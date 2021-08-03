@@ -1,0 +1,588 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bckground_light"
+    tools:context=".activity.CoachProfileActivity">
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar" />
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/toolbar">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_top"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_10sdp"
+                app:cardBackgroundColor="@color/bckground"
+                app:cardCornerRadius="@dimen/_10sdp"
+                app:cardElevation="@dimen/_5sdp"
+                tools:ignore="NamespaceTypo">
+
+                <!--
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        app:cardBackgroundColor="@color/bckground"
+                        app:cardCornerRadius="10dp"
+                        app:cardElevation="10dp"
+                        app:cardMaxElevation="12dp"
+                        app:cardPreventCornerOverlap="true"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">-->
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <com.makeramen.roundedimageview.RoundedImageView
+                        android:id="@+id/img_banner"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_90sdp"
+                        android:layout_alignParentTop="true"
+                        android:background="@drawable/bg_coach"
+                        android:scaleType="centerCrop"
+                        app:riv_corner_radius_top_left="@dimen/_10sdp"
+                        app:riv_corner_radius_top_right="@dimen/_10sdp" />
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/image_profile"
+                        android:layout_width="@dimen/_90sdp"
+                        android:layout_height="@dimen/_90sdp"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="@dimen/_20sdp"
+                        android:src="@drawable/placeholder_user" />
+
+                    <RatingBar
+                        android:id="@+id/rating_bar_review"
+                        style="@style/Widget.AppCompat.RatingBar.Small"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/image_profile"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:numStars="5"
+                        android:rating="3"
+                        android:theme="@style/RatingBar" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/rating_bar_review"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:orientation="vertical"
+                        android:paddingBottom="@dimen/_10sdp">
+
+                        <TextView
+                            android:id="@+id/tvCoachName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginTop="@dimen/_2sdp"
+                            android:gravity="center_horizontal"
+                            android:text="SUMIT SHARMA"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/_12sdp"
+                            app:fontFamily="@font/opensans_semibold" />
+
+                        <TextView
+                            android:id="@+id/tvCoachTitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/tvCoachName"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginTop="@dimen/_2sdp"
+                            android:gravity="center_horizontal"
+                            android:text="Coaching for kids"
+                            android:textColor="#F5F5F5"
+                            android:textSize="@dimen/_10sdp"
+                            app:fontFamily="@font/robotomedium" />
+
+                        <TextView
+                            android:id="@+id/tvCoachExp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/tvCoachTitle"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginTop="@dimen/_2sdp"
+                            android:gravity="center_horizontal"
+                            android:text="5.7 Years Experience"
+                            android:textColor="#F5F5F5"
+                            android:textSize="@dimen/_10sdp"
+                            app:fontFamily="@font/robotomedium" />
+
+                        <RelativeLayout
+                            android:id="@+id/lay_specilization"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/tvCoachExp"
+                            android:layout_marginStart="@dimen/_10sdp"
+                            android:layout_marginTop="@dimen/_5sdp"
+                            android:layout_marginEnd="@dimen/_10sdp"
+                            android:background="@drawable/bg_coach_profile"
+                            android:padding="@dimen/_10sdp"
+                            android:visibility="gone">
+
+                            <TextView
+                                android:id="@+id/tvCoachSpecialization"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerHorizontal="true"
+                                android:gravity="center_horizontal"
+                                android:letterSpacing="0.1"
+                                android:lineSpacingExtra="@dimen/_1sdp"
+                                android:text="Batting, Bowling, Fielding, Wicket Keeping, Mental, Tactical Physical Coach"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/_10sdp"
+                                app:fontFamily="@font/opensans_bold" />
+                        </RelativeLayout>
+
+                        <TextView
+                            android:id="@+id/tvPrice"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/lay_specilization"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginTop="@dimen/_4sdp"
+                            android:text="Price: ₹ 50.00/Session"
+                            android:textColor="@color/app_green"
+                            android:textSize="@dimen/_9sdp"
+                            app:fontFamily="@font/opensans_semibold" />
+
+                        <LinearLayout
+                            android:id="@+id/li_offer"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/tvPrice"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginTop="@dimen/_3sdp"
+                            android:orientation="horizontal"
+                            android:visibility="visible">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Offer Price:"
+                                android:textColor="@color/app_green"
+                                android:textSize="@dimen/_9sdp"
+                                app:fontFamily="@font/opensans_semibold" />
+
+                            <TextView
+                                android:id="@+id/tvOfferPrice"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/_4sdp"
+                                android:textColor="@color/app_green"
+                                android:textSize="@dimen/_9sdp"
+                                app:fontFamily="@font/opensans_semibold" />
+                        </LinearLayout>
+
+                        <FrameLayout
+                            android:id="@+id/tvBookNow"
+                            android:layout_width="@dimen/_100sdp"
+                            android:layout_height="@dimen/_30sdp"
+                            android:layout_below="@+id/li_offer"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginTop="@dimen/_10sdp"
+                            android:background="@color/colorPrimary"
+                            android:visibility="visible">
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/_1sdp"
+                                android:background="#ca9191" />
+
+                            <View
+                                android:layout_width="0.9dp"
+                                android:layout_height="match_parent"
+                                android:background="#ca9191" />
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/_1sdp"
+                                android:layout_gravity="bottom"
+                                android:background="@color/black" />
+
+                            <View
+                                android:layout_width="@dimen/_1sdp"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="end"
+                                android:background="@color/black" />
+
+                            <TextView
+                                android:id="@+id/tv_join"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:text="@string/book_now"
+                                android:textColor="@color/light_text_color"
+                                android:textSize="@dimen/_9sdp"
+                                app:fontFamily="@font/opensans_bold" />
+
+                        </FrameLayout>
+                        <!--<TextView
+                            android:id="@+id/tvBookNow"
+                            android:layout_width="@dimen/_100sdp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_10sdp"
+                            android:paddingTop="@dimen/_5sdp"
+                            android:paddingBottom="@dimen/_5sdp"
+                            android:layout_centerHorizontal="true"
+                            android:background="@drawable/round_corner_red"
+                            android:fontFamily="@font/gotham_book"
+                            android:layout_below="@+id/tvPrice"
+                            android:gravity="center"
+                            android:text="@string/book_now"
+                            android:textSize="@dimen/_12sdp"
+                            android:textColor="@color/white"
+                            />-->
+
+                    </RelativeLayout>
+                </RelativeLayout>
+                <!--</androidx.cardview.widget.CardView>-->
+                <RelativeLayout
+                    android:id="@+id/rl_session_available_or_not"
+                    android:layout_width="@dimen/_120sdp"
+                    android:layout_height="@dimen/_40sdp"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginStart="-4dp"
+                    android:layout_marginTop="-10dp"
+                    android:background="@drawable/session_label"
+                    android:visibility="gone">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="@dimen/_4sdp">
+
+                        <TextView
+                            android:id="@+id/tv_booked_session"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginStart="@dimen/_8sdp"
+                            android:textColor="@color/light_text_color"
+                            android:textSize="@dimen/_10sdp"
+                            app:fontFamily="@font/opensans_semibold" />
+                    </RelativeLayout>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/rl_offer"
+                    android:layout_width="@dimen/_90sdp"
+                    android:layout_height="@dimen/_40sdp"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginStart="-4dp"
+                    android:layout_marginTop="-10dp"
+                    android:background="@drawable/session_label"
+                    android:visibility="gone">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="@dimen/_4sdp">
+
+                        <TextView
+                            android:id="@+id/tvoffer"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginStart="@dimen/_15sdp"
+                            android:gravity="clip_horizontal"
+                            android:textColor="#E0FFFF"
+                            android:textSize="@dimen/_10sdp"
+                            app:fontFamily="@font/opensans_bold" />
+                    </RelativeLayout>
+                </RelativeLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/middle_language"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:layout_marginBottom="@dimen/_10sdp"
+                    app:cardBackgroundColor="@color/bckground"
+                    app:cardCornerRadius="@dimen/_10sdp"
+                    app:cardElevation="@dimen/_5sdp"
+                    tools:ignore="NamespaceTypo">
+
+
+                    <RelativeLayout
+                        android:id="@+id/rel_language"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_5sdp"
+                            android:orientation="vertical"
+                            android:paddingBottom="@dimen/_10sdp">
+
+                            <TextView
+                                android:id="@+id/tvLanguage"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerHorizontal="true"
+                                android:layout_marginTop="@dimen/_2sdp"
+                                android:gravity="center_horizontal"
+                                android:text="@string/language"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/_12sdp"
+                                app:fontFamily="@font/opensans_regular" />
+
+                            <LinearLayout
+                                android:id="@+id/linegradientt"
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/_1sdp"
+                                android:layout_below="@+id/tvLanguage"
+                                android:layout_centerHorizontal="true"
+                                android:layout_marginTop="@dimen/_5sdp"
+                                android:background="@drawable/line_gradient"
+                                android:orientation="horizontal" />
+
+                            <TextView
+                                android:id="@+id/tvLanguage_details"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@+id/linegradientt"
+                                android:layout_marginStart="@dimen/_10sdp"
+                                android:layout_marginTop="@dimen/_5sdp"
+                                android:layout_marginEnd="@dimen/_10sdp"
+                                android:layout_marginBottom="@dimen/_5sdp"
+                                android:gravity="left"
+                                android:lineSpacingExtra="@dimen/_1sdp"
+                                android:text="Have completed the coaching for many kids"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/_10sdp"
+                                app:fontFamily="@font/opensans_semibold" />
+
+
+                        </RelativeLayout>
+                    </RelativeLayout>
+                    <!--</androidx.cardview.widget.CardView>-->
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/middle_card"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/middle_language"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:layout_marginBottom="@dimen/_10sdp"
+                    app:cardBackgroundColor="@color/bckground"
+                    app:cardCornerRadius="@dimen/_10sdp"
+                    app:cardElevation="@dimen/_5sdp"
+                    tools:ignore="NamespaceTypo">
+
+
+                    <RelativeLayout
+                        android:id="@+id/rel_achievement"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_5sdp"
+                            android:orientation="vertical"
+                            android:paddingBottom="@dimen/_10sdp">
+
+                            <TextView
+                                android:id="@+id/tvAchievment"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerHorizontal="true"
+                                android:layout_marginTop="@dimen/_2sdp"
+                                android:gravity="center_horizontal"
+                                android:text="@string/achievement"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/_12sdp"
+                                app:fontFamily="@font/opensans_regular" />
+
+                            <LinearLayout
+                                android:id="@+id/linegradient"
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/_1sdp"
+                                android:layout_below="@+id/tvAchievment"
+                                android:layout_centerHorizontal="true"
+                                android:layout_marginTop="@dimen/_5sdp"
+                                android:background="@drawable/line_gradient"
+                                android:orientation="horizontal" />
+
+                            <TextView
+                                android:id="@+id/tvAchievement_details"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@+id/linegradient"
+                                android:layout_centerHorizontal="true"
+                                android:layout_margin="@dimen/_5sdp"
+                                android:gravity="center_horizontal"
+                                android:text="Have completed the coaching for many kids"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/_10sdp"
+                                app:fontFamily="@font/opensans_semibold" />
+
+
+                        </RelativeLayout>
+                    </RelativeLayout>
+                    <!--</androidx.cardview.widget.CardView>-->
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/card_lang"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/middle_card"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:layout_marginBottom="@dimen/_10sdp"
+                    app:cardBackgroundColor="@color/bckground"
+                    app:cardCornerRadius="@dimen/_10sdp"
+                    app:cardElevation="@dimen/_5sdp"
+                    tools:ignore="NamespaceTypo">
+
+                    <RelativeLayout
+                        android:id="@+id/rl_bio"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_5sdp"
+                            android:orientation="vertical"
+                            android:paddingBottom="@dimen/_10sdp">
+
+                            <TextView
+                                android:id="@+id/tvBio"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerHorizontal="true"
+                                android:layout_marginTop="@dimen/_2sdp"
+                                android:gravity="center_horizontal"
+                                android:text="@string/bio"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/_12sdp"
+                                app:fontFamily="@font/opensans_regular" />
+
+                            <LinearLayout
+                                android:id="@+id/linegradient1"
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/_1sdp"
+                                android:layout_below="@+id/tvBio"
+                                android:layout_centerHorizontal="true"
+                                android:layout_marginTop="@dimen/_5sdp"
+                                android:background="@drawable/line_gradient"
+                                android:orientation="horizontal" />
+
+                            <TextView
+                                android:id="@+id/tvBio_details"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@+id/linegradient1"
+                                android:layout_margin="@dimen/_10sdp"
+                                android:text="Currently I am coach of cricket team. I have been coaching them since 2015 and in my leadership team has won 7 major tournaments and same time i have trained individuals player as well of under 16 years and now they are playing at very good level, my focus area on coaching in fitness, technique and help them to learn their natural cricket talent, I think temperament is most important in player that is first thing coach should tell to players and prepare them accordingly, looking forward to coach and mentor to any young kid who is really interested to play serious cricket."
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/_10sdp"
+                                app:fontFamily="@font/opensans_semibold" />
+
+
+                        </RelativeLayout>
+                    </RelativeLayout>
+                    <!--</androidx.cardview.widget.CardView>-->
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/card_lang"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:layout_marginBottom="@dimen/_10sdp"
+                    app:cardBackgroundColor="@color/bckground"
+                    app:cardCornerRadius="@dimen/_10sdp"
+                    app:cardElevation="@dimen/_5sdp"
+                    tools:ignore="NamespaceTypo">
+
+                    <RelativeLayout
+                        android:id="@+id/rl_certificate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_5sdp"
+                            android:orientation="vertical"
+                            android:paddingBottom="@dimen/_10sdp">
+
+                            <TextView
+                                android:id="@+id/tvCertificate"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerHorizontal="true"
+                                android:layout_marginTop="@dimen/_2sdp"
+                                android:gravity="center_horizontal"
+                                android:text="@string/certificate"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/_12sdp"
+                                app:fontFamily="@font/opensans_regular" />
+
+                            <LinearLayout
+                                android:id="@+id/linegradient3"
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/_1sdp"
+                                android:layout_below="@+id/tvCertificate"
+                                android:layout_centerHorizontal="true"
+                                android:layout_marginTop="@dimen/_5sdp"
+                                android:background="@drawable/line_gradient"
+                                android:orientation="horizontal" />
+
+
+                            <com.makeramen.roundedimageview.RoundedImageView
+                                android:id="@+id/img_certificate"
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/_160sdp"
+                                android:layout_below="@+id/linegradient3"
+                                android:layout_margin="@dimen/_5sdp"
+                                android:background="@drawable/bg_certificate"
+                                android:scaleType="centerCrop"
+                                app:riv_corner_radius_bottom_left="@dimen/_10sdp"
+                                app:riv_corner_radius_bottom_right="@dimen/_10sdp"
+                                app:riv_corner_radius_top_left="@dimen/_10sdp"
+                                app:riv_corner_radius_top_right="@dimen/_10sdp" />
+                        </RelativeLayout>
+                    </RelativeLayout>
+                </com.google.android.material.card.MaterialCardView>
+            </RelativeLayout>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+
+</RelativeLayout>

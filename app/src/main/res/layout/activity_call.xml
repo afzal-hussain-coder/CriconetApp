@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:keepScreenOn="true">
+
+    <com.pb.criconet.layout.GridVideoViewContainer
+        android:id="@+id/grid_video_view_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <ViewStub
+        android:id="@id/small_video_view_dock"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_50sdp"
+        android:inflatedId="@id/small_video_view_dock"
+        android:layout="@layout/small_video_view_dock" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible">
+
+        <com.pb.criconet.propeller.ui.AGLinearLayout
+            android:id="@+id/extra_ops_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:padding="@dimen/_5sdp"
+            android:background="@drawable/transparent_circle"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
+                android:onClick="onSwitchCameraClicked"
+                android:src="@drawable/ic_switch_camera_black_24dp"
+                android:contentDescription="@string/app_name" />
+
+            <ImageView
+                android:layout_width="@dimen/_48sdp"
+                android:layout_height="match_parent"
+                android:onClick="onMixingAudioClicked"
+                android:scaleType="center"
+                android:contentDescription="@string/app_name"
+                android:src="@drawable/btn_audio_mixing_off"
+                android:visibility="gone" />
+
+        </com.pb.criconet.propeller.ui.AGLinearLayout>
+
+        <com.pb.criconet.propeller.ui.AGLinearLayout
+            android:id="@+id/bottom_container"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_40sdp"
+            android:layout_marginBottom="@dimen/_10sdp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentBottom="true"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/bottom_action_container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:gravity="center_horizontal"
+                android:layout_gravity="center_horizontal"
+                android:visibility="visible">
+
+                <RelativeLayout
+                    android:layout_width="@dimen/_35sdp"
+                    android:layout_height="@dimen/_35sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:background="@drawable/transparent_circle">
+                <ImageView
+                    android:id="@id/switch_speaker_id"
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:layout_centerInParent="true"
+                    android:contentDescription="@string/app_name"
+                    android:onClick="onSwitchSpeakerClicked"
+                    android:src="@drawable/ic_volume_up_black_24dp" />
+                </RelativeLayout>
+                <RelativeLayout
+                    android:layout_width="@dimen/_35sdp"
+                    android:layout_height="@dimen/_35sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:background="@drawable/transparent_circle">
+                <ImageView
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:layout_centerInParent="true"
+                    android:contentDescription="@string/app_name"
+                    android:onClick="onFilterClicked"
+                    android:src="@drawable/ic_auto_awesome_black_24dp" />
+                </RelativeLayout>
+
+
+                <ImageView
+                    android:layout_width="@dimen/_40sdp"
+                    android:layout_height="@dimen/_40sdp"
+                    android:onClick="onHangupClicked"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:contentDescription="@string/app_name"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:src="@drawable/btn_endcall" />
+                <RelativeLayout
+                    android:layout_width="@dimen/_35sdp"
+                    android:layout_height="@dimen/_35sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:background="@drawable/transparent_circle">
+
+                <ImageView
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:layout_centerInParent="true"
+                    android:onClick="onVideoMuteClicked"
+                    android:contentDescription="@string/app_name"
+                    android:src="@drawable/ic_videocam_black_24dp" />
+                </RelativeLayout>
+                <RelativeLayout
+                    android:layout_width="@dimen/_35sdp"
+                    android:layout_height="@dimen/_35sdp"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:background="@drawable/transparent_circle">
+                <ImageView
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:layout_centerInParent="true"
+                    android:contentDescription="@string/app_name"
+                    android:onClick="onVoiceMuteClicked"
+                    android:src="@drawable/ic_mic_black_24dp" />
+                </RelativeLayout>
+                <!--<ImageView
+                    android:layout_width="@dimen/_35sdp"
+                    android:layout_height="match_parent"
+                    android:onClick="onChatClicked"
+                    android:contentDescription="@string/app_name"
+                    android:src="@drawable/ic_comment_blue_24dp"
+                    android:visibility="gone" />-->
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/msg_input_container"
+                android:layout_width="match_parent"
+                android:layout_height="54dp"
+                android:background="@color/text_grey3"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <ImageView
+                    android:layout_width="54dp"
+                    android:layout_height="match_parent"
+                    android:onClick="onClickHideIME"
+                    android:scaleType="center"
+                    android:contentDescription="@string/app_name"
+                    android:src="@drawable/btn_keyboard_hide" />
+
+                <EditText
+                    android:id="@+id/msg_content"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="20"
+                    android:background="@android:color/transparent"
+                    android:hint="@string/msg_say_something"
+                    android:imeActionLabel="@string/label_send"
+                    android:imeOptions="actionSend"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:textColor="@android:color/white"
+                    android:textColorHint="@android:color/white"
+                    android:autofillHints="@string/msg_say_something" />
+
+            </LinearLayout>
+
+        </com.pb.criconet.propeller.ui.AGLinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="272dp"
+            android:layout_height="144dp"
+            android:layout_above="@id/bottom_container"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/tv_timeDuration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:background="@drawable/bg_timer"
+            android:fontFamily="@font/opensans_semibold"
+            android:padding="@dimen/_5sdp"
+            android:textAlignment="gravity"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/_10sdp"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:id="@+id/lin_log"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/_30sdp"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/log_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@drawable/log_back_info"
+                android:fontFamily="@font/opensans_semibold"
+                android:padding="@dimen/_5sdp"
+                android:textAlignment="gravity"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/_10sdp"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/log_texth_other"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:background="@drawable/log_back_info"
+                android:fontFamily="@font/opensans_semibold"
+                android:padding="@dimen/_5sdp"
+                android:textAlignment="gravity"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/_10sdp"
+                android:visibility="gone" />
+        </LinearLayout>
+
+        <com.pb.criconet.logger.LoggerRecyclerView
+            android:layout_width="272dp"
+            android:layout_height="144dp"
+            android:layout_above="@id/bottom_container"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:visibility="gone"
+            tools:ignore="MissingClass" />
+
+    </RelativeLayout>
+</FrameLayout>

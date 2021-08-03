@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:wheel="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bckground_light">
+    <!-- android:background="@drawable/bg"-->
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar" />
+
+    <RelativeLayout
+        android:id="@+id/top"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_below="@+id/toolbar">
+
+        <ImageView
+            android:id="@+id/cover_img"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_150sdp"
+            android:layout_centerHorizontal="true"
+            android:background="@color/nav_bg"
+            android:scaleType="fitXY" />
+
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/profile_pic"
+            android:layout_width="@dimen/_80sdp"
+            android:layout_height="@dimen/_80sdp"
+            android:layout_centerInParent="true"
+            android:src="@drawable/placeholder_user"
+            app:civ_border_color="@color/white"
+            app:civ_border_overlay="true"
+            app:civ_border_width="@dimen/_1sdp" />
+
+        <ImageView
+            android:id="@+id/del_img"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_margin="5dp"
+            android:background="@color/nav_bg"
+            android:visibility="gone"
+            android:padding="5dp"
+            android:scaleType="fitXY"
+            app:srcCompat="@drawable/delete_forever"
+            app:tint="@color/white" />
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:isScrollContainer="true"
+        android:layout_below="@+id/top">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="25dp"
+            android:orientation="vertical"
+            android:paddingLeft="15dp"
+            android:paddingTop="10dp"
+            android:paddingRight="15dp"
+            android:paddingBottom="5dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColorHint="@color/bckground"
+                        app:hintTextAppearance="@style/MyHintTextDarkk">
+
+                        <EditText
+                            android:id="@+id/edttxt_fname"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="5dp"
+                            android:layout_marginEnd="5dp"
+                            android:layout_marginBottom="5dp"
+                            android:background="@null"
+                            android:hint="Page Title*"
+                            android:inputType="textPersonName"
+                            android:padding="5dp"
+                            android:singleLine="true"
+                            android:fontFamily="@font/opensans_semibold"
+                            android:textColor="@color/light_text_color"
+                            android:textColorHint="@color/light_text_color"
+                            android:textCursorDrawable="@null"
+                            android:textSize="@dimen/_10sdp"
+                            />
+                    </com.google.android.material.textfield.TextInputLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/line_gradient_black2" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="8"
+                        android:textColorHint="@color/bckground"
+                        app:hintTextAppearance="@style/MyHintTextDarkk">
+
+                        <EditText
+                            android:id="@+id/edttxt_desc"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="5dp"
+                            android:layout_marginEnd="5dp"
+                            android:layout_marginBottom="5dp"
+                            android:background="@null"
+                            android:gravity="start"
+                            android:hint="Page Description*"
+                            android:inputType="textMultiLine"
+                            android:minHeight="90dp"
+                            android:padding="5dp"
+                            android:singleLine="true"
+                            android:fontFamily="@font/opensans_semibold"
+                            android:textColor="@color/light_text_color"
+                            android:textColorHint="@color/light_text_color"
+                            android:textCursorDrawable="@null"
+                            android:textSize="@dimen/_10sdp"
+                            android:theme="@style/MyHintTextDarkk" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/line_gradient_black2" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="8"
+                        android:textColorHint="@color/bckground"
+                        app:hintTextAppearance="@style/MyHintTextDarkk">
+
+                        <EditText
+                            android:id="@+id/edttxt_company"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="5dp"
+                            android:layout_marginEnd="5dp"
+                            android:layout_marginBottom="5dp"
+                            android:background="@null"
+                            android:hint="Company Name*"
+                            android:inputType="text"
+                            android:padding="5dp"
+                            android:singleLine="true"
+                            android:textColor="@color/light_text_color"
+                            android:textColorHint="@color/light_text_color"
+                            android:textCursorDrawable="@null"
+                            android:textSize="@dimen/_10sdp"
+                            android:theme="@style/MyHintTextDarkk" />
+                    </com.google.android.material.textfield.TextInputLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/line_gradient_black2" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="8"
+                        android:textColorHint="@color/bckground"
+                        app:hintTextAppearance="@style/MyHintTextDarkk">
+
+                        <EditText
+                            android:id="@+id/edttxt_address"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="5dp"
+                            android:layout_marginEnd="5dp"
+                            android:layout_marginBottom="5dp"
+                            android:background="@null"
+                            android:hint="Address*"
+                            android:inputType="text"
+                            android:padding="5dp"
+                            android:singleLine="true"
+                            android:fontFamily="@font/opensans_semibold"
+                            android:textColor="@color/light_text_color"
+                            android:textColorHint="@color/light_text_color"
+                            android:textCursorDrawable="@null"
+                            android:textSize="@dimen/_10sdp"
+                            android:theme="@style/MyHintTextDarkk" />
+                    </com.google.android.material.textfield.TextInputLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/line_gradient_black2" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="8"
+                        android:textColorHint="@color/bckground"
+                        app:hintTextAppearance="@style/MyHintTextDarkk">
+
+                        <EditText
+                            android:id="@+id/edttxt_phone"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="5dp"
+                            android:layout_marginEnd="5dp"
+                            android:layout_marginBottom="5dp"
+                            android:background="@null"
+                            android:hint="@string/phone_no"
+                            android:inputType="phone"
+                            android:maxLength="16"
+                            android:padding="5dp"
+                            android:singleLine="true"
+                            android:fontFamily="@font/opensans_semibold"
+                            android:textColor="@color/light_text_color"
+                            android:textColorHint="@color/light_text_color"
+                            android:textCursorDrawable="@null"
+                            android:textSize="@dimen/_10sdp"
+                            android:theme="@style/MyHintTextDarkk" />
+                    </com.google.android.material.textfield.TextInputLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/line_gradient_black2" />
+
+
+            </LinearLayout>
+
+
+            <Button
+                android:id="@+id/btn_login"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:background="@drawable/btn_bg_pink_round"
+                android:gravity="center"
+                android:padding="7dp"
+                android:text="@string/update_page"
+                android:textAllCaps="true"
+                android:textColor="@color/light_text_color"
+                android:fontFamily="@font/opensans_bold"
+                android:textSize="@dimen/_10sdp" />
+
+        </LinearLayout>
+    </ScrollView>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/dim"
+        android:alpha="0"
+        android:fitsSystemWindows="true"
+        android:background="@color/black_semi_transparent"/>
+
+    <include layout="@layout/dialog_camera_selector"
+        />
+
+    <com.pnikosis.materialishprogress.ProgressWheel
+        android:id="@+id/progress_wheel"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:visibility="gone"
+        wheel:matProg_barColor="@color/app_red"
+        wheel:matProg_progressIndeterminate="true" />
+
+</RelativeLayout>

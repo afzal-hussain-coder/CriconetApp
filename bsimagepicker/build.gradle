@@ -1,0 +1,67 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 30
+
+
+
+    defaultConfig {
+        minSdkVersion 16
+        targetSdkVersion 30
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    api 'androidx.appcompat:appcompat:1.2.0'
+    api 'androidx.recyclerview:recyclerview:1.2.0'
+    api 'com.google.android.material:material:1.3.0'
+    api 'androidx.constraintlayout:constraintlayout:2.0.4'
+    api("com.github.bumptech.glide:glide:4.11.0") {
+        exclude group: "com.android.support"
+    }
+    androidTestImplementation 'org.junit.jupiter:junit-jupiter'
+    androidTestImplementation 'junit:junit:4.13.2'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
+}
+
+ext {
+    bintrayRepo = 'maven'
+    bintrayName = 'BSImagePicker'
+
+    publishedGroupId = 'com.asksira.android'
+    libraryName = 'BSImagePicker'
+    artifact = 'bsimagepicker'
+
+    libraryDescription = 'An image picker that extends BottomSheetDialogFragment. Camera and gallery all in one dialog. Single or Multi Selection.'
+
+    siteUrl = 'https://github.com/siralam/BSImagePicker'
+    gitUrl = 'https://github.com/siralam/BSImagePicker.git'
+
+    libraryVersion = '1.0.1'
+
+    developerId = 'siralam'
+    developerName = 'Sira Lam'
+    developerEmail = 'sira.swlam@gmail.com'
+
+    licenseName = 'The Apache Software License, Version 2.0'
+    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+    allLicenses = ["Apache-2.0"]
+}
+
+// Place it at the end of the file
+apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/installv1.gradle'
+apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/bintrayv1.gradle'

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#800000</color>
+    <color name="colorPrimaryDark">#800000</color>
+    <color name="colorAccent">#800000</color>
+    <color name="bckground">#4a4a4a</color>
+    <color name="bckground_light">#8C8979</color>
+    <color name="light_text_color">#FFFFFF</color>
+    <color name="app_green">#8bbb51</color>
+    <color name="gray">#D3D3D3</color>
+    <color name="blue">#32c5f3</color>
+<!--    //428f42-->
+    <color name="edit_text_color_hint">#8c8979</color>
+    <color name="edit_text_color">#8c8979</color>#FAFFCC
+    <color name="button_color">#FAFFCC</color>
+    <color name="join_button_color">#800000</color>
+    <color name="app_red">#b4604e</color>
+    <color name="app_redd">#430f02</color>
+    <color name="liked_color">#DB7373</color>
+    <color name="disliked_color">#fc9b1b</color>
+    <color name="app_light_red">#FF0000</color>
+
+
+
+    <!--end use of color-->
+
+
+    <color name="black_semi_transparent">#B2000000</color>
+<!--    <color name="black">#000000</color>-->
+    <color name="black_light">#757575</color>
+    <color name="light_black">#323232</color>
+    <color name="white">#ffffff</color>
+
+    <color name="white_smoke">#f5f5f5</color>
+    <color name="grey">#cccccc</color>
+
+    <color name="grey2">#bdbdbd</color>
+    <color name="transparent">#00000000</color>
+
+    <color name="app_grey">#6D6E6E</color>
+    <color name="app_red_light">#C45A5B</color>
+    <color name="nav_bg">#686868</color>
+
+    <color name="app_pink">#800000</color>
+    <color name="app_yellow">#FFFF89</color>
+
+
+    <color name="app_blue">#35498E</color>
+
+
+    <color name="text_grey">#535353</color>
+    <color name="text_grey2">#353535</color>
+    <color name="text_grey3">#433E54</color>
+    <color name="transparent_75_white">#ACFFFFFF</color>
+
+    <color name="dim_grey">#696969</color>
+    <color name="dark_grey">#A9A9A9</color>
+    <color name="light_grey">#EFEFEF</color>
+    <color name="view_color">#C45A5B</color>
+
+    <color name="color_error_password">#ffa500</color>
+
+
+    <!-- Chat Activity -->
+
+    <!-- Logs -->
+    <color name="logWarn">#fedd56</color>
+    <color name="logError">#800000</color>
+
+
+
+    <color name="green">#8bbb51</color>
+    <color name="yellow">#FF7F24</color>
+    <color name="yourColor">#8bbb51</color>
+
+
+</resources>

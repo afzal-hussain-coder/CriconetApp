@@ -1,0 +1,18 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">10dp</dimen>
+    <dimen name="post_height">250dp</dimen>
+    <dimen name="social_icon_dim">30dp</dimen>
+
+
+<!--    //new code..-->
+
+    <!-- buttons -->
+
+    <!--Logger-->
+    <dimen name="log_back_corner_radius">16dp</dimen>
+    <dimen name="log_item_offset">3dp</dimen>
+
+</resources>

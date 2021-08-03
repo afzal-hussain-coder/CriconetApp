@@ -1,0 +1,364 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/toolbar" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:animateLayoutChanges="true"
+        android:layout_below="@+id/toolbar"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:background="@color/bckground_light"
+            android:orientation="vertical">
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_10sdp"
+                app:cardBackgroundColor="@color/bckground"
+                app:cardCornerRadius="@dimen/_10sdp"
+                app:cardElevation="@dimen/_10sdp"
+                app:cardPreventCornerOverlap="true">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="@dimen/_5sdp"
+                    android:paddingBottom="@dimen/_5sdp">
+
+
+                    <RelativeLayout
+                        android:id="@+id/rel_top"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <de.hdodenhof.circleimageview.CircleImageView
+                            android:id="@+id/ivProfileImage"
+                            android:layout_width="@dimen/_70sdp"
+                            android:layout_height="@dimen/_70sdp"
+                            android:layout_centerVertical="true"
+                            android:layout_marginStart="@dimen/_10sdp"
+                            android:src="@drawable/cover" />
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_5sdp"
+                            android:layout_toEndOf="@+id/ivProfileImage">
+
+                            <TextView
+                                android:id="@+id/tvCoachName"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/_10sdp"
+                                android:layout_centerHorizontal="true"
+                                android:layout_toStartOf="@+id/rating_bar_review"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/_10sdp"
+                                app:fontFamily="@font/opensans_semibold" />
+
+                            <RatingBar
+                                android:id="@+id/rating_bar_review"
+                                style="@style/Widget.AppCompat.RatingBar.Small"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="@dimen/_5sdp"
+                                android:layout_alignParentEnd="true"
+                                android:numStars="5"
+                                android:rating="3"
+                                android:theme="@style/RatingBar" />
+
+                            <TextView
+                                android:id="@+id/tvCoacTitle"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@+id/tvCoachName"
+                                android:layout_marginTop="@dimen/_2sdp"
+                                android:layout_marginStart="@dimen/_10sdp"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/_10sdp"
+                                app:fontFamily="@font/opensans_regular" />
+                            <TextView
+                                android:id="@+id/tvCoacExp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@+id/tvCoacTitle"
+                                android:layout_marginTop="@dimen/_2sdp"
+                                android:layout_marginStart="@dimen/_10sdp"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/_8sdp"
+                                app:fontFamily="@font/opensans_semibold" />
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/_10sdp"
+                                android:layout_marginEnd="@dimen/_10sdp"
+                                android:layout_marginTop="@dimen/_3sdp"
+                                android:layout_below="@+id/tvCoacExp">
+                                <TextView
+                                    android:id="@+id/tvPrice"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentStart="true"
+                                    android:textColor="@color/app_green"
+                                    android:textSize="@dimen/_10sdp"
+                                    app:fontFamily="@font/opensans_semibold" />
+                                <LinearLayout
+                                    android:id="@+id/li_offer"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginEnd="@dimen/_10sdp"
+                                    android:layout_alignParentEnd="true"
+                                    android:orientation="vertical"
+                                    android:visibility="gone"
+                                    android:layout_marginTop="@dimen/_3sdp">
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:textColor="@color/app_green"
+                                        android:layout_gravity="center_horizontal"
+                                        android:text="Offer Price"
+                                        android:textSize="@dimen/_10sdp"
+                                        app:fontFamily="@font/opensans_semibold" />
+                                    <TextView
+                                        android:id="@+id/tvOfferPrice"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:textColor="@color/app_green"
+                                        android:textSize="@dimen/_10sdp"
+                                        app:fontFamily="@font/opensans_semibold" />
+                                </LinearLayout>
+                            </RelativeLayout>
+
+                        </RelativeLayout>
+                    </RelativeLayout>
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/rel_top"
+                        android:layout_marginStart="@dimen/_10sdp"
+                        android:padding="@dimen/_5sdp"
+                        android:layout_marginEnd="@dimen/_10sdp"
+                        android:layout_marginTop="@dimen/_5sdp">
+                        <TextView
+                            android:id="@+id/tvCoachSpecialization"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Batting, Bowling, Fielding, Wicket Keeping, Mental, Tactical Physical Coach"
+                            android:layout_centerHorizontal="true"
+                            android:gravity="center_horizontal"
+                            android:textColor="@color/white"
+                            android:lineSpacingExtra="@dimen/_1sdp"
+                            android:letterSpacing="0.1"
+                            android:textSize="@dimen/_10sdp"
+                            app:fontFamily="@font/opensans_semibold" />
+                    </RelativeLayout>
+                </RelativeLayout>
+
+
+            </com.google.android.material.card.MaterialCardView>
+
+
+            <com.applandeo.materialcalendarview.CalendarView
+                android:id="@+id/calendarView"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                app:abbreviationsBarColor="@color/bckground_light"
+                app:abbreviationsLabelsColor="@color/white"
+                app:daysLabelsColor="@color/white"
+                app:eventsEnabled="true"
+                app:disabledDaysLabelsColor="#fff"
+                app:typeface="@font/opensans_regular"
+                app:forwardButtonSrc="@drawable/ic_arrow_right"
+                app:headerColor="@color/bckground_light"
+                app:headerLabelColor="@color/white"
+                app:pagesColor="@color/bckground_light"
+                app:previousButtonSrc="@drawable/ic_arrow_left"
+                app:selectionColor="@color/app_green"
+                app:todayLabelColor="@color/colorPrimary"
+                app:type="one_day_picker" />
+
+
+            <TextView
+                android:id="@+id/tv_criconet_support_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:fontFamily="@font/opensans_semibold"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:visibility="gone"
+                android:gravity="center_horizontal"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:textSize="@dimen/_10sdp"
+                android:textColor="@color/colorPrimary" />
+
+            <LinearLayout
+                android:id="@+id/li_support"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:weightSum="2"
+                android:visibility="gone"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:orientation="horizontal">
+                <FrameLayout
+                    android:id="@+id/fl_call"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/_35sdp"
+                    android:layout_weight="1"
+                    android:background="@color/bckground_light"
+                    android:layout_marginEnd="@dimen/_10sdp">
+
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.7dp"
+                        android:background="#7b868f"/>
+                    <View
+                        android:layout_width="0.7dp"
+                        android:layout_height="match_parent"
+                        android:background="#7b868f"/>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.7dp"
+                        android:layout_gravity="bottom"
+                        android:background="@color/black50"/>
+                    <View
+                        android:layout_width="0.9dp"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="end"
+                        android:background="@color/black50"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:padding="@dimen/_5sdp"
+                        android:text="@string/call_now"
+                        android:drawablePadding="@dimen/_2sdp"
+                        app:fontFamily="@font/opensans_semibold"
+                        android:textColor="#E0FFFF"
+                        android:textSize="@dimen/_10sdp"
+                        app:drawableStartCompat="@drawable/ic_call_black_24dp"
+                        app:drawableTint="#E0FFFF" />
+
+                </FrameLayout>
+
+                <FrameLayout
+                    android:id="@+id/fl_whatsapp"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/_35sdp"
+                    android:layout_weight="1"
+                    android:background="@color/bckground_light"
+                    >
+
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.7dp"
+                        android:background="#7b868f"/>
+                    <View
+                        android:layout_width="0.7dp"
+                        android:layout_height="match_parent"
+                        android:background="#7b868f"/>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.7dp"
+                        android:layout_gravity="bottom"
+                        android:background="@color/black50"/>
+                    <View
+                        android:layout_width="0.9dp"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="end"
+                        android:background="@color/black50"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:padding="@dimen/_5sdp"
+                        android:text="@string/whatsapp"
+                        android:drawablePadding="@dimen/_2sdp"
+                        app:fontFamily="@font/opensans_semibold"
+                        android:textColor="#E0FFFF"
+                        app:drawableStartCompat="@drawable/ic_whatsapp"
+                        android:textSize="@dimen/_10sdp"/>
+
+                </FrameLayout>
+
+
+            </LinearLayout>
+
+            <!--<TextView
+                android:id="@+id/btnCalender"
+                android:layout_width="@dimen/_100sdp"
+                android:layout_height="@dimen/_30sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginBottom="@dimen/_10sdp"
+                android:background="@drawable/round_corner_red"
+                android:fontFamily="@font/gotham_book"
+                android:gravity="center"
+                android:text="Book Coach"
+                android:textColor="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent" />-->
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <FrameLayout
+        android:id="@+id/btnCalender"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_34sdp"
+        android:layout_marginBottom="@dimen/_10sdp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="@dimen/_20sdp"
+        android:layout_marginEnd="@dimen/_20sdp"
+        android:layout_centerHorizontal="true"
+        android:background="@color/colorPrimary">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_1sdp"
+            android:background="#ca9191"/>
+        <View
+            android:layout_width="0.9dp"
+            android:layout_height="match_parent"
+            android:background="#ca9191"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_1sdp"
+            android:layout_gravity="bottom"
+            android:background="#592627"/>
+        <View
+            android:layout_width="@dimen/_1sdp"
+            android:layout_height="match_parent"
+            android:layout_gravity="end"
+            android:background="#592627"/>
+
+        <TextView
+            android:id="@+id/tv_join"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/book_now"
+            app:fontFamily="@font/opensans_semibold"
+            android:textColor="@color/light_text_color"
+            android:textSize="@dimen/_12sdp"/>
+
+    </FrameLayout>
+</RelativeLayout>

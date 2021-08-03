@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".activity.TermsCondition">
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar_login" />
+
+    <WebView
+        android:id="@+id/web"
+        android:layout_width="match_parent"
+        android:layout_below="@+id/toolbar"
+        android:background="@color/bckground_light"
+        android:layout_height="match_parent"/>
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginLeft="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:layout_marginRight="@dimen/_10sdp"
+        android:visibility="gone"
+        android:background="@color/white"
+        android:layout_below="@+id/toolbar"
+        app:cardCornerRadius="@dimen/_1sdp"
+        app:cardElevation="@dimen/_5sdp"
+        android:layout_marginBottom="@dimen/_20sdp">
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+            <RelativeLayout
+                android:id="@+id/top"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/_10sdp"
+                android:visibility="gone"
+                android:background="@drawable/terams_bg">
+                <com.pb.criconet.fontsview.OSEBTextView
+                    android:id="@+id/txt_login"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/_14sdp"
+                    android:textColor="@color/light_black"
+                    android:text="@string/term_of_use"/>
+
+            </RelativeLayout>
+            <View
+                android:id="@+id/view"
+                android:layout_width="match_parent"
+                android:layout_height="0.8dp"
+                android:layout_below="@+id/top"
+                android:background="#f8f8f8"/>
+            <androidx.core.widget.NestedScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/_10sdp"
+                android:layout_marginRight="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:scrollbars="vertical"
+                android:layout_marginBottom="@dimen/_10sdp"
+                android:scrollbarAlwaysDrawVerticalTrack="true"
+                android:layout_below="@+id/view">
+            <com.pb.criconet.fontsview.OSLTextView
+                android:id="@+id/textTermsOfUse"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:textColor="@color/light_black" />
+            </androidx.core.widget.NestedScrollView>
+        </RelativeLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+
+</RelativeLayout>

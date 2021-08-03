@@ -1,0 +1,176 @@
+apply plugin: 'com.android.application'
+
+android {
+
+    /* signingConfigs {
+         release {
+            storeFile file('F:\\Android\\KeyStore\\Criconet\\criconet.jks')
+             storePassword 'criconet'
+             keyAlias 'criconet'
+             keyPassword 'criconet'
+         }
+     }*/
+    compileSdkVersion 30
+    useLibrary 'org.apache.http.legacy'
+    defaultConfig {
+        applicationId "com.pb.criconet"
+        minSdkVersion 21
+        targetSdkVersion 30
+        versionCode 13
+        versionName "1.0.3"
+        vectorDrawables.useSupportLibrary = true
+        multiDexEnabled true
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+//        signingConfig signingConfigs.release
+    }
+
+    buildTypes {
+        debug {
+//            signingConfig signingConfigs.release
+        }
+        release {
+           // minifyEnabled false //Important step
+            //shrinkResources true
+           // signingConfig signingConfigs.release
+        }
+
+//        release {
+//            minifyEnabled false
+//            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+//        }
+    }
+    packagingOptions {
+//        exclude 'META-INF/DEPENDENCIES.txt'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+//        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/dependencies.txt'
+//        exclude 'META-INF/LGPL2.1'
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    lintOptions {
+        warning 'InvalidPackage'
+    }
+    dataBinding {
+        enabled = true
+    }
+    dexOptions {
+        javaMaxHeapSize "4g"
+        jumboMode true
+    }
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['src/main/jniLibs']
+        }
+    }
+
+}
+def lifecycle_version = "2.2.0"
+def daggerVersion = '2.16'
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'com.google.android.material:material:1.3.0'
+    //noinspection GradleCompatible
+    implementation 'com.android.support:design:28.0.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+    implementation 'androidx.coordinatorlayout:coordinatorlayout:1.1.0'
+    testImplementation 'junit:junit:4.13.2'
+    implementation 'com.shobhitpuri.custombuttons:google-signin:1.0.0'
+
+    //////////////////////////////////////
+    implementation files('libs/android-query-full.0.26.7.jar')
+    implementation 'androidx.cardview:cardview:1.0.0'
+    implementation 'androidx.palette:palette:1.0.0'
+    implementation 'com.pnikosis:materialish-progress:1.7'
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
+    implementation 'com.makeramen:roundedimageview:2.3.0'
+    implementation 'com.github.bumptech.glide:glide:4.11.0'
+    implementation 'com.squareup.picasso:picasso:2.71828'
+    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.17'
+    implementation 'com.mcxiaoke.volley:library:1.0.19'
+    implementation 'me.relex:circleindicator:1.2.2@aar'
+    implementation 'com.makeramen:roundedimageview:2.3.0'
+    implementation files('libs/httpmime-4.2.1-1.jar')
+    implementation 'com.github.chrisbanes:PhotoView:2.1.3'
+    implementation 'com.google.firebase:firebase-core:17.4.2'
+    implementation 'com.google.firebase:firebase-messaging:20.2.0'
+    implementation 'com.google.firebase:firebase-database:19.3.0'
+    implementation 'com.google.firebase:firebase-auth:19.3.1'
+    //implementation 'io.agora.rtc:full-sdk:2.9.1'
+    //api 'com.github.agorabuilder:native-full-sdk:3.4.2'
+
+    //new import
+    implementation 'io.agora.rtm:rtm-sdk:1.3.0'
+    implementation 'com.vanniktech:emoji-google:0.6.0'
+
+    implementation 'com.vanniktech:emoji-ios:0.6.0'
+
+    implementation 'com.vanniktech:emoji-twitter:0.6.0'
+
+    implementation 'com.theartofdev.edmodo:android-image-cropper:2.8.0'
+
+    //end
+    implementation 'com.baoyz.swipemenulistview:library:1.3.0'
+    implementation 'com.allattentionhere:autoplayvideos:0.2.0'
+    implementation 'com.danikula:videocache:2.7.1'
+    //    -------------------Social login--------------------------
+    implementation 'com.facebook.android:facebook-android-sdk:5.15.3'
+    implementation 'com.google.android.gms:play-services-auth:18.0.0'
+    implementation 'com.github.mukeshsolanki:android-otpview-pinview:2.0.1'
+    implementation 'com.github.joielechong:countrycodepicker:2.4.2'
+    //    -------------------------------------------------------------
+    //    implementation 'me.riddhimanadib.bottom-nav-bar:bottom-nav-bar:1.0.1'
+    implementation 'it.sephiroth.android.library.bottomnavigation:bottom-navigation:3.0.0'
+    // dexter runtime permissions
+    implementation 'com.karumi:dexter:5.0.0'
+    // location play services
+    implementation 'com.google.android.gms:play-services-location:17.0.0'
+    //    implementation 'com.asksira.android:bsimagepicker:1.1.0'
+    implementation project(':bsimagepicker')
+    implementation project(':rtcTokengenerator')
+    implementation files('libs/YouTubeAndroidPlayerApi.jar')
+    implementation project(':AnimatedLoadingIndicator')
+
+    // Youtube lib
+    implementation 'com.github.PierfrancescoSoffritti:AndroidYouTubePlayer:7.0.1'
+    implementation 'com.github.HamidrezaAmz:MagicalExoPlayer:1.0.15'
+
+    //dimension
+    implementation 'com.intuit.sdp:sdp-android:1.0.5'
+
+    // Retrofit
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.google.code.gson:gson:2.8.5'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.7.2'
+    implementation 'com.wdullaer:materialdatetimepicker:4.2.3'
+    implementation 'org.greenrobot:eventbus:3.1.1'
+    implementation 'androidx.multidex:multidex:2.0.0'
+    implementation 'io.agora.rtc:full-sdk:3.5.0'
+    implementation 'org.slf4j:slf4j-api:1.7.25'
+    implementation 'com.github.tony19:logback-android-core:1.1.1-4'
+    implementation 'androidx.work:work-runtime:2.0.1'
+    implementation 'com.applandeo:material-calendar-view:1.9.0-rc03'
+    implementation('com.razorpay:checkout:1.6.7')
+    implementation 'com.squareup.retrofit:retrofit:1.9.0'
+    implementation 'com.github.mancj:SlideUp-Android:2.2.8'
+    implementation "androidx.viewpager2:viewpager2:1.0.0"
+    implementation 'com.google.android.play:core:1.10.0' // In App Update
+    implementation 'com.github.armcha:AutoLinkTextView:0.3.0'
+    implementation 'com.google.android.gms:play-services-analytics:17.0.0'
+
+
+
+
+}
+apply plugin: 'com.google.gms.google-services'

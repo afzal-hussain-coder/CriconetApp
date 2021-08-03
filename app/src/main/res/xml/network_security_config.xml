@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <domain-config cleartextTrafficPermitted="true">
+        <!--        <domain includeSubdomains="true">your_domain.com</domain>-->
+        <domain includeSubdomains="true">criconet.com</domain>
+        <domain includeSubdomains="true">127.0.0.1</domain>
+        <domain includeSubdomains="true">127.0.0.1:45477</domain>
+    </domain-config>
+</network-security-config>
+
+    <!--<?xml version="1.0" encoding="utf-8"?>-->
+    <!--<network-security-config>-->
+    <!--    &lt;!&ndash;Set application-wide security config using base-config tag.&ndash;&gt;-->
+    <!--    <base-config cleartextTrafficPermitted="false" />-->
+    <!--</network-security-config>-->
+

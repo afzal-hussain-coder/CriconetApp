@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<resources>
+    <!-- PLEASE KEEP THIS App ID IN SAFE PLACE -->
+    <!-- Get your own App ID at https://dashboard.agora.io/ -->
+    <!-- After you entered the App ID, remove <##> outside of Your App ID -->
+    <!-- For formal released project, please use Security Keys/Token
+        https://docs.agora.io/en/Video/token?platform=All%20Platforms -->
+    <!--<string name="agora_app_id" translatable="false">ee06e02d3bdc4193821258811319262f</string>-->
+    <string name="agora_app_id" translatable="false">ee06e02d3bdc4193821258811319262f</string>
+    <string name="app_certificate" translatable="false">ef666188eef74fd994fc3f3a9a1c548d</string>
+<!--    ee06e02d3bdc4193821258811319262f-->
+<!--    ad46ea608a1b42b1a2bc07892b6f6b4d-->
+    <!-- Please leave it if not enable App Certificate -->
+    <!-- You can generate a temporary token at https://dashboard.agora.io/projects -->
+
+    <string-array
+        name="string_array_resolutions">
+        <item>160x120</item> // 120P
+        <item>320x180</item> // 180P
+        <item>320x240</item> // 240P the default one
+        <item>640x360</item> // 360P
+        <item>640x480</item> // 480P
+        <item>1280x720</item> // 720P
+    </string-array>
+
+    <string-array
+        name="string_array_frame_rate">
+        <item>1</item>
+        <item>7</item>
+        <item>10</item>
+        <item>15</item> // the default one
+        <item>24</item>
+        <item>30</item>
+    </string-array>
+
+</resources>

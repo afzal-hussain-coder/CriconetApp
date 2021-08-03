@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/relative_dash"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/bckground"
+    android:layout_marginStart="@dimen/_5sdp"
+    android:layout_marginEnd="@dimen/_5sdp"
+    android:layout_marginBottom="@dimen/_3sdp"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/_10sdp">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/user_image"
+            android:layout_width="@dimen/_50sdp"
+            android:layout_height="@dimen/_50sdp"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="10dp"
+            android:src="@drawable/user_default" />
+
+        <TextView
+            android:id="@+id/user_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_toEndOf="@+id/user_image"
+            android:gravity="start"
+            android:inputType="textMultiLine"
+            android:padding="2dp"
+            android:text="Michel"
+            android:textColor="@color/light_text_color"
+            android:fontFamily="@font/opensans_semibold"
+            android:textSize="@dimen/_10sdp" />
+
+        <com.luseen.autolinklibrary.AutoLinkTextView
+            android:id="@+id/user_comment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/user_name"
+            android:layout_toEndOf="@+id/user_image"
+            android:gravity="start"
+            android:layout_toStartOf="@+id/delete_cmnt"
+            android:padding="2dp"
+            android:visibility="visible"
+            android:text="25 min ago"
+            android:textColor="@color/light_text_color"
+            android:fontFamily="@font/opensans_semibold"
+            android:textSize="@dimen/_8sdp" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rec_tag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/user_name"
+            android:visibility="gone"
+            android:gravity="start|center_vertical"
+            android:layout_toEndOf="@+id/user_image"
+            android:divider="@null"
+            />
+
+<!--        android:orientation="horizontal"-->
+<!--        android:visibility="visible"-->
+<!--        app:reverseLayout="true"-->
+
+        <TextView
+            android:id="@+id/time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:gravity="start"
+            android:layout_marginTop="5dp"
+            android:padding="2dp"
+            android:text="25 min ago"
+            android:textColor="@color/light_text_color"
+            android:fontFamily="@font/opensans_semibold"
+            android:textSize="@dimen/_9sdp" />
+
+        <ImageView
+            android:id="@+id/delete_cmnt"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_below="@+id/time"
+            android:layout_marginTop="5dp"
+            android:layout_alignParentEnd="true"
+            android:padding="9dp"
+            android:visibility="gone"
+            android:src="@drawable/red_cross"
+            app:tint="@color/light_text_color" />
+
+
+    </RelativeLayout>
+
+</RelativeLayout>

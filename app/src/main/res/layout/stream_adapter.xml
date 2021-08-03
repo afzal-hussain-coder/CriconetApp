@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+android:id="@+id/relative_dash"
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+android:orientation="vertical"
+app:cardBackgroundColor="@color/bckground"
+android:layout_margin="@dimen/_5sdp"
+app:cardCornerRadius="@dimen/_3sdp"
+app:cardElevation="@dimen/_5sdp">
+
+<LinearLayout
+    android:id="@+id/ll"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_155sdp">
+            <ImageView
+                android:id="@+id/logo_imageview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitXY"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:src="@drawable/live_img" />
+            <TextView
+                android:id="@+id/tv_not_match"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textSize="@dimen/_14sdp"
+                android:gravity="center"
+                android:visibility="gone"
+                android:fontFamily="@font/opensans_regular"
+                android:textColor="@color/light_text_color"
+                android:background="#c9000000"
+                android:text="lsncskjncakjcn"/>
+
+        </RelativeLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_5sdp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/roundedImageView"
+                android:layout_width="@dimen/_40sdp"
+                android:layout_height="@dimen/_40sdp"
+                android:layout_margin="@dimen/_5sdp"
+                android:src="@drawable/app_logo2" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:layout_marginEnd="@dimen/_5sdp"
+                android:layout_toRightOf="@+id/roundedImageView">
+            <TextView
+                android:id="@+id/ground_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Name"
+                android:padding="@dimen/_2sdp"
+                android:textColor="@color/light_text_color"
+                android:fontFamily="@font/opensans_bold"
+                android:textSize="@dimen/_9sdp" />
+            <TextView
+                android:id="@+id/location"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="location"
+                android:paddingLeft="@dimen/_2sdp"
+                android:layout_below="@+id/ground_name"
+                android:textColor="@color/light_text_color"
+                android:fontFamily="@font/opensans_semibold"
+                android:textSize="@dimen/_8sdp" />
+            </RelativeLayout>
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+</LinearLayout>
+
+
+</com.google.android.material.card.MaterialCardView>
+
+
+
+

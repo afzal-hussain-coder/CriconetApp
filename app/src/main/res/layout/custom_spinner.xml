@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView android:textAlignment="inherit"
+    android:ellipsize="marquee"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:singleLine="true"
+    android:textSize="@dimen/_10sdp"
+    android:fontFamily="@font/opensans_semibold"
+    android:textColor="@color/light_text_color"
+    style="?android:attr/spinnerItemStyle"
+    android:id="@android:id/text1" xmlns:android="http://schemas.android.com/apk/res/android"/>

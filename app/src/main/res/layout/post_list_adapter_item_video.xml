@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/relative_dash"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardBackgroundColor="@color/bckground"
+    android:layout_marginTop="@dimen/_3sdp"
+    android:layout_marginBottom="@dimen/_3sdp"
+    app:cardCornerRadius="@dimen/_5sdp"
+    app:cardElevation="@dimen/_5sdp">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:orientation="vertical">
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/bckground"
+                android:paddingStart="@dimen/_10sdp"
+                android:paddingEnd="@dimen/_5sdp"
+                android:paddingTop="@dimen/_10sdp"
+                android:paddingBottom="@dimen/_10sdp"
+                >
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/post_user_image"
+                    android:layout_width="@dimen/_38sdp"
+                    android:layout_height="@dimen/_38sdp"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/user_default" />
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_2sdp"
+                    android:orientation="vertical"
+                    android:layout_toEndOf="@+id/post_user_image">
+                    <RelativeLayout
+                        android:id="@+id/rl_post"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_5sdp"
+                        tools:ignore="UselessParent">
+                        <RelativeLayout
+                            android:id="@+id/top"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="@dimen/_2sdp"
+                            android:layout_toStartOf="@+id/post_options">
+                            <TextView
+                                android:id="@+id/post_user_name"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentStart="true"
+                                android:layout_marginTop="@dimen/_2sdp"
+                                android:fontFamily="@font/opensans_bold"
+                                android:textColor="@color/light_text_color"
+                                android:textSize="@dimen/_9sdp" />
+
+                            <TextView
+                                android:id="@+id/post_status"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:layout_marginTop="@dimen/_2sdp"
+                                android:layout_marginStart="@dimen/_4sdp"
+                                android:layout_toEndOf="@+id/post_user_name"
+                                android:text="@string/share_a_new_photo"
+                                android:textColor="@color/light_text_color"
+                                android:fontFamily="@font/opensans_semibold"
+                                android:textSize="@dimen/_9sdp" />
+                        </RelativeLayout>
+                        <ImageView
+                            android:id="@+id/post_options"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_marginEnd="-5dp"
+                            android:contentDescription="@string/app_name"
+                            android:rotation="90"
+                            app:srcCompat="@drawable/ic_more" />
+                        <TextView
+                            android:id="@+id/post_time"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/top"
+                            android:gravity="start"
+                            android:layout_marginTop="@dimen/_2sdp"
+                            android:layout_toStartOf="@+id/post_options"
+                            android:fontFamily="@font/opensans_semibold"
+                            android:textColor="@color/grey2"
+                            android:textSize="@dimen/_8sdp" />
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/post_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autoLink="web"
+                android:gravity="start"
+                android:linksClickable="true"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_2sdp"
+                android:layout_marginBottom="@dimen/_10sdp"
+                android:fontFamily="@font/opensans_semibold"
+                android:textColor="@color/light_text_color"
+                android:textSize="@dimen/_9sdp"
+                android:visibility="gone" />
+            <com.luseen.autolinklibrary.AutoLinkTextView
+                android:id="@+id/post_text_autolink"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:layout_marginBottom="@dimen/_10sdp"
+                android:fontFamily="@font/opensans_semibold"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_9sdp"
+                android:visibility="gone" />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/post_height">
+
+                <com.allattentionhere.autoplayvideos.AAH_VideoImage
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerInside"
+                    android:tag="aah_vi" />
+
+                <ImageView
+                    android:id="@+id/img_playback"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left|bottom"
+                    android:contentDescription="@string/app_name"
+                    android:layout_margin="8dp"
+                    android:visibility="gone"
+                    app:srcCompat="@drawable/ic_play"
+                    tools:ignore="RtlHardcoded" />
+
+                <ImageView
+                    android:id="@+id/img_vol"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|bottom"
+                    android:contentDescription="@string/app_name"
+                    android:layout_margin="8dp"
+                    android:visibility="gone"
+                    app:srcCompat="@drawable/ic_unmute"
+                    tools:ignore="RtlHardcoded" />
+            </FrameLayout>
+
+            <include layout="@layout/post_list_adapter_links_layout" />
+
+            <include layout="@layout/post_list_adapter_options_layout" />
+        </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

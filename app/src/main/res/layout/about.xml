@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bckground_light"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar" />
+
+    <TextView
+        android:id="@+id/hdn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:visibility="gone"
+        android:text="@string/privacy_setting"
+        android:textColor="@color/light_text_color"
+        android:layout_margin="10dp"
+        android:textSize="20sp" />
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="vertical"
+        android:fillViewport="true">
+
+    <TextView
+        android:id="@+id/text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="start"
+        android:fontFamily="@font/opensans_regular"
+        android:padding="@dimen/_10sdp"
+        android:autoLink="web"
+        android:scrollbars="vertical"
+        android:textColor="@color/light_text_color"
+        android:textSize="@dimen/_10sdp" />
+    </ScrollView>
+
+</LinearLayout>

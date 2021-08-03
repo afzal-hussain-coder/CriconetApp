@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/viewgroup"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/booking_fileter_bg">
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/reclerFilterCoach"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <FrameLayout
+        android:id="@+id/fl_done"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_30sdp"
+        android:layout_marginStart="@dimen/_20sdp"
+        android:layout_marginEnd="@dimen/_20sdp"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:visibility="gone"
+        android:layout_below="@+id/reclerFilterCoach"
+        android:layout_marginBottom="@dimen/_5sdp"
+        android:background="@color/bckground">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_1sdp"
+            android:background="@color/bckground_light"/>
+        <View
+            android:layout_width="0.9dp"
+            android:layout_height="match_parent"
+            android:background="@color/bckground_light"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_1sdp"
+            android:layout_gravity="bottom"
+            android:background="@color/black"/>
+        <View
+            android:layout_width="@dimen/_1sdp"
+            android:layout_height="match_parent"
+            android:layout_gravity="end"
+            android:background="@color/black"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:padding="@dimen/_5sdp"
+            android:text="@string/done"
+            android:textAllCaps="true"
+            android:drawablePadding="@dimen/_2sdp"
+            android:gravity="center_vertical"
+            app:fontFamily="@font/opensans_bold"
+            android:textColor="#E0FFFF"
+            android:textSize="@dimen/_10sdp"
+            app:drawableStartCompat="@drawable/ic_done_black_24dp" />
+
+    </FrameLayout>
+
+</RelativeLayout>

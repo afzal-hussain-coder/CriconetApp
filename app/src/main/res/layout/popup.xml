@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/booking_fileter_bg">
+
+    <com.applandeo.materialcalendarview.CalendarView
+        android:id="@+id/calendarView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:abbreviationsBarColor="@color/bckground"
+        app:abbreviationsLabelsColor="@color/light_text_color"
+        app:daysLabelsColor="@color/light_text_color"
+        android:layout_marginStart="@dimen/_1sdp"
+        android:layout_marginEnd="@dimen/_1sdp"
+        android:layout_marginTop="@dimen/_1sdp"
+        android:layout_marginBottom="@dimen/_1sdp"
+        app:eventsEnabled="true"
+        app:disabledDaysLabelsColor="#fff"
+        app:typeface="@font/opensans_regular"
+        app:forwardButtonSrc="@drawable/ic_arrow_right"
+        app:headerColor="@color/bckground"
+        app:headerLabelColor="@color/light_text_color"
+        app:pagesColor="@color/bckground"
+        app:previousButtonSrc="@drawable/ic_arrow_left"
+        app:selectionColor="@color/app_green"
+        app:todayLabelColor="@color/colorPrimary"
+        app:type="one_day_picker" />
+
+</LinearLayout>

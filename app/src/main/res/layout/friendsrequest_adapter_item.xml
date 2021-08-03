@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/relative_dash"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_5sdp"
+        android:layout_marginEnd="@dimen/_5sdp"
+        android:background="@color/bckground"
+        android:padding="@dimen/_5sdp">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/user_image"
+            android:layout_width="@dimen/_50sdp"
+            android:layout_height="@dimen/_50sdp"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:src="@drawable/user_default" />
+
+        <TextView
+            android:id="@+id/user_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_toRightOf="@+id/user_image"
+            android:gravity="start"
+            android:layout_centerVertical="true"
+            android:padding="2dp"
+            android:text="Michel"
+            android:fontFamily="@font/opensans_semibold"
+            android:textColor="@color/light_text_color"
+            android:textSize="@dimen/_10sdp" />
+
+        <TextView
+            android:id="@+id/user_address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/user_name"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/loc"
+            android:background="@color/white"
+            android:gravity="start"
+            android:padding="2dp"
+            android:visibility="gone"
+            android:text="25 min ago"
+            android:textColor="@color/grey2"
+            android:textSize="16sp" />
+
+        <ImageView
+            android:id="@+id/req_decline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:padding="@dimen/_5sdp"
+            android:src="@drawable/ic_close_black_24dp"
+            app:tint="@color/colorPrimary" />
+
+        <ImageView
+            android:id="@+id/req_accept"
+            android:layout_width="@dimen/_30sdp"
+            android:layout_height="@dimen/_30sdp"
+            android:layout_toLeftOf="@+id/req_decline"
+            android:layout_centerVertical="true"
+            android:padding="@dimen/_5sdp"
+            android:src="@drawable/accept" />
+
+        <ImageView
+            android:id="@+id/loc"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_below="@+id/user_name"
+            android:layout_marginTop="4dp"
+            android:visibility="gone"
+            android:layout_marginRight="3dp"
+            android:layout_toRightOf="@+id/user_image"
+            android:src="@drawable/location_grey" />
+
+    </RelativeLayout>
+
+</RelativeLayout>

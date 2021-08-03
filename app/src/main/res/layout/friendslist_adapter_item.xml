@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/relative_dash"
+    android:orientation="vertical">
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_5sdp"
+        android:layout_marginEnd="@dimen/_5sdp"
+        android:layout_marginBottom="@dimen/_6sdp"
+        app:cardBackgroundColor="@color/bckground"
+        app:cardCornerRadius="@dimen/_5sdp"
+        app:cardElevation="@dimen/_7sdp"
+        app:cardPreventCornerOverlap="true">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:padding="@dimen/_5sdp"
+        android:layout_height="wrap_content">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/user_image"
+            android:layout_width="@dimen/_50sdp"
+            android:layout_height="@dimen/_50sdp"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/_5sdp"
+            android:src="@drawable/user_default" />
+
+
+        <TextView
+            android:id="@+id/user_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@+id/user_image"
+            android:gravity="start"
+            android:padding="@dimen/_2sdp"
+            android:fontFamily="@font/opensans_semibold"
+            android:text="Michel"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_10sdp" />
+
+        <TextView
+            android:id="@+id/user_address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/user_name"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/loc"
+            android:background="@color/white"
+            android:gravity="start"
+            android:padding="2dp"
+            android:visibility="gone"
+            android:text="25 min ago"
+            android:textColor="@color/grey2"
+            android:textSize="16sp" />
+
+        <ImageView
+            android:id="@+id/user_status"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:visibility="gone"
+            android:padding="10dp"
+            android:src="@drawable/chat_dark" />
+
+        <ImageView
+            android:id="@+id/loc"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_below="@+id/user_name"
+            android:visibility="gone"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="3dp"
+            android:layout_toEndOf="@+id/user_image"
+            android:src="@drawable/location_grey" />
+
+    </RelativeLayout>
+    </androidx.cardview.widget.CardView>
+
+</RelativeLayout>

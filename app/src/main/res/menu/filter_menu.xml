@@ -1,0 +1,13 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:bbn_rippleColor="#33ffffff"
+    app:bbn_itemColorInactive="#33ffffff"
+    >
+    <item
+        android:id="@+id/filter"
+        android:icon="@drawable/filter_icon"
+        android:title="Filter"
+
+        app:showAsAction="always" />
+</menu>

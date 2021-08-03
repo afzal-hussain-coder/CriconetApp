@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    >
+    <include layout="@layout/toolbar"
+        android:id="@+id/toolbar"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/toolbar"
+        android:background="@color/bckground_light">
+
+
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/_10sdp"
+                android:layout_marginRight="@dimen/_10sdp"
+                android:paddingBottom="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvCancelFormQuets"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_1sdp"
+                    android:layout_gravity="center_horizontal"
+                    android:textColor="@color/light_text_color"
+                    android:textSize="@dimen/_10sdp"
+                    app:fontFamily="@font/opensans_regular"
+                    />
+
+
+               <com.google.android.material.card.MaterialCardView
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:layout_marginTop="@dimen/_10sdp"
+                   android:layout_marginBottom="@dimen/_10sdp"
+                   android:padding="@dimen/_10sdp"
+                   app:cardElevation="@dimen/_5sdp"
+                   app:cardBackgroundColor="@color/bckground">
+
+                   <LinearLayout
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content"
+                       android:orientation="vertical">
+                   <androidx.recyclerview.widget.RecyclerView
+                       android:id="@+id/recycler_feedback"
+                       android:layout_width="match_parent"
+                       android:layout_below="@+id/li_filter"
+                       android:padding="@dimen/_5sdp"
+                       android:layout_marginTop="@dimen/_5sdp"
+                       android:layout_height="match_parent" />
+                   <LinearLayout
+                       android:id="@+id/li_edit"
+                       android:layout_width="match_parent"
+                       android:layout_height="@dimen/_100sdp"
+                       android:layout_margin="@dimen/_10sdp"
+                       android:layout_below="@+id/top"
+                       android:visibility="gone"
+                       android:background="@drawable/bg_backedit_feed">
+                       <EditText
+                           android:id="@+id/edit_type_feedback"
+                           android:layout_width="match_parent"
+                           android:layout_height="wrap_content"
+                           app:fontFamily="@font/opensans_semibold"
+                           android:textSize="@dimen/_10sdp"
+                           android:background="@null"
+                           android:hint="Type here..."
+                           android:cursorVisible="true"
+                           android:enabled="true"
+                           android:focusable="true"
+                           android:textColor="@color/light_text_color"
+                           android:padding="@dimen/_7sdp" />
+                   </LinearLayout>
+                   </LinearLayout>
+               </com.google.android.material.card.MaterialCardView>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:layout_marginTop="@dimen/_10sdp">
+
+                    <CheckBox
+                        android:id="@+id/ch_terams"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:buttonTint="@color/light_text_color" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_toEndOf="@+id/ch_terams"
+                        android:layout_centerVertical="true"
+                        android:layout_centerHorizontal="true"
+                        android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/tearms_use_policy"
+                        android:layout_gravity="center_vertical"
+                        app:fontFamily="@font/opensans_semibold"
+                        android:textSize="@dimen/_9sdp"
+                        android:textColor="@color/light_text_color"
+                        />
+                        <TextView
+                            android:id="@+id/tv_terms"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/tearms_use_policyy"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginStart="@dimen/_2sdp"
+                            app:fontFamily="@font/opensans_semibold"
+                            android:textSize="@dimen/_10sdp"
+                            android:textColor="@color/light_text_color"
+                            />
+
+                        <TextView
+                            android:id="@+id/tv_policy"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/tearms_use_policyyy"
+                            android:layout_marginStart="@dimen/_2sdp"
+                            android:layout_gravity="center_vertical"
+                            app:fontFamily="@font/opensans_bold"
+                            android:textSize="@dimen/_10sdp"
+                            android:textColor="@color/bckground"
+                            />
+                    </LinearLayout>
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/_5sdp"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:orientation="vertical">
+
+                    <FrameLayout
+                        android:id="@+id/fl_submit_feedback"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_35sdp"
+                        android:layout_marginBottom="@dimen/_5sdp"
+                        android:background="@color/colorPrimary">
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/_1sdp"
+                            android:background="#ca9191"/>
+                        <View
+                            android:layout_width="0.9dp"
+                            android:layout_height="match_parent"
+                            android:background="#ca9191"/>
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/_1sdp"
+                            android:layout_gravity="bottom"
+                            android:background="@color/black"/>
+                        <View
+                            android:layout_width="@dimen/_1sdp"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="end"
+                            android:background="@color/black"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:padding="@dimen/_5sdp"
+                            android:text="@string/submit_your_feedback"
+                            app:fontFamily="@font/opensans_semibold"
+                            android:textColor="@color/light_text_color"
+                            android:textSize="@dimen/_10sdp"/>
+
+                    </FrameLayout>
+
+
+
+                </LinearLayout>
+
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+
+    </RelativeLayout>
+</RelativeLayout>

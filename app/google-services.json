@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1072621342122",
+    "firebase_url": "https://criconet-872a3.firebaseio.com",
+    "project_id": "criconet-872a3",
+    "storage_bucket": "criconet-872a3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1072621342122:android:9cc2eafdd31a7d6cacefd3",
+        "android_client_info": {
+          "package_name": "com.pb.criconet"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1072621342122-6q5bb7b1rq3l71macqa16agotnssba8o.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.pb.criconet",
+            "certificate_hash": "ce14ecbf9e31a986ca15913e4df09e951d980abb"
+          }
+        },
+        {
+          "client_id": "1072621342122-hrdbvme9dvs47eq072q7d492ruu01ahj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBwYBjCT9GW0F0bU6mZWQzPF6w_utDjouc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1072621342122-79db54nr4q2n5159h5ck25q7f2t38p88.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

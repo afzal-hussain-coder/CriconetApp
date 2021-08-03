@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+    <include layout="@layout/toolbar"
+        android:id="@+id/toolbar"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/toolbar"
+        android:background="@color/bckground_light">
+
+
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/_10sdp"
+                android:layout_marginRight="@dimen/_10sdp"
+                android:paddingBottom="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/tv_dear_coach"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Dear Coach,"
+                    android:layout_marginTop="@dimen/_1sdp"
+                    android:singleLine="false"
+                    android:layout_gravity="center_horizontal"
+                    android:textColor="@color/light_text_color"
+                    android:textSize="@dimen/_9sdp"
+                    app:fontFamily="@font/opensans_semibold"
+                    />
+                <TextView
+                    android:id="@+id/tvCancelFormQuets"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/end_session_quets"
+                    android:layout_marginTop="@dimen/_1sdp"
+                    android:singleLine="false"
+                    android:layout_gravity="center_horizontal"
+                    android:textColor="@color/light_text_color"
+                    android:textSize="@dimen/_9sdp"
+                    app:fontFamily="@font/opensans_semibold"
+                    />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Please rate your experience on the following parameters:-"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_gravity="center_horizontal"
+                    android:textColor="@color/bckground"
+                    android:textSize="@dimen/_10sdp"
+                    app:fontFamily="@font/opensans_bold"
+                    />
+
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_marginBottom="@dimen/_10sdp"
+                    android:padding="@dimen/_10sdp"
+                    app:cardElevation="@dimen/_5sdp"
+                    app:cardBackgroundColor="@color/bckground">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/recycler_feedback"
+                            android:layout_width="match_parent"
+                            android:layout_marginTop="@dimen/_5sdp"
+                            android:layout_height="match_parent" />
+                        <TextView
+                            android:id="@+id/tv_last_position"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="left"
+                            android:layout_below="@+id/recycler_feedback"
+                            android:layout_marginStart="@dimen/_10sdp"
+                            android:text="@string/submit_your_feedback"
+                            app:fontFamily="@font/opensans_semibold"
+                            android:textColor="@color/light_text_color"
+                            android:textSize="@dimen/_8sdp"/>
+                        <LinearLayout
+                            android:id="@+id/li_edit"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/_100sdp"
+                            android:layout_margin="@dimen/_10sdp"
+                            android:layout_below="@+id/tv_last_position"
+                            android:visibility="visible"
+                            android:orientation="vertical"
+                            android:background="@drawable/bg_backedit_feed">
+                            <EditText
+                                android:id="@+id/edit_type_feedback"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                app:fontFamily="@font/opensans_semibold"
+                                android:textSize="@dimen/_8sdp"
+                                android:background="@null"
+                                android:gravity="top"
+                                android:scrollbars="vertical"
+                                android:overScrollMode="ifContentScrolls"
+                                android:hint="Type here..."
+                                android:cursorVisible="true"
+                                android:enabled="true"
+                                android:focusable="true"
+                                android:textColor="@color/light_text_color"
+                                android:padding="@dimen/_7sdp" />
+                        </LinearLayout>
+                    </RelativeLayout>
+
+
+                </com.google.android.material.card.MaterialCardView>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/_5sdp"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:orientation="vertical">
+
+                    <FrameLayout
+                        android:id="@+id/fl_submit_feedback"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_35sdp"
+                        android:layout_marginBottom="@dimen/_5sdp"
+                        android:background="@color/colorPrimary">
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/_1sdp"
+                            android:background="#ca9191"/>
+                        <View
+                            android:layout_width="0.9dp"
+                            android:layout_height="match_parent"
+                            android:background="#ca9191"/>
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/_1sdp"
+                            android:layout_gravity="bottom"
+                            android:background="@color/app_redd"/>
+                        <View
+                            android:layout_width="@dimen/_1sdp"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="end"
+                            android:background="@color/app_redd"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:padding="@dimen/_5sdp"
+                            android:text="@string/submit_your_feedback"
+                            app:fontFamily="@font/opensans_semibold"
+                            android:textColor="@color/light_text_color"
+                            android:textSize="@dimen/_10sdp"/>
+
+                    </FrameLayout>
+
+
+
+                </LinearLayout>
+
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+
+    </RelativeLayout>
+</RelativeLayout>

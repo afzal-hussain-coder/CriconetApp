@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/relative_dash"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/bckground"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:padding="@dimen/_10sdp">
+
+        <!--<de.hdodenhof.circleimageview.CircleImageView-->
+        <!--android:id="@+id/user_image"-->
+        <!--android:layout_width="55dp"-->
+        <!--android:layout_height="55dp"-->
+        <!--android:layout_centerVertical="true"-->
+        <!--android:layout_marginRight="10dp"-->
+        <!--android:src="@drawable/user_default" />-->
+        <com.makeramen.roundedimageview.RoundedImageView
+            android:id="@+id/user_image"
+            android:layout_width="@dimen/_40sdp"
+            android:layout_height="@dimen/_40sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/app_icon"
+            app:riv_oval="true"
+            app:riv_corner_radius="@dimen/_5sdp" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/user_image"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/unblock"
+            android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/user_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:padding="2dp"
+            android:text="Michel"
+            android:fontFamily="@font/opensans_semibold"
+            android:textColor="@color/light_text_color"
+            android:textSize="@dimen/_10sdp" />
+
+        <TextView
+            android:id="@+id/user_address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:visibility="gone"
+            android:padding="2dp"
+            android:text="25 min ago"
+            android:fontFamily="@font/opensans_semibold"
+            android:textColor="@color/light_text_color"
+            android:textSize="@dimen/_8dp" />
+        </LinearLayout>
+        <Button
+            android:id="@+id/unblock"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/_25sdp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/btn_bg_gradient_round"
+            android:text="@string/unblock"
+            android:textSize="@dimen/_9sdp"
+            android:fontFamily="@font/opensans_semibold"
+            android:textColor="@color/light_text_color" />
+
+
+    </RelativeLayout>
+
+</RelativeLayout>
