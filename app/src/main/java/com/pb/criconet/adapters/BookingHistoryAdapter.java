@@ -43,7 +43,7 @@ public class BookingHistoryAdapter extends RecyclerView.Adapter<BookingHistoryAd
         holder.tvCoachName.setText(Global.capitalizeFirstLatterOfString(data.get(position).getName()));
         holder.tvTime.setText(Global.convertUTCDateToLocalDate(data.get(position).getBookingSlotDate())+" , "+data.get(position).getBookingSlotTxt());
         holder.tvSlotDuration.setText(data.get(position).getSlotDuration()+" min");
-        holder.tvBookingDateTime.setText(Global.convertUTCDateToLocalDatee(data.get(position).getBooking_date()));
+        holder.tvBookingDateTime.setText(data.get(position).getBooking_date());
        // holder.tvBookingDateTime.setText(data.get(position).getBooking_date());
 
 //        holder.btn2.setOnClickListener(view -> {

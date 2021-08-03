@@ -187,7 +187,8 @@ public class RecMatches extends Fragment {
                                 data = new ArrayList<>();
                                 edit_search.setText("");
                                 data = VideoModel.fromJson(jsonObject.getJSONArray("data"));
-
+//                                int size = data.size();
+//                                size =0;
                                 if (data.size() == 0) {
                                     notfound.setVisibility(View.VISIBLE);
                                 } else {

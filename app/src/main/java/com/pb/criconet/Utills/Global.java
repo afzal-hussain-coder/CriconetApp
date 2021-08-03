@@ -579,26 +579,17 @@ public class Global {
         if (date_string.isEmpty()) {
             return "";
         }
-        //02 Jun 2021,01:20:00
         SimpleDateFormat oldFormatter = new SimpleDateFormat("dd MMM yyyy,hh:mm:ss");
-        //oldFormatter.setTimeZone(TimeZone.getTimeZone("UTC"));
         Date value = null;
         String dueDateAsNormal = "";
         try {
             value = oldFormatter.parse(date_string);
             SimpleDateFormat newFormatter = new SimpleDateFormat("dd MMM yyyy, h:mm a");
-
-           /* Date date = new SimpleDateFormat("yyyy-M-d").parse(date_string);
-            String dayOfWeek = new SimpleDateFormat("EEE", Locale.ENGLISH).format(newFormatter);
-
-            Log.d("day",dayOfWeek);*/
             newFormatter.setTimeZone(TimeZone.getDefault());
             dueDateAsNormal = newFormatter.format(value);
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        Log.d("date", dueDateAsNormal);
-
         return dueDateAsNormal;
     }
 
