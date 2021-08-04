@@ -122,6 +122,7 @@ public class EndSessionFeedbackFormActivity extends AppCompatActivity {
         recycler_feedback.setHasFixedSize(true);
         tv_dear_coach = findViewById(R.id.tv_dear_coach);
 
+        //Toaster.customToast(SessionManager.getProfileType(prefs));
         if(SessionManager.getProfileType(prefs).equalsIgnoreCase("coach")){
             tv_dear_coach.setText("Dear Coach,");
         }else{

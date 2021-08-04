@@ -33,7 +33,13 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".activity.EndSessionFeedbackFormActivity"></activity>
+        <activity android:name=".activity.EndSessionFeedbackFormActivity">
+             <!--<intent-filter>
+             <action android:name="android.intent.action.MAIN" />
+
+             <category android:name="android.intent.category.LAUNCHER" />
+             </intent-filter>-->
+        </activity>
         <activity android:name=".activity.JoinSessionActivity" />
         <activity android:name=".activity.CancelletionWebView" />
         <activity android:name=".activity.TermsUseActivity" />

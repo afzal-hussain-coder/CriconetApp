@@ -62,9 +62,9 @@ public class Global {
 
     public static final String FILE_UPLOAD_URL = "https://criconetonline.com/app_api.php?type=new_post";
       /*for debug*/
-    public static final String URL = "https://stage.criconetonline.com/app_api.php?type=";
+    //public static final String URL = "https://stage.criconetonline.com/app_api.php?type=";
       /*for live*/
-    //public static final String URL = "https://www.criconet.com/app_api.php?type=";
+    public static final String URL = "https://www.criconet.com/app_api.php?type=";
     // for video upload testing..
     //public static final String URL = "https://www.criconet.com/app_api.php?type=";
     public static final String BOOKING_URL = "https://stage.criconetonline.com/app_api.php?type=create_booking_order";

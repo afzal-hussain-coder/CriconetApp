@@ -57,7 +57,7 @@ public class RecordedMatchAdapter extends RecyclerView.Adapter<RecordedMatchAdap
         holder.ground_name.setText(arrayList_image.get(position).getGround_name());
         holder.team_name.setText(arrayList_image.get(position).getTeam_name());
         holder.location.setText(arrayList_image.get(position).getLocation());
-        holder.date_time.setText(convertUTCDateToLocalDate(arrayList_image.get(position).getDate_time()));
+        holder.date_time.setText(arrayList_image.get(position).getDate_time());
         holder.play_icon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
