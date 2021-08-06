@@ -352,6 +352,6 @@
     <string name="thanks">Thanks!</string>
     <string name="end_session_quets">Thank you for booking your session with Criconet.We would like to know how your session was. Please spare some movement to give us your valuable feedback so we can improve our service.</string>
     <string name="submit">Submit</string>
-    <string name="search_by_name_location">Search by Name or Location</string>
+    <string name="search_by_name_location">Search by Team, Location and Ground</string>
 
 </resources>

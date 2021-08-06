@@ -1121,7 +1121,16 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
         dialog.setCancelable(false);
         FrameLayout fl_ok = dialog.findViewById(R.id.fl_ok);
         fl_ok.setOnClickListener(v -> {
+
+//            joinType="leave";
+//            if (Global.isOnline(mActivity)) {
+//                getSessionLog();
+//            } else {
+//                Global.showDialog(mActivity);
+//            }
+
             dialog.dismiss();
+            // will show..after testing...............................................................
             Bundle args = new Bundle();
             args.putSerializable("ARRAYLIST",(Serializable)feedBackFormChildData);
            startActivity(new Intent(CallActivity.this,EndSessionFeedbackFormActivity.class)
@@ -1140,7 +1149,6 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
                 Log.d("SessionResponse",response);
 
                 //Global.dismissDialog(progressDialog);
-
             }
         }, new Response.ErrorListener() {
             @Override
@@ -1218,7 +1226,6 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
         postRequest.setRetryPolicy(policy);
         queue.add(postRequest);
     }
-
 
     @Override
     public void onBackPressed() {

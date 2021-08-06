@@ -114,11 +114,18 @@ public class RecMatches extends Fragment {
 
         fl_search.setOnClickListener(v -> {
             search_value = edit_search.getText().toString().trim();
-            if (Global.isOnline(getActivity())) {
-                getHelp();
-            } else {
-                Global.showDialog(getActivity());
+
+            if(search_value.isEmpty()){
+
+            }else{
+                if (Global.isOnline(getActivity())) {
+                    getHelp();
+                } else {
+                    Global.showDialog(getActivity());
+                }
             }
+
+
         });
         /*edit_search.addTextChangedListener(new TextWatcher() {
             @Override
@@ -223,7 +230,7 @@ public class RecMatches extends Fragment {
                 Map<String, String> param = new HashMap<String, String>();
                 param.put("user_id", SessionManager.get_user_id(prefs));
                 param.put("s", SessionManager.get_session_id(prefs));
-                param.put("country_id", "");
+                param.put("country_id", "101");
                 param.put("state_id", "");
                 param.put("search_key", search_value);
 

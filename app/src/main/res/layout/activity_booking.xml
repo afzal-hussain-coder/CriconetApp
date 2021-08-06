@@ -154,16 +154,17 @@
                             android:layout_width="0.9dp"
                             android:layout_height="match_parent"
                             android:background="#ca9191"/>
+
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/_1sdp"
                             android:layout_gravity="bottom"
-                            android:background="@color/black"/>
+                            android:background="@color/app_redd"/>
                         <View
                             android:layout_width="@dimen/_1sdp"
                             android:layout_height="match_parent"
                             android:layout_gravity="end"
-                            android:background="@color/black"/>
+                            android:background="@color/app_redd"/>
 
                         <TextView
                             android:layout_width="wrap_content"
