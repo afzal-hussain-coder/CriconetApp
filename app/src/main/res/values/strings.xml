@@ -353,5 +353,29 @@
     <string name="end_session_quets">Thank you for booking your session with Criconet.We would like to know how your session was. Please spare some movement to give us your valuable feedback so we can improve our service.</string>
     <string name="submit">Submit</string>
     <string name="search_by_name_location">Search by Team, Location and Ground</string>
+    <string name="pay_later">Pay Later</string>
+    <string name="name">Name</string>
+    <string name="enter_your_full_name">Enter your full name</string>
+    <string name="enter_your_full_address">Enter your address</string>
+    <string name="address">Address</string>
+    <string name="pin_code">Pin Code</string>
+    <string name="submit_details">Submit Details</string>
+    <string name="fill_deatils">Please fill the form, our executive will collect after session</string>
+    <string name="enter_your_pin">Enter pin code</string>
+    <string name="enter_alterenate_mobile_no">Enter alternate mobile no.</string>
+    <string name="terms_pay_later">I Give permission for my child’s picture to be posted on social media</string>
+    <string name="terms_pay_later_no">I DO NOT give permission for my child’s picture to be posted on social media</string>
+    <!--<string name="terms_pay_later_condition">If you can’t pay, we would like to offer you a free session. However we would than like to use your footage for social media and promotions. Please have your parent / guardian give us an approval to use</string>-->
+    <string name="session_paid_amount_later">Amount to be paid later</string>
+    <string name="terms_pay_later_condition">Please fill the form our executive will come to collect after session</string>
+    <string name="students_name">Student Name</string>
+    <string name="pincode">Pin Code</string>
+    <string name="alternateNo">Alternate Mobile No</string>
+    <string name="permission_slip">Social Media Permission Slip</string>
+    <string name="permission_quets">Please select below whether or not you give permission for your child’s picture to be posted on social media account</string>
+    <string name="child_info">Your child’s personal information will never appear</string>
+    <string name="parent_signature">Parent/Guardian Signature</string>
+    <string name="upload_signature">Upload Signature</string>
+
 
 </resources>

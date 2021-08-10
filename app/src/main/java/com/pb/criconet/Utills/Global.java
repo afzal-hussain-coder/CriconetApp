@@ -61,16 +61,22 @@ import timber.log.Timber;
 public class Global {
 
     public static final String FILE_UPLOAD_URL = "https://criconetonline.com/app_api.php?type=new_post";
-      /*for debug*/
-    //public static final String URL = "https://stage.criconetonline.com/app_api.php?type=";
-      /*for live*/
-    public static final String URL = "https://www.criconet.com/app_api.php?type=";
+
+    /*for debug*/
+    public static final String URL = "https://stage.criconetonline.com/app_api.php?type=";
+    public static final String URL_CHAT = "https://stage.criconetonline.com";
+
+    /*for live*/
+    //public static final String URL = "https://www.criconet.com/app_api.php?type=";
+    //public static final String URL_CHAT = "https://www.criconet.com";
+
+
     // for video upload testing..
     //public static final String URL = "https://www.criconet.com/app_api.php?type=";
     public static final String BOOKING_URL = "https://stage.criconetonline.com/app_api.php?type=create_booking_order";
     //public static String URL2 = "https://www.criconet.com/";
-    public static final String VIDEO_URL="https://stage.criconetonline.com";// for bebug
-    public static final String URL2="https://criconet.com"; // for release live
+    public static final String VIDEO_URL = "https://stage.criconetonline.com";// for bebug
+    public static final String URL2 = "https://criconet.com"; // for release live
 
     /*Use this URL when app goes to live*/
     //public static String URL = "https://www.criconet.com/app_api.php?type=";
@@ -80,23 +86,19 @@ public class Global {
     public static String GameURL = "https://criconetonline.com/cricket_js/index.php?";
     public static String websiteURL_demo = "https://criconetonline.com/webviewhome?username=dfordharma&password=dharma@123";
     public static String NOTIFICATION_KEY = "key=AIzaSyCKqEUtgG3zQq1JRI3s5bS5H4uk0qXhJB4";
-    public static final String SURVEY_FORM_LINK="https://stage.criconetonline.com/online-survey-form";
-    public static final String OTP_VERIFY ="otp_verification";
-    public static final String RESEND_OTP ="resend_otp";
-    public static final String VERIFY_MOBILE ="mobile_update";
-    public static final String PAYMENT_SUCCESS ="booking_payment_success";
-    public static final String GET_FEEDBACK_FORM="get_cancel_feedback_form";
-    public static final String CANCEL_BOOKING ="cancel_booking";
-    public static final String GET_SPECIALITIES ="get_specialities_cat";
-    public static final String GET_SESSION_FEEDBACKFORM ="get_session_feedback_form";
-    public static final String SUBMIT_END_SESSION_FEEDBACK ="post_session_feedback_form";
-    public static final String getOffet ="get_offer";
-    public static final String coupan_applay ="coupon_price_cal";
-    public static final String check_coupon_code ="check_coupon_code";
-
-
-
-
+    public static final String SURVEY_FORM_LINK = "https://stage.criconetonline.com/online-survey-form";
+    public static final String OTP_VERIFY = "otp_verification";
+    public static final String RESEND_OTP = "resend_otp";
+    public static final String VERIFY_MOBILE = "mobile_update";
+    public static final String PAYMENT_SUCCESS = "booking_payment_success";
+    public static final String GET_FEEDBACK_FORM = "get_cancel_feedback_form";
+    public static final String CANCEL_BOOKING = "cancel_booking";
+    public static final String GET_SPECIALITIES = "get_specialities_cat";
+    public static final String GET_SESSION_FEEDBACKFORM = "get_session_feedback_form";
+    public static final String SUBMIT_END_SESSION_FEEDBACK = "post_session_feedback_form";
+    public static final String getOffet = "get_offer";
+    public static final String coupan_applay = "coupon_price_cal";
+    public static final String check_coupon_code = "check_coupon_code";
 
 
     public static final int TYPE_VIDEO = 0,
@@ -144,18 +146,24 @@ public class Global {
             return android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
         }
     }
+
     public static boolean isValidEmail(String email) {
         String EMAIL_PATTERN = "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
         return email.matches(EMAIL_PATTERN);
     }
 
     public static boolean isValidPhoneNumber(String testString) {
-        return (testString.length()>=8 && testString.length()<=12);
+        return (testString.length() >= 8 && testString.length() <= 12);
     }
-    public static String capitalizeFirstLatterOfString(String name){
-        if(name == null){
+
+    public static boolean isValidPincode(String testString) {
+        return (testString.length() == 6);
+    }
+
+    public static String capitalizeFirstLatterOfString(String name) {
+        if (name == null) {
             return "";
-        }else{
+        } else {
             StringBuilder sb = new StringBuilder(name);
             sb.setCharAt(0, Character.toUpperCase(sb.charAt(0)));
             return sb.toString();
@@ -178,11 +186,12 @@ public class Global {
         } catch (Exception e) {
         }
     }
+
     public static void hideSoftKeyboard(Activity activity) {
         InputMethodManager inputMethodManager =
                 (InputMethodManager) activity.getSystemService(
                         Activity.INPUT_METHOD_SERVICE);
-        if(inputMethodManager.isAcceptingText()){
+        if (inputMethodManager.isAcceptingText()) {
             inputMethodManager.hideSoftInputFromWindow(
                     activity.getCurrentFocus().getWindowToken(),
                     0
@@ -437,9 +446,8 @@ public class Global {
     }
 
     public static String getMonth(int month) {
-        return new DateFormatSymbols().getMonths()[month-0];
+        return new DateFormatSymbols().getMonths()[month - 0];
     }
-
 
 
     public static ProgressDialog getProgressDialog(Context context, String message, Boolean canceleable) {
@@ -469,22 +477,9 @@ public class Global {
         }
     }
 
-    public static String getDateGot(String dateTime){
-        Date date=null;
-        String realdate=null;
-        SimpleDateFormat formatter = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzzz yyyy");
-        try {
-            date = formatter.parse(dateTime);
-            realdate = new SimpleDateFormat("yyyy-MM-dd").format(date);
-
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return realdate;
-    }
-    public static String getDateGott(String dateTime){
-        Date date=null;
-        String realdate=null;
+    public static String getDateGot(String dateTime) {
+        Date date = null;
+        String realdate = null;
         SimpleDateFormat formatter = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzzz yyyy");
         try {
             date = formatter.parse(dateTime);
@@ -496,9 +491,23 @@ public class Global {
         return realdate;
     }
 
-    public static String getMonth(String dateTime){
-        Date date=null;
-        String realdate=null;
+    public static String getDateGott(String dateTime) {
+        Date date = null;
+        String realdate = null;
+        SimpleDateFormat formatter = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzzz yyyy");
+        try {
+            date = formatter.parse(dateTime);
+            realdate = new SimpleDateFormat("yyyy-MM-dd").format(date);
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return realdate;
+    }
+
+    public static String getMonth(String dateTime) {
+        Date date = null;
+        String realdate = null;
         SimpleDateFormat formatter = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzzz yyyy");
         try {
             date = formatter.parse(dateTime);
@@ -510,9 +519,9 @@ public class Global {
         return realdate;
     }
 
-    public static String getYear(String dateTime){
-        Date date=null;
-        String realdate=null;
+    public static String getYear(String dateTime) {
+        Date date = null;
+        String realdate = null;
         SimpleDateFormat formatter = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzzz yyyy");
         try {
             date = formatter.parse(dateTime);
@@ -542,7 +551,7 @@ public class Global {
         return index;
     }
 
-    public static void showSnackbar(View view,String msg){
+    public static void showSnackbar(View view, String msg) {
         Snackbar snackbar = Snackbar
                 .make(view, msg, Snackbar.LENGTH_LONG);
         snackbar.show();
@@ -670,7 +679,7 @@ public class Global {
         }
     }
 
-    public static String getCurrentDate(){
+    public static String getCurrentDate() {
         Date c = Calendar.getInstance().getTime();
         System.out.println("Current time => " + c);
 
@@ -678,14 +687,14 @@ public class Global {
         return df.format(c);
     }
 
-    public static String capitizeString(String name){
-        String captilizedString="";
-        try{
+    public static String capitizeString(String name) {
+        String captilizedString = "";
+        try {
 
-            if(!name.trim().equals("")){
-                captilizedString = name.substring(0,1).toUpperCase() + name.substring(1);
+            if (!name.trim().equals("")) {
+                captilizedString = name.substring(0, 1).toUpperCase() + name.substring(1);
             }
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -707,11 +716,12 @@ public class Global {
 
         long h = (seconds / (60 * 60)) % 24;
 
-        return String.format("%d:%02d:%02d", h,m,s);
+        return String.format("%d:%02d:%02d", h, m, s);
 
     }
+
     //2021-06-28 16:00:00
-    public static String getCurrentDateAndTime(){
+    public static String getCurrentDateAndTime() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
         String currentDateandTime = sdf.format(new Date());
         return currentDateandTime;

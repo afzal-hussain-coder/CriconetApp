@@ -33,12 +33,16 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning">
+        <activity android:name=".activity.PayLaterFormActivity"></activity>
         <activity android:name=".activity.EndSessionFeedbackFormActivity">
-             <!--<intent-filter>
+
+            <!--
+             <intent-filter>
              <action android:name="android.intent.action.MAIN" />
 
              <category android:name="android.intent.category.LAUNCHER" />
-             </intent-filter>-->
+             </intent-filter>
+            -->
         </activity>
         <activity android:name=".activity.JoinSessionActivity" />
         <activity android:name=".activity.CancelletionWebView" />
@@ -276,13 +280,12 @@
         <meta-data
             android:name="com.razorpay.ApiKey"
             android:value="rzp_live_GRQJ65vJqdOWGl" /> <!-- test Api key rzp_test_RQnJPHd5MrrleO exprire -->
-
         <!-- live APi key rzp_live_GRQJ65vJqdOWGl -->
-
         <meta-data
             android:name="com.google.android.gms.wallet.api.enabled"
             android:value="true" />
 
+        joj
         <activity android:name=".activity.MessageActivity" />
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"

@@ -38,7 +38,7 @@ app:cardElevation="@dimen/_5sdp">
                 android:visibility="gone"
                 android:fontFamily="@font/opensans_regular"
                 android:textColor="@color/light_text_color"
-                android:background="#c9000000"
+                android:background="@color/transparnt_light"
                 android:text="lsncskjncakjcn"/>
 
         </RelativeLayout>

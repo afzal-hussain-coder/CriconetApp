@@ -137,13 +137,13 @@
                     android:onClick="onVoiceMuteClicked"
                     android:src="@drawable/ic_mic_black_24dp" />
                 </RelativeLayout>
-                <!--<ImageView
+                <ImageView
                     android:layout_width="@dimen/_35sdp"
                     android:layout_height="match_parent"
                     android:onClick="onChatClicked"
                     android:contentDescription="@string/app_name"
                     android:src="@drawable/ic_comment_blue_24dp"
-                    android:visibility="gone" />-->
+                    android:visibility="gone" />
 
             </LinearLayout>
 

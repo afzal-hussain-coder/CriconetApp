@@ -151,12 +151,6 @@ public class CoachProfileActivity extends AppCompatActivity {
                     });
 
             }
-
-
-
-
-
-
             if (!extras.getString("Cover").isEmpty()) {
                 Glide.with(mContext).load(extras.getString("Cover"))
                         .into(img_banner);

@@ -75,7 +75,7 @@
                                 android:text="@string/session_details"
                                 android:textColor="@color/grey"
                                 android:textSize="@dimen/_10sdp"
-                                app:fontFamily="@font/robotomedium"
+                                app:fontFamily="@font/opensans_semibold"
                                 />
                             <TextView
                                 android:id="@+id/tvSessionDetails"
@@ -111,7 +111,7 @@
                             android:textColor="@color/bckground_light"
                             android:layout_gravity="center_horizontal"
                             android:textSize="@dimen/_10sdp"
-                            app:fontFamily="@font/robotomedium"
+                            app:fontFamily="@font/opensans_semibold"
                             />
                         <TextView
                             android:id="@+id/tvSessionDateTime"
@@ -143,7 +143,7 @@
                             android:textColor="@color/bckground_light"
                             android:layout_gravity="center_horizontal"
                             android:textSize="@dimen/_10sdp"
-                            app:fontFamily="@font/robotomedium"
+                            app:fontFamily="@font/opensans_semibold"
                             />
                         <TextView
                             android:id="@+id/tvBookingDate"
@@ -160,11 +160,13 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/li_paid"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/rectangle_dotted"
                         android:layout_marginTop="@dimen/_10sdp"
                         android:paddingTop="@dimen/_5sdp"
+                        android:visibility="visible"
                         android:paddingBottom="@dimen/_5sdp"
                         android:orientation="vertical">
                         <TextView
@@ -174,10 +176,42 @@
                             android:textColor="@color/bckground_light"
                             android:layout_gravity="center_horizontal"
                             android:textSize="@dimen/_10sdp"
-                            app:fontFamily="@font/robotomedium"
+                            app:fontFamily="@font/opensans_semibold"
                             />
                         <TextView
                             android:id="@+id/tvSessionAmount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="ID1-294"
+                            android:layout_marginTop="@dimen/_1sdp"
+                            android:layout_gravity="center_horizontal"
+                            android:textColor="@color/app_green"
+                            android:textSize="@dimen/_10sdp"
+                            app:fontFamily="@font/opensans_semibold"
+                            />
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/li_paylater"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/rectangle_dotted"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:paddingTop="@dimen/_5sdp"
+                        android:visibility="gone"
+                        android:paddingBottom="@dimen/_5sdp"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/session_paid_amount_later"
+                            android:textColor="@color/green"
+                            android:layout_gravity="center_horizontal"
+                            android:textSize="@dimen/_10sdp"
+                            app:fontFamily="@font/opensans_bold"
+                            />
+                        <TextView
+                            android:id="@+id/tvSessionAmount_paylater"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="ID1-294"
@@ -206,7 +240,7 @@
                             android:textColor="@color/bckground_light"
                             android:layout_gravity="center_horizontal"
                             android:textSize="@dimen/_10sdp"
-                            app:fontFamily="@font/robotomedium"
+                            app:fontFamily="@font/opensans_semibold"
                             />
                         <TextView
                             android:id="@+id/tvBookingStataus"

@@ -72,6 +72,7 @@
     <color name="green">#8bbb51</color>
     <color name="yellow">#FF7F24</color>
     <color name="yourColor">#8bbb51</color>
+    <color name="transparnt_light">#c9000000</color>
 
 
 </resources>

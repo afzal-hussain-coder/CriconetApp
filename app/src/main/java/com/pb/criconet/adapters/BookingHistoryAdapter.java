@@ -62,12 +62,18 @@ public class BookingHistoryAdapter extends RecyclerView.Adapter<BookingHistoryAd
 
         if(data.get(position).getBtn2()!=null&&!data.get(position).getBtn2().equalsIgnoreCase("")){
 
-            if(data.get(position).getChanel_id().equalsIgnoreCase("")){
-                holder.btn2.setVisibility(View.GONE);
-            }else{
-                holder.btn2.setVisibility(View.VISIBLE);
-                holder.tv_join.setText(data.get(position).getBtn2()+" "+"Session");
+            try{
+                if(data.get(position).getChanel_id().equalsIgnoreCase("")){
+                    holder.btn2.setVisibility(View.GONE);
+                }else{
+                    holder.btn2.setVisibility(View.VISIBLE);
+                    holder.tv_join.setText(data.get(position).getBtn2()+" "+"Session");
+                }
+            }catch(Exception e){
+                e.printStackTrace();
+
             }
+
         }else {
             holder.btn2.setVisibility(View.GONE);
         }

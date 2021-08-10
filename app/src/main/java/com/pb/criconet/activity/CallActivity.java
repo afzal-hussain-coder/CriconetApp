@@ -572,11 +572,11 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
     }
 
 
-//    public void onChatClicked(View view){
-//
-//        startActivity(new Intent(this,MessageActivity.class).putExtra(ConstantApp.ACTION_KEY_CHANNEL_NAME,channelName).putExtra("mUserId",image_profile));
-//
-//    }
+    public void onChatClicked(View view){
+
+        startActivity(new Intent(this,MessageActivity.class).putExtra(ConstantApp.ACTION_KEY_CHANNEL_NAME,channelName).putExtra("mUserId",image_profile));
+
+    }
     public void onVoiceMuteClicked(View view) {
        // log.info("onVoiceMuteClicked " + view + " " + mUidsList.size() + " video_status: " + mVideoMuted + " audio_status: " + mAudioMuted);
         if (mUidsList.size() == 0) {

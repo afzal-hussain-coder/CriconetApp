@@ -1473,8 +1473,6 @@ public class HomeFragment extends Fragment implements BSImagePicker.OnMultiImage
 
     }*/
 
-
-
 //    private void upload(final String pdfname, Uri pdffile) {
 //        InputStream iStream = null;
 //        try {
@@ -1554,7 +1552,6 @@ public class HomeFragment extends Fragment implements BSImagePicker.OnMultiImage
 //
 //
 //    }
-
     private void ResetFeed() {
         img_close.setVisibility(View.GONE);
         img_addpost.setVisibility(View.VISIBLE);

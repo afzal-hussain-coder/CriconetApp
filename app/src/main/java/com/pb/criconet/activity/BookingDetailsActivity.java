@@ -16,6 +16,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.volley.DefaultRetryPolicy;
@@ -61,14 +62,18 @@ public class BookingDetailsActivity extends AppCompatActivity {
     private TextView tvBookingStataus;
     FrameLayout fl_book_another_session;
     FrameLayout fl_navigate_home_page;
-    FrameLayout fl_cancel_booking ;
+    FrameLayout fl_cancel_booking;
     JSONObject jsonObject;
     Activity mActivity;
-    String bookingId,fromWhere="";
+    String bookingId, fromWhere = "";
     private RequestQueue queue;
     CustomLoaderView loaderView;
     BookingPaymentsDetails bookingPaymentsDetails;
     private SharedPreferences prefs;
+    String paymentMethod = "";
+    LinearLayout li_paid, li_paylater;
+    TextView tvSessionAmount_paylater;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -100,25 +105,33 @@ public class BookingDetailsActivity extends AppCompatActivity {
         tvBookingDate = findViewById(R.id.tvBookingDate);
         tvSessionAmount = findViewById(R.id.tvSessionAmount);
         tvBookingStataus = findViewById(R.id.tvBookingStataus);
+        li_paid = findViewById(R.id.li_paid);
+        li_paylater = findViewById(R.id.li_paylater);
+        tvSessionAmount_paylater = findViewById(R.id.tvSessionAmount_paylater);
         fl_book_another_session = findViewById(R.id.fl_book_another_session);
-        fl_book_another_session.setOnClickListener(v -> {finish();});
+        fl_book_another_session.setOnClickListener(v -> {
+            finish();
+        });
         fl_navigate_home_page = findViewById(R.id.fl_navigate_home_page);
         fl_navigate_home_page.setOnClickListener(v -> {
             startActivity(new Intent(BookingDetailsActivity.this, MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
             finish();
         });
         fl_cancel_booking = findViewById(R.id.fl_cancel_booking);
-        fl_cancel_booking.setOnClickListener(v -> {cancelAlertDialog();});
+        fl_cancel_booking.setOnClickListener(v -> {
+            cancelAlertDialog();
+        });
 
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
             fromWhere = bundle.getString("FROM");
 
-            if(fromWhere.equalsIgnoreCase("1")){
+            if (fromWhere.equalsIgnoreCase("1")) {
+                paymentMethod = bundle.getString("PAYLATER");
                 bookingPaymentsDetails = (BookingPaymentsDetails) getIntent().getSerializableExtra("Data");
                 bookingDetails(bookingPaymentsDetails);
-            }else{
-                bookingId =bundle.getString("BookingID");
+            } else {
+                bookingId = bundle.getString("BookingID");
                 if (Global.isOnline(this)) {
                     getBookingDetails();
                 } else {
@@ -134,26 +147,40 @@ public class BookingDetailsActivity extends AppCompatActivity {
 
         bookingId = bookingPaymentsDetails.getId();
         try {
-            if (!bookingPaymentsDetails.getAvatar().isEmpty()){
+            if (!bookingPaymentsDetails.getAvatar().isEmpty()) {
                 Glide.with(mActivity).load(bookingPaymentsDetails.getAvatar())
                         .into(ivProfileImagee);
-            }else{
+            } else {
                 Glide.with(mActivity).load(R.drawable.placeholder_user)
                         .into(ivProfileImagee);
             }
             tvCoachNamee.setText(bookingPaymentsDetails.getCoachName());
-            tvSessionDetails.setText("Booking ID: "+" "+bookingPaymentsDetails.getBooking_id());
-            tvSessionDateTime.setText(Global.convertUTCDateToLocalDate(bookingPaymentsDetails.getOnlineSessionStartTime())+" , "+bookingPaymentsDetails.getBookingSlotTxt());
+            tvSessionDetails.setText("Booking ID: " + " " + bookingPaymentsDetails.getBooking_id());
+            tvSessionDateTime.setText(Global.convertUTCDateToLocalDate(bookingPaymentsDetails.getOnlineSessionStartTime()) + " , " + bookingPaymentsDetails.getBookingSlotTxt());
             tvBookingDate.setText(Global.getDate(Long.parseLong(bookingPaymentsDetails.getBookingTime())));
-            tvSessionAmount.setText("\u20B9"+" "+bookingPaymentsDetails.getPaymentAmount());
 
-            if (bookingPaymentsDetails.getBookingStatus().equalsIgnoreCase("1")){
+            if (paymentMethod.equalsIgnoreCase("PAYLATER")) {
+                li_paid.setVisibility(View.GONE);
+                li_paylater.setVisibility(View.VISIBLE);
+                tvSessionAmount_paylater.setText("\u20B9" + " " + bookingPaymentsDetails.getPaymentAmount());
+            } else if (paymentMethod.equalsIgnoreCase("PAID")) {
+                li_paid.setVisibility(View.VISIBLE);
+                li_paylater.setVisibility(View.GONE);
+                tvSessionAmount.setText("\u20B9" + " " + bookingPaymentsDetails.getPaymentAmount());
+            } else {
+                li_paid.setVisibility(View.VISIBLE);
+                li_paylater.setVisibility(View.GONE);
+                tvSessionAmount.setText("\u20B9" + " " + bookingPaymentsDetails.getPaymentAmount());
+            }
+
+
+            if (bookingPaymentsDetails.getBookingStatus().equalsIgnoreCase("1")) {
                 tvBookingStataus.setText(getString(R.string.booking_confirmed));
-            }else{
+            } else {
                 tvBookingStataus.setText("Booking in processing!");
             }
 
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -173,7 +200,7 @@ public class BookingDetailsActivity extends AppCompatActivity {
         FrameLayout fl_yes = dialog.findViewById(R.id.fl_yes);
         fl_yes.setOnClickListener(v -> {
             dialog.dismiss();
-            startActivity(new Intent(BookingDetailsActivity.this,CancellationFeedbackFormActivity.class).putExtra("BookingId",bookingId));
+            startActivity(new Intent(BookingDetailsActivity.this, CancellationFeedbackFormActivity.class).putExtra("BookingId", bookingId));
         });
         dialog.show();
     }
@@ -184,13 +211,13 @@ public class BookingDetailsActivity extends AppCompatActivity {
         StringRequest postRequest = new StringRequest(Request.Method.POST, Global.URL + "get_booking_details", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Log.d("BokingDetails Response",response);
+                Log.d("BokingDetails Response", response);
                 loaderView.hideLoader();
                 try {
                     JSONObject jsonObject = new JSONObject(response);
                     if (jsonObject.getString("api_text").equalsIgnoreCase("success")) {
                         JSONObject jsonObject1 = jsonObject.getJSONObject("data");
-                         bookingPaymentsDetails = new BookingPaymentsDetails(jsonObject1);
+                        bookingPaymentsDetails = new BookingPaymentsDetails(jsonObject1);
                         bookingDetails(bookingPaymentsDetails);
                     } else if (jsonObject.optString("api_text").equalsIgnoreCase("failed")) {
                         Toaster.customToast(jsonObject.optJSONObject("errors").optString("error_text"));

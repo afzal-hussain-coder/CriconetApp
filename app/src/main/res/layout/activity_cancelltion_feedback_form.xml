@@ -13,8 +13,6 @@
         android:layout_below="@+id/toolbar"
         android:background="@color/bckground_light">
 
-
-
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
