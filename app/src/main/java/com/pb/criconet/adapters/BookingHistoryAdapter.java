@@ -84,7 +84,7 @@ public class BookingHistoryAdapter extends RecyclerView.Adapter<BookingHistoryAd
 
         if (data.get(position).getBtn2().equalsIgnoreCase("join")){
             holder.btn2.setOnClickListener(v -> {
-                callback.buttonClick(data.get(position).getDuration_in_milisecond(),data.get(position).getBtn2(),data.get(position).getChanel_id(),data.get(position).getBookingId(),
+                callback.buttonClick(data.get(position).getId(),data.get(position).getDuration_in_milisecond(),data.get(position).getBtn2(),data.get(position).getChanel_id(),data.get(position).getBookingId(),
                         data.get(position).getUserId(),data.get(position).getCoachUserId(),data.get(position).getName());
             });
         }
@@ -127,7 +127,7 @@ public class BookingHistoryAdapter extends RecyclerView.Adapter<BookingHistoryAd
     }
 
     public interface clickCallback{
-        public void buttonClick(long timeDuration,String action,String channel_id,String booking_id,String userid,String coachid,String coachName);
+        public void buttonClick(String id,long timeDuration,String action,String channel_id,String booking_id,String userid,String coachid,String coachName);
         public void viewDetails(BookingHistory.Datum data);
     }
 

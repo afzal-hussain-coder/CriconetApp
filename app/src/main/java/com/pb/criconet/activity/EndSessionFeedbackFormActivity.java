@@ -77,7 +77,8 @@ public class EndSessionFeedbackFormActivity extends AppCompatActivity {
     private int lastCheckedRB = -1;
     TextView tv_terms,tv_policy;
     int a1,a2,a3,a4,a5,a6,a7;
-    String suggestions="";
+    String suggestions="",id="";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,6 +92,7 @@ public class EndSessionFeedbackFormActivity extends AppCompatActivity {
         if(getIntent().getExtras()!=null){
             Bundle args = getIntent().getBundleExtra("Certificate");
             feedbackModelList = (ArrayList<FeedBackFormChildData>) args.getSerializable("ARRAYLIST");
+            id = getIntent().getExtras().getString("id");
 
         }
 
@@ -206,7 +208,6 @@ public class EndSessionFeedbackFormActivity extends AppCompatActivity {
 
     private void submitEndSessionFeedback() {
         loaderView.showLoader();
-//        progressDialog = Global.getProgressDialog(this, CCResource.getString(this, R.string.loading_dot), false);
         StringRequest postRequest = new StringRequest(Request.Method.POST, Global.URL + Global.SUBMIT_END_SESSION_FEEDBACK, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -224,10 +225,6 @@ public class EndSessionFeedbackFormActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
-
-
-                //Global.dismissDialog(progressDialog);
-
             }
         }, new Response.ErrorListener() {
             @Override
@@ -244,7 +241,7 @@ public class EndSessionFeedbackFormActivity extends AppCompatActivity {
                 param.put("user_id", SessionManager.get_user_id(prefs));
                 param.put("s", SessionManager.get_session_id(prefs));
                 param.put("commentText",feedbackText);
-                param.put("booking_id", SessionManager.get_session_id(prefs));
+                param.put("booking_id",id);
                 param.put("Q1", String.valueOf(a1));
                 param.put("Q2", String.valueOf(a2));
                 param.put("Q3", String.valueOf(a3));

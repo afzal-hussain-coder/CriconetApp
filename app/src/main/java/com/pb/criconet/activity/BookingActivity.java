@@ -316,13 +316,14 @@ public class BookingActivity extends AppCompatActivity implements BookingHistory
     }
 
     @Override
-    public void buttonClick(long timeDuration,String action,String channel_id,String booking_id,String userId,String coachId,String coachName) {
+    public void buttonClick(String id,long timeDuration,String action,String channel_id,String booking_id,String userId,String coachId,String coachName) {
         if(action.equalsIgnoreCase("join")){
             Intent intent=new Intent(this, CallActivity.class);
             intent.putExtra(ConstantApp.ACTION_KEY_CHANNEL_NAME,channel_id);
             intent.putExtra("UserId",userId);
             intent.putExtra("CoachId",coachId);
             intent.putExtra("booking_id",booking_id);
+            intent.putExtra("id",id);
             intent.putExtra("timeDuration",timeDuration);
             intent.putExtra("Name",coachName);
             startActivity(intent);
@@ -400,6 +401,7 @@ public class BookingActivity extends AppCompatActivity implements BookingHistory
             intent.putExtra("UserId",data.getUserId());
             intent.putExtra("CoachId",data.getCoachUserId());
             intent.putExtra("booking_id",data.getBookingId());
+            intent.putExtra("id",data.getId());
             intent.putExtra("timeDuration",data.getDuration_in_milisecond());
             intent.putExtra("Name",data.getName());
             startActivity(intent);

@@ -147,7 +147,8 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
         userId = getIntent().getStringExtra("UserId");
         coachId = getIntent().getStringExtra("CoachId");
         coachName =getIntent().getStringExtra("Name");
-        bookingId =getIntent().getStringExtra("booking_id");
+        //bookingId =getIntent().getStringExtra("booking_id");
+        bookingId =getIntent().getStringExtra("id");
         timeDuration=getIntent().getLongExtra("timeDuration",0);
         image_profile=SessionManager.get_image(prefs);
        // mLogView = findViewById(R.id.log_recycler_view);
@@ -1134,7 +1135,9 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
             Bundle args = new Bundle();
             args.putSerializable("ARRAYLIST",(Serializable)feedBackFormChildData);
            startActivity(new Intent(CallActivity.this,EndSessionFeedbackFormActivity.class)
-                   .putExtra("Certificate",args));
+                   .putExtra("Certificate",args).putExtra("id",bookingId));
+
+
             finish();
         });
 
