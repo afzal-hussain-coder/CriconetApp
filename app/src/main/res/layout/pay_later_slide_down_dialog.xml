@@ -22,7 +22,7 @@
             android:id="@+id/textView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_marginTop="@dimen/_15sdp"
             android:fontFamily="@font/opensans_semibold"
             android:gravity="center_horizontal"
             android:text="@string/slide_down"
@@ -47,7 +47,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_1sdp"
                     android:layout_below="@+id/mid"
-                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_marginTop="@dimen/_10sdp"
                     android:background="@drawable/line_gradient" />
 
                 <LinearLayout
@@ -66,7 +66,7 @@
                         android:text="@string/terms_pay_later_condition"
                         android:textAllCaps="false"
                         android:textColor="@color/green"
-                        android:textSize="@dimen/_10sdp" />
+                        android:textSize="@dimen/_11sdp" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -127,57 +127,61 @@
                                 android:background="@drawable/pay_later_edit_bg"
                                 android:fontFamily="@font/opensans_semibold"
                                 android:hint="@string/enter_your_full_name"
+                                android:imeOptions="actionNext"
                                 android:importantForAutofill="no"
                                 android:inputType="text"
-                                android:padding="@dimen/_9sdp"
+                                android:padding="@dimen/_10sdp"
                                 android:textColor="@color/light_text_color"
-                                android:textColorHint="@color/light_text_color"
-                                android:textSize="@dimen/_9sdp" />
+                                android:textColorHint="@android:color/darker_gray"
+                                android:textSize="@dimen/_10sdp" />
 
                             <EditText
                                 android:id="@+id/edit_enter_address"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/_8sdp"
+                                android:imeOptions="actionNext"
                                 android:background="@drawable/pay_later_edit_bg"
                                 android:fontFamily="@font/opensans_semibold"
                                 android:hint="@string/enter_your_full_address"
                                 android:importantForAutofill="no"
                                 android:inputType="text"
-                                android:padding="@dimen/_9sdp"
+                                android:padding="@dimen/_10sdp"
                                 android:textColor="@color/light_text_color"
-                                android:textColorHint="@color/light_text_color"
-                                android:textSize="@dimen/_9sdp" />
+                                android:textColorHint="@android:color/darker_gray"
+                                android:textSize="@dimen/_10sdp" />
 
                             <EditText
                                 android:id="@+id/edit_pinCode"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/_8sdp"
+                                android:imeOptions="actionNext"
                                 android:background="@drawable/pay_later_edit_bg"
                                 android:fontFamily="@font/opensans_semibold"
                                 android:hint="@string/enter_your_pin"
                                 android:importantForAutofill="no"
-                                android:inputType="text"
-                                android:padding="@dimen/_9sdp"
+                                android:inputType="number"
+                                android:padding="@dimen/_10sdp"
                                 android:textColor="@color/light_text_color"
-                                android:textColorHint="@color/light_text_color"
-                                android:textSize="@dimen/_9sdp" />
+                                android:textColorHint="@android:color/darker_gray"
+                                android:textSize="@dimen/_10sdp" />
 
                             <EditText
                                 android:id="@+id/edit_alternateMobile"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/_8sdp"
+                                android:imeOptions="actionDone"
                                 android:background="@drawable/pay_later_edit_bg"
                                 android:fontFamily="@font/opensans_semibold"
                                 android:hint="@string/enter_alterenate_mobile_no"
                                 android:importantForAutofill="no"
-                                android:inputType="number"
-                                android:padding="@dimen/_9sdp"
+                                android:inputType="phone"
+                                android:padding="@dimen/_10sdp"
                                 android:textColor="@color/light_text_color"
-                                android:textColorHint="@color/light_text_color"
-                                android:textSize="@dimen/_9sdp" />
+                                android:textColorHint="@android:color/darker_gray"
+                                android:textSize="@dimen/_10sdp" />
 
                             <LinearLayout
                                 android:layout_width="match_parent"

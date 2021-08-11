@@ -67,7 +67,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:padding="@dimen/_5sdp"
-                    android:text="@string/done"
+                    android:text="@string/ok"
                     android:textAllCaps="true"
                     app:fontFamily="@font/opensans_semibold"
                     android:textColor="#E0FFFF"
