@@ -96,8 +96,8 @@
                     android:layout_height="@dimen/_20sdp"
                     android:layout_centerInParent="true"
                     android:contentDescription="@string/app_name"
-                    android:onClick="onFilterClicked"
-                    android:src="@drawable/ic_auto_awesome_black_24dp" />
+                    android:onClick="onChatClicked"
+                    android:src="@drawable/ic_wechat_black_24dp" />
                 </RelativeLayout>
 
 
@@ -140,7 +140,7 @@
                 <ImageView
                     android:layout_width="@dimen/_35sdp"
                     android:layout_height="match_parent"
-                    android:onClick="onChatClicked"
+                    android:onClick="onFilterClicked"
                     android:contentDescription="@string/app_name"
                     android:src="@drawable/ic_comment_blue_24dp"
                     android:visibility="gone" />

@@ -122,11 +122,10 @@ public class MessageActivity extends AppCompatActivity {
 //            colors.add(newColor);
 //        }
         channelName = getIntent().getStringExtra(ConstantApp.ACTION_KEY_CHANNEL_NAME);
-        //mUserId = getIntent().getStringExtra("mUserId");
-        mUserId = "1735";
-        coach_id = "1209";
-        webUrl= Global.URL_CHAT+"/"+"messages"+"/"+coach_id+"?"+"user_id="+mUserId+"&"+"s=7295057200de972c10b71ac8197442b0c5da7dedb0b8893d2d18d0dcff64e25d5be3c527278297153b220b436e5f3d917a1e649a0dc0281c";
-        //Toaster.customToast(channelName);
+        mUserId = getIntent().getStringExtra("UserId");
+        coach_id = getIntent().getStringExtra("CoachId");
+        Toaster.customToastUp(mUserId+"/"+coach_id);
+        webUrl= Global.URL_CHAT+"/"+"messages"+"/"+coach_id+"?"+"user_id="+mUserId+"&"+"s="+SessionManager.get_session_id(prefs);
         init();
 
     }

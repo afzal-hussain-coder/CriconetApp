@@ -161,6 +161,19 @@ public class BookingHistory {
         @SerializedName("chanel_id")
         @Expose
         private String chanel_id;
+
+        public String getPay_leter_str() {
+            return pay_leter_str;
+        }
+
+        public void setPay_leter_str(String pay_leter_str) {
+            this.pay_leter_str = pay_leter_str;
+        }
+
+        @SerializedName("pay_leter_str")
+        @Expose
+        private String pay_leter_str;
+
         @SerializedName("booking_time")
         @Expose
         private String bookingTime;

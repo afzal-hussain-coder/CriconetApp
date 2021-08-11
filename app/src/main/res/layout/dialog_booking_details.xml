@@ -191,10 +191,11 @@
                             android:paddingBottom="@dimen/_5sdp"
                             android:orientation="vertical">
                             <TextView
+                                android:id="@+id/tv_booking_paymnet_status"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/session_paid_amount"
-                                android:textColor="#AAAAB1"
+                                android:textColor="@color/green"
                                 android:layout_gravity="center_horizontal"
                                 android:textSize="@dimen/_10sdp"
                                 app:fontFamily="@font/opensans_regular"
@@ -205,7 +206,7 @@
                                 android:layout_height="wrap_content"
                                 android:text="ID1-294"
                                 android:layout_gravity="center_horizontal"
-                                android:textColor="@color/light_text_color"
+                                android:textColor="@color/green"
                                 android:textSize="@dimen/_10sdp"
                                 app:fontFamily="@font/opensans_regular"
                                 />

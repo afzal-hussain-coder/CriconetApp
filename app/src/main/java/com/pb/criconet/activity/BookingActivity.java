@@ -86,6 +86,7 @@ public class BookingActivity extends AppCompatActivity implements BookingHistory
     private TextView tvBookingDate;
     private TextView tvSessionAmount;
     private TextView tvBookingStataus;
+    private TextView tv_booking_paymnet_status;
     private FrameLayout fl_cancel_booking;
     private FrameLayout fl_join_session;
     private FrameLayout fl_cancelled;
@@ -180,6 +181,7 @@ public class BookingActivity extends AppCompatActivity implements BookingHistory
         tvBookingDate=findViewById(R.id.tvBookingDate);
         tvSessionAmount=findViewById(R.id.tvSessionAmount);
         tvBookingStataus=findViewById(R.id.tvBookingStataus);
+        tv_booking_paymnet_status = findViewById(R.id.tv_booking_paymnet_status);
         fl_cancel_booking = findViewById(R.id.fl_cancel_booking);
         fl_join_session = findViewById(R.id.fl_join_session);
         fl_cancelled = findViewById(R.id.fl_cancelled);
@@ -353,7 +355,8 @@ public class BookingActivity extends AppCompatActivity implements BookingHistory
 
         tvSessionDetails.setText("Booking ID: "+" "+data.getBookingId());
         tvSessionDateTime.setText(Global.convertUTCDateToLocalDate(data.getBookingSlotDate())+" , "+data.getBookingSlotTxt());
-        tvBookingDate.setText(Global.convertUTCDateToLocalDatee(data.getBooking_date()));
+        tvBookingDate.setText(data.getBooking_date());
+        tv_booking_paymnet_status.setText(data.getPay_leter_str());
         tvSessionAmount.setText("\u20B9"+data.getPayment_amount());
         tvBookingStataus.setText("Your booking has been "+data.getBtn1().toLowerCase()+"!");
 
@@ -371,7 +374,6 @@ public class BookingActivity extends AppCompatActivity implements BookingHistory
                 }else{
                     fl_cancel_booking.setVisibility(View.GONE);
                 }
-
                 fl_cancelled.setVisibility(View.GONE);
                 fl_join_session.setVisibility(View.GONE);
             }

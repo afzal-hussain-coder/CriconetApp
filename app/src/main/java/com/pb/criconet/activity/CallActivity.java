@@ -386,7 +386,6 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
 
     public void onClickHideIME(View view) {
         //log.debug("onClickHideIME " + view);
-
         closeIME(findViewById(R.id.msg_content));
         findViewById(R.id.msg_input_container).setVisibility(View.GONE);
         findViewById(R.id.bottom_action_container).setVisibility(View.VISIBLE);
@@ -491,8 +490,6 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
         iv.setImageResource(Constant.BEAUTY_EFFECT_ENABLED ? R.drawable.ic_auto_awesome_black_24dp : R.drawable.ic_auto_awesome_gray_24dp);
     }
 
-
-
     @Override
     protected void deInitUIandEvent() {
         optionalDestroy();
@@ -575,7 +572,7 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
 
     public void onChatClicked(View view){
 
-        startActivity(new Intent(this,MessageActivity.class).putExtra(ConstantApp.ACTION_KEY_CHANNEL_NAME,channelName).putExtra("mUserId",image_profile));
+        startActivity(new Intent(this,MessageActivity.class).putExtra(ConstantApp.ACTION_KEY_CHANNEL_NAME,channelName).putExtra("UserId",userId).putExtra("CoachId",coachId));
 
     }
     public void onVoiceMuteClicked(View view) {
