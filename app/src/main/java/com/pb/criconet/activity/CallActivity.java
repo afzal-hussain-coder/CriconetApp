@@ -292,7 +292,6 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
 
     private void onSmallVideoViewDoubleClicked(View view, int position) {
         //log.debug("onItemDoubleClick small " + view + " " + position + " " + mLayoutType);
-
         switchToDefaultVideoView();
     }
 
@@ -572,7 +571,7 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
 
     public void onChatClicked(View view){
 
-        startActivity(new Intent(this,MessageActivity.class).putExtra(ConstantApp.ACTION_KEY_CHANNEL_NAME,channelName).putExtra("UserId",userId).putExtra("CoachId",coachId));
+        //startActivity(new Intent(this,MessageActivity.class).putExtra(ConstantApp.ACTION_KEY_CHANNEL_NAME,channelName).putExtra("UserId",userId).putExtra("CoachId",coachId));
 
     }
     public void onVoiceMuteClicked(View view) {

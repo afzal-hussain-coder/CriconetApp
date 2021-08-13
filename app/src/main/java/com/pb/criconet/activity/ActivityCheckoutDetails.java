@@ -213,8 +213,8 @@ public class ActivityCheckoutDetails extends AppCompatActivity implements Paymen
 
          if(laterPayeeName.isEmpty()){
              Toaster.customToastUp("Please Enter Full Name");
-         }else if(laterPayeeAddress.isEmpty()){
-             Toaster.customToastUp("Please Enter Address");
+         }else if(!Global.isValidAddress(laterPayeeAddress)){
+             Toaster.customToastUp("Address must have min 5 character");
          }else if(laterPayeePin.isEmpty()){
              Toaster.customToastUp("Please Enter Pin Code");
          }

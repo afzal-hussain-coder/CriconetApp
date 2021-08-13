@@ -279,7 +279,7 @@
 
         <meta-data
             android:name="com.razorpay.ApiKey"
-            android:value="rzp_test_kwGXAE8hCqZnYY" /> <!-- test Api key rzp_test_kwGXAE8hCqZnYY exprire -->
+            android:value="rzp_live_GRQJ65vJqdOWGl" /> <!-- test Api key rzp_test_kwGXAE8hCqZnYY exprire -->
         <!-- live APi key rzp_live_GRQJ65vJqdOWGl -->
         <meta-data
             android:name="com.google.android.gms.wallet.api.enabled"

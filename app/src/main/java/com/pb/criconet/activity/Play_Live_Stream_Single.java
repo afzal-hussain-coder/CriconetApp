@@ -131,7 +131,6 @@ public class Play_Live_Stream_Single extends AppCompatActivity {
         });
 
 
-        //https://play.google.com/store/apps/details?id=com.pb.criconet.Play_Live_Stream_Single
         btnShare.setOnClickListener(v -> {
             Intent shareIntent =   new Intent(android.content.Intent.ACTION_SEND);
             shareIntent.setType("text/plain");
@@ -216,9 +215,11 @@ public class Play_Live_Stream_Single extends AppCompatActivity {
                 videoview2.pausePlayer();
             getSupportActionBar().hide();
             bottomPanel.setVisibility(View.GONE);
+            btnShare.setVisibility(View.GONE);
             desc.setVisibility(View.GONE);
         } else {
             getSupportActionBar().show();
+            btnShare.setVisibility(View.VISIBLE);
             bottomPanel.setVisibility(View.VISIBLE);
             desc.setVisibility(View.VISIBLE);
         }

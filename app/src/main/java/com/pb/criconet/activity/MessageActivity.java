@@ -124,8 +124,8 @@ public class MessageActivity extends AppCompatActivity {
         channelName = getIntent().getStringExtra(ConstantApp.ACTION_KEY_CHANNEL_NAME);
         mUserId = getIntent().getStringExtra("UserId");
         coach_id = getIntent().getStringExtra("CoachId");
-        Toaster.customToastUp(mUserId+"/"+coach_id);
-        webUrl= Global.URL_CHAT+"/"+"messages"+"/"+coach_id+"?"+"user_id="+mUserId+"&"+"s="+SessionManager.get_session_id(prefs);
+        //Toaster.customToastUp(mUserId+"/"+coach_id);
+        //webUrl= Global.URL_CHAT+"/"+"messages"+"/"+coach_id+"?"+"user_id="+mUserId+"&"+"s="+SessionManager.get_session_id(prefs);
         init();
 
     }
