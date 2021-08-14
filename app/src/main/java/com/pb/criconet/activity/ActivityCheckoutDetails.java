@@ -282,6 +282,7 @@ public class ActivityCheckoutDetails extends AppCompatActivity implements Paymen
         btnPaynow.setOnClickListener(view -> {
             try{
                 int a = ordercreate.getPaymentOption().getAmount();
+                //Toaster.customToastUp(a+"amount");
                 if (a == 0) {
                     Intent intent = new Intent(ActivityCheckoutDetails.this, BookingActivity.class);
                     startActivity(intent);
@@ -875,6 +876,5 @@ public class ActivityCheckoutDetails extends AppCompatActivity implements Paymen
         postRequest.setRetryPolicy(policy);
         queue.add(postRequest);
     }
-
 
 }

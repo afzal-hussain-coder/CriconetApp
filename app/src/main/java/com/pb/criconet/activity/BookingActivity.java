@@ -356,7 +356,12 @@ public class BookingActivity extends AppCompatActivity implements BookingHistory
         tvSessionDetails.setText("Booking ID: "+" "+data.getBookingId());
         tvSessionDateTime.setText(Global.convertUTCDateToLocalDate(data.getBookingSlotDate())+" , "+data.getBookingSlotTxt());
         tvBookingDate.setText(data.getBooking_date());
-        tv_booking_paymnet_status.setText(data.getPay_leter_str());
+        if(data.getPay_leter_str().isEmpty()){
+            tv_booking_paymnet_status.setText("Online e-Coaching session paid amount");
+        }else{
+            tv_booking_paymnet_status.setText(data.getPay_leter_str());
+        }
+
         tvSessionAmount.setText("\u20B9"+data.getPayment_amount());
         tvBookingStataus.setText("Your booking has been "+data.getBtn1().toLowerCase()+"!");
 
