@@ -129,7 +129,7 @@ public class CoachDetailsActivity extends BaseActivity {
         tvCoachName = findViewById(R.id.tvCoachName);
         tvCoacTitle = findViewById(R.id.tvCoacTitle);
         tvPrice = findViewById(R.id.tvPrice);
-        tvPrice.setPaintFlags(tvPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+
         tvOfferPrice = findViewById(R.id.tvOfferPrice);
         li_offer = findViewById(R.id.li_offer);
         li_support = findViewById(R.id.li_support);
@@ -264,11 +264,13 @@ public class CoachDetailsActivity extends BaseActivity {
                     tvCoacExp.setText(modelArrayList.getData().getExps());
                     tvCoachSpecialization.setText(modelArrayList.getData().getCatTitle());
 
-                    if (modelArrayList.getData().getIsOffer().equalsIgnoreCase("Yes")) {
-                        li_offer.setVisibility(View.VISIBLE);
-                        tvOfferPrice.setText("\u20B9" + modelArrayList.getData().getPrice().getPaymentPrice() + "/" + "Session");
-                    } else {
+                    if (modelArrayList.getData().getPrice().getOfferId().equalsIgnoreCase("0")) {
                         li_offer.setVisibility(View.GONE);
+                    } else {
+                        li_offer.setVisibility(View.VISIBLE);
+                        tvPrice.setPaintFlags(tvPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                        tvOfferPrice.setText("\u20B9" + modelArrayList.getData().getPrice().getPaymentPrice() + "/" + "Session");
+
                     }
 
 //                    tv_criconet_support_info.setText(ordercreate.getCriconetSupport().getTxtmsg2());

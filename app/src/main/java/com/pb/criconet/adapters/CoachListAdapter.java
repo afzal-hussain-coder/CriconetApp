@@ -100,6 +100,7 @@ public class CoachListAdapter extends RecyclerView.Adapter<CoachListAdapter.MyVi
             holder.tvOfferP.setVisibility(View.GONE);
         }else{
             holder.tvOfferP.setVisibility(View.VISIBLE);
+            holder.tvPrice.setPaintFlags(holder.tvPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
             holder.tvOfferP.setText("Offer Price: "+"\u20B9" +mdata.get(position).getPrice().getPaymentPrice() +"/"+"Session");
         }
 
@@ -151,6 +152,7 @@ public class CoachListAdapter extends RecyclerView.Adapter<CoachListAdapter.MyVi
 
 
             intent.putExtra("Offer",mdata.get(position).getPrice().getOfferPercentage());
+            intent.putExtra("OfferID",mdata.get(position).getPrice().getOfferId());
             intent.putExtra("OfferPrice",mdata.get(position).getPrice().getPaymentPrice());
             intent.putExtra("specialization",mdata.get(position).getCat_title());
             intent.putExtra("ADAYS",mdata.get(position).getADAYS());
@@ -204,6 +206,7 @@ public class CoachListAdapter extends RecyclerView.Adapter<CoachListAdapter.MyVi
 
             intent.putExtra("Offer",mdata.get(position).getPrice().getOfferPercentage());
             intent.putExtra("OfferPrice",mdata.get(position).getPrice().getPaymentPrice());
+            intent.putExtra("OfferID",mdata.get(position).getPrice().getOfferId());
             intent.putExtra("specialization",mdata.get(position).getCat_title());
             intent.putExtra("ADAYS",mdata.get(position).getADAYS());
             intent.putExtra("ADAYS_msg",mdata.get(position).getADAYS_msg());
@@ -274,7 +277,7 @@ public class CoachListAdapter extends RecyclerView.Adapter<CoachListAdapter.MyVi
             tvCoachName=itemView.findViewById(R.id.tvCoachName);
             tvDiscription=itemView.findViewById(R.id.tvDiscription);
             tvPrice=itemView.findViewById(R.id.tvPrice);
-            tvPrice.setPaintFlags(tvPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+
 
             image=itemView.findViewById(R.id.image);
             tvCoacExp=itemView.findViewById(R.id.tvCoacExp);

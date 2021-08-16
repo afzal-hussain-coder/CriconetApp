@@ -96,7 +96,7 @@ public class CoachProfileActivity extends AppCompatActivity {
         rel_achievement = findViewById(R.id.rel_achievement);
         rl_bio = findViewById(R.id.rl_bio);
         tvPrice=findViewById(R.id.tvPrice);
-        tvPrice.setPaintFlags(tvPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+
         li_offer = findViewById(R.id.li_offer);
         rl_session_available_or_not = findViewById(R.id.rl_session_available_or_not);
         tvBookNow=findViewById(R.id.tvBookNow);
@@ -186,10 +186,10 @@ public class CoachProfileActivity extends AppCompatActivity {
             }
 
 
-            if (extras.getString("OfferPrice").equalsIgnoreCase("0")) {
+            if (extras.getString("OfferID").equalsIgnoreCase("0")) {
                 li_offer.setVisibility(View.GONE);
-
             } else {
+                tvPrice.setPaintFlags(tvPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                 tvOfferPrice.setText("\u20B9" + extras.getString("OfferPrice") + "/" + "Session");
                 li_offer.setVisibility(View.VISIBLE);
             }

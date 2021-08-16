@@ -150,7 +150,7 @@ public class ActivityCheckoutDetails extends AppCompatActivity implements Paymen
         tvCoachName = findViewById(R.id.tvCoachName);
         tvCoacTitle = findViewById(R.id.tvCoacTitle);
         tvPrice = findViewById(R.id.tvPrice);
-        tvPrice.setPaintFlags(tvPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+
         tvOfferPrice = findViewById(R.id.tvOfferPrice);
         tvDate = findViewById(R.id.tvDate);
         tvtime = findViewById(R.id.tvtime);
@@ -197,7 +197,7 @@ public class ActivityCheckoutDetails extends AppCompatActivity implements Paymen
         edit_alternateMobile = findViewById(R.id.edit_alternateMobile);
         tvPricee = findViewById(R.id.tvPricee);
         li_offerr = findViewById(R.id.li_offerr);
-        tvPricee.setPaintFlags(tvPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+        //tvPricee.setPaintFlags(tvPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         tvOfferPricee = findViewById(R.id.tvOfferPricee);
         tvTotalAmountt = findViewById(R.id.tvTotalAmountt);
         flSubmitDetails = findViewById(R.id.flSubmitDetails);
@@ -352,21 +352,23 @@ public class ActivityCheckoutDetails extends AppCompatActivity implements Paymen
             tvSubtotal.setText("Subtotal : " + "\u20B9" + modelArrayList.getData().getPrice().getPaymentPrice());
             tvDate.setText(Global.convertUTCDateToLocall(ordercreate.getPaymentOption().getSessionDate()));
             tvtime.setText(ordercreate.getPaymentOption().getSessionTime());
-            if (modelArrayList.getData().getIsOffer().equalsIgnoreCase("Yes")) {
-                tvOfferPrice.setVisibility(View.VISIBLE);
-                tvOfferPrice.setText("Offer price: " + "\u20B9" + modelArrayList.getData().getPrice().getPaymentPrice());
-            } else {
+            if (modelArrayList.getData().getPrice().getOfferId().equalsIgnoreCase("0")) {
                 tvOfferPrice.setVisibility(View.GONE);
+            } else {
+                tvOfferPrice.setVisibility(View.VISIBLE);
+                tvPrice.setPaintFlags(tvPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                tvOfferPrice.setText("Offer price: " + "\u20B9" + modelArrayList.getData().getPrice().getPaymentPrice());
             }
             tvPricee.setText("\u20B9" + modelArrayList.getData().getPrice().getCoachPrice() + "/" + "Session");
             tvTotalAmountt.setText("Total payable amount: " + "\u20B9" + modelArrayList.getData().getPrice().getWithTaxesAmount());
             tvTaxx.setText("Taxes : " + "\u20B9" + modelArrayList.getData().getPrice().getTaxesAmount());
             tvSubtotall.setText("Subtotal : " + "\u20B9" + modelArrayList.getData().getPrice().getPaymentPrice());
-            if (modelArrayList.getData().getIsOffer().equalsIgnoreCase("Yes")) {
+            if (modelArrayList.getData().getPrice().getOfferId().equalsIgnoreCase("0")) {
+                li_offerr.setVisibility(View.GONE);
+            } else {
+                tvPricee.setPaintFlags(tvPricee.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                 tvOfferPricee.setText("\u20B9" + modelArrayList.getData().getPrice().getPaymentPrice() + "/" + "Session");
                 li_offerr.setVisibility(View.VISIBLE);
-            } else {
-                li_offerr.setVisibility(View.GONE);
             }
         }
 
