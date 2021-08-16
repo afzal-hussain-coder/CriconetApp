@@ -334,9 +334,8 @@ public class CoachFragment extends Fragment {
                         if (jsonObject1.has("offer_details")) {
                             jsonArray = jsonObject1.getJSONArray("offer_details");
                         }
-                        //jsonArray=null;
-                        if (jsonArray==null) {
 
+                        if (jsonArray.length()==0) {
                             img_banner.setVisibility(View.GONE);
                         }else{
                             img_banner.setVisibility(View.VISIBLE);

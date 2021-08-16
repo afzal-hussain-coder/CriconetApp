@@ -10,7 +10,6 @@
         android:id="@+id/reli"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/toolbar"
         android:background="@color/app_red_light"
         android:visibility="gone">
 
@@ -55,7 +54,6 @@
         </RelativeLayout>
 
     </RelativeLayout>
-
     <ListView
         android:id="@+id/friends_list"
         android:layout_width="match_parent"
@@ -65,7 +63,7 @@
         android:divider="@null"
         android:layout_marginBottom="@dimen/_15sdp"
         android:dividerHeight="0dp"
-        tools:listitem="@layout/friendslist_adapter_item" />
+        />
 
     <TextView
         android:id="@+id/notfound"
