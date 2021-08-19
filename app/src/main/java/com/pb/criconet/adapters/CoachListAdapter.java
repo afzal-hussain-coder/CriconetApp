@@ -48,7 +48,12 @@ public class CoachListAdapter extends RecyclerView.Adapter<CoachListAdapter.MyVi
     public CoachListAdapter(List<CoachList.Datum> data,Context context) {
         this.context = context;
         this.mdata=data;
-        prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        try{
+            prefs =  PreferenceManager.getDefaultSharedPreferences(context);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
     }
 
     @Override

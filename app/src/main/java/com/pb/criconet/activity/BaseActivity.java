@@ -1,6 +1,7 @@
 package com.pb.criconet.activity;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
 import android.content.res.TypedArray;
 import android.os.Build;
@@ -54,20 +55,30 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        navigationController = new NavigationController(this);
-        final View layout = findViewById(Window.ID_ANDROID_CONTENT);
-        ViewTreeObserver vto = layout.getViewTreeObserver();
-        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
+
+        try{
+            navigationController = new NavigationController(this);
+            final View layout = findViewById(Window.ID_ANDROID_CONTENT);
+            ViewTreeObserver vto = layout.getViewTreeObserver();
+            vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @SuppressLint("ObsoleteSdkInt")
+                @Override
+                public void onGlobalLayout() {
+                    //layout.getViewTreeObserver().removeGlobalOnLayoutListener(this);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                     layout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                 } else {
-                    layout.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                    //noinspection deprecation
+                    layout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                 }
-                initUIandEvent();
-            }
-        });
+                    initUIandEvent();
+                }
+            });
+        }catch(Exception e){
+         e.printStackTrace();
+        }
+
+
     }
 
     protected abstract void initUIandEvent();

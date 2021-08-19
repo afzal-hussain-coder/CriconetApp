@@ -217,17 +217,22 @@ public class CoachFragment extends Fragment {
         StringRequest postRequest = new StringRequest(Request.Method.POST, Global.URL + "get_coach_lists", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Log.d("Response", response);
+                //Log.d("Response", response);
                 // Global.dismissDialog(progressDialog);
                 loaderView.hideLoader();
-                Gson gson = new Gson();
-                CoachList modelArrayList = gson.fromJson(response, CoachList.class);
+                try{
+                    Gson gson = new Gson();
+                    CoachList modelArrayList = gson.fromJson(response, CoachList.class);
 
-                if (modelArrayList.getApiStatus().equalsIgnoreCase("200")) {
-                    recyclerView.setAdapter(new CoachListAdapter(modelArrayList.getData(), getActivity()));
-                } else {
-                    Toast.makeText(getActivity(), modelArrayList.getErrors().getErrorText(), Toast.LENGTH_SHORT).show();
+                    if (modelArrayList.getApiStatus().equalsIgnoreCase("200")) {
+                        recyclerView.setAdapter(new CoachListAdapter(modelArrayList.getData(), getActivity()));
+                    } else {
+                        Toast.makeText(getActivity(), modelArrayList.getErrors().getErrorText(), Toast.LENGTH_SHORT).show();
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
                 }
+
 
             }
         }, new Response.ErrorListener() {

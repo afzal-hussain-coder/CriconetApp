@@ -47,7 +47,7 @@ public class Splash extends Activity {
 //        Fresco.initialize(this);
         prefs = PreferenceManager.getDefaultSharedPreferences(Splash.this);
         //calculateHashKey("com.pb.criconet");
-        Log.d("DeviceToken",SessionManager.get_devicetoken(prefs));
+        //Log.d("DeviceToken",SessionManager.get_devicetoken(prefs));
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_splash);

@@ -97,7 +97,16 @@
                     android:layout_centerInParent="true"
                     android:contentDescription="@string/app_name"
                     android:onClick="onFilterClicked"
+                    android:visibility="gone"
                     android:src="@drawable/ic_auto_awesome_black_24dp"/>
+                    <ImageView
+                        android:layout_width="@dimen/_20sdp"
+                        android:layout_height="@dimen/_20sdp"
+                        android:layout_centerInParent="true"
+                        android:onClick="onChatClicked"
+                        android:contentDescription="@string/app_name"
+                        android:src="@drawable/ic_wechat_black_24dp"
+                        android:visibility="visible" />
                 </RelativeLayout>
                 <ImageView
                     android:layout_width="@dimen/_40sdp"
@@ -135,13 +144,7 @@
                     android:onClick="onVoiceMuteClicked"
                     android:src="@drawable/ic_mic_black_24dp" />
                 </RelativeLayout>
-                <ImageView
-                    android:layout_width="@dimen/_35sdp"
-                    android:layout_height="match_parent"
-                    android:onClick="onChatClicked"
-                    android:contentDescription="@string/app_name"
-                    android:src="@drawable/ic_wechat_black_24dp"
-                    android:visibility="gone" />
+
 
             </LinearLayout>
 
@@ -247,4 +250,16 @@
             tools:ignore="MissingClass" />
 
     </RelativeLayout>
+
+    <FrameLayout
+        android:id="@+id/dim"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:alpha="0"
+        android:background="@color/black_semi_transparent"
+        android:fitsSystemWindows="false"
+        />
+
+    <include layout="@layout/chat_dailog"
+        />
 </FrameLayout>

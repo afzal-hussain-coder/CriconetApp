@@ -1,9 +1,12 @@
 package com.pb.criconet.activity;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.Color;
@@ -13,11 +16,14 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Parcelable;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -26,6 +32,11 @@ import android.view.View;
 import android.view.ViewParent;
 import android.view.ViewStub;
 import android.view.Window;
+import android.webkit.ValueCallback;
+import android.webkit.WebChromeClient;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -33,9 +44,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -47,6 +62,8 @@ import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.mancj.slideup.SlideUp;
+import com.mancj.slideup.SlideUpBuilder;
 import com.pb.criconet.R;
 import com.pb.criconet.Utills.Global;
 import com.pb.criconet.Utills.SessionManager;
@@ -78,9 +95,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.Serializable;
 import java.net.URI;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -96,7 +116,7 @@ import io.agora.rtc.video.VirtualBackgroundSource;
 import timber.log.Timber;
 
 public class CallActivity extends BaseActivity implements DuringCallEventHandler {
-
+    private final String TAG = CallActivity.class.getSimpleName();
     public static final int LAYOUT_TYPE_DEFAULT = 0;
     public static final int LAYOUT_TYPE_SMALL = 1;
    // private final static Logger log = LoggerFactory.getLogger(CallActivity.class);
@@ -136,6 +156,60 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
     TextView tv_timeDuration;
     ArrayList<FeedBackFormChildData> feedBackFormChildData=null;
 
+    //WebView web_chat;
+    private SlideUp slideUp;
+    private View dim, rootView;
+    private View slideView;
+    String webUrl="";
+    String coach_id="";
+
+    private final static int FCR = 1;
+    WebView webView;
+    private String mCM;
+    private ValueCallback<Uri> mUM;
+    private ValueCallback<Uri[]> mUMA;
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+
+        if (Build.VERSION.SDK_INT >= 21) {
+            Uri[] results = null;
+
+            //Check if response is positive
+            if (resultCode == Activity.RESULT_OK) {
+                if (requestCode == FCR) {
+
+                    if (null == mUMA) {
+                        return;
+                    }
+                    if (intent == null) {
+                        //Capture Photo if no image available
+                        if (mCM != null) {
+                            results = new Uri[]{Uri.parse(mCM)};
+                        }
+                    } else {
+                        String dataString = intent.getDataString();
+                        if (dataString != null) {
+                            results = new Uri[]{Uri.parse(dataString)};
+                        }
+                    }
+                }
+            }
+            mUMA.onReceiveValue(results);
+            mUMA = null;
+        } else {
+
+            if (requestCode == FCR) {
+                if (null == mUM) return;
+                Uri result = intent == null || resultCode != RESULT_OK ? null : intent.getData();
+                mUM.onReceiveValue(result);
+                mUM = null;
+            }
+        }
+    }
+
+    @SuppressLint({"SetJavaScriptEnabled", "WrongViewCast"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -147,6 +221,7 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
         userId = getIntent().getStringExtra("UserId");
         coachId = getIntent().getStringExtra("CoachId");
         coachName =getIntent().getStringExtra("Name");
+        loadWebView();
         //bookingId =getIntent().getStringExtra("booking_id");
         bookingId =getIntent().getStringExtra("id");
         timeDuration=getIntent().getLongExtra("timeDuration",0);
@@ -156,6 +231,35 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
         log_texth_other = findViewById(R.id.log_texth_other);
         lin_log = findViewById(R.id.lin_log);
         tv_timeDuration = findViewById(R.id.tv_timeDuration);
+
+        //........Web Chat .....
+        rootView = findViewById(R.id.root_view);
+        slideView = findViewById(R.id.slideView);
+        dim = findViewById(R.id.dim);
+        slideUp = new SlideUpBuilder(slideView)
+                .withListeners(new SlideUp.Listener.Events() {
+                    @Override
+                    public void onSlide(float percent) {
+                        dim.setAlpha(1 - (percent / 100));
+                        if (percent < 100) {
+                            // slideUp started showing
+
+                        }
+                    }
+
+                    @Override
+                    public void onVisibilityChanged(int visibility) {
+                        if (visibility == View.GONE) {
+                        }
+                    }
+                })
+                .withStartGravity(Gravity.BOTTOM)
+                .withLoggingEnabled(true)
+                .withStartState(SlideUp.State.HIDDEN)
+                .withSlideFromOtherView(rootView)
+                .build();
+
+        //........End Web Chat...
 
         //user.setFireDisplayName(image_link);
         ActionBar ab = getSupportActionBar();
@@ -374,14 +478,14 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
         startActivityForResult(i, CALL_OPTIONS_REQUEST);*/
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == CALL_OPTIONS_REQUEST) {
-//            RecyclerView msgListView = (RecyclerView) findViewById(R.id.msg_list);
-//            msgListView.setVisibility(Constant.DEBUG_INFO_ENABLED ? View.VISIBLE : View.INVISIBLE);
-        }
-    }
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        if (requestCode == CALL_OPTIONS_REQUEST) {
+////            RecyclerView msgListView = (RecyclerView) findViewById(R.id.msg_list);
+////            msgListView.setVisibility(Constant.DEBUG_INFO_ENABLED ? View.VISIBLE : View.INVISIBLE);
+//        }
+//    }
 
     public void onClickHideIME(View view) {
         //log.debug("onClickHideIME " + view);
@@ -570,7 +674,7 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
 
 
     public void onChatClicked(View view){
-
+        slideUp.show();
         //startActivity(new Intent(this,MessageActivity.class).putExtra(ConstantApp.ACTION_KEY_CHANNEL_NAME,channelName).putExtra("UserId",userId).putExtra("CoachId",coachId));
 
     }
@@ -631,6 +735,7 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
                 tv_timeDuration.setVisibility(View.VISIBLE);
                 new CountDownTimer(timeDuration, 1000) {
 
+                    @SuppressLint("SetTextI18n")
                     public void onTick(long millisUntilFinished) {
                         tv_timeDuration.setText("Remaining time: " + Global.convertSecondsToHMmSs(millisUntilFinished/1000));
                         //here you can have your logic to set text to edittext
@@ -649,6 +754,7 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
 //                    log_text.setText("You have joined" +" "+"successfully");
 
                     new Handler().postDelayed(new Runnable() {
+                        @SuppressLint("SetTextI18n")
                         @Override
                         public void run() {
                             log_texth_other.setVisibility(View.VISIBLE);
@@ -1111,20 +1217,14 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
     }
 
     private void sessionEndDialog() {
-        final Dialog dialog = new Dialog(CallActivity.this);
+        final Dialog dialog = new Dialog(mActivity);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.setContentView(R.layout.session_end);
         dialog.setCancelable(false);
+        dialog.show();
         FrameLayout fl_ok = dialog.findViewById(R.id.fl_ok);
         fl_ok.setOnClickListener(v -> {
-
-//            joinType="leave";
-//            if (Global.isOnline(mActivity)) {
-//                getSessionLog();
-//            } else {
-//                Global.showDialog(mActivity);
-//            }
 
             dialog.dismiss();
             // will show..after testing...............................................................
@@ -1137,7 +1237,7 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
             finish();
         });
 
-        dialog.show();
+
     }
 
     private void getSessionLog() {
@@ -1145,7 +1245,7 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
         StringRequest postRequest = new StringRequest(Request.Method.POST, Global.URL + "update_activity_session", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Log.d("SessionResponse",response);
+               // Log.d("SessionResponse",response);
 
                 //Global.dismissDialog(progressDialog);
             }
@@ -1179,7 +1279,7 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
         StringRequest postRequest = new StringRequest(Request.Method.POST, Global.URL + Global.GET_SESSION_FEEDBACKFORM, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Log.d("SessionFeedback",response);
+              //  Log.d("SessionFeedback",response);
 
                 try {
                     JSONObject  jsonObject= new JSONObject(response);
@@ -1229,6 +1329,154 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
     @Override
     public void onBackPressed() {
         sessionCancelAlertDialog();
+    }
+
+    public void loadWebView(){
+        webUrl= Global.URL_CHAT+"/"+"messages"+"/"+coachId+"?"+"user_id="+userId+"&"+"s="+SessionManager.get_session_id(prefs);
+        Log.d("WevURL",webUrl);
+        if (Build.VERSION.SDK_INT >= 23 && (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)) {
+            ActivityCompat.requestPermissions(CallActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA}, 1);
+        }
+
+        webView = (WebView) findViewById(R.id.web_chat);
+        webView.setBackgroundColor(Color.TRANSPARENT);
+        webView.setLayerType(WebView.LAYER_TYPE_SOFTWARE, null);
+        assert webView != null;
+
+        WebSettings webSettings = webView.getSettings();
+        webSettings.setJavaScriptEnabled(true);
+        webSettings.setAllowFileAccess(true);
+
+        if (Build.VERSION.SDK_INT >= 21) {
+            webSettings.setMixedContentMode(0);
+            webView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
+        } else if (Build.VERSION.SDK_INT >= 19) {
+            webView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
+        } else if (Build.VERSION.SDK_INT < 19) {
+            webView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+        }
+
+        webView.setWebViewClient(new Callback());
+        webView.loadUrl(webUrl);
+        webView.setWebChromeClient(new WebChromeClient() {
+
+            //For Android 3.0+
+            public void openFileChooser(ValueCallback<Uri> uploadMsg) {
+
+                mUM = uploadMsg;
+                Intent i = new Intent(Intent.ACTION_GET_CONTENT);
+                i.addCategory(Intent.CATEGORY_OPENABLE);
+                i.setType("*/*");
+                CallActivity.this.startActivityForResult(Intent.createChooser(i, "File Chooser"), FCR);
+            }
+
+            // For Android 3.0+, above method not supported in some android 3+ versions, in such case we use this
+            public void openFileChooser(ValueCallback uploadMsg, String acceptType) {
+
+                mUM = uploadMsg;
+                Intent i = new Intent(Intent.ACTION_GET_CONTENT);
+                i.addCategory(Intent.CATEGORY_OPENABLE);
+                i.setType("*/*");
+                CallActivity.this.startActivityForResult(
+                        Intent.createChooser(i, "File Browser"),
+                        FCR);
+            }
+
+            //For Android 4.1+
+            public void openFileChooser(ValueCallback<Uri> uploadMsg, String acceptType, String capture) {
+
+                mUM = uploadMsg;
+                Intent i = new Intent(Intent.ACTION_GET_CONTENT);
+                i.addCategory(Intent.CATEGORY_OPENABLE);
+                i.setType("*/*");
+                CallActivity.this.startActivityForResult(Intent.createChooser(i, "File Chooser"), CallActivity.FCR);
+            }
+
+            //For Android 5.0+
+            public boolean onShowFileChooser(
+                    WebView webView, ValueCallback<Uri[]> filePathCallback,
+                    WebChromeClient.FileChooserParams fileChooserParams) {
+
+                if (mUMA != null) {
+                    mUMA.onReceiveValue(null);
+                }
+
+                mUMA = filePathCallback;
+                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                if (takePictureIntent.resolveActivity(CallActivity.this.getPackageManager()) != null) {
+
+                    File photoFile = null;
+
+                    try {
+                        photoFile = createImageFile();
+                        takePictureIntent.putExtra("PhotoPath", mCM);
+                    } catch (IOException ex) {
+                        Log.e(TAG, "Image file creation failed", ex);
+                    }
+                    if (photoFile != null) {
+                        mCM = "file:" + photoFile.getAbsolutePath();
+                        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
+                    } else {
+                        takePictureIntent = null;
+                    }
+                }
+
+                Intent contentSelectionIntent = new Intent(Intent.ACTION_GET_CONTENT);
+                contentSelectionIntent.addCategory(Intent.CATEGORY_OPENABLE);
+                contentSelectionIntent.setType("*/*");
+                Intent[] intentArray;
+
+                if (takePictureIntent != null) {
+                    intentArray = new Intent[]{takePictureIntent};
+                } else {
+                    intentArray = new Intent[0];
+                }
+
+                Intent chooserIntent = new Intent(Intent.ACTION_CHOOSER);
+                chooserIntent.putExtra(Intent.EXTRA_INTENT, contentSelectionIntent);
+                chooserIntent.putExtra(Intent.EXTRA_TITLE, "Image Chooser");
+                chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, intentArray);
+                startActivityForResult(chooserIntent, FCR);
+
+                return true;
+            }
+        });
+
+    }
+
+    private File createImageFile() throws IOException {
+
+        @SuppressLint("SimpleDateFormat") String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "img_" + timeStamp + "_";
+        File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+        return File.createTempFile(imageFileName, ".jpg", storageDir);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, @NonNull KeyEvent event) {
+
+        if (event.getAction() == KeyEvent.ACTION_DOWN) {
+
+            switch (keyCode) {
+                case KeyEvent.KEYCODE_BACK:
+
+                    if (webView.canGoBack()) {
+                        webView.goBack();
+                    } else {
+                        finish();
+                    }
+
+                    return true;
+            }
+        }
+
+        return super.onKeyDown(keyCode, event);
+    }
+
+    public class Callback extends WebViewClient {
+        public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
+            Toast.makeText(getApplicationContext(), "Failed loading app!", Toast.LENGTH_SHORT).show();
+        }
     }
 
 

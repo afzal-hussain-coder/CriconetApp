@@ -399,15 +399,20 @@ public class CoachDetailsActivity extends BaseActivity {
         StringRequest postRequest = new StringRequest(Request.Method.POST, Global.URL + "get_coach_date_slot", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Log.d("Time respose", response);
-                Gson gson = new Gson();
-                TimeSlot modelArrayList = gson.fromJson(response, TimeSlot.class);
-                if (modelArrayList.getApiStatus().equalsIgnoreCase("200")) {
-                    navigationController.showTimePreode(modelArrayList);
-                } else {
-                    dateGott="";
-                    Toaster.customToast(modelArrayList.getErrors().getErrorText());
+                //Log.d("Time respose", response);
+                try{
+                    Gson gson = new Gson();
+                    TimeSlot modelArrayList = gson.fromJson(response, TimeSlot.class);
+                    if (modelArrayList.getApiStatus().equalsIgnoreCase("200")) {
+                        navigationController.showTimePreode(modelArrayList);
+                    } else {
+                        dateGott="";
+                        Toaster.customToast(modelArrayList.getErrors().getErrorText());
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
                 }
+
             }
         }, new Response.ErrorListener() {
             @Override
