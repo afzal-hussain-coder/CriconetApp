@@ -219,4 +219,17 @@
         android:fitsSystemWindows="false" />
 
     <include layout="@layout/dialog_booking_details" />
+
+    <FrameLayout
+        android:id="@+id/dim_chat"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:alpha="0"
+        android:background="@color/black_semi_transparent"
+        android:fitsSystemWindows="false"
+        />
+
+    <include layout="@layout/chat_dailog_booking"
+        android:visibility="visible"
+        />
 </RelativeLayout>

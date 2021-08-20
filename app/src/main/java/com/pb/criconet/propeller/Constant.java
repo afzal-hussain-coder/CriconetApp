@@ -55,8 +55,8 @@ public class Constant {
     public static int color=0;
     public static String source = "https://www.criconet.com/themes/wowonder/img/vbackgroundsession.jpg";
 
-    static Uri fileUri = Uri.parse("android.resource://com.pb.criconet/" + R.drawable.vb);
-        public static File file= new File(fileUri.getPath());
+//    static Uri fileUri = Uri.parse("android.resource://com.pb.criconet/" + R.drawable.vb);
+//        public static File file= new File(fileUri.getPath());
 
-    public static final VirtualBackgroundSource VIRTUAL_BACKGROUND_SOURCE=new VirtualBackgroundSource(BACKGROUND_IMG,0,file.getAbsolutePath());
+    //public static final VirtualBackgroundSource VIRTUAL_BACKGROUND_SOURCE=new VirtualBackgroundSource(BACKGROUND_IMG,0,file.getAbsolutePath());
 }

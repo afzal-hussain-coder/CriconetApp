@@ -55,9 +55,15 @@ public class BookingHistoryAdapter extends RecyclerView.Adapter<BookingHistoryAd
         if(data.get(position).getBtn1()!=null&&!data.get(position).getBtn1().equalsIgnoreCase("")){
             holder.btn1.setVisibility(View.VISIBLE);
             holder.tv_confirmed.setText(data.get(position).getBtn1());
-
         }else {
             holder.btn1.setVisibility(View.GONE);
+
+        }
+
+        if(data.get(position).getBtn1().equalsIgnoreCase("Confirmed")){
+            holder.fl_chat.setVisibility(View.VISIBLE);
+        }else{
+            holder.fl_chat.setVisibility(View.GONE);
         }
 
         if(data.get(position).getBtn2()!=null&&!data.get(position).getBtn2().equalsIgnoreCase("")){
@@ -82,6 +88,10 @@ public class BookingHistoryAdapter extends RecyclerView.Adapter<BookingHistoryAd
             callback.viewDetails(data.get(position));
         });
 
+        holder.fl_chat.setOnClickListener(v -> {
+            callback.chatClick(data.get(position).getCoachUserId(),data.get(position).getUserId());
+        });
+
         if (data.get(position).getBtn2().equalsIgnoreCase("join")){
             holder.btn2.setOnClickListener(v -> {
                 callback.buttonClick(data.get(position).getId(),data.get(position).getDuration_in_milisecond(),data.get(position).getBtn2(),data.get(position).getChanel_id(),data.get(position).getBookingId(),
@@ -103,7 +113,7 @@ public class BookingHistoryAdapter extends RecyclerView.Adapter<BookingHistoryAd
         TextView tvBookingDateTime;
         FrameLayout btn1;
         FrameLayout btn2;
-        FrameLayout tv_viewDetails;
+        FrameLayout tv_viewDetails,fl_chat;
         TextView tvSlotDuration;
         TextView tv_confirmed;
         TextView tv_join;
@@ -122,13 +132,15 @@ public class BookingHistoryAdapter extends RecyclerView.Adapter<BookingHistoryAd
             tv_join = itemView.findViewById(R.id.tv_join);
             tv_viewDetails=itemView.findViewById(R.id.tv_viewDetails);
             tvSlotDuration = itemView.findViewById(R.id.tvSlotDuration);
+            fl_chat = itemView.findViewById(R.id.fl_chat);
 
         }
     }
 
     public interface clickCallback{
-        public void buttonClick(String id,long timeDuration,String action,String channel_id,String booking_id,String userid,String coachid,String coachName);
-        public void viewDetails(BookingHistory.Datum data);
+         void buttonClick(String id,long timeDuration,String action,String channel_id,String booking_id,String userid,String coachid,String coachName);
+         void viewDetails(BookingHistory.Datum data);
+         void chatClick(String coachId,String userId);
     }
 
 }

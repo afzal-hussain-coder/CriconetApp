@@ -672,7 +672,6 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
         }
     }
 
-
     public void onChatClicked(View view){
         slideUp.show();
         //startActivity(new Intent(this,MessageActivity.class).putExtra(ConstantApp.ACTION_KEY_CHANNEL_NAME,channelName).putExtra("UserId",userId).putExtra("CoachId",coachId));
@@ -1332,7 +1331,12 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
     }
 
     public void loadWebView(){
-        webUrl= Global.URL_CHAT+"/"+"messages"+"/"+coachId+"?"+"user_id="+userId+"&"+"s="+SessionManager.get_session_id(prefs);
+        if(SessionManager.getProfileType(prefs).equalsIgnoreCase("Coach")){
+            webUrl= Global.URL_CHAT+"/"+"messages"+"/"+userId+"?"+"user_id="+SessionManager.get_user_id(prefs)+"&"+"s="+SessionManager.get_session_id(prefs);
+        }else{
+            webUrl= Global.URL_CHAT+"/"+"messages"+"/"+coachId+"?"+"user_id="+SessionManager.get_user_id(prefs)+"&"+"s="+SessionManager.get_session_id(prefs);
+        }
+
         Log.d("WevURL",webUrl);
         if (Build.VERSION.SDK_INT >= 23 && (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)) {
             ActivityCompat.requestPermissions(CallActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA}, 1);

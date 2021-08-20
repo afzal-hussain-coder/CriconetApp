@@ -261,5 +261,6 @@
         />
 
     <include layout="@layout/chat_dailog"
+        android:visibility="visible"
         />
 </FrameLayout>
