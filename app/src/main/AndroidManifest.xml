@@ -285,7 +285,7 @@
             android:name="com.google.android.gms.wallet.api.enabled"
             android:value="true" />
 
-        joj
+
         <activity android:name=".activity.MessageActivity" />
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"

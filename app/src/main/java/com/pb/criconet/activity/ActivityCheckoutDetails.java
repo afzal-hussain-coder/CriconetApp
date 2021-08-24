@@ -211,38 +211,38 @@ public class ActivityCheckoutDetails extends AppCompatActivity implements Paymen
             laterPayeePin = edit_pinCode.getText().toString().trim();
             laterPayAlternateMobileNo = edit_alternateMobile.getText().toString().trim();
 
-         if(laterPayeeName.isEmpty()){
-             Toaster.customToastUp("Please Enter Full Name");
-         }else if(!Global.isValidAddress(laterPayeeAddress)){
-             Toaster.customToastUp("Address must have min 5 character");
-         }else if(laterPayeePin.isEmpty()){
-             Toaster.customToastUp("Please Enter Pin Code");
-         }
-         else if(!Global.isValidPincode(laterPayeePin)){
-             Toaster.customToastUp("Please Enter Valid Pin Code");
-         } else if(laterPayAlternateMobileNo.isEmpty()){
-             Toaster.customToastUp("Please enter alternate number");
-         }
-         else if(!Global.isValidPhoneNumber(laterPayAlternateMobileNo)){
-             Toaster.customToastUp("Please enter valid alternate number");
-         }else{
+            if (laterPayeeName.isEmpty()) {
+                Toaster.customToastUp("Please Enter Full Name");
+            } else if (laterPayeeAddress.isEmpty()) {
+                Toaster.customToastUp("Please Enter Address");
+            } else if (!Global.isValidAddress(laterPayeeAddress)) {
+                Toaster.customToastUp("Address must have min 5 character");
+            } else if (laterPayeePin.isEmpty()) {
+                Toaster.customToastUp("Please Enter Pin Code");
+            } else if (!Global.isValidPincode(laterPayeePin)) {
+                Toaster.customToastUp("Please Enter Valid Pin Code");
+            } else if (laterPayAlternateMobileNo.isEmpty()) {
+                Toaster.customToastUp("Please enter alternate number");
+            } else if (!Global.isValidPhoneNumber(laterPayAlternateMobileNo)) {
+                Toaster.customToastUp("Please enter valid alternate number");
+            } else {
 
-             if (coupon_status.equalsIgnoreCase("apply")) {
-                 if (Global.isOnline(mActivity)) {
-                     BookCoachPaylater();
-                 } else {
-                     Global.showDialog(mActivity);
-                 }
-             } else {
-                 if (Global.isOnline(mActivity)) {
-                     submitDetails();
-                 } else {
-                     Global.showDialog(mActivity);
-                 }
-             }
+                if (coupon_status.equalsIgnoreCase("apply")) {
+                    if (Global.isOnline(mActivity)) {
+                        BookCoachPaylater();
+                    } else {
+                        Global.showDialog(mActivity);
+                    }
+                } else {
+                    if (Global.isOnline(mActivity)) {
+                        submitDetails();
+                    } else {
+                        Global.showDialog(mActivity);
+                    }
+                }
 
 
-         }
+            }
 
         });
 //
@@ -280,9 +280,9 @@ public class ActivityCheckoutDetails extends AppCompatActivity implements Paymen
         });
 
         btnPaynow.setOnClickListener(view -> {
-            try{
+            try {
                 int a = ordercreate.getPaymentOption().getAmount();
-                //Toaster.customToastUp(a+"amount");
+                Toaster.customToastUp(a+"amount");
                 if (a == 0) {
                     Intent intent = new Intent(ActivityCheckoutDetails.this, BookingActivity.class);
                     startActivity(intent);
@@ -304,7 +304,7 @@ public class ActivityCheckoutDetails extends AppCompatActivity implements Paymen
 
 
                 }
-            }catch(Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
 
             }
@@ -826,7 +826,7 @@ public class ActivityCheckoutDetails extends AppCompatActivity implements Paymen
             @Override
             public void onResponse(String response) {
                 loaderView.hideLoader();
-                Log.d("PayLaterResponse",response);
+                Log.d("PayLaterResponse", response);
                 try {
                     JSONObject jsonObject = new JSONObject(response);
                     if (jsonObject.getString("api_text").equalsIgnoreCase("success")) {
@@ -856,7 +856,7 @@ public class ActivityCheckoutDetails extends AppCompatActivity implements Paymen
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
                 loaderView.hideLoader();
-                 Global.msgDialog((Activity) mActivity, "Error from server");
+                Global.msgDialog((Activity) mActivity, "Error from server");
             }
         }) {
             @Override
@@ -864,7 +864,7 @@ public class ActivityCheckoutDetails extends AppCompatActivity implements Paymen
                 Map<String, String> param = new HashMap<String, String>();
                 param.put("user_id", SessionManager.get_user_id(prefs));
                 param.put("s", SessionManager.get_session_id(prefs));
-                param.put("booking_id",String.valueOf(ordercreate.getBookingId()) );
+                param.put("booking_id", String.valueOf(ordercreate.getBookingId()));
                 param.put("name", laterPayeeName);
                 param.put("address", laterPayeeAddress);
                 param.put("pincode", laterPayeePin);

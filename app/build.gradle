@@ -16,7 +16,7 @@ android {
         applicationId "com.pb.criconet"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 17
+        versionCode 18
         versionName "1.0.3"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true

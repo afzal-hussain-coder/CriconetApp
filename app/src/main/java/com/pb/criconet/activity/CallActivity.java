@@ -4,6 +4,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -27,11 +28,13 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewParent;
 import android.view.ViewStub;
 import android.view.Window;
+import android.view.inputmethod.InputMethodManager;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
@@ -305,6 +308,7 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
                     //Log.d("Channel",channelName);
             accessToken = generateToken(getResources().getString(R.string.agora_app_id),getResources().getString(R.string.app_certificate),channelName,0,3600);
 
+            Log.d("AccessToken",accessToken);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -478,14 +482,6 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
         startActivityForResult(i, CALL_OPTIONS_REQUEST);*/
     }
 
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        if (requestCode == CALL_OPTIONS_REQUEST) {
-////            RecyclerView msgListView = (RecyclerView) findViewById(R.id.msg_list);
-////            msgListView.setVisibility(Constant.DEBUG_INFO_ENABLED ? View.VISIBLE : View.INVISIBLE);
-//        }
-//    }
 
     public void onClickHideIME(View view) {
         //log.debug("onClickHideIME " + view);
@@ -1330,6 +1326,7 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
         sessionCancelAlertDialog();
     }
 
+    @SuppressLint("SetJavaScriptEnabled")
     public void loadWebView(){
         if(SessionManager.getProfileType(prefs).equalsIgnoreCase("Coach")){
             webUrl= Global.URL_CHAT+"/"+"messages"+"/"+userId+"?"+"user_id="+SessionManager.get_user_id(prefs)+"&"+"s="+SessionManager.get_session_id(prefs);
@@ -1348,6 +1345,10 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
         assert webView != null;
 
         WebSettings webSettings = webView.getSettings();
+        webSettings.setUseWideViewPort(true);
+        //webView.getSettings().setBuiltInZoomControls(true);
+        webView.getSettings().setLoadsImagesAutomatically(true);
+        webView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
         webSettings.setJavaScriptEnabled(true);
         webSettings.setAllowFileAccess(true);
 
@@ -1478,9 +1479,29 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
     }
 
     public class Callback extends WebViewClient {
+//        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+//            view.loadUrl(url);
+//            return true;
+//        }
+//
+//        @Override
+//        public void onPageFinished(WebView view, String url) {
+//            if (.isShowing()) {
+//                progressDialog.dismiss();
+//            }
+//        }
         public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
             Toast.makeText(getApplicationContext(), "Failed loading app!", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if (getCurrentFocus() != null) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        }
+        return super.dispatchTouchEvent(ev);
     }
 
 

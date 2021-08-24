@@ -221,24 +221,13 @@
                             android:textSize="@dimen/_9sdp"/>
 
                     </FrameLayout>
-<!--                <TextView-->
-<!--                    android:id="@+id/btn1"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:background="@drawable/btn_round_orange"-->
-<!--                    android:padding="@dimen/_5sdp"-->
-<!--                    android:fontFamily="@font/gotham_book"-->
-<!--                    android:gravity="center"-->
-<!--                    android:text="Pending"-->
-<!--                    android:textColor="@color/white"-->
-<!--                    android:textSize="@dimen/_12sdp"-->
-<!--                    />-->
+
 
                     <FrameLayout
-                        android:id="@+id/btn2"
+                        android:id="@+id/fl_chat"
                         android:layout_width="@dimen/_75sdp"
                         android:layout_height="@dimen/_30sdp"
-                        android:visibility="gone"
+                        android:visibility="visible"
                         android:layout_marginStart="@dimen/_5sdp"
                         android:background="@color/colorPrimary">
 
@@ -250,26 +239,29 @@
                             android:layout_width="0.9dp"
                             android:layout_height="match_parent"
                             android:background="#ca9191"/>
+
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/_1sdp"
                             android:layout_gravity="bottom"
-                            android:background="@color/black"/>
+                            android:background="@color/app_redd"/>
                         <View
                             android:layout_width="@dimen/_1sdp"
                             android:layout_height="match_parent"
                             android:layout_gravity="end"
-                            android:background="@color/black"/>
-
+                            android:background="@color/app_redd"/>
                         <TextView
-                            android:id="@+id/tv_join"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:text="@string/join_session"
+                            android:text="@string/chat"
+                            android:gravity="center_vertical"
                             app:fontFamily="@font/opensans_bold"
                             android:textColor="@color/light_text_color"
-                            android:textSize="@dimen/_9sdp"/>
+                            android:drawablePadding="@dimen/_2sdp"
+                            android:textSize="@dimen/_9sdp"
+                            app:drawableStartCompat="@drawable/ic_wechat_black_24dp" />
+
 
                     </FrameLayout>
                 <!--<TextView
@@ -341,14 +333,13 @@
                     />-->
             </RelativeLayout>
             <FrameLayout
-                android:id="@+id/fl_chat"
+                android:id="@+id/btn2"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_30sdp"
-                android:visibility="visible"
+                android:visibility="gone"
                 android:layout_marginStart="@dimen/_10sdp"
                 android:layout_marginEnd="@dimen/_10sdp"
                 android:layout_marginBottom="@dimen/_10sdp"
-                android:layout_alignParentEnd="true"
                 android:background="@color/colorPrimary">
 
                 <View
@@ -372,15 +363,14 @@
                     android:background="@color/app_redd"/>
 
                 <TextView
+                    android:id="@+id/tv_join"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="@string/chat"
+                    android:text="@string/join_session"
                     app:fontFamily="@font/opensans_bold"
                     android:textColor="@color/light_text_color"
-                    android:drawablePadding="@dimen/_2sdp"
-                    android:textSize="@dimen/_10sdp"
-                    app:drawableStartCompat="@drawable/ic_wechat_black_24dp" />
+                    android:textSize="@dimen/_9sdp"/>
 
             </FrameLayout>
 

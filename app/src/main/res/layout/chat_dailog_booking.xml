@@ -12,8 +12,7 @@
         android:id="@+id/slideView_chat"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/transparent"
-        android:layout_marginTop="@dimen/_20sdp">
+        android:background="@color/transparent">
 
         <TextView
             android:id="@+id/textView"
@@ -23,7 +22,7 @@
             android:layout_centerHorizontal="true"
             android:layout_alignParentTop="true"
             android:text="@string/slide_down"
-            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_marginTop="@dimen/_15sdp"
             android:layout_marginBottom="@dimen/_10sdp"
             android:textColor="@color/light_text_color"
             android:textSize="@dimen/_10sdp"
@@ -34,7 +33,8 @@
             android:id="@+id/web_chat"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scrollbars="none"
+            android:layout_marginStart="@dimen/_5sdp"
+            android:layout_marginEnd="@dimen/_5sdp"
             android:layout_below="@+id/textView"
             />
 

@@ -13,11 +13,13 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
@@ -30,21 +32,18 @@ import android.text.Html;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
+import android.view.inputmethod.InputMethodManager;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -58,32 +57,23 @@ import com.google.gson.Gson;
 import com.mancj.slideup.SlideUp;
 import com.mancj.slideup.SlideUpBuilder;
 import com.pb.criconet.R;
-import com.pb.criconet.Utills.CCResource;
 import com.pb.criconet.Utills.CustomLoaderView;
 import com.pb.criconet.Utills.DataModel;
 import com.pb.criconet.Utills.DateDropDownView;
-import com.pb.criconet.Utills.DropDownView;
 import com.pb.criconet.Utills.FilterBookingDropDownView;
 import com.pb.criconet.Utills.Global;
 import com.pb.criconet.Utills.SessionManager;
 import com.pb.criconet.Utills.Toaster;
 import com.pb.criconet.adapters.BookingHistoryAdapter;
 import com.pb.criconet.models.BookingHistory;
-import com.pb.criconet.models.BookingPaymentsDetails;
 import com.pb.criconet.models.CoachAccept;
 import com.pb.criconet.models.ConstantApp;
-import com.rilixtech.widget.countrycodepicker.CountryCodePicker;
-
-import org.json.JSONObject;
-
 import java.io.File;
 import java.io.IOException;
-import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -141,6 +131,7 @@ public class BookingActivity extends AppCompatActivity implements BookingHistory
     private ValueCallback<Uri[]> mUMA;
 
 
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
@@ -180,6 +171,8 @@ public class BookingActivity extends AppCompatActivity implements BookingHistory
             }
         }
     }
+
+
 
     @SuppressLint({"SetJavaScriptEnabled", "WrongViewCast"})
     @Override
@@ -607,7 +600,6 @@ public class BookingActivity extends AppCompatActivity implements BookingHistory
         dialog.show();
     }
 
-
     @Override
     public void onBackPressed() {
         super.onBackPressed();
@@ -617,13 +609,13 @@ public class BookingActivity extends AppCompatActivity implements BookingHistory
     }
 
     // webchat....
-    public void loadWebView(String coach_id,String user_Id){
+    @SuppressLint({"SetJavaScriptEnabled", "ClickableViewAccessibility"})
+    public void loadWebView(String coach_id, String user_Id){
         if(SessionManager.getProfileType(prefs).equalsIgnoreCase("Coach")){
             webUrl= Global.URL_CHAT+"/"+"messages"+"/"+user_Id+"?"+"user_id="+SessionManager.get_user_id(prefs)+"&"+"s="+SessionManager.get_session_id(prefs);
         }else{
             webUrl= Global.URL_CHAT+"/"+"messages"+"/"+coach_id+"?"+"user_id="+SessionManager.get_user_id(prefs)+"&"+"s="+SessionManager.get_session_id(prefs);
         }
-
 
         Log.d("WevURL",webUrl);
         if (Build.VERSION.SDK_INT >= 23 && (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)) {
@@ -631,14 +623,22 @@ public class BookingActivity extends AppCompatActivity implements BookingHistory
         }
 
         webView = (WebView) findViewById(R.id.web_chat);
+
         webView.setScrollContainer(false);
         webView.setBackgroundColor(Color.TRANSPARENT);
         webView.setLayerType(WebView.LAYER_TYPE_SOFTWARE, null);
         assert webView != null;
 
         WebSettings webSettings = webView.getSettings();
+        webSettings.setUseWideViewPort(true);
+        webSettings.setPluginState(WebSettings.PluginState.ON);
+        webSettings.setLoadsImagesAutomatically(true);
+        webSettings.setJavaScriptCanOpenWindowsAutomatically(true);
+        webSettings.setAllowFileAccessFromFileURLs(true);
+        webSettings.setAllowUniversalAccessFromFileURLs(true);
         webSettings.setJavaScriptEnabled(true);
         webSettings.setAllowFileAccess(true);
+
 
         if (Build.VERSION.SDK_INT >= 21) {
             webSettings.setMixedContentMode(0);
@@ -712,6 +712,7 @@ public class BookingActivity extends AppCompatActivity implements BookingHistory
                     } else {
                         takePictureIntent = null;
                     }
+
                 }
 
                 Intent contentSelectionIntent = new Intent(Intent.ACTION_GET_CONTENT);
@@ -767,13 +768,24 @@ public class BookingActivity extends AppCompatActivity implements BookingHistory
     }
 
     public class Callback extends WebViewClient {
+
         public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
             Toast.makeText(getApplicationContext(), "Failed loading app!", Toast.LENGTH_SHORT).show();
         }
+
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if (getCurrentFocus() != null) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        }
+        return super.dispatchTouchEvent(ev);
     }
 }
