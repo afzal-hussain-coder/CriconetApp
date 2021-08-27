@@ -36,6 +36,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
+import android.webkit.DownloadListener;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
@@ -609,7 +610,7 @@ public class BookingActivity extends AppCompatActivity implements BookingHistory
     }
 
     // webchat....
-    @SuppressLint({"SetJavaScriptEnabled", "ClickableViewAccessibility"})
+    @SuppressLint({"SetJavaScriptEnabled", "ClickableViewAccessibility", "ObsoleteSdkInt"})
     public void loadWebView(String coach_id, String user_Id){
         if(SessionManager.getProfileType(prefs).equalsIgnoreCase("Coach")){
             webUrl= Global.URL_CHAT+"/"+"messages"+"/"+user_Id+"?"+"user_id="+SessionManager.get_user_id(prefs)+"&"+"s="+SessionManager.get_session_id(prefs);
@@ -622,8 +623,7 @@ public class BookingActivity extends AppCompatActivity implements BookingHistory
             ActivityCompat.requestPermissions(BookingActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA}, 1);
         }
 
-        webView = (WebView) findViewById(R.id.web_chat);
-
+        webView =findViewById(R.id.web_chat);
         webView.setScrollContainer(false);
         webView.setBackgroundColor(Color.TRANSPARENT);
         webView.setLayerType(WebView.LAYER_TYPE_SOFTWARE, null);
@@ -651,6 +651,18 @@ public class BookingActivity extends AppCompatActivity implements BookingHistory
 
         webView.setWebViewClient(new Callback());
         webView.loadUrl(webUrl);
+        webView.setDownloadListener(new DownloadListener() {
+            public void onDownloadStart(String url, String userAgent,
+                                        String contentDisposition, String mimetype,
+                                        long contentLength) {
+                File file = new File(url);
+                openFile(file);
+//                Intent i = new Intent(Intent.ACTION_VIEW);
+//                //i.setDataAndType(Uri.parse(url), "application/*");
+//                i.setData(Uri.parse(url));
+//                startActivity(i);
+            }
+        });
         webView.setWebChromeClient(new WebChromeClient() {
 
             //For Android 3.0+
@@ -735,7 +747,60 @@ public class BookingActivity extends AppCompatActivity implements BookingHistory
                 return true;
             }
         });
+    }
+    private void openFile(File url) {
 
+        try {
+
+            Uri uri = Uri.fromFile(url);
+
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            if (url.toString().contains(".doc") || url.toString().contains(".docx")) {
+                // Word document
+                intent.setDataAndType(uri, "application/msword");
+            } else if (url.toString().contains(".pdf")) {
+                // PDF file
+                intent.setDataAndType(uri, "application/pdf");
+            } else if (url.toString().contains(".ppt") || url.toString().contains(".pptx")) {
+                // Powerpoint file
+                intent.setDataAndType(uri, "application/vnd.ms-powerpoint");
+            } else if (url.toString().contains(".xls") || url.toString().contains(".xlsx")) {
+                // Excel file
+                intent.setDataAndType(uri, "application/vnd.ms-excel");
+            } else if (url.toString().contains(".zip")) {
+                // ZIP file
+                intent.setDataAndType(uri, "application/zip");
+            } else if (url.toString().contains(".rar")){
+                // RAR file
+                intent.setDataAndType(uri, "application/x-rar-compressed");
+            } else if (url.toString().contains(".rtf")) {
+                // RTF file
+                intent.setDataAndType(uri, "application/rtf");
+            } else if (url.toString().contains(".wav") || url.toString().contains(".mp3")) {
+                // WAV audio file
+                intent.setDataAndType(uri, "audio/x-wav");
+            } else if (url.toString().contains(".gif")) {
+                // GIF file
+                intent.setDataAndType(uri, "image/gif");
+            } else if (url.toString().contains(".jpg") || url.toString().contains(".jpeg") || url.toString().contains(".png")) {
+                // JPG file
+                intent.setDataAndType(uri, "image/jpeg");
+            } else if (url.toString().contains(".txt")) {
+                // Text file
+                intent.setDataAndType(uri, "text/plain");
+            } else if (url.toString().contains(".3gp") || url.toString().contains(".mpg") ||
+                    url.toString().contains(".mpeg") || url.toString().contains(".mpe") || url.toString().contains(".mp4") || url.toString().contains(".avi")) {
+                // Video files
+                intent.setDataAndType(uri, "video/*");
+            } else {
+                intent.setDataAndType(uri, "*/*");
+            }
+
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(mActivity, "No application found which can open the file", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private File createImageFile() throws IOException {
