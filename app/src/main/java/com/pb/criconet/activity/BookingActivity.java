@@ -655,12 +655,11 @@ public class BookingActivity extends AppCompatActivity implements BookingHistory
             public void onDownloadStart(String url, String userAgent,
                                         String contentDisposition, String mimetype,
                                         long contentLength) {
-                File file = new File(url);
-                openFile(file);
-//                Intent i = new Intent(Intent.ACTION_VIEW);
-//                //i.setDataAndType(Uri.parse(url), "application/*");
-//                i.setData(Uri.parse(url));
-//                startActivity(i);
+                //File file = new File(url);
+                //openFile(file);
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(url));
+                startActivity(i);
             }
         });
         webView.setWebChromeClient(new WebChromeClient() {
