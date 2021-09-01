@@ -11,7 +11,7 @@
     <color name="blue">#32c5f3</color>
 <!--    //428f42-->
     <color name="edit_text_color_hint">#8c8979</color>
-    <color name="edit_text_color">#8c8979</color>#FAFFCC
+    <color name="edit_text_color">#8c8979</color>
     <color name="button_color">#FAFFCC</color>
     <color name="join_button_color">#800000</color>
     <color name="app_red">#b4604e</color>

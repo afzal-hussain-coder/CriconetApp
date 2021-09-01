@@ -31,7 +31,26 @@
             android:textSize="@dimen/_10sdp"
             app:drawableEndCompat="@drawable/ic_keyboard_arrow_down_black_24dp"
             app:drawableTint="@color/light_text_color" />
-
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyleSmall"
+            android:layout_width="@dimen/_25sdp"
+            android:layout_height="@dimen/_25sdp"
+            android:layout_centerHorizontal="true"
+            android:visibility="gone"
+            android:layout_centerVertical="true"
+            />
+        <com.github.loadingview.LoadingView
+            android:id="@+id/loadingVieww"
+            android:layout_width="@dimen/_45sdp"
+            android:layout_height="@dimen/_45sdp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            app:lv_duration="20"
+            app:lv_end_color="@color/grey"
+            app:lv_external_radius="@dimen/_12sdp"
+            app:lv_internal_radius="@dimen/_3sdp"
+            app:lv_start_color="@color/white" />
         <WebView
             android:id="@+id/web_chat"
             android:layout_width="match_parent"

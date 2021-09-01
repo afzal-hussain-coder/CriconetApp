@@ -98,6 +98,16 @@ public class PageURL implements Serializable {
     private JSONObject groundOwner;
     private JSONObject liveStreaming;
 
+    public JSONObject getMediaReleases() {
+        return MediaReleases;
+    }
+
+    public void setMediaReleases(JSONObject mediaReleases) {
+        MediaReleases = mediaReleases;
+    }
+
+    private JSONObject MediaReleases;
+
     public JSONObject getContact_us() {
         return contact_us;
     }
@@ -210,6 +220,14 @@ public class PageURL implements Serializable {
          if(jsonObject.has("user_agreement")){
              try {
                  this.userAggreement=jsonObject.getJSONObject("user_agreement");
+             } catch (JSONException e) {
+                 e.printStackTrace();
+             }
+
+         }
+         if(jsonObject.has("media_releases")){
+             try {
+                 this.MediaReleases=jsonObject.getJSONObject("media_releases");
              } catch (JSONException e) {
                  e.printStackTrace();
              }

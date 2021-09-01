@@ -26,6 +26,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.text.Html;
@@ -43,6 +44,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.android.volley.DefaultRetryPolicy;
@@ -54,6 +56,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
+import com.github.loadingview.LoadingDialog;
+import com.github.loadingview.LoadingView;
 import com.google.gson.Gson;
 import com.mancj.slideup.SlideUp;
 import com.mancj.slideup.SlideUpBuilder;
@@ -127,9 +131,11 @@ public class BookingActivity extends AppCompatActivity implements BookingHistory
 
     private final static int FCR = 1;
     WebView webView;
+    LoadingView progressBar;
     private String mCM;
     private ValueCallback<Uri> mUM;
     private ValueCallback<Uri[]> mUMA;
+    WebSettings webSettings;
 
 
 
@@ -216,7 +222,28 @@ public class BookingActivity extends AppCompatActivity implements BookingHistory
         }
     }
 
+    @SuppressLint("SetJavaScriptEnabled")
     private void initializeView() {
+
+        webView =findViewById(R.id.web_chat);
+        progressBar = findViewById(R.id.loadingVieww);
+        webView.setWebViewClient(new Callback());
+        webView.setOverScrollMode(WebView.OVER_SCROLL_NEVER);
+        webView.setBackgroundColor(Color.TRANSPARENT);
+        webView.setLayerType(WebView.LAYER_TYPE_SOFTWARE, null);
+        assert webView != null;
+
+        webSettings = webView.getSettings();
+        webSettings.setUseWideViewPort(true);
+        webSettings.setPluginState(WebSettings.PluginState.ON);
+        webSettings.setLoadsImagesAutomatically(true);
+        webSettings.setJavaScriptCanOpenWindowsAutomatically(true);
+        webSettings.setAllowFileAccessFromFileURLs(true);
+        webSettings.setAllowUniversalAccessFromFileURLs(true);
+        webSettings.setJavaScriptEnabled(true);
+        webSettings.setAllowFileAccess(true);
+
+
         rootView = findViewById(R.id.root_view);
         slideView = findViewById(R.id.slideView);
         dim = findViewById(R.id.dim);
@@ -623,23 +650,6 @@ public class BookingActivity extends AppCompatActivity implements BookingHistory
             ActivityCompat.requestPermissions(BookingActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA}, 1);
         }
 
-        webView =findViewById(R.id.web_chat);
-        webView.setScrollContainer(false);
-        webView.setBackgroundColor(Color.TRANSPARENT);
-        webView.setLayerType(WebView.LAYER_TYPE_SOFTWARE, null);
-        assert webView != null;
-
-        WebSettings webSettings = webView.getSettings();
-        webSettings.setUseWideViewPort(true);
-        webSettings.setPluginState(WebSettings.PluginState.ON);
-        webSettings.setLoadsImagesAutomatically(true);
-        webSettings.setJavaScriptCanOpenWindowsAutomatically(true);
-        webSettings.setAllowFileAccessFromFileURLs(true);
-        webSettings.setAllowUniversalAccessFromFileURLs(true);
-        webSettings.setJavaScriptEnabled(true);
-        webSettings.setAllowFileAccess(true);
-
-
         if (Build.VERSION.SDK_INT >= 21) {
             webSettings.setMixedContentMode(0);
             webView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
@@ -648,8 +658,6 @@ public class BookingActivity extends AppCompatActivity implements BookingHistory
         } else if (Build.VERSION.SDK_INT < 19) {
             webView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         }
-
-        webView.setWebViewClient(new Callback());
         webView.loadUrl(webUrl);
         webView.setDownloadListener(new DownloadListener() {
             public void onDownloadStart(String url, String userAgent,
@@ -812,31 +820,52 @@ public class BookingActivity extends AppCompatActivity implements BookingHistory
 
     @Override
     public boolean onKeyDown(int keyCode, @NonNull KeyEvent event) {
+           try{
+               if (event.getAction() == KeyEvent.ACTION_DOWN) {
 
-        if (event.getAction() == KeyEvent.ACTION_DOWN) {
+                   if (keyCode == KeyEvent.KEYCODE_BACK) {
+                       if (webView.canGoBack()) {
+                           webView.goBack();
+                       } else {
+                           finish();
+                       }
+                       return true;
+                   }
+               }
 
-            switch (keyCode) {
-                case KeyEvent.KEYCODE_BACK:
-
-                    if (webView.canGoBack()) {
-                        webView.goBack();
-                    } else {
-                        finish();
-                    }
-
-                    return true;
-            }
-        }
-
+           }catch (Exception e){
+               e.printStackTrace();
+           }
         return super.onKeyDown(keyCode, event);
     }
 
     public class Callback extends WebViewClient {
+        @Override
+        public void onPageStarted(WebView webview, String url, Bitmap favicon) {
+            webview.setVisibility(webView.INVISIBLE);
+            progressBar.start();
+
+        }
+
+        @Override
+        public void onPageFinished(WebView view, String url) {
+            view.setVisibility(webView.VISIBLE);
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    progressBar.stop();
+                }
+            },2000);
+
+            super.onPageFinished(view, url);
+
+        }
+
+        // ProgressBar will disappear once page is loaded
 
         public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
             Toast.makeText(getApplicationContext(), "Failed loading app!", Toast.LENGTH_SHORT).show();
         }
-
     }
 
     @Override

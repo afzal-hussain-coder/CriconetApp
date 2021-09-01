@@ -405,6 +405,13 @@ public class MainActivity extends BaseActivity {
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
+                }else if (text.get(position).getTitle().equalsIgnoreCase(pageURL.getMediaReleases().getString("title"))) {
+                    try {
+                        startActivity(new Intent(mActivity, WebViewActivity.class).putExtra("URL", pageURL.getMediaReleases().getString("url")).putExtra("title", pageURL.getMediaReleases().getString("title")));
+                        finish();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
                 else if (text.get(position).getTitle().equalsIgnoreCase(pageURL.getContact_us().getString("title"))) {
                     startActivity(new Intent(mActivity, WebViewActivity.class).putExtra("URL", pageURL.getContact_us().getString("url")).putExtra("title", pageURL.getContact_us().getString("title")));
@@ -521,6 +528,7 @@ public class MainActivity extends BaseActivity {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
+
                         try {
                             text.add(new Drawer(pageURL.getLiveStreaming().getString("title"), false, R.drawable.live_streaming));
                         } catch (JSONException e) {
@@ -533,6 +541,11 @@ public class MainActivity extends BaseActivity {
                         }
                         try {
                             text.add(new Drawer(pageURL.getGroundOwner().getString("title"), false, R.drawable.ic_block_user));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        try {
+                            text.add(new Drawer(pageURL.getMediaReleases().getString("title"), false, R.drawable.ic_perm_media_black_24dp));
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

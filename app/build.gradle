@@ -168,6 +168,7 @@ dependencies {
     implementation 'com.google.android.play:core:1.10.0' // In App Update
     implementation 'com.github.armcha:AutoLinkTextView:0.3.0'
     implementation 'com.google.android.gms:play-services-analytics:17.0.0'
+    implementation 'com.samigehi:loadingview:1.1'
 
 
 

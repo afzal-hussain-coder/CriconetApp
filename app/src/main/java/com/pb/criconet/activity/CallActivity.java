@@ -11,6 +11,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.media.AudioManager;
@@ -47,6 +48,7 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -67,6 +69,7 @@ import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.github.loadingview.LoadingView;
 import com.mancj.slideup.SlideUp;
 import com.mancj.slideup.SlideUpBuilder;
 import com.pb.criconet.R;
@@ -170,9 +173,11 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
 
     private final static int FCR = 1;
     WebView webView;
+    LoadingView progressBar;
     private String mCM;
     private ValueCallback<Uri> mUM;
     private ValueCallback<Uri[]> mUMA;
+    WebSettings webSettings;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
@@ -238,6 +243,24 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
         tv_timeDuration = findViewById(R.id.tv_timeDuration);
 
         //........Web Chat .....
+
+        webView =findViewById(R.id.web_chat);
+        progressBar = findViewById(R.id.loadingVieww);
+        webView.setWebViewClient(new Callback());
+        webView.setOverScrollMode(WebView.OVER_SCROLL_NEVER);
+        webView.setBackgroundColor(Color.TRANSPARENT);
+        webView.setLayerType(WebView.LAYER_TYPE_SOFTWARE, null);
+        assert webView != null;
+
+        webSettings = webView.getSettings();
+        webSettings.setUseWideViewPort(true);
+        webSettings.setPluginState(WebSettings.PluginState.ON);
+        webSettings.setLoadsImagesAutomatically(true);
+        webSettings.setJavaScriptCanOpenWindowsAutomatically(true);
+        webSettings.setAllowFileAccessFromFileURLs(true);
+        webSettings.setAllowUniversalAccessFromFileURLs(true);
+        webSettings.setJavaScriptEnabled(true);
+        webSettings.setAllowFileAccess(true);
         rootView = findViewById(R.id.root_view);
         slideView = findViewById(R.id.slideView);
         dim = findViewById(R.id.dim);
@@ -1341,22 +1364,6 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
             ActivityCompat.requestPermissions(CallActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA}, 1);
         }
 
-        webView = findViewById(R.id.web_chat);
-        webView.setScrollContainer(false);
-        webView.setBackgroundColor(Color.TRANSPARENT);
-        webView.setLayerType(WebView.LAYER_TYPE_SOFTWARE, null);
-        assert webView != null;
-
-        WebSettings webSettings = webView.getSettings();
-        webSettings.setUseWideViewPort(true);
-        webSettings.setPluginState(WebSettings.PluginState.ON);
-        webSettings.setLoadsImagesAutomatically(true);
-        webSettings.setJavaScriptCanOpenWindowsAutomatically(true);
-        webSettings.setAllowFileAccessFromFileURLs(true);
-        webSettings.setAllowUniversalAccessFromFileURLs(true);
-        webSettings.setJavaScriptEnabled(true);
-        webSettings.setAllowFileAccess(true);
-
         if (Build.VERSION.SDK_INT >= 21) {
             webSettings.setMixedContentMode(0);
             webView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
@@ -1365,8 +1372,6 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
         } else if (Build.VERSION.SDK_INT < 19) {
             webView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         }
-
-        webView.setWebViewClient(new Callback());
         webView.loadUrl(webUrl);
         webView.setDownloadListener(new DownloadListener() {
             public void onDownloadStart(String url, String userAgent,
@@ -1465,60 +1470,6 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
         });
 
     }
-    private void openFile(File url) {
-
-        try {
-
-            Uri uri = Uri.fromFile(url);
-
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            if (url.toString().contains(".doc") || url.toString().contains(".docx")) {
-                // Word document
-                intent.setDataAndType(uri, "application/msword");
-            } else if (url.toString().contains(".pdf")) {
-                // PDF file
-                intent.setDataAndType(uri, "application/pdf");
-            } else if (url.toString().contains(".ppt") || url.toString().contains(".pptx")) {
-                // Powerpoint file
-                intent.setDataAndType(uri, "application/vnd.ms-powerpoint");
-            } else if (url.toString().contains(".xls") || url.toString().contains(".xlsx")) {
-                // Excel file
-                intent.setDataAndType(uri, "application/vnd.ms-excel");
-            } else if (url.toString().contains(".zip")) {
-                // ZIP file
-                intent.setDataAndType(uri, "application/zip");
-            } else if (url.toString().contains(".rar")){
-                // RAR file
-                intent.setDataAndType(uri, "application/x-rar-compressed");
-            } else if (url.toString().contains(".rtf")) {
-                // RTF file
-                intent.setDataAndType(uri, "application/rtf");
-            } else if (url.toString().contains(".wav") || url.toString().contains(".mp3")) {
-                // WAV audio file
-                intent.setDataAndType(uri, "audio/x-wav");
-            } else if (url.toString().contains(".gif")) {
-                // GIF file
-                intent.setDataAndType(uri, "image/gif");
-            } else if (url.toString().contains(".jpg") || url.toString().contains(".jpeg") || url.toString().contains(".png")) {
-                // JPG file
-                intent.setDataAndType(uri, "image/jpeg");
-            } else if (url.toString().contains(".txt")) {
-                // Text file
-                intent.setDataAndType(uri, "text/plain");
-            } else if (url.toString().contains(".3gp") || url.toString().contains(".mpg") ||
-                    url.toString().contains(".mpeg") || url.toString().contains(".mpe") || url.toString().contains(".mp4") || url.toString().contains(".avi")) {
-                // Video files
-                intent.setDataAndType(uri, "video/*");
-            } else {
-                intent.setDataAndType(uri, "*/*");
-            }
-
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
-        } catch (ActivityNotFoundException e) {
-            Toast.makeText(mActivity, "No application found which can open the file", Toast.LENGTH_SHORT).show();
-        }
-    }
 
     private File createImageFile() throws IOException {
 
@@ -1531,25 +1482,50 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
     @Override
     public boolean onKeyDown(int keyCode, @NonNull KeyEvent event) {
 
-        if (event.getAction() == KeyEvent.ACTION_DOWN) {
+        try{
+            if (event.getAction() == KeyEvent.ACTION_DOWN) {
 
-            switch (keyCode) {
-                case KeyEvent.KEYCODE_BACK:
-
+                if (keyCode == KeyEvent.KEYCODE_BACK) {
                     if (webView.canGoBack()) {
                         webView.goBack();
                     } else {
                         finish();
                     }
-
                     return true;
+                }
             }
+
+        }catch (Exception e){
+            e.printStackTrace();
         }
 
         return super.onKeyDown(keyCode, event);
     }
 
     public class Callback extends WebViewClient {
+        @Override
+        public void onPageStarted(WebView webview, String url, Bitmap favicon) {
+            webview.setVisibility(webView.INVISIBLE);
+            progressBar.start();
+
+        }
+
+        @Override
+        public void onPageFinished(WebView view, String url) {
+            view.setVisibility(webView.VISIBLE);
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    progressBar.stop();
+                }
+            },2000);
+
+            super.onPageFinished(view, url);
+
+        }
+
+        // ProgressBar will disappear once page is loaded
+
         public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
             Toast.makeText(getApplicationContext(), "Failed loading app!", Toast.LENGTH_SHORT).show();
         }
@@ -1564,5 +1540,61 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
         return super.dispatchTouchEvent(ev);
     }
 
+//    private void openFile(File url) {
+//
+////        try {
+////
+////            Uri uri = Uri.fromFile(url);
+////
+////            Intent intent = new Intent(Intent.ACTION_VIEW);
+////            if (url.toString().contains(".doc") || url.toString().contains(".docx")) {
+////                // Word document
+////                intent.setDataAndType(uri, "application/msword");
+////            } else if (url.toString().contains(".pdf")) {
+////                // PDF file
+////                intent.setDataAndType(uri, "application/pdf");
+////            } else if (url.toString().contains(".ppt") || url.toString().contains(".pptx")) {
+////                // Powerpoint file
+////                intent.setDataAndType(uri, "application/vnd.ms-powerpoint");
+////            } else if (url.toString().contains(".xls") || url.toString().contains(".xlsx")) {
+////                // Excel file
+////                intent.setDataAndType(uri, "application/vnd.ms-excel");
+////            } else if (url.toString().contains(".zip")) {
+////                // ZIP file
+////                intent.setDataAndType(uri, "application/zip");
+////            } else if (url.toString().contains(".rar")){
+////                // RAR file
+////                intent.setDataAndType(uri, "application/x-rar-compressed");
+////            } else if (url.toString().contains(".rtf")) {
+////                // RTF file
+////                intent.setDataAndType(uri, "application/rtf");
+////            } else if (url.toString().contains(".wav") || url.toString().contains(".mp3")) {
+////                // WAV audio file
+////                intent.setDataAndType(uri, "audio/x-wav");
+////            } else if (url.toString().contains(".gif")) {
+////                // GIF file
+////                intent.setDataAndType(uri, "image/gif");
+////            } else if (url.toString().contains(".jpg") || url.toString().contains(".jpeg") || url.toString().contains(".png")) {
+////                // JPG file
+////                intent.setDataAndType(uri, "image/jpeg");
+////            } else if (url.toString().contains(".txt")) {
+////                // Text file
+////                intent.setDataAndType(uri, "text/plain");
+////            } else if (url.toString().contains(".3gp") || url.toString().contains(".mpg") ||
+////                    url.toString().contains(".mpeg") || url.toString().contains(".mpe") || url.toString().contains(".mp4") || url.toString().contains(".avi")) {
+////                // Video files
+////                intent.setDataAndType(uri, "video/*");
+////            } else {
+////                intent.setDataAndType(uri, "*/*");
+////            }
+////
+////            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+////            startActivity(intent);
+////        } catch (ActivityNotFoundException e) {
+////            Toast.makeText(mActivity, "No application found which can open the file", Toast.LENGTH_SHORT).show();
+////        }
+//    }
 
 }
+
+
