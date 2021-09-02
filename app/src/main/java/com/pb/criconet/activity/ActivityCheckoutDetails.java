@@ -58,6 +58,7 @@ import com.razorpay.Checkout;
 import com.razorpay.PaymentResultListener;
 import com.rilixtech.widget.countrycodepicker.CountryCodePicker;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.Serializable;
@@ -110,6 +111,7 @@ public class ActivityCheckoutDetails extends AppCompatActivity implements Paymen
     FrameLayout flSubmitDetails;
     TextView tvPricee, tvOfferPricee, tvTotalAmountt, tvCouponDiss, tvSubtotall, tvTaxx;
     LinearLayout li_offerr;
+    String payLater_settings_status="",coupon_code_settings_status="";
 
 
     @Override
@@ -142,6 +144,11 @@ public class ActivityCheckoutDetails extends AppCompatActivity implements Paymen
         prefs = PreferenceManager.getDefaultSharedPreferences(mActivity);
 
         initializeView();
+        if (Global.isOnline(mActivity)) {
+            checkAppSettings();
+        } else {
+            Global.showDialog(mActivity);
+        }
     }
 
     private void initializeView() {
@@ -873,6 +880,65 @@ public class ActivityCheckoutDetails extends AppCompatActivity implements Paymen
                 return param;
             }
         };
+        int socketTimeout = 30000;
+        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        postRequest.setRetryPolicy(policy);
+        queue.add(postRequest);
+    }
+    private void checkAppSettings() {
+        StringRequest postRequest = new StringRequest(Request.Method.GET, Global.URL + Global.GET_APP_SETTINGS, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.d("AppSettingsResponse", response);
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    if (jsonObject.getString("api_text").equalsIgnoreCase("success")) {
+                        JSONObject jsonObject1 = jsonObject.getJSONObject("data");
+
+                        if(jsonObject1.has("paylater")) {
+                            try {
+                                payLater_settings_status = jsonObject1.getString("paylater");
+                                if(payLater_settings_status.equalsIgnoreCase("0")){
+                                    btnPayLater.setVisibility(View.GONE);
+                                }else{
+                                    btnPayLater.setVisibility(View.VISIBLE);
+                                }
+
+                            } catch (JSONException jsonException) {
+                                jsonException.printStackTrace();
+                            }
+                        }
+                        if(jsonObject1.has("coupon_code")) {
+                            try {
+                                coupon_code_settings_status = jsonObject1.getString("coupon_code");
+                                if(coupon_code_settings_status.equalsIgnoreCase("0")){
+                                    rel_apply.setVisibility(View.GONE);
+                                }else{
+                                    rel_apply.setVisibility(View.VISIBLE);
+                                }
+
+                            } catch (JSONException jsonException) {
+                                jsonException.printStackTrace();
+                            }
+                        }
+
+                    } else if (jsonObject.optString("api_text").equalsIgnoreCase("failed")) {
+                        Toaster.customToast(jsonObject.optJSONObject("errors").optString("error_text"));
+                    } else {
+                        Toaster.customToast(getResources().getString(R.string.socket_timeout));
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                //Global.msgDialog((Activity) mActivity, "Error from server");
+            }
+        }) ;
         int socketTimeout = 30000;
         RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
         postRequest.setRetryPolicy(policy);

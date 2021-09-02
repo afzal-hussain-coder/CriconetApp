@@ -21,5 +21,5 @@
         app:bbn_scrollEnabled="true"
         app:layout_behavior="@string/bbn_phone_view_behavior"  />
 
-
+    <!--app:bbn_alwaysShowLabels="true"-->
 </RelativeLayout>

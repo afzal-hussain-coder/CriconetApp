@@ -64,10 +64,12 @@ public class Global {
     /*for debug*/
     //public static final String URL = "https://stage.criconetonline.com/app_api.php?type=";
     //public static final String URL_CHAT = "https://stage.criconetonline.com";
+    //public static String GameURL = "https://criconetonline.com/cricket_js/index.php?";
 
     /*for live*/
     public static final String URL = "https://www.criconet.com/app_api.php?type=";
     public static final String URL_CHAT = "https://www.criconet.com";
+    public static String GameURL ="https://www.criconet.com/cricket_js/index.php?";
     
     // for video upload testing..
     //public static final String URL = "https://www.criconet.com/app_api.php?type=";
@@ -81,7 +83,6 @@ public class Global {
     /*..........Live URL*/
 
     public static String websiteURL = "https://criconetonline.com/webviewhome?";
-    public static String GameURL = "https://criconetonline.com/cricket_js/index.php?";
     public static String websiteURL_demo = "https://criconetonline.com/webviewhome?username=dfordharma&password=dharma@123";
     public static String NOTIFICATION_KEY = "key=AIzaSyCKqEUtgG3zQq1JRI3s5bS5H4uk0qXhJB4";
     public static final String SURVEY_FORM_LINK = "https://stage.criconetonline.com/online-survey-form";
@@ -97,6 +98,7 @@ public class Global {
     public static final String getOffet = "get_offer";
     public static final String coupan_applay = "coupon_price_cal";
     public static final String check_coupon_code = "check_coupon_code";
+    public static final String GET_APP_SETTINGS = "get_app_setting";
 
 
     public static final int TYPE_VIDEO = 0,

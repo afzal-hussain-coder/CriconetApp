@@ -42,6 +42,7 @@ import com.facebook.AccessToken;
 import com.facebook.LoginStatusCallback;
 import com.facebook.login.LoginManager;
 import com.facebook.login.widget.LoginButton;
+import com.google.android.material.bottomnavigation.LabelVisibilityMode;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.play.core.appupdate.AppUpdateInfo;
 import com.google.android.play.core.appupdate.AppUpdateManager;
@@ -98,6 +99,7 @@ public class MainActivity extends BaseActivity {
     private AppUpdateManager appUpdateManager;
     private static final int FLEXIBLE_APP_UPDATE_REQ_CODE = 123;
     private InstallStateUpdatedListener installStateUpdatedListener;
+    String gameSettingsStataus="";
 
     @SuppressLint("WrongViewCast")
     @Override
@@ -119,6 +121,11 @@ public class MainActivity extends BaseActivity {
         checkUpdate();
         /*End of In_App_update code initializer*/
         queue = Volley.newRequestQueue(this);
+        if (Global.isOnline(mActivity)) {
+            checkAppSettings();
+        } else {
+            Global.showDialog(mActivity);
+        }
         if (Global.isOnline(this)) {
             getPageUrl();
         } else {
@@ -162,7 +169,6 @@ public class MainActivity extends BaseActivity {
         menuadapter = new MenuAdapter(mActivity, text);
         list_nav.setAdapter(menuadapter);
         list_nav.addFooterView(new View(mActivity), null, true);
-
 
         progress = new ProgressDialog(mActivity);
         progress.setMessage(getString(R.string.loading));
@@ -228,6 +234,7 @@ public class MainActivity extends BaseActivity {
                             case 3:
                                 navigationController.navigatoRecMatchesFragment();
                                 break;
+
                         }
 
                     }
@@ -257,6 +264,7 @@ public class MainActivity extends BaseActivity {
         }
 
         socialLink();
+
 
     }
 
@@ -376,6 +384,11 @@ public class MainActivity extends BaseActivity {
 
         else {
             try {
+                if (text.get(position).getTitle().equalsIgnoreCase("Game")){
+                    startActivity(new Intent(mActivity, GameActivity.class));
+                    finish();
+
+                }
                 if (text.get(position).getTitle().equalsIgnoreCase(pageURL.getAboutECoaching().getString("title"))) {
                     try {
                         startActivity(new Intent(mActivity, WebViewActivity.class).putExtra("URL", pageURL.getAboutECoaching().getString("url")).putExtra("title", pageURL.getAboutECoaching().getString("title")));
@@ -523,6 +536,12 @@ public class MainActivity extends BaseActivity {
 
                        // text.add(new Drawer(getString(R.string.pages), false, R.drawable.ic_page));
                         text.add(new Drawer(getString(R.string.booking_history), false, R.drawable.ic_booking_history));
+                        if(gameSettingsStataus.equalsIgnoreCase("0")){
+
+                        }else{
+                            text.add(new Drawer(getString(R.string.game), false, R.drawable.ic_perm_media_black_24dp));
+                        }
+
                         try {
                             text.add(new Drawer(pageURL.getAboutECoaching().getString("title"), false, R.drawable.e_coaching));
                         } catch (JSONException e) {
@@ -587,6 +606,50 @@ public class MainActivity extends BaseActivity {
 //                return param;
 //            }
         };
+        int socketTimeout = 30000;
+        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        postRequest.setRetryPolicy(policy);
+        queue.add(postRequest);
+    }
+
+    private void checkAppSettings() {
+        StringRequest postRequest = new StringRequest(Request.Method.GET, Global.URL + Global.GET_APP_SETTINGS, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.d("AppSettingsResponse", response);
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    if (jsonObject.getString("api_text").equalsIgnoreCase("success")) {
+                        JSONObject jsonObject1 = jsonObject.getJSONObject("data");
+
+
+                        if(jsonObject1.has("game")) {
+                            try {
+                                gameSettingsStataus = jsonObject1.getString("game");
+                                //gameSettingsStataus="0";
+
+                            } catch (JSONException jsonException) {
+                                jsonException.printStackTrace();
+                            }
+                        }
+
+                    } else if (jsonObject.optString("api_text").equalsIgnoreCase("failed")) {
+                        Toaster.customToast(jsonObject.optJSONObject("errors").optString("error_text"));
+                    } else {
+                        Toaster.customToast(getResources().getString(R.string.socket_timeout));
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                //Global.msgDialog((Activity) mActivity, "Error from server");
+            }
+        }) ;
         int socketTimeout = 30000;
         RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
         postRequest.setRetryPolicy(policy);

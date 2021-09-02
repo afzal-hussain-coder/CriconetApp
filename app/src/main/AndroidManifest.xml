@@ -33,7 +33,10 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".activity.PayLaterFormActivity"></activity>
+        <activity android:name=".activity.GameActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity android:name=".activity.PayLaterFormActivity" />
         <activity android:name=".activity.EndSessionFeedbackFormActivity">
 
             <!--
@@ -153,8 +156,8 @@
             android:name=".activity.YoutubePlayerActivity"
             android:label="View Recording"
             android:screenOrientation="landscape"
-            tools:ignore="LockedOrientationActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".activity.StreamPlayerActivity"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -286,7 +289,6 @@
         <meta-data
             android:name="com.google.android.gms.wallet.api.enabled"
             android:value="true" />
-
 
         <activity android:name=".activity.MessageActivity" />
         <activity

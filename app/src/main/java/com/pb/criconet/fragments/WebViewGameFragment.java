@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -45,7 +46,13 @@ public class WebViewGameFragment extends Fragment {
         Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
         TextView mTitle = (TextView) toolbar.findViewById(R.id.toolbartext);
         mTitle.setText("Game");
-
+        ImageView img_addpost = toolbar.findViewById(R.id.img_addpost);
+        TextView tv_post = toolbar.findViewById(R.id.tv_post);
+        tv_post.setVisibility(View.GONE);
+        img_addpost.setVisibility(View.GONE);
+        img_addpost.setVisibility(View.GONE);
+        ImageView img_close = toolbar.findViewById(R.id.img_close);
+        img_close.setVisibility(View.GONE);
         prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         queue = Volley.newRequestQueue(getActivity());
 
