@@ -231,7 +231,6 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
         userId = getIntent().getStringExtra("UserId");
         coachId = getIntent().getStringExtra("CoachId");
         coachName =getIntent().getStringExtra("Name");
-        loadWebView();
         //bookingId =getIntent().getStringExtra("booking_id");
         bookingId =getIntent().getStringExtra("id");
         timeDuration=getIntent().getLongExtra("timeDuration",0);
@@ -301,6 +300,7 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
         } else {
             Global.showDialog(mActivity);
         }
+        loadWebView();
         //"https://www.criconet.com/upload/photos/2021/07/6IsaI9PljUC41bZWX3zp_17_19d8ee4223bd62ad93129b2908f8f1b3_image.jpg"
         //rtcEngine().enableVideo();
     }

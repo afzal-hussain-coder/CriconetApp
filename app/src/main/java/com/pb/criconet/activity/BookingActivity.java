@@ -651,7 +651,7 @@ public class BookingActivity extends AppCompatActivity implements BookingHistory
         }
 
         if (Build.VERSION.SDK_INT >= 21) {
-            webSettings.setMixedContentMode(0);
+            //webSettings.setMixedContentMode(0);
             webView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
         } else if (Build.VERSION.SDK_INT >= 19) {
             webView.setLayerType(View.LAYER_TYPE_HARDWARE, null);

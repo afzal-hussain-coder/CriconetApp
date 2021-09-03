@@ -465,11 +465,12 @@ public class CoachDetailsActivity extends BaseActivity {
                         }
 
                     } else {
-                        if (ordercreate == null){
-                            Toaster.customToast(ordercreate.getErrors().getErrorText());
-                        }else{
-
-                        }
+                        Toaster.customToast(ordercreate.getErrors().getErrorText());
+//                        if (ordercreate == null){
+//                            Toaster.customToast(ordercreate.getErrors().getErrorText());
+//                        }else{
+//
+//                        }
 
                     }
                 }catch(Exception e){

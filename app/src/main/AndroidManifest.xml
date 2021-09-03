@@ -71,7 +71,8 @@
         <activity android:name=".activity.BookingDetailsActivity" />
         <activity
             android:name=".activity.BookingActivity"
-            tools:ignore="LockedOrientationActivity" />
+            tools:ignore="LockedOrientationActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan"/>
         <activity
             android:name=".activity.CoachProfileActivity"
             tools:ignore="LockedOrientationActivity" />
@@ -229,7 +230,8 @@
         <activity
             android:name=".activity.CoachDetailsActivity"
             tools:ignore="LockedOrientationActivity" />
-        <activity android:name=".activity.CallActivity" />
+        <activity android:name=".activity.CallActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan"/>
         <activity
             android:name=".activity.BookingDetails"
             android:theme="@style/AppTheme.NoActionBar" />

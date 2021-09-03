@@ -11,7 +11,7 @@ public class OrderCreate implements Serializable {
     @Expose
     private Errors errors;
 
-    @SerializedName("status")
+    @SerializedName("api_status")
     @Expose
     private int status;
     @SerializedName("booking_id")

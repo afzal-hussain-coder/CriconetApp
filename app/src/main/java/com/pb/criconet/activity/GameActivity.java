@@ -52,7 +52,7 @@ public class GameActivity extends AppCompatActivity {
         });
 
         TextView mTitle = (TextView) toolbar.findViewById(R.id.toolbartext);
-        mTitle.setText("Game");
+        mTitle.setText(R.string.game);
 
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
         queue = Volley.newRequestQueue(this);

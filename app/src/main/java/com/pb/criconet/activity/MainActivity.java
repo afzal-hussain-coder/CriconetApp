@@ -384,7 +384,7 @@ public class MainActivity extends BaseActivity {
 
         else {
             try {
-                if (text.get(position).getTitle().equalsIgnoreCase("Game")){
+                if (text.get(position).getTitle().equalsIgnoreCase("Super Six")){
                     startActivity(new Intent(mActivity, GameActivity.class));
                     finish();
 
@@ -418,7 +418,8 @@ public class MainActivity extends BaseActivity {
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                }else if (text.get(position).getTitle().equalsIgnoreCase(pageURL.getMediaReleases().getString("title"))) {
+                }
+                else if (text.get(position).getTitle().equalsIgnoreCase(pageURL.getMediaReleases().getString("title"))) {
                     try {
                         startActivity(new Intent(mActivity, WebViewActivity.class).putExtra("URL", pageURL.getMediaReleases().getString("url")).putExtra("title", pageURL.getMediaReleases().getString("title")));
                         finish();
@@ -539,7 +540,7 @@ public class MainActivity extends BaseActivity {
                         if(gameSettingsStataus.equalsIgnoreCase("0")){
 
                         }else{
-                            text.add(new Drawer(getString(R.string.game), false, R.drawable.ic_perm_media_black_24dp));
+                            text.add(new Drawer(getString(R.string.game), false, R.drawable.super_six));
                         }
 
                         try {
@@ -626,7 +627,7 @@ public class MainActivity extends BaseActivity {
                         if(jsonObject1.has("game")) {
                             try {
                                 gameSettingsStataus = jsonObject1.getString("game");
-                                //gameSettingsStataus="0";
+                               // gameSettingsStataus="1";
 
                             } catch (JSONException jsonException) {
                                 jsonException.printStackTrace();
