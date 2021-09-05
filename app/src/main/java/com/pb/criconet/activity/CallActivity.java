@@ -127,7 +127,7 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
     private final String TAG = CallActivity.class.getSimpleName();
     public static final int LAYOUT_TYPE_DEFAULT = 0;
     public static final int LAYOUT_TYPE_SMALL = 1;
-   // private final static Logger log = LoggerFactory.getLogger(CallActivity.class);
+    // private final static Logger log = LoggerFactory.getLogger(CallActivity.class);
     // should only be modified under UI thread
     private final HashMap<Integer, SurfaceView> mUidsList = new HashMap<>(); // uid = 0 || uid == EngineConfig.mUid
     public int mLayoutType = LAYOUT_TYPE_DEFAULT;
@@ -178,6 +178,8 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
     private ValueCallback<Uri> mUM;
     private ValueCallback<Uri[]> mUMA;
     WebSettings webSettings;
+    TextView tv_count;
+    RelativeLayout rl_count;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
@@ -235,14 +237,15 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
         bookingId =getIntent().getStringExtra("id");
         timeDuration=getIntent().getLongExtra("timeDuration",0);
         image_profile=SessionManager.get_image(prefs);
-       // mLogView = findViewById(R.id.log_recycler_view);
+        // mLogView = findViewById(R.id.log_recycler_view);
         log_text = findViewById(R.id.log_text);
         log_texth_other = findViewById(R.id.log_texth_other);
         lin_log = findViewById(R.id.lin_log);
         tv_timeDuration = findViewById(R.id.tv_timeDuration);
 
         //........Web Chat .....
-
+        rl_count = findViewById(R.id.rl_count);
+        tv_count = findViewById(R.id.tv_count);
         webView =findViewById(R.id.web_chat);
         progressBar = findViewById(R.id.loadingVieww);
         webView.setWebViewClient(new Callback());
@@ -270,13 +273,20 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
                         dim.setAlpha(1 - (percent / 100));
                         if (percent < 100) {
                             // slideUp started showing
-
+                            //Toaster.customToast("show");
+                            loadWebView();
                         }
                     }
 
                     @Override
                     public void onVisibilityChanged(int visibility) {
                         if (visibility == View.GONE) {
+                            //Toaster.customToast("gone");
+                            if (Build.VERSION.SDK_INT < 18) {
+                                webView.clearView();
+                            } else {
+                                webView.loadUrl("about:blank");
+                            }
                         }
                     }
                 })
@@ -300,9 +310,31 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
         } else {
             Global.showDialog(mActivity);
         }
-        loadWebView();
+
+       callChatApi();
+
+        //loadWebView();
         //"https://www.criconet.com/upload/photos/2021/07/6IsaI9PljUC41bZWX3zp_17_19d8ee4223bd62ad93129b2908f8f1b3_image.jpg"
         //rtcEngine().enableVideo();
+    }
+
+    private void callChatApi(){
+
+        Handler handler = new Handler();
+
+        final Runnable r = new Runnable() {
+            public void run() {
+                //Initiate your API here
+                if (Global.isOnline(mActivity)) {
+                    getChatNotification();
+                } else {
+                    Global.showDialog(mActivity);
+                }
+                handler.postDelayed(this, 2000);
+            }
+        };
+
+        handler.postDelayed(r, 2000);
     }
 
     @Override
@@ -329,8 +361,8 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
         addEventHandler(this);
         channelName = getIntent().getStringExtra(ConstantApp.ACTION_KEY_CHANNEL_NAME);
 
-                try {
-                    //Log.d("Channel",channelName);
+        try {
+            //Log.d("Channel",channelName);
             accessToken = generateToken(getResources().getString(R.string.agora_app_id),getResources().getString(R.string.app_certificate),channelName,0,3600);
 
             Log.d("AccessToken",accessToken);
@@ -407,7 +439,7 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
     }
 
     private void onBigVideoViewDoubleClicked(View view, int position) {
-       // log.debug("onItemDoubleClick " + view + " " + position + " " + mLayoutType);
+        // log.debug("onItemDoubleClick " + view + " " + position + " " + mLayoutType);
 
         if (mUidsList.size() < 2) {
             return;
@@ -634,7 +666,7 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
     }
 
     public void onVideoMuteClicked(View view) {
-       // log.info("onVoiceChatClicked " + view + " " + mUidsList.size() + " video_status: " + mVideoMuted + " audio_status: " + mAudioMuted);
+        // log.info("onVoiceChatClicked " + view + " " + mUidsList.size() + " video_status: " + mVideoMuted + " audio_status: " + mAudioMuted);
         if (mUidsList.size() == 0) {
             return;
         }
@@ -642,7 +674,7 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
         SurfaceView surfaceV = getLocalView();
         ViewParent parent;
         if (surfaceV == null || (parent = surfaceV.getParent()) == null) {
-           // log.warn("onVoiceChatClicked " + view + " " + surfaceV);
+            // log.warn("onVoiceChatClicked " + view + " " + surfaceV);
             return;
         }
 
@@ -695,11 +727,12 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
 
     public void onChatClicked(View view){
         slideUp.show();
+        //loadWebView();
         //startActivity(new Intent(this,MessageActivity.class).putExtra(ConstantApp.ACTION_KEY_CHANNEL_NAME,channelName).putExtra("UserId",userId).putExtra("CoachId",coachId));
 
     }
     public void onVoiceMuteClicked(View view) {
-       // log.info("onVoiceMuteClicked " + view + " " + mUidsList.size() + " video_status: " + mVideoMuted + " audio_status: " + mAudioMuted);
+        // log.info("onVoiceMuteClicked " + view + " " + mUidsList.size() + " video_status: " + mVideoMuted + " audio_status: " + mAudioMuted);
         if (mUidsList.size() == 0) {
             return;
         }
@@ -742,7 +775,7 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
 //                //notifyMessageChanged(new Message(new User(0, null), "user " + (uid & 0xFFFFFFFFL) + " joined"));
 //            }
 //        });
-         joinType ="join";
+        joinType ="join";
         if (Global.isOnline(mActivity)) {
             getSessionLog();
         } else {
@@ -1037,7 +1070,7 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
     }
 
     private void requestRemoteStreamType(final int currentHostCount) {
-       // log.debug("requestRemoteStreamType " + currentHostCount);
+        // log.debug("requestRemoteStreamType " + currentHostCount);
     }
 
     private void doRemoveRemoteUi(final int uid) {
@@ -1089,7 +1122,7 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
                 if (!setRemoteUserPriorityFlag) {
                     setRemoteUserPriorityFlag = true;
                     rtcEngine().setRemoteUserPriority(uid, Constants.USER_PRIORITY_HIGH);
-                   // log.debug("setRemoteUserPriority USER_PRIORITY_HIGH " + mUidsList.size() + " " + (uid & 0xFFFFFFFFL));
+                    // log.debug("setRemoteUserPriority USER_PRIORITY_HIGH " + mUidsList.size() + " " + (uid & 0xFFFFFFFFL));
                 } else {
                     rtcEngine().setRemoteUserPriority(uid, Constants.USER_PRIORITY_NORMAL);
                     //log.debug("setRemoteUserPriority USER_PRIORITY_NORANL " + mUidsList.size() + " " + (uid & 0xFFFFFFFFL));
@@ -1188,7 +1221,7 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
     }
 
     public void notifyHeadsetPlugged(final int routing) {
-       // log.info("notifyHeadsetPlugged " + routing + " " + mVideoMuted);
+        // log.info("notifyHeadsetPlugged " + routing + " " + mVideoMuted);
 
         mAudioRouting = routing;
 
@@ -1250,8 +1283,8 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
             // will show..after testing...............................................................
             Bundle args = new Bundle();
             args.putSerializable("ARRAYLIST",(Serializable)feedBackFormChildData);
-           startActivity(new Intent(CallActivity.this,EndSessionFeedbackFormActivity.class)
-                   .putExtra("Certificate",args).putExtra("id",bookingId));
+            startActivity(new Intent(CallActivity.this,EndSessionFeedbackFormActivity.class)
+                    .putExtra("Certificate",args).putExtra("id",bookingId));
 
 
             finish();
@@ -1265,7 +1298,7 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
         StringRequest postRequest = new StringRequest(Request.Method.POST, Global.URL + "update_activity_session", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-               // Log.d("SessionResponse",response);
+                // Log.d("SessionResponse",response);
 
                 //Global.dismissDialog(progressDialog);
             }
@@ -1274,7 +1307,7 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
                 //Global.dismissDialog(progressDialog);
-               // Global.msgDialog((Activity) mActivity, "Error from server");
+                // Global.msgDialog((Activity) mActivity, "Error from server");
             }
         }) {
             @Override
@@ -1299,7 +1332,7 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
         StringRequest postRequest = new StringRequest(Request.Method.POST, Global.URL + Global.GET_SESSION_FEEDBACKFORM, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-              //  Log.d("SessionFeedback",response);
+                //  Log.d("SessionFeedback",response);
 
                 try {
                     JSONObject  jsonObject= new JSONObject(response);
@@ -1311,7 +1344,7 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
                             feedBackFormChildDataa = new FeedBackFormChildData(jsonArray.getJSONObject(i));
                             feedBackFormChildData.add(feedBackFormChildDataa);
                         }
-                        
+
                     }
                     //Toaster.customToast(feedBackFormChildData.size()+"");
                 } catch (JSONException e) {
@@ -1478,29 +1511,29 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
         File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
         return File.createTempFile(imageFileName, ".jpg", storageDir);
     }
-
-    @Override
-    public boolean onKeyDown(int keyCode, @NonNull KeyEvent event) {
-
-        try{
-            if (event.getAction() == KeyEvent.ACTION_DOWN) {
-
-                if (keyCode == KeyEvent.KEYCODE_BACK) {
-                    if (webView.canGoBack()) {
-                        webView.goBack();
-                    } else {
-                        finish();
-                    }
-                    return true;
-                }
-            }
-
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-
-        return super.onKeyDown(keyCode, event);
-    }
+//
+//    @Override
+//    public boolean onKeyDown(int keyCode, @NonNull KeyEvent event) {
+//
+//        try{
+//            if (event.getAction() == KeyEvent.ACTION_DOWN) {
+//
+//                if (keyCode == KeyEvent.KEYCODE_BACK) {
+//                    if (webView.canGoBack()) {
+//                        webView.goBack();
+//                    } else {
+//                        finish();
+//                    }
+//                    return true;
+//                }
+//            }
+//
+//        }catch (Exception e){
+//            e.printStackTrace();
+//        }
+//
+//        return super.onKeyDown(keyCode, event);
+//    }
 
     public class Callback extends WebViewClient {
         @Override
@@ -1538,6 +1571,53 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
             imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
         }
         return super.dispatchTouchEvent(ev);
+    }
+    private void getChatNotification() {
+//        progressDialog = Global.getProgressDialog(this, CCResource.getString(this, R.string.loading_dot), false);
+        StringRequest postRequest = new StringRequest(Request.Method.POST, Global.URL + Global.GET_CHAT_NOTIFICATION, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.d("ChatNotification",response);
+
+                try {
+                    JSONObject  jsonObject= new JSONObject(response);
+                    if(jsonObject.getString("api_status").equalsIgnoreCase("200")) {
+                        JSONObject  jsonArray =jsonObject.getJSONObject("data");
+                        if(jsonArray.getString("message_counter").equalsIgnoreCase("0")){
+                            rl_count.setVisibility(View.GONE);
+                        }else{
+                            rl_count.setVisibility(View.VISIBLE);
+                            tv_count.setText(jsonArray.getString("message_counter"));
+                        }
+
+
+                    }
+                    //Toaster.customToast(feedBackFormChildData.size()+"");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                //Global.dismissDialog(progressDialog);
+                // Global.msgDialog((Activity) mActivity, "Error from server");
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> param = new HashMap<String, String>();
+                param.put("user_id", SessionManager.get_user_id(prefs));
+                param.put("s", SessionManager.get_session_id(prefs));
+                Timber.e(param.toString());
+                return param;
+            }
+        };
+        int socketTimeout = 30000;
+        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        postRequest.setRetryPolicy(policy);
+        queue.add(postRequest);
     }
 
 //    private void openFile(File url) {

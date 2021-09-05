@@ -1,6 +1,10 @@
 package com.pb.criconet.adapters;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,21 +13,46 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.RetryPolicy;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.pb.criconet.R;
 import com.pb.criconet.Utills.Global;
+import com.pb.criconet.Utills.SessionManager;
 import com.pb.criconet.models.BookingHistory;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import timber.log.Timber;
 
 public class BookingHistoryAdapter extends RecyclerView.Adapter<BookingHistoryAdapter.MyViewHolder> {
 
     private Context context;
     private List<BookingHistory.Datum> data;
     private clickCallback callback;
-    public BookingHistoryAdapter(Context context,List<BookingHistory.Datum> data,clickCallback callback) {
+    String notification_count="";
+    private SharedPreferences prefs;
+    private RequestQueue queue;
+    public BookingHistoryAdapter(Context context,List<BookingHistory.Datum> data,String notification_count,clickCallback callback) {
         this.context = context;
         this.data = data;
         this.callback = callback;
+        this.notification_count=notification_count;
+        prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        queue = Volley.newRequestQueue(context);
+
     }
 
     @Override
@@ -62,7 +91,14 @@ public class BookingHistoryAdapter extends RecyclerView.Adapter<BookingHistoryAd
 
         if(data.get(position).getBtn1().equalsIgnoreCase("Confirmed")){
             holder.fl_chat.setVisibility(View.VISIBLE);
+            if(notification_count.equalsIgnoreCase("0")){
+                holder.rl_count.setVisibility(View.GONE);
+            }else{
+                holder.rl_count.setVisibility(View.VISIBLE);
+                holder.tv_count.setText(notification_count);
+            }
         }else{
+            holder.rl_count.setVisibility(View.GONE);
             holder.fl_chat.setVisibility(View.GONE);
         }
 
@@ -118,6 +154,8 @@ public class BookingHistoryAdapter extends RecyclerView.Adapter<BookingHistoryAd
         TextView tv_confirmed;
         TextView tv_join;
         RelativeLayout constraint;
+        TextView tv_count;
+        RelativeLayout rl_count;
         MyViewHolder(View itemView) {
             super(itemView);
             // get the reference of item view's
@@ -133,6 +171,10 @@ public class BookingHistoryAdapter extends RecyclerView.Adapter<BookingHistoryAd
             tv_viewDetails=itemView.findViewById(R.id.tv_viewDetails);
             tvSlotDuration = itemView.findViewById(R.id.tvSlotDuration);
             fl_chat = itemView.findViewById(R.id.fl_chat);
+            rl_count = itemView.findViewById(R.id.rl_count);
+            tv_count = itemView.findViewById(R.id.tv_count);
+
+
 
         }
     }
@@ -142,5 +184,6 @@ public class BookingHistoryAdapter extends RecyclerView.Adapter<BookingHistoryAd
          void viewDetails(BookingHistory.Datum data);
          void chatClick(String coachId,String userId);
     }
+
 
 }

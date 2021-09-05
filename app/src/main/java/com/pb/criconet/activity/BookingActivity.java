@@ -45,6 +45,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.android.volley.DefaultRetryPolicy;
@@ -73,6 +74,10 @@ import com.pb.criconet.adapters.BookingHistoryAdapter;
 import com.pb.criconet.models.BookingHistory;
 import com.pb.criconet.models.CoachAccept;
 import com.pb.criconet.models.ConstantApp;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -136,6 +141,8 @@ public class BookingActivity extends AppCompatActivity implements BookingHistory
     private ValueCallback<Uri> mUM;
     private ValueCallback<Uri[]> mUMA;
     WebSettings webSettings;
+    String notification_count="";
+
 
 
 
@@ -180,7 +187,6 @@ public class BookingActivity extends AppCompatActivity implements BookingHistory
     }
 
 
-
     @SuppressLint({"SetJavaScriptEnabled", "WrongViewCast"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -215,11 +221,17 @@ public class BookingActivity extends AppCompatActivity implements BookingHistory
     @Override
     protected void onResume() {
         super.onResume();
+        if (Global.isOnline(mContext)) {
+            getChatNotification();
+        } else {
+            Global.showDialog(mActivity);
+        }
         if (Global.isOnline(this)) {
             getBookingHistory();
         } else {
             Global.showDialog(this);
         }
+
     }
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -290,6 +302,17 @@ public class BookingActivity extends AppCompatActivity implements BookingHistory
                     @Override
                     public void onVisibilityChanged(int visibility) {
                         if (visibility == View.GONE) {
+                            if (Global.isOnline(mContext)) {
+                                getChatNotification();
+                            } else {
+                                Global.showDialog(mActivity);
+                            }
+                            if (Global.isOnline(mContext)) {
+                                getBookingHistory();
+                            } else {
+                                Global.showDialog(mActivity);
+                            }
+
                         }
                     }
                 })
@@ -389,7 +412,11 @@ public class BookingActivity extends AppCompatActivity implements BookingHistory
 
         fl_search = findViewById(R.id.fl_search);
         fl_search.setOnClickListener(v -> {
-            getBookingHistory();
+            if (Global.isOnline(this)) {
+                getBookingHistory();
+            } else {
+                Global.showDialog(this);
+            }
 //            if (isValidateSearch()){
 //                getBookingHistory();
 //            }
@@ -415,7 +442,7 @@ public class BookingActivity extends AppCompatActivity implements BookingHistory
                 }else{
                     notfound.setVisibility(View.GONE);
                     coachlist.setVisibility(View.VISIBLE);
-                    coachlist.setAdapter(new BookingHistoryAdapter(mContext,modelArrayList.getData(), BookingActivity.this));
+                    coachlist.setAdapter(new BookingHistoryAdapter(mContext,modelArrayList.getData(),notification_count, BookingActivity.this));
                 }
 
 
@@ -880,5 +907,46 @@ public class BookingActivity extends AppCompatActivity implements BookingHistory
             imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
         }
         return super.dispatchTouchEvent(ev);
+    }
+
+    private void getChatNotification() {
+//        progressDialog = Global.getProgressDialog(this, CCResource.getString(this, R.string.loading_dot), false);
+        StringRequest postRequest = new StringRequest(Request.Method.POST, Global.URL + Global.GET_CHAT_NOTIFICATION, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.d("ChatNotification",response);
+
+                try {
+                    JSONObject jsonObject= new JSONObject(response);
+                    if(jsonObject.getString("api_status").equalsIgnoreCase("200")) {
+                        JSONObject  jsonArray =jsonObject.getJSONObject("data");
+                        notification_count = jsonArray.getString("message_counter");
+                    }
+                    //Toaster.customToast(feedBackFormChildData.size()+"");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                //Global.dismissDialog(progressDialog);
+                // Global.msgDialog((Activity) mActivity, "Error from server");
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> param = new HashMap<String, String>();
+                param.put("user_id", SessionManager.get_user_id(prefs));
+                param.put("s", SessionManager.get_session_id(prefs));
+                Timber.e(param.toString());
+                return param;
+            }
+        };
+        int socketTimeout = 30000;
+        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        postRequest.setRetryPolicy(policy);
+        queue.add(postRequest);
     }
 }

@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:keepScreenOn="true">
 
     <com.pb.criconet.layout.GridVideoViewContainer
@@ -107,6 +108,29 @@
                         android:contentDescription="@string/app_name"
                         android:src="@drawable/ic_wechat_black_24dp"
                         android:visibility="visible" />
+                    <RelativeLayout
+                        android:id="@+id/rl_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/green_circle"
+                        android:layout_alignParentEnd="true"
+                        android:paddingLeft="@dimen/_3sdp"
+                        android:paddingEnd="@dimen/_3sdp"
+                        android:visibility="gone"
+                        android:layout_alignParentTop="true">
+                    <TextView
+                        android:id="@+id/tv_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        android:layout_centerVertical="true"
+                        android:layout_centerHorizontal="true"
+                        android:text="34"
+                        android:textSize="@dimen/_8sdp"
+                        app:fontFamily="@font/opensans_semibold"
+                         />
+                    </RelativeLayout>
+
                 </RelativeLayout>
                 <ImageView
                     android:layout_width="@dimen/_40sdp"
@@ -261,5 +285,6 @@
         />
 
     <include layout="@layout/chat_dailog"
+        android:visibility="visible"
         />
 </FrameLayout>

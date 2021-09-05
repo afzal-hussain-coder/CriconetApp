@@ -18,6 +18,7 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -97,8 +98,8 @@ public class MainActivity extends BaseActivity {
     PageURL pageURL;
 
     private AppUpdateManager appUpdateManager;
-    private static final int FLEXIBLE_APP_UPDATE_REQ_CODE = 123;
     private InstallStateUpdatedListener installStateUpdatedListener;
+    private static final int FLEXIBLE_APP_UPDATE_REQ_CODE = 123;
     String gameSettingsStataus="";
 
     @SuppressLint("WrongViewCast")
@@ -115,11 +116,14 @@ public class MainActivity extends BaseActivity {
             } else if (state.installStatus() == InstallStatus.INSTALLED) {
                 removeInstallStateUpdateListener();
             } else {
-                Toaster.toast("InstallStateUpdatedListener: state: " + state.installStatus());
+                Toast.makeText(getApplicationContext(), "InstallStateUpdatedListener: state: " + state.installStatus(), Toast.LENGTH_LONG).show();
             }
         };
+        appUpdateManager.registerListener(installStateUpdatedListener);
         checkUpdate();
         /*End of In_App_update code initializer*/
+
+
         queue = Volley.newRequestQueue(this);
         if (Global.isOnline(mActivity)) {
             checkAppSettings();
@@ -264,8 +268,6 @@ public class MainActivity extends BaseActivity {
         }
 
         socialLink();
-
-
     }
 
     @Override
@@ -658,6 +660,7 @@ public class MainActivity extends BaseActivity {
     }
 
     /*In _App_Update code here*/
+
     private void checkUpdate() {
 
         Task<AppUpdateInfo> appUpdateInfoTask = appUpdateManager.getAppUpdateInfo();
@@ -671,40 +674,52 @@ public class MainActivity extends BaseActivity {
             }
         });
     }
+
+    private void startUpdateFlow(AppUpdateInfo appUpdateInfo) {
+        try {
+            appUpdateManager.startUpdateFlowForResult(appUpdateInfo, AppUpdateType.FLEXIBLE, this, MainActivity.FLEXIBLE_APP_UPDATE_REQ_CODE);
+        } catch (IntentSender.SendIntentException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == FLEXIBLE_APP_UPDATE_REQ_CODE) {
+            if (resultCode == RESULT_CANCELED) {
+                Toast.makeText(getApplicationContext(), "Update cancelled by user" + resultCode, Toast.LENGTH_LONG).show();
+            } else if (resultCode == RESULT_OK) {
+                Toast.makeText(getApplicationContext(),"Update Success" + resultCode, Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(getApplicationContext(), "Update Failed" + resultCode, Toast.LENGTH_LONG).show();
+                checkUpdate();
+            }
+        }
+    }
+
     private void popupSnackBarForCompleteUpdate() {
         Snackbar.make(findViewById(android.R.id.content).getRootView(), "New app is ready!", Snackbar.LENGTH_INDEFINITE)
+
                 .setAction("Install", view -> {
                     if (appUpdateManager != null) {
                         appUpdateManager.completeUpdate();
                     }
                 })
-                .setActionTextColor(getResources().getColor(R.color.colorPrimary))
+                .setActionTextColor(getResources().getColor(R.color.white))
                 .show();
     }
+
     private void removeInstallStateUpdateListener() {
         if (appUpdateManager != null) {
             appUpdateManager.unregisterListener(installStateUpdatedListener);
         }
     }
-    private void startUpdateFlow(AppUpdateInfo appUpdateInfo) {
-        try {
-            appUpdateManager.startUpdateFlowForResult(appUpdateInfo, AppUpdateType.FLEXIBLE, this, FLEXIBLE_APP_UPDATE_REQ_CODE);
-        } catch (IntentSender.SendIntentException e) {
-            e.printStackTrace();
-        }
-    }
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == FLEXIBLE_APP_UPDATE_REQ_CODE) {
-            if (resultCode == RESULT_CANCELED) {
-                Toaster.toast("Update canceled by user! Result Code: " + resultCode);
-            } else if (resultCode == RESULT_OK) {
-                Toaster.toast("Update success! Result Code: " + resultCode);
-            } else {
-                Toaster.toast("Update Failed! Result Code: " + resultCode);
-                checkUpdate();
-            }
-        }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        removeInstallStateUpdateListener();
     }
    /*End of In App Update Code*/
 }

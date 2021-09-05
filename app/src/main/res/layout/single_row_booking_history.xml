@@ -179,7 +179,7 @@
 
                 <LinearLayout
                     android:layout_width="@dimen/_165sdp"
-                    android:layout_height="@dimen/_30sdp"
+                    android:layout_height="@dimen/_35sdp"
                     android:layout_alignParentStart="true"
                     android:layout_marginEnd="@dimen/_10sdp"
                     android:orientation="horizontal">
@@ -187,6 +187,7 @@
                         android:id="@+id/btn1"
                         android:layout_width="@dimen/_75sdp"
                         android:layout_height="@dimen/_30sdp"
+                        android:layout_gravity="center_vertical"
                         android:visibility="visible"
                         android:background="@color/button_color">
 
@@ -223,10 +224,14 @@
                     </FrameLayout>
 
 
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_35sdp">
                     <FrameLayout
                         android:id="@+id/fl_chat"
                         android:layout_width="@dimen/_75sdp"
                         android:layout_height="@dimen/_30sdp"
+                        android:layout_centerVertical="true"
                         android:visibility="visible"
                         android:layout_marginStart="@dimen/_5sdp"
                         android:background="@color/colorPrimary">
@@ -239,7 +244,6 @@
                             android:layout_width="0.9dp"
                             android:layout_height="match_parent"
                             android:background="#ca9191"/>
-
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/_1sdp"
@@ -261,9 +265,32 @@
                             android:drawablePadding="@dimen/_2sdp"
                             android:textSize="@dimen/_9sdp"
                             app:drawableStartCompat="@drawable/ic_wechat_black_24dp" />
-
-
                     </FrameLayout>
+                        <RelativeLayout
+                            android:id="@+id/rl_count"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentTop="true"
+                            android:layout_marginEnd="@dimen/_6sdp"
+                            android:background="@drawable/white_circle"
+                            android:paddingLeft="@dimen/_5sdp"
+                            android:paddingEnd="@dimen/_5sdp"
+                            android:paddingBottom="@dimen/_3sdp"
+                            android:visibility="gone">
+                            <TextView
+                                android:id="@+id/tv_count"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/black"
+                                android:layout_centerVertical="true"
+                                android:text="2"
+                                android:layout_centerHorizontal="true"
+                                android:textSize="@dimen/_8sdp"
+                                app:fontFamily="@font/opensans_semibold"
+                                />
+                        </RelativeLayout>
+                    </RelativeLayout>
                 <!--<TextView
                     android:id="@+id/btn2"
                     android:layout_width="wrap_content"

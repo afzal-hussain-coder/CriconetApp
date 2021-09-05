@@ -62,12 +62,12 @@ public class Global {
 
     public static final String FILE_UPLOAD_URL = "https://criconetonline.com/app_api.php?type=new_post";
     /*for debug*/
-    public static final String URL = "https://stage.criconetonline.com/app_api.php?type=";
+    //public static final String URL = "https://stage.criconetonline.com/app_api.php?type=";
     //public static final String URL_CHAT = "https://stage.criconetonline.com";
     //public static String GameURL = "https://criconetonline.com/cricket_js/index.php?";
 
     /*for live*/
-    //public static final String URL = "https://www.criconet.com/app_api.php?type=";
+    public static final String URL = "https://www.criconet.com/app_api.php?type=";
     public static final String URL_CHAT = "https://www.criconet.com";
     public static String GameURL ="https://www.criconet.com/cricket_js/index.php?";
     
@@ -99,6 +99,8 @@ public class Global {
     public static final String coupan_applay = "coupon_price_cal";
     public static final String check_coupon_code = "check_coupon_code";
     public static final String GET_APP_SETTINGS = "get_app_setting";
+    public static final String GET_CHAT_NOTIFICATION = "get_message_notifications";
+
 
 
     public static final int TYPE_VIDEO = 0,
