@@ -144,8 +144,6 @@ public class BookingActivity extends AppCompatActivity implements BookingHistory
     String notification_count="";
 
 
-
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
@@ -186,7 +184,6 @@ public class BookingActivity extends AppCompatActivity implements BookingHistory
         }
     }
 
-
     @SuppressLint({"SetJavaScriptEnabled", "WrongViewCast"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -221,11 +218,6 @@ public class BookingActivity extends AppCompatActivity implements BookingHistory
     @Override
     protected void onResume() {
         super.onResume();
-        if (Global.isOnline(mContext)) {
-            getChatNotification();
-        } else {
-            Global.showDialog(mActivity);
-        }
         if (Global.isOnline(this)) {
             getBookingHistory();
         } else {
@@ -302,11 +294,7 @@ public class BookingActivity extends AppCompatActivity implements BookingHistory
                     @Override
                     public void onVisibilityChanged(int visibility) {
                         if (visibility == View.GONE) {
-                            if (Global.isOnline(mContext)) {
-                                getChatNotification();
-                            } else {
-                                Global.showDialog(mActivity);
-                            }
+
                             if (Global.isOnline(mContext)) {
                                 getBookingHistory();
                             } else {
@@ -442,7 +430,7 @@ public class BookingActivity extends AppCompatActivity implements BookingHistory
                 }else{
                     notfound.setVisibility(View.GONE);
                     coachlist.setVisibility(View.VISIBLE);
-                    coachlist.setAdapter(new BookingHistoryAdapter(mContext,modelArrayList.getData(),notification_count, BookingActivity.this));
+                    coachlist.setAdapter(new BookingHistoryAdapter(mContext,modelArrayList.getData(), BookingActivity.this));
                 }
 
 
@@ -909,44 +897,5 @@ public class BookingActivity extends AppCompatActivity implements BookingHistory
         return super.dispatchTouchEvent(ev);
     }
 
-    private void getChatNotification() {
-//        progressDialog = Global.getProgressDialog(this, CCResource.getString(this, R.string.loading_dot), false);
-        StringRequest postRequest = new StringRequest(Request.Method.POST, Global.URL + Global.GET_CHAT_NOTIFICATION, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                Log.d("ChatNotification",response);
 
-                try {
-                    JSONObject jsonObject= new JSONObject(response);
-                    if(jsonObject.getString("api_status").equalsIgnoreCase("200")) {
-                        JSONObject  jsonArray =jsonObject.getJSONObject("data");
-                        notification_count = jsonArray.getString("message_counter");
-                    }
-                    //Toaster.customToast(feedBackFormChildData.size()+"");
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
-                //Global.dismissDialog(progressDialog);
-                // Global.msgDialog((Activity) mActivity, "Error from server");
-            }
-        }) {
-            @Override
-            protected Map<String, String> getParams() {
-                Map<String, String> param = new HashMap<String, String>();
-                param.put("user_id", SessionManager.get_user_id(prefs));
-                param.put("s", SessionManager.get_session_id(prefs));
-                Timber.e(param.toString());
-                return param;
-            }
-        };
-        int socketTimeout = 30000;
-        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-        postRequest.setRetryPolicy(policy);
-        queue.add(postRequest);
-    }
 }

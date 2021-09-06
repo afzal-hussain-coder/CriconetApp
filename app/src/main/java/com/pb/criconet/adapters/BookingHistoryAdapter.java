@@ -45,7 +45,7 @@ public class BookingHistoryAdapter extends RecyclerView.Adapter<BookingHistoryAd
     String notification_count="";
     private SharedPreferences prefs;
     private RequestQueue queue;
-    public BookingHistoryAdapter(Context context,List<BookingHistory.Datum> data,String notification_count,clickCallback callback) {
+    public BookingHistoryAdapter(Context context,List<BookingHistory.Datum> data,clickCallback callback) {
         this.context = context;
         this.data = data;
         this.callback = callback;
@@ -91,11 +91,11 @@ public class BookingHistoryAdapter extends RecyclerView.Adapter<BookingHistoryAd
 
         if(data.get(position).getBtn1().equalsIgnoreCase("Confirmed")){
             holder.fl_chat.setVisibility(View.VISIBLE);
-            if(notification_count.equalsIgnoreCase("0")){
+            if(data.get(position).getMessage_counter().equalsIgnoreCase("0")){
                 holder.rl_count.setVisibility(View.GONE);
             }else{
                 holder.rl_count.setVisibility(View.VISIBLE);
-                holder.tv_count.setText(notification_count);
+                holder.tv_count.setText(data.get(position).getMessage_counter());
             }
         }else{
             holder.rl_count.setVisibility(View.GONE);

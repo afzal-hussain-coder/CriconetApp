@@ -174,6 +174,19 @@ public class BookingHistory {
         @Expose
         private String pay_leter_str;
 
+        public String getMessage_counter() {
+            return message_counter;
+        }
+
+        public void setMessage_counter(String message_counter) {
+            this.message_counter = message_counter;
+        }
+
+        @SerializedName("message_counter")
+        @Expose
+        private String message_counter;
+
+
         @SerializedName("booking_time")
         @Expose
         private String bookingTime;

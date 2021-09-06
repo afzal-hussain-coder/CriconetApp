@@ -16,8 +16,8 @@ android {
         applicationId "com.pb.criconet"
         minSdkVersion 21
         targetSdkVersion 31
-        versionCode 23
-        versionName "1.1.1"
+        versionCode 24
+        versionName "1.1.2"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -169,6 +169,8 @@ dependencies {
     implementation 'com.github.armcha:AutoLinkTextView:0.3.0'
     implementation 'com.google.android.gms:play-services-analytics:17.0.0'
     implementation 'com.samigehi:loadingview:1.1'
+    implementation 'com.github.Redman1037:TSnackBar:V2.0.0'
+
 
 
 
