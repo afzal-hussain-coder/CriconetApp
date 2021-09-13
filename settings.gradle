@@ -1,1 +1,1 @@
-include ':app', ':bsimagepicker', ':AnimatedLoadingIndicator',':rtcTokengenerator'
+include ':app', ':bsimagepicker', ':AnimatedLoadingIndicator',':rtcTokengenerator',':lib-screensharing',':lib-component'

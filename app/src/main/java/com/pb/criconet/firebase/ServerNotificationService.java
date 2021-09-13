@@ -24,16 +24,20 @@ import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.pb.criconet.R;
 import com.pb.criconet.Utills.SessionManager;
+import com.pb.criconet.Utills.Toaster;
 import com.pb.criconet.activity.BookingActivity;
 import com.pb.criconet.activity.BookingDetails;
 import com.pb.criconet.activity.BookingDetailsActivity;
 import com.pb.criconet.activity.MainActivity;
+import com.pb.criconet.activity.Splash;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
+import java.net.URLDecoder;
 import java.util.Map;
 import java.util.Random;
 
@@ -54,19 +58,18 @@ public class ServerNotificationService extends FirebaseMessagingService {
     public void onMessageReceived(@NonNull @NotNull RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
 
-        Log.d(TAG, "From: " + remoteMessage.getFrom());
+        //Log.d(TAG, "From: " + remoteMessage.getFrom());
 
         if (remoteMessage.getData().size() > 0) {
-            Log.d(TAG, "Message data payload: " + remoteMessage.getData());
-
-
+           // Log.d(TAG, "Message data payload: " + remoteMessage.getData());
             JSONObject json = null;//notification;
 
             json = new JSONObject(remoteMessage.getData());
-            messageBody =remoteMessage.getNotification().getBody();
-            title =remoteMessage.getNotification().getTitle();
-            icon =remoteMessage.getNotification().getIcon();
-            sound =remoteMessage.getNotification().getSound();
+            //Log.d("Json", json + "");
+            messageBody = remoteMessage.getNotification().getBody();
+            title = remoteMessage.getNotification().getTitle();
+            icon = remoteMessage.getNotification().getIcon();
+            sound = remoteMessage.getNotification().getSound();
 
 
             if (json.has("booking_id")) {
@@ -88,79 +91,128 @@ public class ServerNotificationService extends FirebaseMessagingService {
             if (json.has("type")) {
                 try {
                     notificationType = json.getString("type");
+                    //Toaster.customToast(notificationType);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
-            Log.d(TAG, title+"/"+"?"+messageBody+booking_id + "/" + notificationType + "/" + post_id);
 
-            sendNotification(sound,icon,title,messageBody,notificationType,booking_id);
-
-
-
-
-
+            sendNotification(sound, icon, title, messageBody, notificationType, booking_id);
         }
     }
+    
+
+
 
     private void sendNotification(String sound,String icon,String title,String msg,String type,String bookingid) {
-        Intent intent;
-        if(type.equalsIgnoreCase("booking")){
-            if (bookingid.equalsIgnoreCase("")) {
-                intent = new Intent(this, BookingActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            } else {
-                intent = new Intent(this, BookingDetailsActivity.class);
-                intent.putExtra("FROM", "2");
-                intent.putExtra("BookingID", bookingid);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+
+        try {
+
+            NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            long notificatioId = System.currentTimeMillis();
+            Intent intent=null;
+            //Log.d("Type",type);
+            if(type.equalsIgnoreCase("Coach_List")){
+                intent = new Intent(this, Splash.class);
+                intent.putExtra("type", "coachFreagment");
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            }else if(notificationType.equalsIgnoreCase("booking")){
+                intent = new Intent(this, Splash.class);
+                intent.putExtra("booking_id", booking_id);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            } else if(notificationType.equalsIgnoreCase("live_streaming")){
+                intent = new Intent(this, Splash.class);
+                intent.putExtra("type", "live_streaming");
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             }
-        }else{
-            intent = new Intent(this, MainActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        }// Here pass your activity where you want to redirect.
 
-        intent.putExtra("type", notificationType);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
-                PendingIntent.FLAG_ONE_SHOT);
+            PendingIntent contentIntent = PendingIntent.getActivity(this, (int) (Math.random() * 100), intent, 0);
 
-        Uri defaultSoundUri;
-        defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+            int currentapiVersion = android.os.Build.VERSION.SDK_INT;
+            if (currentapiVersion >= android.os.Build.VERSION_CODES.LOLLIPOP){
+                currentapiVersion = R.drawable.app_logo2;
+            } else{
+                currentapiVersion = R.drawable.app_logo2;
+            }
 
-
-        Uri soundd = Uri.parse("android.resource://" + getApplicationContext().getPackageName() + "/" + R.raw.notification_sound);
-        Bitmap bm = BitmapFactory.decodeResource(this.getResources(),R.drawable.app_icon); //large drawable);
-        NotificationCompat.Builder notificationBuilder;
-
-        if (notificationType.equalsIgnoreCase("live_streaming"))
-            notificationBuilder = new NotificationCompat.Builder(this, getResources().getString(R.string.ls_channel_id));
-        else
-            notificationBuilder = new NotificationCompat.Builder(this, getResources().getString(R.string.channel_id));
-
-        notificationBuilder.setContentTitle(title)
-                .setStyle(new NotificationCompat.BigTextStyle().bigText(messageBody))
-                .setContentText(msg)
-                .setAutoCancel(true)
-                .setSound(defaultSoundUri)
-                .setVibrate(new long[]{1000, 1000})
-                .setSmallIcon(R.drawable.app_logo2)
-                .setLargeIcon(bm)
-                .setContentIntent(pendingIntent);
-
-        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            /* Create or update. */
-            NotificationChannel nchannel;
-
-            if (notificationType.equalsIgnoreCase("live_streaming"))
-                nchannel = new NotificationChannel(getResources().getString(R.string.ls_channel_id), "Criconet", NotificationManager.IMPORTANCE_DEFAULT);
-            else
-                nchannel = new NotificationChannel(getResources().getString(R.string.channel_id), "Criconet", NotificationManager.IMPORTANCE_DEFAULT);
-            notificationManager.createNotificationChannel(nchannel);
+            NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
+                    .setSmallIcon(currentapiVersion)
+                    .setContentTitle(this.getResources().getString(R.string.app_name))
+                    .setStyle(new NotificationCompat.BigTextStyle().bigText(msg))
+                    .setContentText(msg)
+                    .setAutoCancel(true)
+                    .setPriority(Notification.PRIORITY_HIGH)
+                    .setDefaults(Notification.FLAG_AUTO_CANCEL | Notification.DEFAULT_LIGHTS | Notification.DEFAULT_VIBRATE | Notification.DEFAULT_SOUND)
+                    .setContentIntent(contentIntent);
+            mNotificationManager.notify((int) notificatioId, notificationBuilder.build());
+        } catch (Exception  e) {
+            e.printStackTrace();
         }
 
-        Random rand = new Random();
-        int as = rand.nextInt();
-        notificationManager.notify(as /* ID of notification */, notificationBuilder.build());
+//        Intent intent;
+//
+//        if(notificationType.equalsIgnoreCase("booking")){
+//            if (bookingid.equalsIgnoreCase("")) {
+//                intent = new Intent(this, BookingActivity.class);
+//                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//            } else {
+//                intent = new Intent(this, BookingDetailsActivity.class);
+//                intent.putExtra("FROM", "2");
+//                intent.putExtra("BookingID", bookingid);
+//                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//            }
+//        } else if(notificationType.equalsIgnoreCase("Coach_List")){
+//            intent = new Intent(this, MainActivity.class);
+//            intent.putExtra("type", "coachFreagment");
+//            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//        }
+//        else{
+//            intent = new Intent(this, MainActivity.class);
+//            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//        }// Here pass your activity where you want to redirect.
+//
+//        intent.putExtra("type", notificationType);
+//        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0  Request code , intent,
+//                PendingIntent.FLAG_ONE_SHOT);
+//
+//        Uri defaultSoundUri;
+//        defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+//
+//
+//        Uri soundd = Uri.parse("android.resource://" + getApplicationContext().getPackageName() + "/" + R.raw.notification_sound);
+//        Bitmap bm = BitmapFactory.decodeResource(this.getResources(),R.drawable.app_icon); //large drawable);
+//        NotificationCompat.Builder notificationBuilder;
+//
+//        if (notificationType.equalsIgnoreCase("live_streaming"))
+//            notificationBuilder = new NotificationCompat.Builder(this, getResources().getString(R.string.ls_channel_id));
+//        else
+//            notificationBuilder = new NotificationCompat.Builder(this, getResources().getString(R.string.channel_id));
+//
+//        notificationBuilder.setContentTitle(title)
+//                .setStyle(new NotificationCompat.BigTextStyle().bigText(messageBody))
+//                .setContentText(msg)
+//                .setAutoCancel(true)
+//                .setSound(defaultSoundUri)
+//                .setVibrate(new long[]{1000, 1000})
+//                .setSmallIcon(R.drawable.app_logo2)
+//                .setLargeIcon(bm)
+//                .setContentIntent(pendingIntent);
+//
+//        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//             Create or update.
+//            NotificationChannel nchannel;
+//
+//            if (notificationType.equalsIgnoreCase("live_streaming"))
+//                nchannel = new NotificationChannel(getResources().getString(R.string.ls_channel_id), "Criconet", NotificationManager.IMPORTANCE_DEFAULT);
+//            else
+//                nchannel = new NotificationChannel(getResources().getString(R.string.channel_id), "Criconet", NotificationManager.IMPORTANCE_DEFAULT);
+//            notificationManager.createNotificationChannel(nchannel);
+//        }
+//
+//        Random rand = new Random();
+//        int as = rand.nextInt();
+//        notificationManager.notify(as  ID of notification , notificationBuilder.build());
     }
 }

@@ -260,23 +260,6 @@ public class MainActivity extends BaseActivity {
                 }
         );
 
-        Bundle bundle = getIntent().getExtras();
-        if (bundle != null) {
-            if (bundle.getString("type").equalsIgnoreCase("live_streaming")) {
-                bottomNavigation.setSelectedIndex(2, true);
-            }
-        }else{
-            navigationController.navigateToHomeFragment();
-        }
-        if (bundle != null) {
-            if (bundle.getString("type").equalsIgnoreCase("coachFreagment")) {
-                navigationController.navigatoCoachFragment();
-                //bottomNavigation.setSelectedIndex(1, true);
-            }
-        }else{
-            navigationController.navigateToHomeFragment();
-        }
-
         socialLink();
     }
 
@@ -284,6 +267,22 @@ public class MainActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
         toggle.syncState();
+        Bundle bundle = getIntent().getExtras();
+
+
+        if (bundle != null) {
+            //Log.d("TypeNo",getIntent().getExtras().getString("type")+"Helo");
+            if (bundle.getString("type").equalsIgnoreCase("live_streaming")) {
+                navigationController.navigatoLiveMatchesFragment();
+            } else if(bundle.getString("type").equalsIgnoreCase("coachFreagment")){
+                navigationController.navigatoCoachFragment();
+            } else{
+                navigationController.navigateToHomeFragment();
+            }
+        }
+        else{
+            navigationController.navigateToHomeFragment();
+        }
     }
 
 //    @Override

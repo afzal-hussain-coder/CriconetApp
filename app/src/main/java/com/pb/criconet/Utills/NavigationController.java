@@ -164,7 +164,6 @@ public class NavigationController {
     }
 
     public void showTimePreode(TimeSlot mmodelArrayList) {
-
         TimePreode fragment = new TimePreode(mmodelArrayList);
         fragment.setCancelable(true);
         fragment.show(fragmentManager, TimePreode.class.getName());

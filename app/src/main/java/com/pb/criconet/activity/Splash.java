@@ -39,6 +39,7 @@ public class Splash extends Activity {
     boolean permission = false;
     int PERMISSION_ALL = 1;
     Context mContext;;
+    String type="",booking_id="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +53,18 @@ public class Splash extends Activity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_splash);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+
+            if(bundle.containsKey("type")){
+                type =bundle.getString("type");
+            }
+            if(bundle.containsKey("booking_id")){
+                booking_id =bundle.getString("booking_id");
+            }
+
+            //Log.d("SpashNo",type+"/"+booking_id);
+        }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             // only for gingerbread and newer versions
@@ -146,17 +159,46 @@ public class Splash extends Activity {
             @Override
             public void run() {
                 // TODO Auto-generated method stub
-                Log.d("Status",SessionManager.get_check_login(prefs)+"");
+               // Log.d("Status",SessionManager.get_check_login(prefs)+"");
                 if (SessionManager.get_check_login(prefs)) {
 //                    if (SessionManager.get_check_agreement(prefs)) {
 //                        Intent intent = new Intent(Splash.this, Verification.class);
 //                        startActivity(intent);
 //                        finish();
 //                    } else {
-                    Intent intent = new Intent(Splash.this, MainActivity.class);
-                    startActivity(intent);
-                    finish();
-//                    }
+                    if(type.equalsIgnoreCase("Coach_List")){
+                        Intent intent = new Intent(Splash.this, MainActivity.class);
+                        intent.putExtra("type", "coachFreagment");
+                        startActivity(intent);
+                        finish();
+                    }else if(type.equalsIgnoreCase("live_streaming")){
+                        Intent intent = new Intent(Splash.this, MainActivity.class);
+                        intent.putExtra("type", "live_streaming");
+                        startActivity(intent);
+                        finish();
+                    } else if(type.equalsIgnoreCase("Booking")){
+                        Intent intent = new Intent(Splash.this, BookingActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }else{
+                        Intent intent = new Intent(Splash.this, MainActivity.class);
+                        startActivity(intent);
+                        finish();
+                        /*if(type.equalsIgnoreCase("Booking")){
+                            Intent intent = new Intent(Splash.this, BookingActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                            if (booking_id.isEmpty()) {
+//                                Intent intent = new Intent(Splash.this, BookingActivity.class);
+//                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                            } else {
+//                                Intent intent = new Intent(Splash.this, BookingDetailsActivity.class);
+//                                intent.putExtra("FROM", "2");
+//                                intent.putExtra("BookingID", booking_id);
+//                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                            }
+                        }*/
+
+                    }
                 } else {
 
                     if(SessionManager.get_check_login(prefs)==false){

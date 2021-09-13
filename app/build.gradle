@@ -16,7 +16,7 @@ android {
         applicationId "com.pb.criconet"
         minSdkVersion 21
         targetSdkVersion 31
-        versionCode 24
+        versionCode 25
         versionName "1.1.2"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
@@ -138,6 +138,7 @@ dependencies {
     //    implementation 'com.asksira.android:bsimagepicker:1.1.0'
     implementation project(':bsimagepicker')
     implementation project(':rtcTokengenerator')
+    implementation project(path: ':lib-screensharing')
     implementation files('libs/YouTubeAndroidPlayerApi.jar')
     implementation project(':AnimatedLoadingIndicator')
 

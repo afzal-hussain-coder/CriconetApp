@@ -377,6 +377,8 @@
     <string name="parent_signature">Parent/Guardian Signature</string>
     <string name="upload_signature">Upload Signature</string>
     <string name="game">Super Six</string>
+    <string name="share_screen">Share Screen</string>
+    <string name="stop">Stop</string>
 
 
 </resources>
