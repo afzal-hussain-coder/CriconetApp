@@ -379,6 +379,9 @@
     <string name="game">Super Six</string>
     <string name="share_screen">Share Screen</string>
     <string name="stop">Stop</string>
+    <string name="record_video">Record Video</string>
+    <string name="upload_video">Upload Video</string>
+    <string name="recorded_video">Recorded Video</string>
 
 
 </resources>

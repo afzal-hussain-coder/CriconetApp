@@ -438,8 +438,7 @@
                                         android:layout_height="@dimen/_40sdp"
                                         android:scaleType="centerInside"
                                         android:background="@color/bckground_light"
-                                        android:layout_alignParentStart="true"
-                                        android:src="@drawable/afzal_signature"/>
+                                        android:layout_alignParentStart="true" />
                                     <FrameLayout
                                         android:id="@+id/fluploadSignature"
                                         android:layout_width="@dimen/_100sdp"

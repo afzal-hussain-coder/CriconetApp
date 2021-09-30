@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/bckground_light">
-
+    
     <include
         android:id="@+id/toolbar"
         layout="@layout/toolbar" />
@@ -13,6 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/toolbar">
+
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/li_filter"
@@ -207,25 +208,43 @@
             android:textSize="@dimen/_12sdp"
             android:fontFamily="@font/opensans_semibold"
             android:visibility="gone" />
+            <ru.dimorinny.floatingtextbutton.FloatingTextButton
+                android:id="@+id/action_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginRight="@dimen/_10sdp"
+                android:layout_marginBottom="@dimen/_40sdp"
+                android:padding="@dimen/_2sdp"
+                app:floating_title="@string/record_video"
+                app:floating_background_color="@color/colorPrimary"
+                app:floating_left_icon="@drawable/recording_icon"
+                app:floating_title_color="@android:color/white"
+                />
         </RelativeLayout>
-    </RelativeLayout>
 
+
+    </RelativeLayout>
 
     <FrameLayout
         android:id="@+id/dim"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:alpha="0"
+        android:visibility="visible"
         android:background="@color/black_semi_transparent"
         android:fitsSystemWindows="false" />
 
-    <include layout="@layout/dialog_booking_details" />
+    <include layout="@layout/dialog_booking_details"
+        android:visibility="visible"/>
 
     <FrameLayout
         android:id="@+id/dim_chat"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:alpha="0"
+        android:visibility="visible"
         android:background="@color/black_semi_transparent"
         android:fitsSystemWindows="false"
         />
@@ -233,4 +252,5 @@
     <include layout="@layout/chat_dailog_booking"
         android:visibility="visible"
         />
+
 </RelativeLayout>

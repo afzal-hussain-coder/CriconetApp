@@ -18,4 +18,13 @@ public interface VideoInterface {
             @Part ("postPrivacy") RequestBody postPrivacy,
             @Part ("postText") RequestBody postText
     );
+
+    @Multipart
+    @POST("app_api.php?type=recording_upload")
+    Call<ResultObject> uploadVideoToServerr(
+            @Part MultipartBody.Part video,
+            @Part ("user_id") RequestBody user_id,
+            @Part ("s") RequestBody s,
+            @Part ("postVideo") RequestBody postVideo
+    );
 }

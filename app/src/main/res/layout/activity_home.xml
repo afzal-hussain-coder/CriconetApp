@@ -28,15 +28,6 @@
             android:layout_below="@+id/layout_nav"
             tools:listitem="@layout/list_adapter_item" />
 
-        <include
-            android:id="@+id/sl"
-            layout="@layout/social_page_icons"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:visibility="gone"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp" />
     </RelativeLayout>
 
 

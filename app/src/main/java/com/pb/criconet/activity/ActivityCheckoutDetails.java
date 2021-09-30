@@ -570,6 +570,7 @@ public class ActivityCheckoutDetails extends AppCompatActivity implements Paymen
                         payableAmount = jsonObject1.getString("total_payable_amount");
 
 
+
                     } else if (jsonObject.optString("api_text").equalsIgnoreCase("failed")) {
                         Toaster.customToast(jsonObject.optJSONObject("errors").optString("error_text"));
                     } else {
@@ -684,11 +685,19 @@ public class ActivityCheckoutDetails extends AppCompatActivity implements Paymen
                     if (ordercreate != null && jsonObject.getString("status").equalsIgnoreCase("200")) {
 
 
-                        if (Global.isOnline(mActivity)) {
-                            startPayment();
-                        } else {
-                            Global.showDialog(mActivity);
-                        }
+                        // Log.d("Payment",ordercreate.getPayment()+".....");
+                         if(ordercreate.getPayment()==0){
+                             Intent intent = new Intent(ActivityCheckoutDetails.this, BookingActivity.class);
+                             startActivity(intent);
+                             finish();
+                         }else{
+                             if (Global.isOnline(mActivity)) {
+                                 startPayment();
+                             } else {
+                                 Global.showDialog(mActivity);
+                             }
+                         }
+
                     } else {
                         if (ordercreate == null) {
                             Toaster.customToast(ordercreate.getErrors().getErrorText());

@@ -198,8 +198,6 @@ public class CoachDetailsActivity extends BaseActivity {
             Global.showDialog(mActivity);
         }
 
-
-
         datePicker.setOnDayClickListener(eventDay -> {
             dateGott = Global.getDateGot(eventDay.getCalendar().getTime().toString());
             if(previousDate.compareTo(eventDay.getCalendar().getTime()) ==-1){
@@ -219,7 +217,6 @@ public class CoachDetailsActivity extends BaseActivity {
             }
 
         });
-
 
         datePicker.setOnForwardPageChangeListener(() -> {
             year = Global.getYear(datePicker.getCurrentPageDate().getTime().toString());

@@ -189,6 +189,7 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
     WebSettings webSettings;
     TextView tv_count;
     RelativeLayout rl_count;
+
     // ScreenSharing
 //    private boolean isSharing = false;
 //    private ScreenSharingClient mSSClient;
@@ -255,7 +256,6 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_call);
         mActivity = this;
-
         // Initialize Screen Share Client
 //        mSSClient = ScreenSharingClient.getInstance();
 //        mSSClient.setListener(mListener);
@@ -459,7 +459,7 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
         try {
 
             if (Global.isOnline(mActivity)) {
-                joinChannel(accessToken,channelName, config().mUid);
+                joinChannel(accessToken,channelName,Integer.parseInt(SessionManager.get_user_id(prefs)));
             } else {
                 Global.showDialog(mActivity);
             }
@@ -895,7 +895,7 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
 
                     @SuppressLint("SetTextI18n")
                     public void onTick(long millisUntilFinished) {
-                        tv_timeDuration.setText("Remaining time: " + Global.convertSecondsToHMmSs(millisUntilFinished/1000));
+                        tv_timeDuration.setText("Remaining time: " + Global.convertSecondsTomSs(millisUntilFinished/1000));
                         //here you can have your logic to set text to edittext
                     }
 

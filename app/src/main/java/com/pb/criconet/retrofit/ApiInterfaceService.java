@@ -43,7 +43,7 @@ public class ApiInterfaceService {
     public static VideoInterface getApiService() {
         if (retrofit == null) {
             retrofit = new Retrofit.Builder()
-                    .baseUrl(URL)
+                    .baseUrl("https://www.criconet.com/")
                     .addConverterFactory(GsonConverterFactory.create())
                     .client(getHttpClient().build())
                     .build();

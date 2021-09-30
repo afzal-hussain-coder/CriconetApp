@@ -110,6 +110,7 @@ public class BookingDetailsActivity extends AppCompatActivity {
         tvSessionAmount_paylater = findViewById(R.id.tvSessionAmount_paylater);
         fl_book_another_session = findViewById(R.id.fl_book_another_session);
         fl_book_another_session.setOnClickListener(v -> {
+            startActivity(new Intent(BookingDetailsActivity.this, MainActivity.class).putExtra("type", "coachFreagment").setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
             finish();
         });
         fl_navigate_home_page = findViewById(R.id.fl_navigate_home_page);

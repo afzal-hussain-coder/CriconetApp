@@ -62,6 +62,7 @@ import com.google.android.play.core.install.model.UpdateAvailability;
 import com.google.android.play.core.tasks.Task;
 import com.google.gson.Gson;
 import com.pb.criconet.R;
+import com.pb.criconet.Utills.CustomLoaderView;
 import com.pb.criconet.Utills.Global;
 import com.pb.criconet.Utills.MytextviewBold;
 import com.pb.criconet.Utills.SessionManager;
@@ -102,6 +103,7 @@ public class MainActivity extends BaseActivity {
     private ArrayList<Drawer> text;
     private AppCompatActivity mActivity;
     private DrawerLayout drawer;
+    CustomLoaderView loaderView;
     PageURL pageURL;
 
     private AppUpdateManager appUpdateManager;
@@ -130,6 +132,7 @@ public class MainActivity extends BaseActivity {
         checkUpdate();
         /*End of In_App_update code initializer*/
 
+        loaderView = CustomLoaderView.initialize(this);
         queue = Volley.newRequestQueue(this);
         if (Global.isOnline(mActivity)) {
             checkAppSettings();
@@ -158,6 +161,7 @@ public class MainActivity extends BaseActivity {
         list_nav = findViewById(R.id.list_nav);
         text = new ArrayList<>();
         text.add(new Drawer(getString(R.string.home), false, R.drawable.ic_home));
+        text.add(new Drawer(getString(R.string.recorded_video), false, R.drawable.record_video));
 
         profile_pic.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -260,7 +264,7 @@ public class MainActivity extends BaseActivity {
                 }
         );
 
-        socialLink();
+        //socialLink();
     }
 
     @Override
@@ -303,7 +307,7 @@ public class MainActivity extends BaseActivity {
 
     }
 
-    private void socialLink() {
+    /*private void socialLink() {
         ImageView fb = findViewById(R.id.fb);
         ImageView twitter = findViewById(R.id.twitter);
         ImageView instagram = findViewById(R.id.instagram);
@@ -339,7 +343,7 @@ public class MainActivity extends BaseActivity {
             startActivity(i);
         });
 
-    }
+    }*/
 
     @Override
     public void onBackPressed() {
@@ -370,11 +374,10 @@ public class MainActivity extends BaseActivity {
         } else if (text.get(position).getTitle().equalsIgnoreCase("Slot")) {
             navigationController.navigatoMenuFragment(true);
         }
-//        else if (text.get(position).getTitle().equalsIgnoreCase("Pages")) {
-//            intent = new Intent(mActivity, Pages.class);
-//            startActivity(intent);
-//            finish();
-//        }
+        else if (text.get(position).getTitle().equalsIgnoreCase("Recorded Video")) {
+            startActivity(new Intent(mActivity,RecordedVideoActivity.class));
+
+        }
         else if (text.get(position).getTitle().equalsIgnoreCase("Booking History")) {
             startActivity(new Intent(mActivity,BookingActivity.class));
             finish();
@@ -462,12 +465,17 @@ public class MainActivity extends BaseActivity {
                     alertDialog.setPositiveButton("Yes",
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
-                                    //                                logout();
-                                    SessionManager.dataclear(prefs);
-                                    SessionManager.save_check_agreement(prefs, true);
-                                    Intent intent = new Intent(mActivity, Login.class);
-                                    startActivity(intent);
-                                    finish();
+                                    if (Global.isOnline(MainActivity.this)) {
+                                        logout();
+                                    } else {
+                                        Toast.makeText(MainActivity.this, R.string.no_internet, Toast.LENGTH_LONG).show();
+                                    }
+
+//                                    SessionManager.dataclear(prefs);
+//                                    SessionManager.save_check_agreement(prefs, true);
+//                                    Intent intent = new Intent(mActivity, Login.class);
+//                                    startActivity(intent);
+//                                    finish();
                                 }
                             });
                     alertDialog.setNegativeButton("No",
@@ -488,31 +496,31 @@ public class MainActivity extends BaseActivity {
         RequestQueue queue = Volley.newRequestQueue(mActivity);
         final JSONObject json = new JSONObject();
         try {
-            json.put("action", "logout");
             json.put("user_id", SessionManager.get_user_id(prefs));
+            json.put("s", SessionManager.get_session_id(prefs));
             Log.e(" data  : ", "" + json);
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        progress.show();
+        loaderView.showLoader();
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-                Request.Method.POST, Global.URL, json,
+                Request.Method.POST, Global.URL+"logout", json,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.v("login reponse", "" + response);
+                        Log.v("logout reponse", "" + response);
 //                        {"status":"Success"}
-                        progress.dismiss();
+                        loaderView.hideLoader();
                         try {
                             JSONObject jsonObject2, jsonObject = new JSONObject(response.toString());
-                            if (jsonObject.getString("status").equals("Success")) {
+                            if (jsonObject.getString("api_status").equals("200")) {
                                 SessionManager.dataclear(prefs);
                                 SessionManager.save_check_agreement(prefs, true);
                                 Intent intent = new Intent(mActivity, Login.class);
                                 startActivity(intent);
                                 finish();
-                            } else if (jsonObject.getString("status").equals("Fail")) {
-                                Global.msgDialog(mActivity, jsonObject.getString("msg"));
+                            } else if (jsonObject.getString("api_status").equals("400")) {
+                                Toaster.customToast(jsonObject.optJSONObject("errors").optString("error_text"));
                             } else {
                                 Global.msgDialog(mActivity, "Error in server");
                             }
@@ -525,7 +533,7 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
-                progress.dismiss();
+                loaderView.hideLoader();
                 Global.msgDialog(mActivity, "Internet connection is slow");
             }
         });
@@ -548,9 +556,7 @@ public class MainActivity extends BaseActivity {
 
                        // text.add(new Drawer(getString(R.string.pages), false, R.drawable.ic_page));
                         text.add(new Drawer(getString(R.string.booking_history), false, R.drawable.ic_booking_history));
-                        if(gameSettingsStataus.equalsIgnoreCase("0")){
-
-                        }else{
+                        if (!gameSettingsStataus.equalsIgnoreCase("0")) {
                             text.add(new Drawer(getString(R.string.game), false, R.drawable.super_six));
                         }
 
@@ -603,7 +609,7 @@ public class MainActivity extends BaseActivity {
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
                 //Global.dismissDialog(progressDialog);
-                Global.msgDialog((Activity) mActivity, "Error from server");
+                //Global.msgDialog((Activity) mActivity, "Error from server");
             }
         }) {
 //            @Override
@@ -646,9 +652,9 @@ public class MainActivity extends BaseActivity {
                         }
 
                     } else if (jsonObject.optString("api_text").equalsIgnoreCase("failed")) {
-                        Toaster.customToast(jsonObject.optJSONObject("errors").optString("error_text"));
+                        //Toaster.customToast(jsonObject.optJSONObject("errors").optString("error_text"));
                     } else {
-                        Toaster.customToast(getResources().getString(R.string.socket_timeout));
+                        //Toaster.customToast(getResources().getString(R.string.socket_timeout));
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

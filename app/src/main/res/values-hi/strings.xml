@@ -1,0 +1,384 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="app_name">क्रिकोनेट</string>
+    <string name="facebook_app_id" translatable="false">459610651835185</string>
+    <string name="fb_login_protocol_scheme">fb459610651835185</string>
+
+    <!--//1007046529735418 old one-->
+    <!--fb1007046529735418 old one-->
+    <string name="channel_id" translatable="false">Criconet_Notifications</string>
+    <string name="ls_channel_id" translatable="false">Live_Streaming</string>
+
+    <!--e0049fa7d09c6a5ef5186120aeb52f08-->
+    <string name="ok">ठीक है</string>
+    <string name="navigation_drawer_open">open</string>
+    <string name="navigation_drawer_close">close</string>
+
+
+    <!--<string name="Are you sure you want to Report th1s User?">LOGIN</string>-->
+    <!--<string name="Send Friend Request">LOGIN</string>-->
+    <!--<string name="Already Requested">LOGIN</string>-->
+
+    <!--<string name="pass_text">Please enter your email address.  You will receive a link to create a new password via email.</string>-->
+    <string name="notfound">क्षमा करें कोई डेटा नहीं मिला</string>
+    <string name="notfound_com">Sorry  No Comments found</string>
+    <string name="notfound_users">Sorry  No Users found</string>
+    <string name="up_image">uploading_image</string>
+    <string name="cancel">Cancel</string>
+
+    <string name="password">Password</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="forgot_password_hd">Forgot Password</string>
+    <string name="email_address">Email Address</string>
+    <string name="register">Register</string>
+    <string name="enter_reason">Enter Reason</string>
+    <string name="unblock">Unblock</string>
+    <string name="current_password">Current Password</string>
+    <string name="new_password">New Password</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="what_s_on_your_mind">Expert Comments..</string>
+    <string name="photo">Photo</string>
+    <string name="video">Video</string>
+    <string name="chat">Chat</string>
+    <string name="camera">Camera</string>
+    <string name="gallery">Gallery</string>
+    <string name="comment">Write a comment..</string>
+    <string name="share_a_new_photo">Shared a new photo</string>
+    <string name="post_a_new_photo">Posted a new Photo</string>
+    <string name="post_a_new_video">Posted a new video</string>
+    <string name="likes">Like</string>
+    <string name="dislikes" translatable="false">Disliked</string>
+    <string name="comments">Comment</string>F
+    <string name="commentss">Comments</string>
+    <string name="share">Share</string>
+    <string name="upload_profile_picture">Upload Profile Picture</string>
+    <string name="skip_step"><![CDATA[You can skip this step & upload later]]></string>
+    <string name="skip_now">Skip Now</string>
+    <!--<string name="first_name">FIRST NAME</string>-->
+    <string name="facebook_sign_in">Continue with Facebook</string>
+    <string name="accept">Accept</string>
+    <string name="reject">Reject</string>
+    <string name="search_users_here">Search users here..</string>
+    <string name="login">Login</string>
+    <string name="upload_picture">Upload Picture</string>
+    <string name="blocked_users">Blocked Users</string>
+    <string name="change_password">Change Password</string>
+    <string name="setting">Settings</string>
+    <string name="dob">D.O.B</string>
+    <string name="phone_no">Enter Phone No.</string>
+    <string name="phone">Phone Number</string>
+    <string name="privacy_setting">Privacy Setting</string>
+    <string name="deactivate_account">Deactivate Account</string>
+    <string name="delete_account">Delete Account</string>
+    <string name="recommend_this_app">Recommend This App</string>
+    <string name="deactivate">DEACTIVATE</string>
+    <string name="confirm_deactivate">Are You Sure you want to DEACTIVATE your account ?</string>
+    <string name="confirm_delete">Are You Sure you want to DELETE your account ?</string>
+    <string name="delete">DELETE</string>
+    <string name="no_internet">No Internet Connection</string>
+    <string name="loading">Loading..</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="change_pass">Change Password</string>
+    <string name="logout">Logout</string>
+    <string name="home" translatable="false">Pavilion</string>
+    <string name="my_pages" translatable="false">My Pages</string>
+    <string name="update_page" translatable="false">Update Page</string>
+    <string name="booking_history" translatable="false">Booking history</string>
+    <string name="booking_confirmed" translatable="false">Your booking has been confirmed</string>
+
+    <string-array name="genders" translatable="false">
+        <item>SELECT GENDER</item>
+        <item>Male</item>
+        <item>Female</item>
+        <item>Other</item>
+    </string-array>
+
+    <string-array name="country" translatable="false">
+        <item>Country</item>
+    </string-array>
+    <string-array name="state" translatable="false">
+        <item>State</item>
+    </string-array>
+
+    <string-array name="city" translatable="false">
+        <item>City</item>
+    </string-array>
+
+    <string-array name="privacy2" translatable="false">
+        <item>Everyone</item>
+        <item>Only me</item>
+        <item>Follower</item>
+        <item>Following</item>
+    </string-array>
+
+
+    <string name="label_send" translatable="false">Send</string>
+
+    <string name="label_options" translatable="false">Options</string>
+
+    <string name="msg_say_something" translatable="false">Say something…</string>
+
+    <string name="msg_connection_error" translatable="false">Connection error, please check the network settings or make sure channel name/access token are valid</string>
+
+    // DO NOT TRANSLATE
+    <string name="bit_rate_value_with_unit" translatable="false">%d kbps</string>
+    <string name="frame_rate_value_with_unit" translatable="false">%d fps</string>
+
+    <string name="coach_profile_title">Coach Profile Title*</string>
+    <string name="total_experience">Total Experience</string>
+    <string name="any_other_information">Any Other Information</string>
+    <string name="amount_session_30_mins_of_online_e_coaching">Amount/Session * (30 mins of online e-coaching)</string>
+    <string name="save_amp_continue"><![CDATA[Save & Continue]]></string>
+    <string name="choose_your_specialities">Choose your specialities*</string>
+
+
+    <!--Afzal code here-->
+
+    <string name="login_new">Login</string>
+    <string name="register_new">Register</string>
+    <string name="username_email_id">User Name or Email ID</string>
+    <string name="incorrect_username_password">Incorrect Username Or Password</string>
+    <string name="password_too_short">Password is too short</string>
+    <string name="username">User Name</string>
+    <string name="terams_for_username">Username can be 3 to 32 Characters long and Space or Special Characters are not allowed, e.g. "yourname</string>
+    <string name="select_sport">Select Gender</string>
+    <string name="select_type">Select User Type</string>
+    <string name="tearms_condition">By creating your account, you agree to our \n<b>Terms of Use</b></string>
+    <string name="forget_your_password">Forgot your password?</string>
+    <string name="e_mail">E-Mail</string>
+    <string name="recover">Recover</string>
+    <string name="weneedemail">We need your registered e-mail address to send you a reset-password link.</string>
+    <string name="name_empty_validation">User Name Can’t be empty</string>
+    <string name="email_empty_validation">Email Can’t be empty</string>
+    <string name="email_invalid_validation">Invalid email format</string>
+    <string name="phone_error">Phone number Can’t be empty</string>
+    <string name="error_invalid_phone">Invalid input for Phone Number</string>
+    <string name="name_limit_validation">Must be between 3 to 32 Characters</string>
+    <string name="password_cannot_empty">Password Can’t be empty</string>
+    <string name="click_continuee">Click to continue</string>
+    <string name="message_internal_inconsistency">There was an internal inconsistency. \n Please try again.</string>
+
+    <string name="socket_timeout">The Criconet server is not responding</string>
+    <string name="repeat_password">Repeat Password</string>
+    <string name="save">Save</string>
+    <string name="term_of_use">Terms of Use</string>
+
+    <string name="facebook_logout">Log out</string>
+
+    <string name="otp">Enter Verification Code</string>
+    <string name="enter_mobile">Enter Mobile Number</string>
+    <string name="sent_verification_phone">We have sent a verification code on your Mobile No.</string>
+    <string name="sent_verificationn">You will get a verification code on your Mobile No.</string>
+    <string name="expire_otp">Your code will expire in</string>
+    <string name="timer_txt">2:00</string>
+    <string name="resend">Resend code</string>
+    <string name="code_msg">Please enter verification code</string>
+    <string name="code_invalid">Verification code not correct</string>
+    <string name="live_one">Live Streaming</string>
+    <string name="recording">Recent Matches</string>
+    <string name="coachh">e-Coaching</string>
+    <string name="book_now">Book Coach</string>
+    <string name="coach_profile">Coach Profile</string>
+    <string name="achievement">Achievement</string>
+    <string name="bio">Bio</string>
+    <string name="available_date_session"><![CDATA[Available Date & Session]]></string>
+    <string name="slide_down">Slide it down</string>
+    <string name="session_details">Session Details</string>
+    <string name="session_date_time"><![CDATA[Session Date & Time]]></string>
+    <string name="booking_date">Booking Date</string>
+    <string name="session_paid_amount">Online e-Coaching session paid amount</string>
+    <string name="booking_status">Booking Status</string>
+    <string name="Choose_Post_Photo">Choose Photo</string>
+    <string name="choose_post_video">Choose Video</string>
+    <string name="pay_now">Pay Now</string>
+    <string name="send">Send</string>
+    <string name="add_photo">Add Photo!</string>
+    <string name="book_another_session">BOOK ANOTHER SESSION</string>
+    <string name="go_home_page">GO TO HOMEPAGE</string>
+    <string name="cancel_booking">CANCEL BOOKING</string>
+    <string name="whatsapp">WhatsApp</string>
+    <string name="call_now">Call Now</string>
+    <string name="join_session">Join Session</string>
+    <string name="View_Details">View Details</string>
+    <string name="submit_your_feedback">Submit Your Feedback</string>
+    <string name="dont_need_session">I don\'t need the session any more.</string>
+    <string name="tearms_use_policy">I accept all the</string>
+    <string name="tearms_use_policyy">terms of the</string>
+    <string name="tearms_use_policyyy"><b>Cancellation Policy</b></string>
+    <string name="alert_cancel_booking">Do you want to cancel the booking?</string>
+    <string name="no">No</string>
+    <string name="yes">Yes</string>
+    <string name="select_e_session_date">Select e-Session From Date</string>
+    <string name="select_e_session_date_to">Select e-Session To Date</string>
+    <string name="done">Done</string>
+    <string name="search">Search</string>
+    <!--<com.google.android.material.card.MaterialCardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="@dimen/_3sdp"
+        android:layout_marginStart="@dimen/_3sdp"
+        android:layout_marginEnd="@dimen/_3sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        app:cardElevation="@dimen/_2sdp">
+        <com.facebook.login.widget.LoginButton
+            android:id="@+id/fb_login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            />
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/img_facebbok"
+                android:layout_width="@dimen/_17sdp"
+                android:layout_height="@dimen/_17sdp"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="@dimen/_8sdp"
+                android:contentDescription="@string/app_name"
+                app:srcCompat="@drawable/facebook_round"/>
+            <com.pb.criconet.fontsview.OSRButton
+                android:id="@+id/fb"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="onClick"
+                android:background="@null"
+                android:layout_marginStart="@dimen/_20sdp"
+                android:layout_centerHorizontal="true"
+                android:textAllCaps="false"
+                android:textStyle="bold"
+                android:textSize="@dimen/_10sdp"
+                android:text="@string/facebook_sign_in"
+                android:textColor="#756C6C"
+                />
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/_1sdp"
+                android:layout_below="@+id/fb"
+                android:background="@color/dark_grey"/>
+        </RelativeLayout>
+    </com.google.android.material.card.MaterialCardView>
+    &lt;!&ndash;<com.facebook.login.widget.LoginButton
+        android:id="@+id/fb_login"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_marginLeft="@dimen/_1sdp"
+        android:layout_marginRight="@dimen/_1sdp"
+        android:paddingTop="@dimen/_10sdp"
+        android:paddingBottom="@dimen/_10sdp"
+        android:textSize="@dimen/_10sdp" />&ndash;&gt;
+
+
+    <com.google.android.gms.common.SignInButton
+        android:id="@+id/gmail_login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="-2dp"
+        android:layout_marginLeft="-2dp"
+        android:layout_marginTop="@dimen/_10sdp"
+        />-->
+
+    <string name="text_intro3">Recent Matches</string>
+    <string name="desc_intro3">Enjoy with recent matches</string>
+    <string name="create_new_page">Create New Page</string>
+    <string name="please_enter_page_name">Please enter your Page Name here..</string>
+    <string name="page_name">Page Name</string>
+    <string name="page_name_appear">The Page name is how it appears on your Page</string>
+    <string name="about_page">About the Page</string>
+    <string name="page_des">Your Page description, maximum 900 characters please.</string>
+    <string name="create">Create</string>
+    <string name="edit">Edit</string>
+    <string-array name="color_list">
+
+        <item>#FB9CDE</item>
+        <item>#56C4C5</item>
+        <item>#70A0E0</item>
+        <item>#A085E2</item>
+        <item>#ED9E6A</item>
+        <item>#ED9E6A</item>
+        <item>#F1812B</item>
+        <item>#A84849</item>
+        <item>#FE72D2</item>
+        <item>#01A5A5</item>
+        <item>#01A5A5</item>
+        <item>#2B87CE</item>
+        <item>#5462A5</item>
+        <item>#008484</item>
+        <item>#A1CE79</item>
+        <item>#8EC96C</item>
+        <item>#51BCBC</item>
+        <item>#0E71EA</item>
+        <item>#056BBA</item>
+        <item>#0BA05D</item>
+        <item>#F9A722</item>
+        <item>#F33D4C</item>
+        <item>#609B41</item>
+        <item>#C9605E</item>
+        <item>#B582AF</item>
+        <item>#50F70C</item>
+        <item>#574040</item>
+        <item>#898181</item>
+        <item>#2A0B0B</item>
+        <item>#581818</item>
+
+    </string-array>
+
+
+    <!--Chat app string-->
+    <string name="account_offline">Connection lost</string>
+    <string name="join_channel_failed">Join channel failed</string>
+    <string name="message_cached">Message cached by server</string>
+    <string name="peer_offline">Peer is offline</string>
+    <string name="reconnecting">Network reconnecting ...</string>
+    \
+    <string name="send_msg_failed">Failed to send message</string>
+    <string name="e_coaching_session">e-Coaching Session</string>
+    <string name="ecoahing_compleated">Is your e-Coaching session complete?</string>
+    <string name="sort">Shorting Coach with price and experience</string>
+    <string name="filter_with_coach_speializationc">Filter coach with specialization</string>
+    <string name="sorting_by_experience">Shorting By Experience:</string>
+    <string name="sorting_by_price">Shorting By Price:</string>
+    <string name="cancelled">Cancelled</string>
+    <string name="View_profile">View Profile</string>
+    <string name="change_profile_pic">Changed his profile picture</string>
+    <string name="change_profile_picc">Changed her profile picture</string>
+    <string name="language">Language</string>
+    <string name="certificate">Certificate</string>
+    <string name="enter_coupon_code">Enter coupon code</string>
+    <string name="applay_coupon">Apply Coupon</string>
+    <string name="session_end_mesage">Your e-Coaching session has been completed</string>
+    <string name="thanks">Thanks!</string>
+    <string name="end_session_quets">Thank you for booking your session with Criconet.We would like to know how your session was. Please spare some movement to give us your valuable feedback so we can improve our service.</string>
+    <string name="submit">Submit</string>
+    <string name="search_by_name_location">Search by Team, Location and Ground</string>
+    <string name="pay_later">Pay Later</string>
+    <string name="name">Name</string>
+    <string name="enter_your_full_name">Enter your full name</string>
+    <string name="enter_your_full_address">Enter your address</string>
+    <string name="address">Address</string>
+    <string name="pin_code">Pin Code</string>
+    <string name="submit_details">Submit Details</string>
+    <string name="fill_deatils">Please fill the form, our executive will collect after session</string>
+    <string name="enter_your_pin">Enter pin code</string>
+    <string name="enter_alterenate_mobile_no">Enter alternate mobile no.</string>
+    <string name="terms_pay_later">I Give permission for my child’s picture to be posted on social media</string>
+    <string name="terms_pay_later_no">I DO NOT give permission for my child’s picture to be posted on social media</string>
+    <!--<string name="terms_pay_later_condition">If you can’t pay, we would like to offer you a free session. However we would than like to use your footage for social media and promotions. Please have your parent / guardian give us an approval to use</string>-->
+    <string name="session_paid_amount_later">Amount to be paid later</string>
+    <string name="terms_pay_later_condition">Please fill the form our executive will come to collect after session</string>
+    <string name="students_name">Student Name</string>
+    <string name="pincode">Pin Code</string>
+    <string name="alternateNo">Alternate Mobile No</string>
+    <string name="permission_slip">Social Media Permission Slip</string>
+    <string name="permission_quets">Please select below whether or not you give permission for your child’s picture to be posted on social media account</string>
+    <string name="child_info">Your child’s personal information will never appear</string>
+    <string name="parent_signature">Parent/Guardian Signature</string>
+    <string name="upload_signature">Upload Signature</string>
+    <string name="game">Super Six</string>
+    <string name="share_screen">Share Screen</string>
+    <string name="stop">Stop</string>
+
+
+</resources>

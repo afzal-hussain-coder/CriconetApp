@@ -19,9 +19,11 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -44,6 +46,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -68,16 +71,25 @@ import com.pb.criconet.Utills.DataModel;
 import com.pb.criconet.Utills.DateDropDownView;
 import com.pb.criconet.Utills.FilterBookingDropDownView;
 import com.pb.criconet.Utills.Global;
+import com.pb.criconet.Utills.MultipartRequest;
 import com.pb.criconet.Utills.SessionManager;
 import com.pb.criconet.Utills.Toaster;
 import com.pb.criconet.adapters.BookingHistoryAdapter;
 import com.pb.criconet.models.BookingHistory;
 import com.pb.criconet.models.CoachAccept;
 import com.pb.criconet.models.ConstantApp;
+import com.pb.criconet.retrofit.ApiInterfaceService;
+import com.pb.criconet.retrofit.ResultObject;
+import com.pb.criconet.retrofit.VideoInterface;
 
+import org.apache.http.entity.mime.HttpMultipartMode;
+import org.apache.http.entity.mime.MultipartEntity;
+import org.apache.http.entity.mime.content.FileBody;
+import org.apache.http.entity.mime.content.StringBody;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -88,7 +100,20 @@ import java.util.Map;
 import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import ru.dimorinny.floatingtextbutton.FloatingTextButton;
 import timber.log.Timber;
+
+import static com.pb.criconet.Utills.Global.POST_TYPE_IMAGE;
+import static com.pb.criconet.Utills.Global.POST_TYPE_LINK;
+import static com.pb.criconet.Utills.Global.POST_TYPE_MULTI_IMAGE;
+import static com.pb.criconet.Utills.Global.POST_TYPE_TEXT;
+import static com.pb.criconet.Utills.Global.POST_TYPE_VIDEO;
+import static com.pb.criconet.Utills.Global.POST_TYPE_YOUTUBE;
 
 public class BookingActivity extends AppCompatActivity implements BookingHistoryAdapter.clickCallback {
     private final String TAG = BookingActivity.class.getSimpleName();
@@ -144,6 +169,16 @@ public class BookingActivity extends AppCompatActivity implements BookingHistory
     String notification_count="";
 
 
+    /*Record Video*/
+    private static final int CAPTURE_VIDEO = 3015;
+    private String postFile = "";
+    private String filemanagerstring = " ";
+    private byte[] byteArray;
+    FloatingTextButton fabCreate;
+    /*End Record Video*/
+
+
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
@@ -169,10 +204,56 @@ public class BookingActivity extends AppCompatActivity implements BookingHistory
                             results = new Uri[]{Uri.parse(dataString)};
                         }
                     }
+                } else if (requestCode == CAPTURE_VIDEO) {
+                    Uri selectedVideo = intent.getData();
+
+                    String[] filePathColumn = {MediaStore.Video.Media.DATA};
+                    Cursor cursor = mActivity.getContentResolver().query(selectedVideo, filePathColumn, null, null, null);
+                    cursor.moveToFirst();
+                    int columnindex = cursor.getColumnIndex(filePathColumn[0]);
+                    filemanagerstring = cursor.getString(columnindex);
+                    cursor.close();
+                    System.out.println("filemanagerstring x  " + filemanagerstring);
+                    postFile = filemanagerstring;
+//                dialog_camera.dismiss();
+                    if (filemanagerstring != null) {
+                        //progress.show();
+                        loaderView.showLoader();
+//                    Bitmap bitmap = ((BitmapDrawable) imgPreview.getDrawable()).getBitmap();
+                        Bitmap video_thumbnail = ThumbnailUtils.createVideoThumbnail(filemanagerstring, MediaStore.Video.Thumbnails.MINI_KIND);
+                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                        video_thumbnail.compress(Bitmap.CompressFormat.PNG, 100, stream);
+
+                        byteArray = stream.toByteArray();
+//                    uploadVideo_taskimage(Global.URL, filemanagerstring, byteArray);
+                        try {
+                            FileBody filebodyVideo = new FileBody(new File(filemanagerstring));
+                            long kblength = new File(filemanagerstring).length();
+                            kblength = kblength / 1024;
+                            long mblength = kblength / 1024;
+                            System.out.println("file.mblength() = " + mblength);
+//                            if (mblength > 51) {
+//                                System.out.println("file.length() = " + mblength);
+//                                Global.msgDialog(mActivity, "File Size Too Large,\n Must be less than 50 MB");
+//                                //progress.dismiss();
+//                                loaderView.hideLoader();
+//                            } else {
+//                                EmailOtpDialog(video_thumbnail,filemanagerstring);
+//                                loaderView.hideLoader();
+//
+//                            }
+                            EmailOtpDialog(video_thumbnail,filemanagerstring);
+                            loaderView.hideLoader();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+
                 }
+//                mUMA.onReceiveValue(results);
+//                mUMA = null;
             }
-            mUMA.onReceiveValue(results);
-            mUMA = null;
+
         } else {
 
             if (requestCode == FCR) {
@@ -211,6 +292,9 @@ public class BookingActivity extends AppCompatActivity implements BookingHistory
         TextView mTitle = (TextView) toolbar.findViewById(R.id.toolbartext);
         mTitle.setText("Booking History");
 
+
+
+
         initializeView();
 
     }
@@ -228,7 +312,10 @@ public class BookingActivity extends AppCompatActivity implements BookingHistory
 
     @SuppressLint("SetJavaScriptEnabled")
     private void initializeView() {
-
+        fabCreate = (FloatingTextButton)findViewById(R.id.action_button);
+        fabCreate.setOnClickListener(view -> {
+            openCameraVideo();
+        });
         webView =findViewById(R.id.web_chat);
         progressBar = findViewById(R.id.loadingVieww);
         webView.setWebViewClient(new Callback());
@@ -770,60 +857,7 @@ public class BookingActivity extends AppCompatActivity implements BookingHistory
             }
         });
     }
-    private void openFile(File url) {
 
-        try {
-
-            Uri uri = Uri.fromFile(url);
-
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            if (url.toString().contains(".doc") || url.toString().contains(".docx")) {
-                // Word document
-                intent.setDataAndType(uri, "application/msword");
-            } else if (url.toString().contains(".pdf")) {
-                // PDF file
-                intent.setDataAndType(uri, "application/pdf");
-            } else if (url.toString().contains(".ppt") || url.toString().contains(".pptx")) {
-                // Powerpoint file
-                intent.setDataAndType(uri, "application/vnd.ms-powerpoint");
-            } else if (url.toString().contains(".xls") || url.toString().contains(".xlsx")) {
-                // Excel file
-                intent.setDataAndType(uri, "application/vnd.ms-excel");
-            } else if (url.toString().contains(".zip")) {
-                // ZIP file
-                intent.setDataAndType(uri, "application/zip");
-            } else if (url.toString().contains(".rar")){
-                // RAR file
-                intent.setDataAndType(uri, "application/x-rar-compressed");
-            } else if (url.toString().contains(".rtf")) {
-                // RTF file
-                intent.setDataAndType(uri, "application/rtf");
-            } else if (url.toString().contains(".wav") || url.toString().contains(".mp3")) {
-                // WAV audio file
-                intent.setDataAndType(uri, "audio/x-wav");
-            } else if (url.toString().contains(".gif")) {
-                // GIF file
-                intent.setDataAndType(uri, "image/gif");
-            } else if (url.toString().contains(".jpg") || url.toString().contains(".jpeg") || url.toString().contains(".png")) {
-                // JPG file
-                intent.setDataAndType(uri, "image/jpeg");
-            } else if (url.toString().contains(".txt")) {
-                // Text file
-                intent.setDataAndType(uri, "text/plain");
-            } else if (url.toString().contains(".3gp") || url.toString().contains(".mpg") ||
-                    url.toString().contains(".mpeg") || url.toString().contains(".mpe") || url.toString().contains(".mp4") || url.toString().contains(".avi")) {
-                // Video files
-                intent.setDataAndType(uri, "video/*");
-            } else {
-                intent.setDataAndType(uri, "*/*");
-            }
-
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
-        } catch (ActivityNotFoundException e) {
-            Toast.makeText(mActivity, "No application found which can open the file", Toast.LENGTH_SHORT).show();
-        }
-    }
 
     private File createImageFile() throws IOException {
 
@@ -896,6 +930,172 @@ public class BookingActivity extends AppCompatActivity implements BookingHistory
         }
         return super.dispatchTouchEvent(ev);
     }
+
+
+    /*Record Video code start here..*/
+    private void openCameraVideo() {
+        File saveFolder = new File(Environment.getExternalStorageDirectory(), "Utopiaxxx");
+        try {
+            Intent takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+            takeVideoIntent.putExtra(MediaStore.EXTRA_DURATION_LIMIT, 30);
+
+            if (takeVideoIntent.resolveActivity(mActivity.getPackageManager()) != null) {
+                startActivityForResult(takeVideoIntent, CAPTURE_VIDEO);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    private void EmailOtpDialog(Bitmap thumbnail,String postFile) {
+        Dialog dialog = new Dialog(mActivity);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.setContentView(R.layout.dialog_record_video_upload);
+        dialog.setCancelable(false);
+        ImageView img_video = dialog.findViewById(R.id.img_video);
+        img_video.setImageBitmap(thumbnail);
+        FrameLayout fl_cancel= dialog.findViewById(R.id.fl_cancel);
+        fl_cancel.setOnClickListener(view -> {
+            dialog.dismiss();
+        });
+        FrameLayout fl_upload_video= dialog.findViewById(R.id.fl_upload_video);
+        fl_upload_video.setOnClickListener(view -> {
+            //PostFeedFinal(postFile);
+            dialog.dismiss();
+            uploadVideoToServer(postFile);
+        });
+
+        dialog.show();
+    }
+
+    public void PostFeedFinal(String postFile) {
+        try {
+            //progress.show();
+            loaderView.showLoader();
+
+            MultipartEntity entity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
+            Timber.e("Chuncked %b", entity.isChunked());
+//            entity.addPart("s", new StringBody("1"));
+            entity.addPart("user_id", new StringBody(SessionManager.get_user_id(prefs)));
+            entity.addPart("s", new StringBody(SessionManager.get_session_id(prefs)));
+            if (!postFile.isEmpty()) {
+                File file = new File(postFile);
+                FileBody fileBody = new FileBody(file);
+                entity.addPart("postVideo ", fileBody);
+            }
+
+
+            MultipartRequest req = new MultipartRequest(Global.URL + Global.UPLOAD_VIDEO,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            try {
+                                //progress.dismiss();
+                                loaderView.hideLoader();
+                                Timber.e(response);
+                                JSONObject jsonObject2, jsonObject = new JSONObject(response.toString());
+                                if (jsonObject.optString("api_text").equalsIgnoreCase("success")) {
+
+                                } else if (jsonObject.optString("api_text").equalsIgnoreCase("failed")) {
+                                    Global.msgDialog(mActivity, jsonObject.optJSONObject("errors").optString("error_text"));
+                                } else {
+                                    Global.msgDialog(mActivity, "Error in server");
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            //progress.dismiss();
+                            loaderView.hideLoader();
+                            error.printStackTrace();
+                        }
+                    },
+                    entity);
+
+            Log.d("PostEntity",entity.toString());
+
+
+            int socketTimeout = 50000;
+            RetryPolicy policy = new DefaultRetryPolicy(socketTimeout,
+                    DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                    DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+            req.setRetryPolicy(policy);
+            queue.add(req);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
+    private RequestBody bodyPart(String name) {
+        return RequestBody.create(MediaType.parse("multipart/form-data"), name);
+    }
+    private void uploadVideoToServer(String postFile) {
+
+        try{
+            File videoFile = new File(postFile);
+            RequestBody videoBody = RequestBody.create(MediaType.parse("application/octet-stream"), videoFile);
+            MultipartBody.Part vFile = MultipartBody.Part.createFormData("postVideo", videoFile.getName(), videoBody);
+
+            VideoInterface vInterface = ApiInterfaceService.getApiService();
+            //VideoInterface vInterface = retrofit.create(VideoInterface.class);
+            Call<ResultObject> serverCom = vInterface.uploadVideoToServerr(vFile,
+                    bodyPart(SessionManager.get_user_id(prefs)),
+                    bodyPart(SessionManager.get_session_id(prefs)),
+                    bodyPart(postFile));
+
+            //progress.show();
+            loaderView.showLoader();
+
+            serverCom.enqueue(new retrofit2.Callback<ResultObject>() {
+                @Override
+                public void onResponse(Call<ResultObject> call, retrofit2.Response<ResultObject> response) {
+                    try {
+                        //progress.dismiss();
+                        loaderView.hideLoader();
+//                        tv_post.setVisibility(View.GONE);
+//                        img_addpost.setVisibility(View.VISIBLE);
+                        Timber.e(String.valueOf(response));
+                        ResultObject result = response.body();
+                        Timber.e(result.toString());
+                        if (result.getApi_text().equalsIgnoreCase("Success")) {
+                         startActivity(new Intent(mContext,RecordedVideoActivity.class));
+                         finish();
+
+                        } else if (result.getApi_text().equalsIgnoreCase("failed")) {
+                            Global.msgDialog(mActivity, result.getApi_status());
+//                        Global.msgDialog(getActivity(), jsonObject.optJSONObject("errors").optString("error_text"));
+                        } else {
+                            Global.msgDialog(mActivity, "Error in server");
+                        }
+                    } catch (Exception e) {
+                        //progress.dismiss();
+                        loaderView.hideLoader();
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ResultObject> call, Throwable t) {
+                    //progress.dismiss();
+                    loaderView.hideLoader();
+                    Timber.e("Error message Home %s", t.getMessage());
+                }
+            });
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+    }
+    /*End Record Video Code */
 
 
 }

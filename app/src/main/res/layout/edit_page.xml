@@ -311,14 +311,14 @@
     <include layout="@layout/dialog_camera_selector"
         />
 
-    <com.pnikosis.materialishprogress.ProgressWheel
-        android:id="@+id/progress_wheel"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:visibility="gone"
-        wheel:matProg_barColor="@color/app_red"
-        wheel:matProg_progressIndeterminate="true" />
+<!--    <com.pnikosis.materialishprogress.ProgressWheel-->
+<!--        android:id="@+id/progress_wheel"-->
+<!--        android:layout_width="100dp"-->
+<!--        android:layout_height="100dp"-->
+<!--        android:layout_centerHorizontal="true"-->
+<!--        android:layout_centerVertical="true"-->
+<!--        android:visibility="gone"-->
+<!--        wheel:matProg_barColor="@color/app_red"-->
+<!--        wheel:matProg_progressIndeterminate="true" />-->
 
 </RelativeLayout>

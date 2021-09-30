@@ -121,7 +121,7 @@ public class Login extends AppCompatActivity {
     TextInputLayout til_edttxt_email, til_edttxt_password;
     String email_String, password_String;
     RequestQueue queue;
-    ProgressWheel progress_wheel;
+    //ProgressWheel progress_wheel;
     Location mylocation;
     ProgressDialog progress_dialog;
     boolean isGPSEnabled = false;
@@ -369,7 +369,7 @@ public class Login extends AppCompatActivity {
         forgot_password = (TextView) findViewById(R.id.forgot_password);
         btn_login = findViewById(R.id.btn_login);
         queue = Volley.newRequestQueue(Login.this);
-        progress_wheel = (ProgressWheel) findViewById(R.id.progress_wheel);
+        //progress_wheel = (ProgressWheel) findViewById(R.id.progress_wheel);
 
         // Afzal code here..
 

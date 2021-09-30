@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:gravity="center"
+    android:layout_gravity="center"
+    android:background="@android:color/transparent">
+
+    <LinearLayout
+        android:id="@+id/layout_otp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/upload_bg"
+        android:padding="@dimen/_10sdp"
+        android:visibility="visible"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_150sdp"
+            android:background="@drawable/bg_image">
+        <ImageView
+            android:id="@+id/img_video"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_150sdp"
+            android:layout_margin="@dimen/_2sdp"
+            android:contentDescription="@string/app_name"
+            android:src="@color/black50"
+            android:scaleType="centerCrop" />
+        </RelativeLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="2"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:orientation="horizontal">
+            <FrameLayout
+                android:id="@+id/fl_cancel"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/_30sdp"
+                android:layout_weight="1"
+                android:background="@color/colorPrimary"
+                android:layout_marginEnd="@dimen/_10sdp">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.7dp"
+                    android:background="@color/app_red"/>
+                <View
+                    android:layout_width="0.7dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/app_red"/>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.9dp"
+                    android:layout_gravity="bottom"
+                    android:background="@color/app_redd"/>
+                <View
+                    android:layout_width="0.9dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="end"
+                    android:background="@color/app_redd"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:padding="@dimen/_5sdp"
+                    android:text="@string/cancel"
+                    android:textAllCaps="true"
+                    app:fontFamily="@font/opensans_semibold"
+                    android:textColor="@color/light_text_color"
+                    android:textSize="@dimen/_10sdp"/>
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/fl_upload_video"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/_30sdp"
+                android:layout_weight="1"
+                android:background="@color/colorPrimary"
+                >
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.7dp"
+                    android:background="@color/app_red"/>
+                <View
+                    android:layout_width="0.7dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/app_red"/>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.9dp"
+                    android:layout_gravity="bottom"
+                    android:background="@color/app_redd"/>
+                <View
+                    android:layout_width="0.9dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="end"
+                    android:background="@color/app_redd"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:padding="@dimen/_5sdp"
+                    android:text="@string/upload_video"
+                    android:textAllCaps="true"
+                    app:fontFamily="@font/opensans_semibold"
+                    android:textColor="@color/light_text_color"
+                    android:textSize="@dimen/_10sdp"/>
+
+            </FrameLayout>
+
+
+        </LinearLayout>
+    </LinearLayout>
+
+</RelativeLayout>

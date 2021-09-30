@@ -223,7 +223,7 @@
                     android:onClick="onClickHideIME"
                     android:scaleType="center"
                     android:contentDescription="@string/app_name"
-                    android:src="@drawable/btn_keyboard_hide" />
+                    />
 
                 <EditText
                     android:id="@+id/msg_content"

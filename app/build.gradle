@@ -83,7 +83,6 @@ dependencies {
     //noinspection GradleCompatible
     implementation 'com.android.support:design:28.0.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
-    implementation 'androidx.coordinatorlayout:coordinatorlayout:1.1.0'
     testImplementation 'junit:junit:4.13.2'
     implementation 'com.shobhitpuri.custombuttons:google-signin:1.0.0'
 
@@ -96,7 +95,7 @@ dependencies {
     implementation 'com.makeramen:roundedimageview:2.3.0'
     implementation 'com.github.bumptech.glide:glide:4.11.0'
     implementation 'com.squareup.picasso:picasso:2.71828'
-    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.17'
+    //implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.17'
     implementation 'com.mcxiaoke.volley:library:1.0.19'
     implementation 'me.relex:circleindicator:1.2.2@aar'
     implementation 'com.makeramen:roundedimageview:2.3.0'
@@ -111,11 +110,6 @@ dependencies {
 
     //new import
     implementation 'io.agora.rtm:rtm-sdk:1.3.0'
-    implementation 'com.vanniktech:emoji-google:0.6.0'
-
-    implementation 'com.vanniktech:emoji-ios:0.6.0'
-
-    implementation 'com.vanniktech:emoji-twitter:0.6.0'
 
     implementation 'com.theartofdev.edmodo:android-image-cropper:2.8.0'
 
@@ -124,7 +118,7 @@ dependencies {
     implementation 'com.allattentionhere:autoplayvideos:0.2.0'
     implementation 'com.danikula:videocache:2.7.1'
     //    -------------------Social login--------------------------
-    implementation 'com.facebook.android:facebook-android-sdk:5.15.3'
+    implementation 'com.facebook.android:facebook-android-sdk:8.2.0'
     implementation 'com.google.android.gms:play-services-auth:18.0.0'
     implementation 'com.github.mukeshsolanki:android-otpview-pinview:2.0.1'
     implementation 'com.github.joielechong:countrycodepicker:2.4.2'
@@ -163,7 +157,6 @@ dependencies {
     implementation 'androidx.work:work-runtime:2.0.1'
     implementation 'com.applandeo:material-calendar-view:1.9.0-rc03'
     implementation('com.razorpay:checkout:1.6.7')
-    implementation 'com.squareup.retrofit:retrofit:1.9.0'
     implementation 'com.github.mancj:SlideUp-Android:2.2.8'
     implementation "androidx.viewpager2:viewpager2:1.0.0"
     implementation 'com.google.android.play:core:1.8.3' // In App Update
@@ -171,6 +164,7 @@ dependencies {
     implementation 'com.google.android.gms:play-services-analytics:17.0.0'
     implementation 'com.samigehi:loadingview:1.1'
     implementation 'com.github.Redman1037:TSnackBar:V2.0.0'
+    implementation 'com.github.dimorinny:floating-text-button:0.0.4'
 
 
 

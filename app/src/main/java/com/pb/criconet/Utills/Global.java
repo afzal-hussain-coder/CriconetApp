@@ -65,7 +65,7 @@ public class Global {
     /*for debug*/
     //public static final String URL = "https://stage.criconetonline.com/app_api.php?type=";
     //public static final String URL_CHAT = "https://stage.criconetonline.com";
-    //public static String GameURL = "https://criconetonline.com/cricket_js/index.php?";
+   // public static String GameURL = "https://criconetonline.com/cricket_js/index.php?";
 
     /*for live*/
     public static final String URL = "https://www.criconet.com/app_api.php?type=";
@@ -101,6 +101,9 @@ public class Global {
     public static final String check_coupon_code = "check_coupon_code";
     public static final String GET_APP_SETTINGS = "get_app_setting";
     public static final String GET_CHAT_NOTIFICATION = "get_message_notifications";
+    public static final String UPLOAD_VIDEO = "recording_upload";
+    public static final String GET_RECORDED_VIDEO = "get_recording_video";
+
 
 
 
@@ -212,10 +215,17 @@ public class Global {
         alertbox.setPositiveButton(ac.getResources().getString(R.string.ok),
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface arg0, int arg1) {
+                        //arg0.cancel();
                         ac.finish();
                     }
                 });
-        alertbox.show();
+        if(!ac.isFinishing())
+        {
+            //show dialog
+            alertbox.show();
+        }
+
+
     }
 
     public static void showAlertDialog(Context context, String title, String body, DialogInterface.OnClickListener okListener) {
@@ -723,6 +733,18 @@ public class Global {
         long h = (seconds / (60 * 60)) % 24;
 
         return String.format("%d:%02d:%02d", h, m, s);
+
+    }
+    @SuppressLint("DefaultLocale")
+    public static String convertSecondsTomSs(long seconds) {
+
+        long s = seconds % 60;
+
+        long m = (seconds / 60) % 60;
+
+        //long h = (seconds / (60 * 60)) % 24;
+
+        return String.format("%02d:%02d", m, s);
 
     }
 

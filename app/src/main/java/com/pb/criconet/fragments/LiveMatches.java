@@ -97,7 +97,7 @@ public class LiveMatches extends Fragment {
         weeklist = rootView.findViewById(R.id.week_list);
         weeklist.setLayoutManager(new LinearLayoutManager(getContext()));
         notfound = (TextView) rootView.findViewById(R.id.notfound);
-        notfound = (TextView) rootView.findViewById(R.id.notfound);
+
 
 
         return rootView;
@@ -107,7 +107,12 @@ public class LiveMatches extends Fragment {
     public void onResume() {
         super.onResume();
         MainActivity.bottomNavigation.setSelectedIndex(2, true);
-        getHelp();
+        if (Global.isOnline(getActivity())) {
+            getHelp();
+        } else {
+            Global.showDialog(getActivity());
+        }
+
     }
 
     private void getHelp() {

@@ -214,17 +214,17 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
 
-    <com.pnikosis.materialishprogress.ProgressWheel
-        android:id="@+id/progress_wheel"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        wheel:matProg_barColor="@color/app_yellow"
-        wheel:matProg_progressIndeterminate="true" />
+<!--    <com.pnikosis.materialishprogress.ProgressWheel-->
+<!--        android:id="@+id/progress_wheel"-->
+<!--        android:layout_width="100dp"-->
+<!--        android:layout_height="100dp"-->
+<!--        android:visibility="gone"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintLeft_toLeftOf="parent"-->
+<!--        app:layout_constraintRight_toRightOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        wheel:matProg_barColor="@color/app_yellow"-->
+<!--        wheel:matProg_progressIndeterminate="true" />-->
 
     <TextView
         android:id="@+id/notfound"

@@ -34,8 +34,6 @@ import com.pb.criconet.Utills.CustomLoaderView;
 import com.pb.criconet.Utills.Global;
 import com.pb.criconet.Utills.SessionManager;
 import com.pb.criconet.Utills.Toaster;
-import com.pnikosis.materialishprogress.ProgressWheel;
-
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -56,7 +54,6 @@ public class ForgotPassword extends AppCompatActivity {
     EditText edttxt_email;
     String email_String;
     RequestQueue queue;
-    ProgressWheel progress_wheel;
     //    LinearLayout linear_fb, linear_gplus;
     ProgressDialog progress_dialog;
     boolean isGPSEnabled = false;
@@ -93,7 +90,7 @@ public class ForgotPassword extends AppCompatActivity {
         });
         TextView toolbartext = (TextView) toolbar.findViewById(R.id.toolbartext);
         toolbartext.setText(R.string.forgot_password_hd);
-        progress_wheel = (ProgressWheel) findViewById(R.id.progress_wheel);
+
 
 
         initializeView();

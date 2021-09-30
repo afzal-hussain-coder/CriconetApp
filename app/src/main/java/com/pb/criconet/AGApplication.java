@@ -1,14 +1,8 @@
 package com.pb.criconet;
 
-import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.Signature;
-import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Base64;
 import android.util.Log;
 
 import com.danikula.videocache.HttpProxyCacheServer;
@@ -18,17 +12,9 @@ import com.pb.criconet.models.AGEventHandler;
 import com.pb.criconet.models.CurrentUserSettings;
 import com.pb.criconet.models.EngineConfig;
 import com.pb.criconet.models.MyEngineEventHandler;
-import com.pb.criconet.propeller.Constant;
 import com.pb.criconet.rtm.ChatManager;
-import com.vanniktech.emoji.EmojiManager;
-import com.vanniktech.emoji.google.GoogleEmojiProvider;
-
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-
 import io.agora.rtc.Constants;
 import io.agora.rtc.RtcEngine;
-import io.agora.rtc.video.VirtualBackgroundSource;
 import timber.log.Timber;
 
 public class AGApplication extends Application {
@@ -78,7 +64,6 @@ public class AGApplication extends Application {
         super.onCreate();
         _Context=this;
         createRtcEngine();
-        EmojiManager.install(new GoogleEmojiProvider());
         Timber.plant(new Timber.DebugTree());
         proxy = new HttpProxyCacheServer(this);
         mChatManager = new ChatManager(this);

@@ -115,7 +115,15 @@ public class EndSessionFeedbackFormActivity extends AppCompatActivity {
 
     }
 
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+//        if (Global.isOnline(mActivity)) {
+//
+//        } else {
+//            Global.showDialog(mActivity);
+//        }
+    }
 
     private void initializeView() {
         tvCancelFormQuets = findViewById(R.id.tvCancelFormQuets);
