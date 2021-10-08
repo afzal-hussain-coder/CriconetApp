@@ -63,7 +63,7 @@ public class Splash extends Activity {
                 booking_id =bundle.getString("booking_id");
             }
 
-            //Log.d("SpashNo",type+"/"+booking_id);
+          // Log.d("SpashNo",type+"/"+booking_id);
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
