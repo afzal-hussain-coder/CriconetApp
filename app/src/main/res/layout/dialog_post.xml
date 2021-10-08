@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/bckground_light">
-
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:gravity="center"
+    android:layout_gravity="center"
+    android:background="@android:color/transparent">
 
     <LinearLayout
         android:id="@+id/send_panel"
@@ -23,20 +24,20 @@
             android:padding="10dp">
 
             <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/user_image"
+                android:id="@+id/user_imagee"
                 android:layout_width="55dp"
                 android:layout_height="55dp"
                 android:layout_centerVertical="true"
                 android:src="@drawable/user_default" />
 
             <EditText
-                android:id="@+id/up_text"
+                android:id="@+id/up_textt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginStart="5dp"
-                android:layout_toLeftOf="@+id/up_image"
-                android:layout_toEndOf="@+id/user_image"
+                android:layout_toLeftOf="@+id/up_imagee"
+                android:layout_toEndOf="@+id/user_imagee"
                 android:background="@color/white"
                 android:fontFamily="@font/opensans_regular"
                 android:gravity="center_vertical"
@@ -50,7 +51,7 @@
                 android:textColorHint="@color/edit_text_color" />
 
             <ImageView
-                android:id="@+id/up_image"
+                android:id="@+id/up_imagee"
                 android:layout_width="@dimen/_50sdp"
                 android:layout_height="@dimen/_50sdp"
                 android:layout_alignParentEnd="true"
@@ -121,7 +122,7 @@
             android:weightSum="3">
 
             <RelativeLayout
-                android:id="@+id/add_photo"
+                android:id="@+id/add_photoo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="2dp"
@@ -151,7 +152,7 @@
             </RelativeLayout>
 
             <RelativeLayout
-                android:id="@+id/add_video"
+                android:id="@+id/add_videoo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="2dp"
@@ -190,7 +191,7 @@
                 android:padding="1dp">
 
                 <Spinner
-                    android:id="@+id/spn_privacy"
+                    android:id="@+id/spn_privacyy"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:entries="@array/privacy2"
@@ -256,42 +257,4 @@
 
     </LinearLayout>
 
-    <com.allattentionhere.autoplayvideos.AAH_CustomRecyclerView
-        android:id="@+id/post_list"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/send_panel"
-        android:background="@color/bckground_light"
-        android:divider="@color/black"
-        android:dividerHeight="2dp"
-        android:fitsSystemWindows="true"
-        android:layout_marginBottom="@dimen/_40sdp"
-        android:padding="10dp"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-
-    <TextView
-        android:id="@+id/notfound"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:fitsSystemWindows="true"
-        android:fontFamily="@font/opensans_semibold"
-        android:gravity="center"
-        android:text="@string/notfound"
-        android:textColor="@color/white"
-        android:textSize="20sp"
-        android:visibility="gone" />
-
-    <FrameLayout
-        android:id="@+id/dim"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:alpha="0"
-        android:background="@color/black_semi_transparent"
-        android:fitsSystemWindows="false" />
-    <include layout="@layout/dialog_post_selector" />
-
 </RelativeLayout>
-
-
-

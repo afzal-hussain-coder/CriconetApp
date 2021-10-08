@@ -687,9 +687,17 @@ public class ActivityCheckoutDetails extends AppCompatActivity implements Paymen
 
                         // Log.d("Payment",ordercreate.getPayment()+".....");
                          if(ordercreate.getPayment()==0){
-                             Intent intent = new Intent(ActivityCheckoutDetails.this, BookingActivity.class);
-                             startActivity(intent);
-                             finish();
+                              loaderView.showLoader();
+                             new Handler().postDelayed(new Runnable() {
+                                 @Override
+                                 public void run() {
+                                    loaderView.hideLoader();
+                                     Intent intent = new Intent(ActivityCheckoutDetails.this, BookingActivity.class);
+                                     startActivity(intent);
+                                     finish();
+                                 }
+                             },2000);
+
                          }else{
                              if (Global.isOnline(mActivity)) {
                                  startPayment();

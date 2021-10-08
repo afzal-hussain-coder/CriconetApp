@@ -5,6 +5,45 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:keepScreenOn="true">
+    <RelativeLayout
+        android:id="@+id/rl_share_screen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_gravity="right"
+        android:onClick="onScreenShare"
+        android:visibility="gone"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_marginEnd="@dimen/_10sdp">
+        <com.pb.criconet.propeller.ui.AGLinearLayout
+            android:id="@+id/ag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/_5sdp"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/transparent_circle"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
+                android:onClick="onSwitchCameraClicked"
+                android:src="@drawable/ic_ios_share_black_24dp"
+                android:contentDescription="@string/app_name" />
+
+        </com.pb.criconet.propeller.ui.AGLinearLayout>
+        <TextView
+            android:id="@+id/tv_shareScreen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/_10sdp"
+            android:textColor="@color/white"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/ag"
+            android:fontFamily="@font/opensans_semibold"
+            android:text="@string/share_screen"/>
+    </RelativeLayout>
 
     <com.pb.criconet.layout.GridVideoViewContainer
         android:id="@+id/grid_video_view_container"
@@ -23,44 +62,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="visible">
-        <RelativeLayout
-            android:id="@+id/rl_share_screen"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:onClick="onScreenShare"
-            android:visibility="gone"
-            android:layout_marginTop="@dimen/_10sdp"
-            android:layout_marginEnd="@dimen/_10sdp">
-        <com.pb.criconet.propeller.ui.AGLinearLayout
-            android:id="@+id/ag"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/_5sdp"
-            android:layout_centerHorizontal="true"
-            android:background="@drawable/transparent_circle"
-            android:orientation="vertical">
 
-            <ImageView
-                android:layout_width="@dimen/_20sdp"
-                android:layout_height="@dimen/_20sdp"
-                android:onClick="onSwitchCameraClicked"
-                android:src="@drawable/ic_ios_share_black_24dp"
-                android:contentDescription="@string/app_name" />
-
-        </com.pb.criconet.propeller.ui.AGLinearLayout>
-            <TextView
-                android:id="@+id/tv_shareScreen"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="@dimen/_10sdp"
-                android:textColor="@color/white"
-                android:layout_centerHorizontal="true"
-                android:layout_below="@+id/ag"
-                android:fontFamily="@font/opensans_semibold"
-                android:text="@string/share_screen"/>
-        </RelativeLayout>
         <com.pb.criconet.propeller.ui.AGLinearLayout
             android:id="@+id/extra_ops_container"
             android:layout_width="wrap_content"
@@ -317,11 +319,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:alpha="0"
+        android:visibility="gone"
         android:background="@color/black_semi_transparent"
         android:fitsSystemWindows="false"
         />
 
     <include layout="@layout/chat_dailog"
-        android:visibility="visible"
+        android:visibility="gone"
         />
 </FrameLayout>

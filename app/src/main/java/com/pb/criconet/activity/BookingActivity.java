@@ -204,7 +204,9 @@ public class BookingActivity extends AppCompatActivity implements BookingHistory
                             results = new Uri[]{Uri.parse(dataString)};
                         }
                     }
-                } else if (requestCode == CAPTURE_VIDEO) {
+                }
+                //..record video code comment here.
+                /*else if (requestCode == CAPTURE_VIDEO) {
                     Uri selectedVideo = intent.getData();
 
                     String[] filePathColumn = {MediaStore.Video.Media.DATA};
@@ -249,9 +251,9 @@ public class BookingActivity extends AppCompatActivity implements BookingHistory
                         }
                     }
 
-                }
-//                mUMA.onReceiveValue(results);
-//                mUMA = null;
+                }*/
+                mUMA.onReceiveValue(results);
+                mUMA = null;
             }
 
         } else {
@@ -312,10 +314,10 @@ public class BookingActivity extends AppCompatActivity implements BookingHistory
 
     @SuppressLint("SetJavaScriptEnabled")
     private void initializeView() {
-        fabCreate = (FloatingTextButton)findViewById(R.id.action_button);
-        fabCreate.setOnClickListener(view -> {
-            openCameraVideo();
-        });
+//        fabCreate = (FloatingTextButton)findViewById(R.id.action_button);
+//        fabCreate.setOnClickListener(view -> {
+//            openCameraVideo();
+//        });
         webView =findViewById(R.id.web_chat);
         progressBar = findViewById(R.id.loadingVieww);
         webView.setWebViewClient(new Callback());
@@ -933,168 +935,168 @@ public class BookingActivity extends AppCompatActivity implements BookingHistory
 
 
     /*Record Video code start here..*/
-    private void openCameraVideo() {
-        File saveFolder = new File(Environment.getExternalStorageDirectory(), "Utopiaxxx");
-        try {
-            Intent takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
-            takeVideoIntent.putExtra(MediaStore.EXTRA_DURATION_LIMIT, 30);
-
-            if (takeVideoIntent.resolveActivity(mActivity.getPackageManager()) != null) {
-                startActivityForResult(takeVideoIntent, CAPTURE_VIDEO);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-
-    private void EmailOtpDialog(Bitmap thumbnail,String postFile) {
-        Dialog dialog = new Dialog(mActivity);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.setContentView(R.layout.dialog_record_video_upload);
-        dialog.setCancelable(false);
-        ImageView img_video = dialog.findViewById(R.id.img_video);
-        img_video.setImageBitmap(thumbnail);
-        FrameLayout fl_cancel= dialog.findViewById(R.id.fl_cancel);
-        fl_cancel.setOnClickListener(view -> {
-            dialog.dismiss();
-        });
-        FrameLayout fl_upload_video= dialog.findViewById(R.id.fl_upload_video);
-        fl_upload_video.setOnClickListener(view -> {
-            //PostFeedFinal(postFile);
-            dialog.dismiss();
-            uploadVideoToServer(postFile);
-        });
-
-        dialog.show();
-    }
-
-    public void PostFeedFinal(String postFile) {
-        try {
-            //progress.show();
-            loaderView.showLoader();
-
-            MultipartEntity entity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
-            Timber.e("Chuncked %b", entity.isChunked());
-//            entity.addPart("s", new StringBody("1"));
-            entity.addPart("user_id", new StringBody(SessionManager.get_user_id(prefs)));
-            entity.addPart("s", new StringBody(SessionManager.get_session_id(prefs)));
-            if (!postFile.isEmpty()) {
-                File file = new File(postFile);
-                FileBody fileBody = new FileBody(file);
-                entity.addPart("postVideo ", fileBody);
-            }
-
-
-            MultipartRequest req = new MultipartRequest(Global.URL + Global.UPLOAD_VIDEO,
-                    new Response.Listener<String>() {
-                        @Override
-                        public void onResponse(String response) {
-                            try {
-                                //progress.dismiss();
-                                loaderView.hideLoader();
-                                Timber.e(response);
-                                JSONObject jsonObject2, jsonObject = new JSONObject(response.toString());
-                                if (jsonObject.optString("api_text").equalsIgnoreCase("success")) {
-
-                                } else if (jsonObject.optString("api_text").equalsIgnoreCase("failed")) {
-                                    Global.msgDialog(mActivity, jsonObject.optJSONObject("errors").optString("error_text"));
-                                } else {
-                                    Global.msgDialog(mActivity, "Error in server");
-                                }
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    },
-                    new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            //progress.dismiss();
-                            loaderView.hideLoader();
-                            error.printStackTrace();
-                        }
-                    },
-                    entity);
-
-            Log.d("PostEntity",entity.toString());
-
-
-            int socketTimeout = 50000;
-            RetryPolicy policy = new DefaultRetryPolicy(socketTimeout,
-                    DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                    DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-            req.setRetryPolicy(policy);
-            queue.add(req);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-
-    }
-
-    private RequestBody bodyPart(String name) {
-        return RequestBody.create(MediaType.parse("multipart/form-data"), name);
-    }
-    private void uploadVideoToServer(String postFile) {
-
-        try{
-            File videoFile = new File(postFile);
-            RequestBody videoBody = RequestBody.create(MediaType.parse("application/octet-stream"), videoFile);
-            MultipartBody.Part vFile = MultipartBody.Part.createFormData("postVideo", videoFile.getName(), videoBody);
-
-            VideoInterface vInterface = ApiInterfaceService.getApiService();
-            //VideoInterface vInterface = retrofit.create(VideoInterface.class);
-            Call<ResultObject> serverCom = vInterface.uploadVideoToServerr(vFile,
-                    bodyPart(SessionManager.get_user_id(prefs)),
-                    bodyPart(SessionManager.get_session_id(prefs)),
-                    bodyPart(postFile));
-
-            //progress.show();
-            loaderView.showLoader();
-
-            serverCom.enqueue(new retrofit2.Callback<ResultObject>() {
-                @Override
-                public void onResponse(Call<ResultObject> call, retrofit2.Response<ResultObject> response) {
-                    try {
-                        //progress.dismiss();
-                        loaderView.hideLoader();
-//                        tv_post.setVisibility(View.GONE);
-//                        img_addpost.setVisibility(View.VISIBLE);
-                        Timber.e(String.valueOf(response));
-                        ResultObject result = response.body();
-                        Timber.e(result.toString());
-                        if (result.getApi_text().equalsIgnoreCase("Success")) {
-                         startActivity(new Intent(mContext,RecordedVideoActivity.class));
-                         finish();
-
-                        } else if (result.getApi_text().equalsIgnoreCase("failed")) {
-                            Global.msgDialog(mActivity, result.getApi_status());
-//                        Global.msgDialog(getActivity(), jsonObject.optJSONObject("errors").optString("error_text"));
-                        } else {
-                            Global.msgDialog(mActivity, "Error in server");
-                        }
-                    } catch (Exception e) {
-                        //progress.dismiss();
-                        loaderView.hideLoader();
-                        e.printStackTrace();
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<ResultObject> call, Throwable t) {
-                    //progress.dismiss();
-                    loaderView.hideLoader();
-                    Timber.e("Error message Home %s", t.getMessage());
-                }
-            });
-        }catch(Exception e){
-            e.printStackTrace();
-        }
-
-    }
+//    private void openCameraVideo() {
+//        File saveFolder = new File(Environment.getExternalStorageDirectory(), "Utopiaxxx");
+//        try {
+//            Intent takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+//            takeVideoIntent.putExtra(MediaStore.EXTRA_DURATION_LIMIT, 30);
+//
+//            if (takeVideoIntent.resolveActivity(mActivity.getPackageManager()) != null) {
+//                startActivityForResult(takeVideoIntent, CAPTURE_VIDEO);
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
+//
+//
+//    private void EmailOtpDialog(Bitmap thumbnail,String postFile) {
+//        Dialog dialog = new Dialog(mActivity);
+//        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+//        Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+//        dialog.setContentView(R.layout.dialog_record_video_upload);
+//        dialog.setCancelable(false);
+//        ImageView img_video = dialog.findViewById(R.id.img_video);
+//        img_video.setImageBitmap(thumbnail);
+//        FrameLayout fl_cancel= dialog.findViewById(R.id.fl_cancel);
+//        fl_cancel.setOnClickListener(view -> {
+//            dialog.dismiss();
+//        });
+//        FrameLayout fl_upload_video= dialog.findViewById(R.id.fl_upload_video);
+//        fl_upload_video.setOnClickListener(view -> {
+//            //PostFeedFinal(postFile);
+//            dialog.dismiss();
+//            uploadVideoToServer(postFile);
+//        });
+//
+//        dialog.show();
+//    }
+//
+//    public void PostFeedFinal(String postFile) {
+//        try {
+//            //progress.show();
+//            loaderView.showLoader();
+//
+//            MultipartEntity entity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
+//            Timber.e("Chuncked %b", entity.isChunked());
+////            entity.addPart("s", new StringBody("1"));
+//            entity.addPart("user_id", new StringBody(SessionManager.get_user_id(prefs)));
+//            entity.addPart("s", new StringBody(SessionManager.get_session_id(prefs)));
+//            if (!postFile.isEmpty()) {
+//                File file = new File(postFile);
+//                FileBody fileBody = new FileBody(file);
+//                entity.addPart("postVideo ", fileBody);
+//            }
+//
+//
+//            MultipartRequest req = new MultipartRequest(Global.URL + Global.UPLOAD_VIDEO,
+//                    new Response.Listener<String>() {
+//                        @Override
+//                        public void onResponse(String response) {
+//                            try {
+//                                //progress.dismiss();
+//                                loaderView.hideLoader();
+//                                Timber.e(response);
+//                                JSONObject jsonObject2, jsonObject = new JSONObject(response.toString());
+//                                if (jsonObject.optString("api_text").equalsIgnoreCase("success")) {
+//
+//                                } else if (jsonObject.optString("api_text").equalsIgnoreCase("failed")) {
+//                                    Global.msgDialog(mActivity, jsonObject.optJSONObject("errors").optString("error_text"));
+//                                } else {
+//                                    Global.msgDialog(mActivity, "Error in server");
+//                                }
+//                            } catch (Exception e) {
+//                                e.printStackTrace();
+//                            }
+//                        }
+//                    },
+//                    new Response.ErrorListener() {
+//                        @Override
+//                        public void onErrorResponse(VolleyError error) {
+//                            //progress.dismiss();
+//                            loaderView.hideLoader();
+//                            error.printStackTrace();
+//                        }
+//                    },
+//                    entity);
+//
+//            Log.d("PostEntity",entity.toString());
+//
+//
+//            int socketTimeout = 50000;
+//            RetryPolicy policy = new DefaultRetryPolicy(socketTimeout,
+//                    DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+//                    DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+//            req.setRetryPolicy(policy);
+//            queue.add(req);
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//
+//
+//    }
+//
+//    private RequestBody bodyPart(String name) {
+//        return RequestBody.create(MediaType.parse("multipart/form-data"), name);
+//    }
+//    private void uploadVideoToServer(String postFile) {
+//
+//        try{
+//            File videoFile = new File(postFile);
+//            RequestBody videoBody = RequestBody.create(MediaType.parse("application/octet-stream"), videoFile);
+//            MultipartBody.Part vFile = MultipartBody.Part.createFormData("postVideo", videoFile.getName(), videoBody);
+//
+//            VideoInterface vInterface = ApiInterfaceService.getApiService();
+//            //VideoInterface vInterface = retrofit.create(VideoInterface.class);
+//            Call<ResultObject> serverCom = vInterface.uploadVideoToServerr(vFile,
+//                    bodyPart(SessionManager.get_user_id(prefs)),
+//                    bodyPart(SessionManager.get_session_id(prefs)),
+//                    bodyPart(postFile));
+//
+//            //progress.show();
+//            loaderView.showLoader();
+//
+//            serverCom.enqueue(new retrofit2.Callback<ResultObject>() {
+//                @Override
+//                public void onResponse(Call<ResultObject> call, retrofit2.Response<ResultObject> response) {
+//                    try {
+//                        //progress.dismiss();
+//                        loaderView.hideLoader();
+////                        tv_post.setVisibility(View.GONE);
+////                        img_addpost.setVisibility(View.VISIBLE);
+//                        Timber.e(String.valueOf(response));
+//                        ResultObject result = response.body();
+//                        Timber.e(result.toString());
+//                        if (result.getApi_text().equalsIgnoreCase("Success")) {
+//                         startActivity(new Intent(mContext,RecordedVideoActivity.class));
+//                         finish();
+//
+//                        } else if (result.getApi_text().equalsIgnoreCase("failed")) {
+//                            Global.msgDialog(mActivity, result.getApi_status());
+////                        Global.msgDialog(getActivity(), jsonObject.optJSONObject("errors").optString("error_text"));
+//                        } else {
+//                            Global.msgDialog(mActivity, "Error in server");
+//                        }
+//                    } catch (Exception e) {
+//                        //progress.dismiss();
+//                        loaderView.hideLoader();
+//                        e.printStackTrace();
+//                    }
+//                }
+//
+//                @Override
+//                public void onFailure(Call<ResultObject> call, Throwable t) {
+//                    //progress.dismiss();
+//                    loaderView.hideLoader();
+//                    Timber.e("Error message Home %s", t.getMessage());
+//                }
+//            });
+//        }catch(Exception e){
+//            e.printStackTrace();
+//        }
+//
+//    }
     /*End Record Video Code */
 
 

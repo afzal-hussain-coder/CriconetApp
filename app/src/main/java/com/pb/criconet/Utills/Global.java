@@ -65,7 +65,7 @@ public class Global {
     /*for debug*/
     //public static final String URL = "https://stage.criconetonline.com/app_api.php?type=";
     //public static final String URL_CHAT = "https://stage.criconetonline.com";
-   // public static String GameURL = "https://criconetonline.com/cricket_js/index.php?";
+    //public static String GameURL = "https://criconetonline.com/cricket_js/index.php?";
 
     /*for live*/
     public static final String URL = "https://www.criconet.com/app_api.php?type=";

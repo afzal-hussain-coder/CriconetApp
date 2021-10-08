@@ -610,7 +610,6 @@ public class HomeFragment extends Fragment implements BSImagePicker.OnMultiImage
                     cursor.moveToFirst();
                     String capturedImageFilePath = cursor.getString(column_index_data);
                     postFile = capturedImageFilePath;
-
                     up_image.setVisibility(View.VISIBLE);
                     Glide.with(getActivity()).load(postFile).into(up_image);
 
@@ -653,18 +652,18 @@ public class HomeFragment extends Fragment implements BSImagePicker.OnMultiImage
                             kblength = kblength / 1024;
                             long mblength = kblength / 1024;
                             System.out.println("file.mblength() = " + mblength);
-                        if (mblength > 51) {
-                            System.out.println("file.length() = " + mblength);
-                            Global.msgDialog(getActivity(), "File Size Too Large, \n Must be less than 50 MB");
-                            //progress.dismiss();
-                            loaderView.hideLoader();
-                        } else {
-                            up_image.setVisibility(View.VISIBLE);
-                            up_image.setImageBitmap(thumb);
-                            //progress.dismiss();
-                            loaderView.hideLoader();
-                            setHasOptionsMenu(true);
-                        }
+                            if (mblength > 51) {
+                                System.out.println("file.length() = " + mblength);
+                                Global.msgDialog(getActivity(), "File Size Too Large, \n Must be less than 50 MB");
+                                //progress.dismiss();
+                                loaderView.hideLoader();
+                            } else {
+                                up_image.setVisibility(View.VISIBLE);
+                                up_image.setImageBitmap(thumb);
+                                //progress.dismiss();
+                                loaderView.hideLoader();
+                                setHasOptionsMenu(true);
+                            }
 
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -676,8 +675,8 @@ public class HomeFragment extends Fragment implements BSImagePicker.OnMultiImage
                     e.printStackTrace();
                 }
 
-                    finally
-                 {
+                finally
+                {
                     if (cursor != null) {
                         cursor.close();
                     }
@@ -742,7 +741,7 @@ public class HomeFragment extends Fragment implements BSImagePicker.OnMultiImage
         StringRequest postRequest = new StringRequest(Request.Method.POST, Global.URL + "home_posts", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-               Log.d("homeResponse",response);
+                Log.d("homeResponse",response);
                 loaderView.hideLoader();
                 //progress.dismiss();
                 try {
@@ -996,7 +995,7 @@ public class HomeFragment extends Fragment implements BSImagePicker.OnMultiImage
     }
 
     private void dislikeFeed(final String id) {
-       // progress.show();
+        // progress.show();
         loaderView.showLoader();
         StringRequest postRequest = new StringRequest(Request.Method.POST, Global.URL + "unlike_on_post", new Response.Listener<String>() {
             @Override
@@ -1048,14 +1047,14 @@ public class HomeFragment extends Fragment implements BSImagePicker.OnMultiImage
     }
 
     public void ReportFeed(final String id, final String message) {
-       // progress.show();
+        // progress.show();
         loaderView.showLoader();
         StringRequest postRequest = new StringRequest(Request.Method.POST, Global.URL + "report_post", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 Timber.e(String.valueOf(response));
                 loaderView.hideLoader();
-               // progress.dismiss();
+                // progress.dismiss();
                 try {
                     JSONObject jsonObject2, jsonObject = new JSONObject(response.toString());
                     if (jsonObject.optString("api_text").equalsIgnoreCase("Success")) {
@@ -1251,6 +1250,10 @@ public class HomeFragment extends Fragment implements BSImagePicker.OnMultiImage
                                 loaderView.hideLoader();
                                 up_text.setText("");
                                 up_image.setImageURI(null);
+                                send_panel.setVisibility(View.GONE);
+                                tv_post.setVisibility(View.GONE);
+                                img_close.setVisibility(View.GONE);
+                                img_addpost.setVisibility(View.VISIBLE);
                                 Timber.e(response);
                                 JSONObject jsonObject2, jsonObject = new JSONObject(response.toString());
                                 if (jsonObject.optString("api_text").equalsIgnoreCase("success")) {
@@ -1371,42 +1374,32 @@ public class HomeFragment extends Fragment implements BSImagePicker.OnMultiImage
             progressBar.setProgress(0);
             super.onPreExecute();
         }
-
         @Override
         protected void onProgressUpdate(Integer... progress) {
             // Making progress bar visible
             progressBar.setVisibility(View.VISIBLE);
-
             // updating progress bar value
             progressBar.setProgress(progress[0]);
-
             // updating percentage value
            // txtPercentage.setText(String.valueOf(progress[0]) + "%");
         }
-
         @Override
         protected String doInBackground(Void... params) {
             return uploadFile();
         }
-
         @SuppressWarnings("deprecation")
         private String uploadFile() {
             String responseString = null;
-
             HttpClient httpclient = new DefaultHttpClient();
             HttpPost httppost = new HttpPost(Global.FILE_UPLOAD_URL);
-
             try {
                 AndroidMultiPartEntity entity = new AndroidMultiPartEntity(
                         new AndroidMultiPartEntity.ProgressListener() {
-
                             @Override
                             public void transferred(long num) {
                                 publishProgress((int) ((num / (float) totalSize) * 100));
                             }
                         });
-
-
                 File sourceFile = new File(postFile);
                 // Adding file data to http body
                 entity.addPart("postVideo", new FileBody(sourceFile));
@@ -1415,20 +1408,15 @@ public class HomeFragment extends Fragment implements BSImagePicker.OnMultiImage
                 Log.e("RanjeetTest",">>>>>>>>"+SessionManager.get_session_id(prefs));
                 Log.e("RanjeetTest",">>>>>>>>"+String.valueOf(postPrivacy));
                 Log.e("RanjeetTest",">>>>>>>>"+feedText);
-
                 entity.addPart("user_id",new StringBody(SessionManager.get_user_id(prefs)));
                 entity.addPart("s", new StringBody(SessionManager.get_session_id(prefs)));
                 entity.addPart("postPrivacy", new StringBody(String.valueOf(postPrivacy)));
                 entity.addPart("postText", new StringBody(feedText));
                 totalSize = entity.getContentLength();
                 httppost.setEntity(entity);
-
-
-
                 // Making server call
                 HttpResponse response = httpclient.execute(httppost);
                 HttpEntity r_entity = response.getEntity();
-
                 int statusCode = response.getStatusLine().getStatusCode();
                 if (statusCode == 200) {
                     // Server response
@@ -1437,21 +1425,16 @@ public class HomeFragment extends Fragment implements BSImagePicker.OnMultiImage
                     responseString = "Error occurred! Http Status Code: "
                             + statusCode;
                 }
-
             } catch (ClientProtocolException e) {
                 responseString = e.toString();
             } catch (IOException e) {
                 responseString = e.toString();
             }
-
             return responseString;
-
         }
-
         @Override
         protected void onPostExecute(String result) {
             Log.e("RanjeetTest", "Response from server: " + result);
-
             // showing the server response in an alert dialog
             try {
                 Gson gson = new Gson();
@@ -1463,14 +1446,11 @@ public class HomeFragment extends Fragment implements BSImagePicker.OnMultiImage
                 } else {
                     Global.msgDialog(getActivity(), "Error in server");
                 }
-
             }catch (Exception ex){
                 ex.printStackTrace();
             }
-
             super.onPostExecute(result);
         }
-
     }*/
 
     private void ResetFeed() {
@@ -1578,3 +1558,4 @@ public class HomeFragment extends Fragment implements BSImagePicker.OnMultiImage
         }
     }
 }
+

@@ -161,7 +161,9 @@ public class MainActivity extends BaseActivity {
         list_nav = findViewById(R.id.list_nav);
         text = new ArrayList<>();
         text.add(new Drawer(getString(R.string.home), false, R.drawable.ic_home));
-        text.add(new Drawer(getString(R.string.recorded_video), false, R.drawable.record_video));
+
+        // Record Video Code Commented
+        /*text.add(new Drawer(getString(R.string.recorded_video), false, R.drawable.record_video));*/
 
         profile_pic.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -233,7 +235,7 @@ public class MainActivity extends BaseActivity {
             }
         });
 
-
+        navigationController.navigateToHomeFragment();
         bottomNavigation.setMenuItemSelectionListener(
                 new BottomNavigation.OnMenuItemSelectionListener() {
                     @SuppressLint("NonConstantResourceId")
@@ -264,6 +266,18 @@ public class MainActivity extends BaseActivity {
                 }
         );
 
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            //Log.d("TypeNo",getIntent().getExtras().getString("type")+"Helo");
+            if (bundle.getString("type").equalsIgnoreCase("live_streaming")) {
+                bottomNavigation.setSelectedIndex(2, true);
+            } else if(bundle.getString("type").equalsIgnoreCase("coachFreagment")){
+                bottomNavigation.setSelectedIndex(1, true);
+            } //navigationController.navigateToHomeFragment();
+
+        }
+
+
         //socialLink();
     }
 
@@ -271,22 +285,22 @@ public class MainActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
         toggle.syncState();
-        Bundle bundle = getIntent().getExtras();
-
-
-        if (bundle != null) {
-            //Log.d("TypeNo",getIntent().getExtras().getString("type")+"Helo");
-            if (bundle.getString("type").equalsIgnoreCase("live_streaming")) {
-                navigationController.navigatoLiveMatchesFragment();
-            } else if(bundle.getString("type").equalsIgnoreCase("coachFreagment")){
-                navigationController.navigatoCoachFragment();
-            } else{
-                navigationController.navigateToHomeFragment();
-            }
-        }
-        else{
-            navigationController.navigateToHomeFragment();
-        }
+//        Bundle bundle = getIntent().getExtras();
+//
+//           Toaster.customToast("Activity");
+//        if (bundle != null) {
+//            //Log.d("TypeNo",getIntent().getExtras().getString("type")+"Helo");
+//            if (bundle.getString("type").equalsIgnoreCase("live_streaming")) {
+//                navigationController.navigatoLiveMatchesFragment();
+//            } else if(bundle.getString("type").equalsIgnoreCase("coachFreagment")){
+//                navigationController.navigatoCoachFragment();
+//            } else{
+//                navigationController.navigateToHomeFragment();
+//            }
+//        }
+//        else{
+//            navigationController.navigateToHomeFragment();
+//        }
     }
 
 //    @Override
@@ -374,10 +388,11 @@ public class MainActivity extends BaseActivity {
         } else if (text.get(position).getTitle().equalsIgnoreCase("Slot")) {
             navigationController.navigatoMenuFragment(true);
         }
-        else if (text.get(position).getTitle().equalsIgnoreCase("Recorded Video")) {
-            startActivity(new Intent(mActivity,RecordedVideoActivity.class));
-
-        }
+        // Record Video Commented ...if require please unCommented code hare.
+//        else if (text.get(position).getTitle().equalsIgnoreCase("Recorded Video")) {
+//            startActivity(new Intent(mActivity,RecordedVideoActivity.class));
+//
+//        }
         else if (text.get(position).getTitle().equalsIgnoreCase("Booking History")) {
             startActivity(new Intent(mActivity,BookingActivity.class));
             finish();
@@ -556,9 +571,10 @@ public class MainActivity extends BaseActivity {
 
                        // text.add(new Drawer(getString(R.string.pages), false, R.drawable.ic_page));
                         text.add(new Drawer(getString(R.string.booking_history), false, R.drawable.ic_booking_history));
-                        if (!gameSettingsStataus.equalsIgnoreCase("0")) {
+                        if (gameSettingsStataus.equalsIgnoreCase("1")) {
                             text.add(new Drawer(getString(R.string.game), false, R.drawable.super_six));
-                        }
+                        }//text.add(new Drawer(getString(R.string.game), false, R.drawable.super_six));
+
 
                         try {
                             text.add(new Drawer(pageURL.getAboutECoaching().getString("title"), false, R.drawable.e_coaching));
