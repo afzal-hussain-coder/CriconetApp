@@ -63,7 +63,7 @@ public class Splash extends Activity {
                 booking_id =bundle.getString("booking_id");
             }
 
-          // Log.d("SpashNo",type+"/"+booking_id);
+          Log.d("SpashNo",type+"/"+booking_id);
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -168,7 +168,7 @@ public class Splash extends Activity {
 //                    } else {
                     if(type.equalsIgnoreCase("Coach_List")){
                         Intent intent = new Intent(Splash.this, MainActivity.class);
-                        intent.putExtra("type", "coachFreagment");
+                        intent.putExtra("type", "Coach_List");
                         startActivity(intent);
                         finish();
                     }else if(type.equalsIgnoreCase("live_streaming")){

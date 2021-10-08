@@ -268,10 +268,14 @@ public class MainActivity extends BaseActivity {
         if (getIntent().getExtras() != null) {
             if (getIntent().getExtras().getString("type").equalsIgnoreCase("live_streaming")) {
                 navigationController.navigatoLiveMatchesFragment();
-            } else if(getIntent().getExtras().getString("type").equalsIgnoreCase("coachFreagment")){
+            } else if(getIntent().getExtras().getString("type").equalsIgnoreCase("Coach_List")){
+                navigationController.navigatoCoachFragment();
+            }else if(getIntent().getExtras().getString("type").equalsIgnoreCase("coachFreagment")){
                 navigationController.navigatoCoachFragment();
             }
+           // Log.d("Type",getIntent().getExtras().getString("type"));
         }
+       // Log.d("Type",getIntent().getExtras().getString("type"));
         //socialLink();
     }
 
@@ -279,7 +283,6 @@ public class MainActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
         toggle.syncState();
-
     }
 
 //    @Override
