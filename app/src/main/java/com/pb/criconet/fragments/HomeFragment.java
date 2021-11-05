@@ -161,7 +161,6 @@ public class HomeFragment extends Fragment implements BSImagePicker.OnMultiImage
     private TextView link_title, link_content;
     private Spinner spn_privacy;
     private String url_link, url_title, url_content, url_image;
-    private ProgressBar progressBar;
     CustomLoaderView loaderView;
     int page = 1;
     private LinearLayoutManager mLayoutManager;
@@ -224,10 +223,6 @@ public class HomeFragment extends Fragment implements BSImagePicker.OnMultiImage
             loaderView = CustomLoaderView.initialize(getActivity());
             prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
             queue = Volley.newRequestQueue(getActivity());
-//            progress = new ProgressDialog(getActivity());
-//            progress.setMessage(getString(R.string.loading));
-//            progress.setCancelable(false);
-
             initializeView(rootView);
 
         } catch (InflateException e) {
@@ -277,7 +272,6 @@ public class HomeFragment extends Fragment implements BSImagePicker.OnMultiImage
         up_image =  rootView.findViewById(R.id.up_image);
         add_photo =  rootView.findViewById(R.id.add_photo);
         add_video = rootView.findViewById(R.id.add_video);
-        progressBar =  rootView.findViewById(R.id.progressBar);
         add_chat =  rootView.findViewById(R.id.add_chat);
         notfound =  rootView.findViewById(R.id.notfound);
         up_text =  rootView.findViewById(R.id.up_text);

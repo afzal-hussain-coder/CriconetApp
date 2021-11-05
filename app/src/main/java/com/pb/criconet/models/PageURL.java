@@ -98,6 +98,16 @@ public class PageURL implements Serializable {
     private JSONObject groundOwner;
     private JSONObject liveStreaming;
 
+    public JSONObject getCarrer() {
+        return Carrer;
+    }
+
+    public void setCarrer(JSONObject carrer) {
+        Carrer = carrer;
+    }
+
+    private JSONObject Carrer;
+
     public JSONObject getMediaReleases() {
         return MediaReleases;
     }
@@ -233,6 +243,16 @@ public class PageURL implements Serializable {
              }
 
          }
+
+         if(jsonObject.has("career")){
+             try {
+                 this.Carrer=jsonObject.getJSONObject("career");
+             } catch (JSONException e) {
+                 e.printStackTrace();
+             }
+
+         }
+
 
     }
 

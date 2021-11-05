@@ -23,7 +23,6 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
@@ -34,7 +33,6 @@ import androidx.core.app.NotificationCompat;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
-import com.pb.criconet.Utills.Toaster;
 import com.pb.criconet.activity.BookingActivity;
 import com.pb.criconet.activity.MainActivity;
 import com.pb.criconet.R;
@@ -44,7 +42,6 @@ import com.pb.criconet.Utills.SessionManager;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Map;
 import java.util.Random;
 
 import io.agora.rtc.IRtcEngineEventHandler;
@@ -83,7 +80,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         // message, here is where that should be initiated. See sendNotification method below.
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
         // TODO(developer): Handle FCM messages here.
-
         Log.d("From: %s",remoteMessage.getFrom());
         if (remoteMessage.getData().size() > 0) {
             Log.d("Message data: %s", remoteMessage.getData().toString());
@@ -176,7 +172,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                     .setVibrate(new long[]{1000, 1000})
                     .setContentIntent(pendingIntent);
 
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             notificationBuilder.setSmallIcon(R.drawable.app_icon);
         } else {
             notificationBuilder.setSmallIcon(R.drawable.app_icon);

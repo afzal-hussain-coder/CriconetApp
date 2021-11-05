@@ -1,1 +1,2 @@
-include ':app', ':bsimagepicker', ':AnimatedLoadingIndicator',':rtcTokengenerator',':lib-screensharing',':lib-component'
+include ':app', ':bsimagepicker', ':AnimatedLoadingIndicator',':rtcTokengenerator' ,':screensharing', ':libagorartc'
+/*,':agora-simple-filter'*/

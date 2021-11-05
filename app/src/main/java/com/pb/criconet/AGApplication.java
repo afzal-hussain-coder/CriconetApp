@@ -23,20 +23,20 @@ public class AGApplication extends Application {
     private static GoogleAnalytics sAnalytics;
     private static Tracker sTracker;
 
-   // private final Logger log = LoggerFactory.getLogger(this.getClass());
-    private RtcEngine mRtcEngine;
+    // private final Logger log = LoggerFactory.getLogger(this.getClass());
+    /*private RtcEngine mRtcEngine;
     private EngineConfig mConfig;
-    private MyEngineEventHandler mEventHandler;
+    private MyEngineEventHandler mEventHandler;*/
     private static Context _Context;
     private static ChatManager mChatManager;
 
-    public RtcEngine rtcEngine() {
-        return mRtcEngine;
-    }
-
-    public EngineConfig config() {
-        return mConfig;
-    }
+    //    public RtcEngine rtcEngine() {
+//        return mRtcEngine;
+//    }
+//
+//    public EngineConfig config() {
+//        return mConfig;
+//    }
     public static Context getContext() {
         return _Context;
     }
@@ -45,13 +45,13 @@ public class AGApplication extends Application {
         return mVideoSettings;
     }
 
-    public void addEventHandler(AGEventHandler handler) {
-        mEventHandler.addEventHandler(handler);
-    }
-
-    public void remoteEventHandler(AGEventHandler handler) {
-        mEventHandler.removeEventHandler(handler);
-    }
+//    public void addEventHandler(AGEventHandler handler) {
+//        mEventHandler.addEventHandler(handler);
+//    }
+//
+//    public void remoteEventHandler(AGEventHandler handler) {
+//        mEventHandler.removeEventHandler(handler);
+//    }
 
     private static HttpProxyCacheServer proxy;
 
@@ -63,7 +63,7 @@ public class AGApplication extends Application {
     public void onCreate() {
         super.onCreate();
         _Context=this;
-        createRtcEngine();
+        //createRtcEngine();
         Timber.plant(new Timber.DebugTree());
         proxy = new HttpProxyCacheServer(this);
         mChatManager = new ChatManager(this);
@@ -88,7 +88,7 @@ public class AGApplication extends Application {
         return mChatManager;
     }
 
-    private void createRtcEngine() {
+    /*private void createRtcEngine() {
         Context context = getApplicationContext();
         String appId = context.getString(R.string.agora_app_id);
         if (TextUtils.isEmpty(appId)) {
@@ -103,29 +103,28 @@ public class AGApplication extends Application {
             //log.error(Log.getStackTraceString(e));
             throw new RuntimeException("NEED TO check rtc sdk init fatal error\n" + Log.getStackTraceString(e));
         }
+//
+//          Sets the channel profile of the Agora RtcEngine.
+//          The Agora RtcEngine differentiates channel profiles and applies different optimization
+//          algorithms accordingly. For example, it prioritizes smoothness and low latency for a
+//          video call, and prioritizes video quality for a video broadcast.
 
-        /*
-          Sets the channel profile of the Agora RtcEngine.
-          The Agora RtcEngine differentiates channel profiles and applies different optimization
-          algorithms accordingly. For example, it prioritizes smoothness and low latency for a
-          video call, and prioritizes video quality for a video broadcast.
-         */
         mRtcEngine.setChannelProfile(Constants.CHANNEL_PROFILE_COMMUNICATION);
 
         // Enables the video module.
         mRtcEngine.enableVideo();
         //rtcEngine().enableVirtualBackground(true,Constant.VIRTUAL_BACKGROUND_SOURCE);
-        /*
-          Enables the onAudioVolumeIndication callback at a set time interval to report on which
-          users are speaking and the speakers' volume.
-          Once this method is enabled, the SDK returns the volume indication in the
-          onAudioVolumeIndication callback at the set time interval, regardless of whether any user
-          is speaking in the channel.
-         */
+
+//          Enables the onAudioVolumeIndication callback at a set time interval to report on which
+//          users are speaking and the speakers' volume.
+//          Once this method is enabled, the SDK returns the volume indication in the
+//          onAudioVolumeIndication callback at the set time interval, regardless of whether any user
+//          is speaking in the channel.
+
         mRtcEngine.enableAudioVolumeIndication(200, 3, false);
 
         mConfig = new EngineConfig();
-    }
+    }*/
 
     @Override
     public void onTerminate() {

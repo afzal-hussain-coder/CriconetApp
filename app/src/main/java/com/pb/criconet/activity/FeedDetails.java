@@ -1,30 +1,27 @@
 package com.pb.criconet.activity;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.Html;
-import android.text.SpannableString;
-import android.text.style.UnderlineSpan;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.MediaController;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.VideoView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -32,7 +29,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
@@ -50,19 +46,12 @@ import com.bumptech.glide.Glide;
 import com.luseen.autolinklibrary.AutoLinkMode;
 import com.luseen.autolinklibrary.AutoLinkOnClickListener;
 import com.luseen.autolinklibrary.AutoLinkTextView;
-import com.pb.criconet.AGApplication;
 import com.pb.criconet.R;
 import com.pb.criconet.Utills.Global;
-import com.pb.criconet.Utills.Mytextview;
-import com.pb.criconet.Utills.NameSingleton;
-import com.pb.criconet.Utills.NonScrollableListView;
 import com.pb.criconet.Utills.SessionManager;
-import com.pb.criconet.Utills.Toaster;
-import com.pb.criconet.adapters.ButtonAdapter;
 import com.pb.criconet.adapters.MyCustomPagerAdapter;
 import com.pb.criconet.fragments.FeedsPhotos;
 import com.pb.criconet.models.CommentModel;
-import com.pb.criconet.models.DataModel;
 import com.pb.criconet.models.ImageModel;
 import com.pb.criconet.models.NewPostModel;
 import com.pb.criconet.models.TagModel;
@@ -70,17 +59,12 @@ import com.pierfrancescosoffritti.youtubeplayer.player.AbstractYouTubePlayerList
 import com.pierfrancescosoffritti.youtubeplayer.player.YouTubePlayer;
 import com.pierfrancescosoffritti.youtubeplayer.player.YouTubePlayerInitListener;
 import com.pierfrancescosoffritti.youtubeplayer.player.YouTubePlayerView;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.StringTokenizer;
 
 import timber.log.Timber;
 
@@ -112,16 +96,18 @@ public class FeedDetails extends AppCompatActivity {
     ViewPager viewPager;
     YouTubePlayerView youtube_view;
     AAH_VideoImage AAH_video;
+    VideoView videoview;
     NewPostModel data;
-
-
+    Context mContext;
+    MediaController mediaController;
 
     @SuppressLint("WrongViewCast")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.feed_details);
-
+        mContext = this;
+        mediaController = new MediaController(this);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -163,7 +149,9 @@ public class FeedDetails extends AppCompatActivity {
         multi_img = (RelativeLayout) findViewById(R.id.multi_img);
         viewPager = (ViewPager) findViewById(R.id.viewPager);
         youtube_view = (YouTubePlayerView) findViewById(R.id.youtube_view);
-        AAH_video = (AAH_VideoImage) findViewById(R.id.AAH_video);
+        //AAH_video = (AAH_VideoImage)findViewById(R.id.AAH_video);
+        videoview = (VideoView)findViewById(R.id.videoview);
+        videoview.setMediaController(mediaController);
 
         edtxt_comment = (EditText) findViewById(R.id.edtxt_comment);
         image_send = (ImageView) findViewById(R.id.image_send_comment);
@@ -439,61 +427,54 @@ public class FeedDetails extends AppCompatActivity {
                     });
                 }
 
-//                if (data.getPost_type().equalsIgnoreCase("Image")) {
-//                    AAH_video.setImageUrl(data.getThumb());
-//                } else if (data.getPost_type().equalsIgnoreCase("Video")) {
-//                    AAH_video.setImageUrl(data.getThumb());
-//                } else {
-//                    AAH_video.setImageUrl(data.getThumb());
-//                }
-//                holder.setVideoUrl(data.getPostFile());
-
-                //load image/thumbnail into imageview
                 if (data.getThumb() != null && !data.getThumb().isEmpty()) {
-//                    Glide.with(FeedDetails.this).load(holder.getImageUrl()).into(holder.getAAH_ImageView());
-                    Picasso.get().load(data.getThumb()).config(Bitmap.Config.RGB_565).into((Target) AAH_video);
+                    videoview.setVisibility(View.VISIBLE);
+                    Uri uri = Uri.parse(data.getPostFile());
+                    videoview.setVideoURI(uri);
+                    videoview.start();
                 }
 
-                //to play pause videos manually (optional)
-                img_playback.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
+//
+//                //to play pause videos manually (optional)
+//                img_playback.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
 //                        try {
-//                            if (isPlaying()) {
-//                                pauseVideo();
-//                                setPaused(true);
+//                            if (videoview.isPlaying()) {
+//                                videoview.stopPlayback();
+//                                //setPaused(true);
 //                            } else {
-//                                setPaused(false);
-//                                playVideo();
+//                                videoview.start();
+//                                //playVideo();
 //                            }
 //                        } catch (Exception e) {
 //                            e.printStackTrace();
 //                        }
-                    }
-                });
+//                    }
+//                });
+//
+//                //to mute/un-mute video (optional)
+//                img_vol.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+////                        if (isMuted) {
+////                            unmuteVideo();
+////                            img_vol.setImageResource(R.drawable.ic_unmute);
+////                        } else {
+////                            muteVideo();
+////                            img_vol.setImageResource(R.drawable.ic_mute);
+////                        }
+////                        isMuted = !isMuted;
+//                    }
+//                });
 
-                //to mute/un-mute video (optional)
-                img_vol.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-//                        if (isMuted) {
-//                            unmuteVideo();
-//                            img_vol.setImageResource(R.drawable.ic_unmute);
-//                        } else {
-//                            muteVideo();
-//                            img_vol.setImageResource(R.drawable.ic_mute);
-//                        }
-//                        isMuted = !isMuted;
-                    }
-                });
-
-                if (data.getPostFile() == null) {
-                    img_vol.setVisibility(View.GONE);
-                    img_playback.setVisibility(View.GONE);
-                } else {
-                    img_vol.setVisibility(View.VISIBLE);
-                    img_playback.setVisibility(View.VISIBLE);
-                }
+//                if (data.getPostFile() == null) {
+//                    img_vol.setVisibility(View.GONE);
+//                    img_playback.setVisibility(View.GONE);
+//                } else {
+//                    img_vol.setVisibility(View.VISIBLE);
+//                    img_playback.setVisibility(View.VISIBLE);
+//                }
 
                 break;
             }
@@ -723,8 +704,6 @@ public class FeedDetails extends AppCompatActivity {
         postRequest.setRetryPolicy(policy);
         queue.add(postRequest);
     }
-
-
     public void ReportDialog(final String id) {
         AlertDialog.Builder alertbox = new AlertDialog.Builder(FeedDetails.this);
         alertbox.setTitle(FeedDetails.this.getResources().getString(R.string.app_name));
@@ -753,7 +732,6 @@ public class FeedDetails extends AppCompatActivity {
                 });
         alertbox.show();
     }
-
     public void ReportFeed(final String id, final String message) {
         progress.show();
         StringRequest postRequest = new StringRequest(Request.Method.POST, Global.URL + "report_post", new Response.Listener<String>() {
@@ -1062,4 +1040,5 @@ public class FeedDetails extends AppCompatActivity {
         startActivity(intent);
         finish();
     }
+
 }

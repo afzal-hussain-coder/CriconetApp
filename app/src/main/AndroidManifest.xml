@@ -33,16 +33,18 @@
         android:icon="@mipmap/ic_launcher_new_round"
         android:label="@string/app_name"
         android:largeHeap="true"
+        android:debuggable="true"
         android:networkSecurityConfig="@xml/network_security_config"
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_new_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
-        tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".activity.PlayRecordedVideoActivity"
+        tools:ignore="GoogleAppIndexingWarning,HardcodedDebugMode">
+        <activity
+            android:name=".activity.PlayRecordedVideoActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activity.RecordedVideoActivity" />
         <activity
             android:name=".activity.GameActivity"
@@ -171,6 +173,9 @@
             android:theme="@style/AppTheme.NoActionBar"
             tools:ignore="LockedOrientationActivity" />
         <activity
+            android:name=".activity.CallActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+        <activity
             android:name=".activity.StreamPlayerActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
@@ -241,9 +246,6 @@
         <activity
             android:name=".activity.CoachDetailsActivity"
             tools:ignore="LockedOrientationActivity" />
-        <activity
-            android:name=".activity.CallActivity"
-            android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity
             android:name=".activity.BookingDetails"
             android:theme="@style/AppTheme.NoActionBar" />

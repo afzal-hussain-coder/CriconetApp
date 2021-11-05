@@ -2,6 +2,7 @@ package com.pb.criconet.activity;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.content.res.TypedArray;
 import android.os.Build;
@@ -32,6 +33,7 @@ import com.pb.criconet.models.AGEventHandler;
 import com.pb.criconet.models.ConstantApp;
 import com.pb.criconet.models.CurrentUserSettings;
 import com.pb.criconet.models.EngineConfig;
+import com.pb.criconet.models.MyEngineEventHandler;
 import com.pb.criconet.propeller.Constant;
 //
 //import org.slf4j.Logger;
@@ -41,6 +43,7 @@ import java.util.Arrays;
 
 
 import io.agora.media.RtcTokenBuilder;
+import io.agora.rtc.Constants;
 import io.agora.rtc.RtcEngine;
 import io.agora.rtc.internal.EncryptionConfig;
 import io.agora.rtc.live.LiveTranscoding;
@@ -51,12 +54,16 @@ import io.agora.rtc.video.VirtualBackgroundSource;
 public abstract class BaseActivity extends AppCompatActivity {
     //private final static Logger log = LoggerFactory.getLogger(BaseActivity.class);
     protected NavigationController navigationController;
+    private RtcEngine mRtcEngine;
+    private EngineConfig mConfig;
+    private MyEngineEventHandler mEventHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         try{
+            createRtcEngine();
             navigationController = new NavigationController(this);
             final View layout = findViewById(Window.ID_ANDROID_CONTENT);
             ViewTreeObserver vto = layout.getViewTreeObserver();
@@ -65,17 +72,17 @@ public abstract class BaseActivity extends AppCompatActivity {
                 @Override
                 public void onGlobalLayout() {
                     //layout.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                    layout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                } else {
-                    //noinspection deprecation
-                    layout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                }
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                        layout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                    } else {
+                        //noinspection deprecation
+                        layout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                    }
                     initUIandEvent();
                 }
             });
         }catch(Exception e){
-         e.printStackTrace();
+            e.printStackTrace();
         }
 
 
@@ -87,6 +94,8 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     protected void permissionGranted() {
     }
+
+    //...New code here..
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
@@ -148,19 +157,19 @@ public abstract class BaseActivity extends AppCompatActivity {
         return (AGApplication) getApplication();
     }
     protected RtcEngine rtcEngine() {
-        return application().rtcEngine();
+        return mRtcEngine;
     }
 
     protected EngineConfig config() {
-        return application().config();
+        return mConfig;
     }
 
     protected void addEventHandler(AGEventHandler handler) {
-        application().addEventHandler(handler);
+        mEventHandler.addEventHandler(handler);
     }
 
     protected void removeEventHandler(AGEventHandler handler) {
-        application().remoteEventHandler(handler);
+        mEventHandler.removeEventHandler(handler);
     }
 
     protected CurrentUserSettings vSettings() {
@@ -332,7 +341,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     public final void joinChannel(final String accessTokenn,final String channel, int uid)  {
         String accessToken = accessTokenn;
 //        try {
-           //accessToken ="006ee06e02d3bdc4193821258811319262fIABykiF3BS73kkFjD5I+vezS8Y6Su68FKIfaBLfcTh10jgECamoAAAAAEAARpytrBA3LYAEAAQABDctg";
+        //accessToken ="006ee06e02d3bdc4193821258811319262fIABykiF3BS73kkFjD5I+vezS8Y6Su68FKIfaBLfcTh10jgECamoAAAAAEAARpytrBA3LYAEAAQABDctg";
 //            accessToken = generateToken(getResources().getString(R.string.agora_app_id),getResources().getString(R.string.app_certificate),channel,
 //                    String.valueOf(uid),uid,3600);
 //
@@ -350,7 +359,6 @@ public abstract class BaseActivity extends AppCompatActivity {
 
 
         enablePreProcessor();
-
         //Toaster.customToast("joinChannel " + channel + " " + uid);
         //log.debug("joinChannel " + channel + " " + uid);
     }
@@ -451,5 +459,44 @@ public abstract class BaseActivity extends AppCompatActivity {
                 fps,
                 VideoEncoderConfiguration.STANDARD_BITRATE,
                 VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_FIXED_PORTRAIT));
+    }
+
+
+    private void createRtcEngine() {
+        Context context = getApplicationContext();
+        String appId = context.getString(R.string.agora_app_id);
+        if (TextUtils.isEmpty(appId)) {
+            throw new RuntimeException("NEED TO use your App ID, get your own ID at https://dashboard.agora.io/");
+        }
+
+        mEventHandler = new MyEngineEventHandler();
+        try {
+            // Creates an RtcEngine instance
+            mRtcEngine = RtcEngine.create(context, appId, mEventHandler);
+        } catch (Exception e) {
+            //log.error(Log.getStackTraceString(e));
+            throw new RuntimeException("NEED TO check rtc sdk init fatal error\n" + Log.getStackTraceString(e));
+        }
+//
+//          Sets the channel profile of the Agora RtcEngine.
+//          The Agora RtcEngine differentiates channel profiles and applies different optimization
+//          algorithms accordingly. For example, it prioritizes smoothness and low latency for a
+//          video call, and prioritizes video quality for a video broadcast.
+
+        mRtcEngine.setChannelProfile(Constants.CHANNEL_PROFILE_COMMUNICATION);
+
+        // Enables the video module.
+        mRtcEngine.enableVideo();
+        //rtcEngine().enableVirtualBackground(true,Constant.VIRTUAL_BACKGROUND_SOURCE);
+
+//          Enables the onAudioVolumeIndication callback at a set time interval to report on which
+//          users are speaking and the speakers' volume.
+//          Once this method is enabled, the SDK returns the volume indication in the
+//          onAudioVolumeIndication callback at the set time interval, regardless of whether any user
+//          is speaking in the channel.
+
+        mRtcEngine.enableAudioVolumeIndication(200, 3, false);
+
+        mConfig = new EngineConfig();
     }
 }

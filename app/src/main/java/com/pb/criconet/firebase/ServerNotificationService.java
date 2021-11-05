@@ -1,18 +1,11 @@
 package com.pb.criconet.firebase;
 
 import android.app.Notification;
-import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.media.AudioAttributes;
-import android.media.Ringtone;
-import android.media.RingtoneManager;
-import android.net.Uri;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -24,22 +17,11 @@ import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.pb.criconet.R;
 import com.pb.criconet.Utills.SessionManager;
-import com.pb.criconet.Utills.Toaster;
-import com.pb.criconet.activity.BookingActivity;
-import com.pb.criconet.activity.BookingDetails;
-import com.pb.criconet.activity.BookingDetailsActivity;
-import com.pb.criconet.activity.MainActivity;
 import com.pb.criconet.activity.Splash;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.io.UnsupportedEncodingException;
-import java.net.URI;
-import java.net.URLDecoder;
-import java.util.Map;
-import java.util.Random;
 
 public class ServerNotificationService extends FirebaseMessagingService {
     public static final String TAG = ServerNotificationService.class.getSimpleName();
@@ -58,7 +40,7 @@ public class ServerNotificationService extends FirebaseMessagingService {
     public void onMessageReceived(@NonNull @NotNull RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
 
-        //Log.d(TAG, "From: " + remoteMessage.getFrom());
+        Log.d(TAG, "From: " + remoteMessage.getFrom());
 
         if (remoteMessage.getData().size() > 0) {
            // Log.d(TAG, "Message data payload: " + remoteMessage.getData());
@@ -98,11 +80,10 @@ public class ServerNotificationService extends FirebaseMessagingService {
             }
 
             sendNotification(sound, icon, title, messageBody, notificationType, booking_id);
+
         }
     }
     
-
-
 
     private void sendNotification(String sound,String icon,String title,String msg,String type,String bookingid) {
 
@@ -129,8 +110,8 @@ public class ServerNotificationService extends FirebaseMessagingService {
 
             PendingIntent contentIntent = PendingIntent.getActivity(this, (int) (Math.random() * 100), intent, 0);
 
-            int currentapiVersion = android.os.Build.VERSION.SDK_INT;
-            if (currentapiVersion >= android.os.Build.VERSION_CODES.LOLLIPOP){
+            int currentapiVersion = Build.VERSION.SDK_INT;
+            if (currentapiVersion >= Build.VERSION_CODES.LOLLIPOP){
                 currentapiVersion = R.drawable.app_logo2;
             } else{
                 currentapiVersion = R.drawable.app_logo2;

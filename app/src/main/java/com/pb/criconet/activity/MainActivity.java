@@ -125,7 +125,7 @@ public class MainActivity extends BaseActivity {
             } else if (state.installStatus() == InstallStatus.INSTALLED) {
                 removeInstallStateUpdateListener();
             } else {
-                Toast.makeText(getApplicationContext(), "InstallStateUpdatedListener: state: " + state.installStatus(), Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "InstallStateUpdatedListener:state: " + state.installStatus(), Toast.LENGTH_LONG).show();
             }
         };
         appUpdateManager.registerListener(installStateUpdatedListener);
@@ -163,7 +163,7 @@ public class MainActivity extends BaseActivity {
         text.add(new Drawer(getString(R.string.home), false, R.drawable.ic_home));
 
         // Record Video Code Commented
-        /*text.add(new Drawer(getString(R.string.recorded_video), false, R.drawable.record_video));*/
+        text.add(new Drawer(getString(R.string.recorded_video),false, R.drawable.record_video));
 
         profile_pic.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -371,10 +371,10 @@ public class MainActivity extends BaseActivity {
             navigationController.navigatoMenuFragment(true);
         }
         // Record Video Commented ...if require please unCommented code hare.
-//        else if (text.get(position).getTitle().equalsIgnoreCase("Recorded Video")) {
-//            startActivity(new Intent(mActivity,RecordedVideoActivity.class));
-//
-//        }
+        else if (text.get(position).getTitle().equalsIgnoreCase("Recorded Video")) {
+            startActivity(new Intent(mActivity,RecordedVideoActivity.class));
+
+        }
         else if (text.get(position).getTitle().equalsIgnoreCase("Booking History")) {
             startActivity(new Intent(mActivity,BookingActivity.class));
             finish();
@@ -438,6 +438,14 @@ public class MainActivity extends BaseActivity {
                         e.printStackTrace();
                     }
                 }
+                else if (text.get(position).getTitle().equalsIgnoreCase(pageURL.getCarrer().getString("title"))) {
+                    try {
+                        startActivity(new Intent(mActivity, WebViewActivity.class).putExtra("URL", pageURL.getCarrer().getString("url")).putExtra("title", pageURL.getCarrer().getString("title")));
+                        finish();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
                 else if (text.get(position).getTitle().equalsIgnoreCase(pageURL.getContact_us().getString("title"))) {
                     startActivity(new Intent(mActivity, WebViewActivity.class).putExtra("URL", pageURL.getContact_us().getString("url")).putExtra("title", pageURL.getContact_us().getString("title")));
                     finish();
@@ -495,7 +503,7 @@ public class MainActivity extends BaseActivity {
         try {
             json.put("user_id", SessionManager.get_user_id(prefs));
             json.put("s", SessionManager.get_session_id(prefs));
-            Log.e(" data  : ", "" + json);
+            //Log.e(" data  : ", "" + json);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -584,6 +592,12 @@ public class MainActivity extends BaseActivity {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
+//                        try {
+//                            text.add(new Drawer(pageURL.getCarrer().getString("title"), false, R.drawable.career));
+//                        } catch (JSONException e) {
+//                            e.printStackTrace();
+//                        }
+
                         text.add(new Drawer(getString(R.string.setting), false, R.drawable.ic_settings_applications));
                         try {
                             text.add(new Drawer(pageURL.getContact_us().getString("title"), false, R.drawable.ic_contact_page_black_24dp));

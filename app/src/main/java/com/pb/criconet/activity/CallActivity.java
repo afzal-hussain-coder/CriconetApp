@@ -4,13 +4,11 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -21,24 +19,21 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Environment;
 import android.os.Handler;
-import android.os.Parcelable;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.SurfaceView;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.view.ViewStub;
 import android.view.Window;
-import android.view.WindowManager;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.DownloadListener;
 import android.webkit.ValueCallback;
@@ -46,19 +41,14 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -81,24 +71,18 @@ import com.pb.criconet.Utills.SessionManager;
 import com.pb.criconet.Utills.Toaster;
 import com.pb.criconet.layout.GridVideoViewContainer;
 import com.pb.criconet.layout.InChannelMessageListAdapter;
-import com.pb.criconet.layout.MessageListDecoration;
 import com.pb.criconet.layout.SmallVideoViewAdapter;
 import com.pb.criconet.layout.SmallVideoViewDecoration;
 import com.pb.criconet.logger.LoggerRecyclerView;
 import com.pb.criconet.models.AGEventHandler;
 import com.pb.criconet.models.ConstantApp;
-import com.pb.criconet.models.Drawer;
 import com.pb.criconet.models.DuringCallEventHandler;
 import com.pb.criconet.models.FeedBackFormChildData;
 import com.pb.criconet.models.Message;
-import com.pb.criconet.models.PageURL;
-import com.pb.criconet.models.User;
 import com.pb.criconet.propeller.Constant;
 import com.pb.criconet.propeller.UserStatusData;
-import com.pb.criconet.propeller.VideoInfoData;
 import com.pb.criconet.propeller.ui.RecyclerItemClickListener;
 import com.pb.criconet.propeller.ui.RtlLinearLayoutManager;
-import com.rilixtech.widget.countrycodepicker.CountryCodePicker;
 
 
 import org.json.JSONArray;
@@ -108,7 +92,6 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
-import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -120,24 +103,15 @@ import java.util.Objects;
 import io.agora.rtc.Constants;
 import io.agora.rtc.IRtcEngineEventHandler;
 import io.agora.rtc.RtcEngine;
-import io.agora.rtc.mediaio.AgoraSurfaceView;
 import io.agora.rtc.ss.ScreenSharingClient;
 import io.agora.rtc.video.VideoCanvas;
 import io.agora.rtc.video.VideoEncoderConfiguration;
-import io.agora.rtc.video.VirtualBackgroundSource;
 import timber.log.Timber;
-
-import static io.agora.rtc.video.VideoCanvas.RENDER_MODE_HIDDEN;
-import static io.agora.rtc.video.VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_30;
-import static io.agora.rtc.video.VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_ADAPTIVE;
-import static io.agora.rtc.video.VideoEncoderConfiguration.STANDARD_BITRATE;
 
 public class CallActivity extends BaseActivity implements DuringCallEventHandler {
     private final String TAG = CallActivity.class.getSimpleName();
     public static final int LAYOUT_TYPE_DEFAULT = 0;
     public static final int LAYOUT_TYPE_SMALL = 1;
-    // private final static Logger log = LoggerFactory.getLogger(CallActivity.class);
-    // should only be modified under UI thread
     private final HashMap<Integer, SurfaceView> mUidsList = new HashMap<>(); // uid = 0 || uid == EngineConfig.mUid
     public int mLayoutType = LAYOUT_TYPE_DEFAULT;
     private GridVideoViewContainer mGridVideoViewContainer;
@@ -145,40 +119,34 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
     private volatile boolean mVideoMuted = false;
     private volatile boolean mAudioMuted = false;
     private volatile boolean mMixingAudio = false;
-
     private volatile int mAudioRouting = Constants.AUDIO_ROUTE_DEFAULT;
-
     private volatile boolean mFullScreen = false;
-
     private boolean mIsLandscape = false;
-
     private InChannelMessageListAdapter mMsgAdapter;
     private ArrayList<Message> mMsgList;
-
     private SmallVideoViewAdapter mSmallVideoViewAdapter;
-
     private final Handler mUIHandler = new Handler();
-    String channelName,accessToken;
+    String channelName, accessToken;
     private SharedPreferences prefs;
     com.pb.criconet.chatModel.User user;
     String image_profile;
     private LoggerRecyclerView mLogView;
-    String userId="",coachId="",coachName="";
-    TextView log_text,log_texth_other;
+    String userId = "", coachId = "", coachName = "";
+    TextView log_text, log_texth_other;
     LinearLayout lin_log;
-    String bookingId="",joinType="";
+    String bookingId = "", joinType = "";
     long timeDuration;
     private RequestQueue queue;
     Activity mActivity;
     TextView tv_timeDuration;
-    ArrayList<FeedBackFormChildData> feedBackFormChildData=null;
+    ArrayList<FeedBackFormChildData> feedBackFormChildData = null;
 
     //WebView web_chat;
     private SlideUp slideUp;
     private View dim, rootView;
     private View slideView;
-    String webUrl="";
-    String coach_id="";
+    String webUrl = "", FROM = "";
+    String coach_id = "";
 
     private final static int FCR = 1;
     WebView webView;
@@ -189,25 +157,11 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
     WebSettings webSettings;
     TextView tv_count;
     RelativeLayout rl_count;
+    RelativeLayout rl_share_screen;
+    TextView tv_doubleClick;
+    LinearLayout li_tap;
+    String shareType="";
 
-    // ScreenSharing
-//    private boolean isSharing = false;
-//    private ScreenSharingClient mSSClient;
-//    RelativeLayout rl_share_screen;
-//    TextView tv_shareScreen;
-//    private static final Integer SCREEN_SHARE_UID = 10000;
-//    private final ScreenSharingClient.IStateListener mListener = new ScreenSharingClient.IStateListener() {
-//        @Override
-//        public void onError(int error) {
-//            Log.e(TAG, "Screen share service error happened: " + error);
-//        }
-//
-//        @Override
-//        public void onTokenWillExpire() {
-//            Log.d(TAG, "Screen share service token will expire");
-//            mSSClient.renewToken(null); // Replace the token with your valid token
-//        }
-//    };
 
     // End of ScreenSharing
     @Override
@@ -250,41 +204,89 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
         }
     }
 
+
+
+    //...share.
+    private VideoEncoderConfiguration mVEC;
+    private ScreenSharingClient mSSClient;
+    private final ScreenSharingClient.IStateListener mListener = new ScreenSharingClient.IStateListener() {
+        @Override
+        public void onError(int error) {
+            Log.e("LOG_TAG", "Screen share service error happened: " + error);
+        }
+
+        @Override
+        public void onTokenWillExpire() {
+            Log.d("LOG_TAG", "Screen share service token will expire");
+            mSSClient.renewToken(accessToken); // Replace the token with your valid token
+        }
+    };
+
+//    private final IRtcEngineEventHandler mRtcEventHandler = new IRtcEngineEventHandler() {
+//
+//        @Override
+//        public void onUserOffline(int uid, int reason) {
+//            Log.d(LOG_TAG, "onUserOffline: " + uid + " reason: " + reason);
+//        }
+//
+//        @Override
+//        public void onJoinChannelSuccess(String channel, int uid, int elapsed) {
+//            Log.d(LOG_TAG, "onJoinChannelSuccess: " + channel + " " + elapsed);
+//        }
+//
+//        @Override
+//        public void onUserJoined(final int uid, int elapsed) {
+//            Log.d(LOG_TAG, "onUserJoined: " + (uid&0xFFFFFFL));
+//            runOnUiThread(new Runnable() {
+//                @Override
+//                public void run() {
+//                    if(uid == com.pb.criconet.sharedscreen.Constant.SCREEN_SHARE_UID) {
+//                        setupRemoteView(uid);
+//
+//                    }
+//                }
+//            });
+//        }
+//    };
+
     @SuppressLint({"SetJavaScriptEnabled", "WrongViewCast"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_call);
         mActivity = this;
-        // Initialize Screen Share Client
-//        mSSClient = ScreenSharingClient.getInstance();
-//        mSSClient.setListener(mListener);
-        // end Screen Share Clientt
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
         queue = Volley.newRequestQueue(this);
-        user =new com.pb.criconet.chatModel.User(SessionManager.get_user_id(prefs));
+        user = new com.pb.criconet.chatModel.User(SessionManager.get_user_id(prefs));
         userId = getIntent().getStringExtra("UserId");
         coachId = getIntent().getStringExtra("CoachId");
-        coachName =getIntent().getStringExtra("Name");
+        coachName = getIntent().getStringExtra("Name");
+        FROM = getIntent().getStringExtra("FROM");
         //bookingId =getIntent().getStringExtra("booking_id");
-        bookingId =getIntent().getStringExtra("id");
-        timeDuration=getIntent().getLongExtra("timeDuration",0);
-        image_profile=SessionManager.get_image(prefs);
-        // mLogView = findViewById(R.id.log_recycler_view);
+        bookingId = getIntent().getStringExtra("id");
+        timeDuration = getIntent().getLongExtra("timeDuration", 0);
+        image_profile = SessionManager.get_image(prefs);
         log_text = findViewById(R.id.log_text);
         log_texth_other = findViewById(R.id.log_texth_other);
         lin_log = findViewById(R.id.lin_log);
         tv_timeDuration = findViewById(R.id.tv_timeDuration);
-        //..start screenSharing..
-//        rl_share_screen = findViewById(R.id.rl_share_screen);
-//        rl_share_screen.setEnabled(false);
-//        tv_shareScreen = findViewById(R.id.tv_shareScreen);
-        // end of ScreenSharing..
+        rl_share_screen = findViewById(R.id.rl_share_screen);
 
-        //........Web Chat .....
+        li_tap = findViewById(R.id.li_tap);
+        tv_doubleClick = (TextView) findViewById(R.id.tv_doubleClick );
+
+
+
+        Animation anim = new AlphaAnimation(0.0f, 1.0f);
+        anim.setDuration(100); //You can manage the blinking time with this parameter
+        anim.setStartOffset(50);
+        anim.setRepeatMode(Animation.REVERSE);
+        anim.setRepeatCount(Animation.INFINITE);
+        tv_doubleClick.startAnimation(anim);
+
         rl_count = findViewById(R.id.rl_count);
         tv_count = findViewById(R.id.tv_count);
-        webView =findViewById(R.id.web_chat);
+        webView = findViewById(R.id.web_chat);
         progressBar = findViewById(R.id.loadingVieww);
         webView.setWebViewClient(new Callback());
         webView.setOverScrollMode(WebView.OVER_SCROLL_NEVER);
@@ -337,6 +339,35 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
         //........End Web Chat...
 
         //user.setFireDisplayName(image_link);
+
+        mSSClient = ScreenSharingClient.getInstance();
+        mSSClient.setListener(mListener);
+
+        mVEC = new VideoEncoderConfiguration(VideoEncoderConfiguration.VD_840x480,
+                VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_24,
+                VideoEncoderConfiguration.STANDARD_BITRATE,
+                VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_ADAPTIVE);
+
+        /*rl_share_screen.setOnClickListener(view -> {
+            shareType ="Share";
+
+
+            mSSClient.start(getApplicationContext(), getResources().getString(R.string.agora_app_id), accessToken,
+                    channelName, com.pb.criconet.sharedscreen.Constant.SCREEN_SHARE_UID, mVEC);
+
+//            startActivity(new Intent(mActivity, CallActivity.class)
+//                    .putExtra("UserId", userId)
+//                    .putExtra("CoachId", coachId)
+//                    .putExtra(ConstantApp.ACTION_KEY_CHANNEL_NAME, channelName)
+//                    .putExtra("Name", coachName)
+//                    .putExtra("booking_id", bookingId)
+//                    .putExtra("timeDuration", timeDuration)
+//                    .putExtra("AccessToken", accessToken)
+//                    .putExtra("FROM", "1"));
+//           finish();
+            //doLeaveChannel();
+        });*/
+
         ActionBar ab = getSupportActionBar();
         if (ab != null) {
             ab.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
@@ -349,48 +380,30 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
             Global.showDialog(mActivity);
         }
 
-       callChatApi();
+        callChatApi();
 
-        //loadWebView();
-        //"https://www.criconet.com/upload/photos/2021/07/6IsaI9PljUC41bZWX3zp_17_19d8ee4223bd62ad93129b2908f8f1b3_image.jpg"
-        //rtcEngine().enableVideo();
     }
 
-    private void callChatApi(){
+    public void onScreenSharingClicked(View view) {
+        TextView tv_share = findViewById(R.id.tv_share);
+        RelativeLayout button = (RelativeLayout) view;
+        boolean selected = button.isSelected();
+        button.setSelected(!selected);
 
-        Handler handler = new Handler();
-
-        final Runnable r = new Runnable() {
-            public void run() {
-                //Initiate your API here
-                if (Global.isOnline(mActivity)) {
-                    getChatNotification();
-                } else {
-                    Global.showDialog(mActivity);
+        if (button.isSelected()) {
+            mSSClient.start(getApplicationContext(), getResources().getString(R.string.agora_app_id), accessToken,
+                    channelName, com.pb.criconet.sharedscreen.Constant.SCREEN_SHARE_UID, mVEC);
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    tv_share.setText(getResources().getString(R.string.label_stop_sharing_your_screen));
                 }
-                handler.postDelayed(this, 2000);
-            }
-        };
+            },3000);
 
-        handler.postDelayed(r, 2000);
-    }
 
-    @Override
-    public boolean onCreateOptionsMenu(final Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_call, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle presses on the action bar items
-        switch (item.getItemId()) {
-            case R.id.action_options:
-                showCallOptions();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        } else {
+            mSSClient.stop(getApplicationContext());
+            tv_share.setText(getResources().getString(R.string.label_start_sharing_your_screen));
         }
     }
 
@@ -401,9 +414,10 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
 
         try {
             //Log.d("Channel",channelName);
-            accessToken = generateToken(getResources().getString(R.string.agora_app_id),getResources().getString(R.string.app_certificate),channelName,0,3600);
-
-            Log.d("AccessToken",accessToken);
+            accessToken = generateToken(getResources().getString(R.string.agora_app_id), getResources().getString(R.string.app_certificate), channelName, 0, 3600);
+            SessionManager.save_accessToken(prefs, accessToken);
+            SessionManager.save_chanelId(prefs, channelName);
+            Log.d("AccessToken", accessToken);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -452,14 +466,10 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
 
         mGridVideoViewContainer.initViewContainer(this, 0, mUidsList, mIsLandscape); // first is now full view
 
-        initMessageList();
-
-        //notifyMessageChanged(new Message(new User(0, null), "start join " + channelName + " as " + (config().mUid & 0xFFFFFFFFL)));
-
         try {
 
             if (Global.isOnline(mActivity)) {
-                joinChannel(accessToken,channelName,Integer.parseInt(SessionManager.get_user_id(prefs)));
+                joinChannel(accessToken, channelName, Integer.parseInt(SessionManager.get_user_id(prefs)));
             } else {
                 Global.showDialog(mActivity);
             }
@@ -471,143 +481,45 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
         optional();
     }
 
+
     private void onBigVideoViewClicked(View view, int position) {
         //log.debug("onItemClick " + view + " " + position + " " + mLayoutType);
+        if(li_tap.getVisibility()== View.VISIBLE){
+            li_tap.setVisibility(View.GONE);
+        }
         toggleFullscreen();
     }
 
     private void onBigVideoViewDoubleClicked(View view, int position) {
         // log.debug("onItemDoubleClick " + view + " " + position + " " + mLayoutType);
+        if(li_tap.getVisibility()== View.VISIBLE){
+            li_tap.setVisibility(View.GONE);
+        }
 
         if (mUidsList.size() < 2) {
             return;
         }
 
-        UserStatusData user = mGridVideoViewContainer.getItem(position);
-        int uid = (user.mUid == 0) ? config().mUid : user.mUid;
+        try{
+            UserStatusData user = mGridVideoViewContainer.getItem(position);
+            int uid = (user.mUid == 0) ? config().mUid : user.mUid;
 
-        if (mLayoutType == LAYOUT_TYPE_DEFAULT && mUidsList.size() != 1) {
-            switchToSmallVideoView(uid);
-        } else {
-            switchToDefaultVideoView();
+            if (mLayoutType == LAYOUT_TYPE_DEFAULT && mUidsList.size() != 1) {
+                switchToSmallVideoView(uid);
+            } else {
+                switchToDefaultVideoView();
+            }
+        }catch(Exception e){
+            e.printStackTrace();
         }
+
+
     }
 
     private void onSmallVideoViewDoubleClicked(View view, int position) {
         //log.debug("onItemDoubleClick small " + view + " " + position + " " + mLayoutType);
         switchToDefaultVideoView();
     }
-
-    private void showOrHideStatusBar(boolean hide) {
-        // May fail on some kinds of devices
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            View decorView = getWindow().getDecorView();
-            int uiOptions = decorView.getSystemUiVisibility();
-
-            if (hide) {
-                uiOptions |= View.SYSTEM_UI_FLAG_FULLSCREEN;
-            } else {
-                uiOptions ^= View.SYSTEM_UI_FLAG_FULLSCREEN;
-            }
-
-            decorView.setSystemUiVisibility(uiOptions);
-        }
-    }
-
-    private void toggleFullscreen() {
-        mFullScreen = !mFullScreen;
-
-        showOrHideCtrlViews(mFullScreen);
-
-        mUIHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                showOrHideStatusBar(mFullScreen);
-            }
-        }, 200); // action bar fade duration
-    }
-
-    private void showOrHideCtrlViews(boolean hide) {
-        ActionBar ab = getSupportActionBar();
-        if (ab != null) {
-            if (hide) {
-                ab.hide();
-            } else {
-                ab.show();
-            }
-        }
-
-        findViewById(R.id.extra_ops_container).setVisibility(hide ? View.INVISIBLE : View.VISIBLE);
-        findViewById(R.id.bottom_action_container).setVisibility(hide ? View.INVISIBLE : View.VISIBLE);
-        //findViewById(R.id.msg_list).setVisibility(hide ? View.INVISIBLE : (Constant.DEBUG_INFO_ENABLED ? View.VISIBLE : View.INVISIBLE));
-    }
-
-    private void relayoutForVirtualKeyPad(int orientation) {
-        int virtualKeyHeight = virtualKeyHeight();
-
-        LinearLayout eopsContainer = findViewById(R.id.extra_ops_container);
-        FrameLayout.MarginLayoutParams eofmp = (FrameLayout.MarginLayoutParams) eopsContainer.getLayoutParams();
-
-        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            eofmp.rightMargin = virtualKeyHeight;
-            eofmp.leftMargin = 0;
-        } else {
-            eofmp.leftMargin = 0;
-            eofmp.rightMargin = 0;
-        }
-
-        LinearLayout bottomContainer = findViewById(R.id.bottom_container);
-        FrameLayout.MarginLayoutParams fmp = (FrameLayout.MarginLayoutParams) bottomContainer.getLayoutParams();
-
-        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            fmp.bottomMargin = 0;
-            fmp.rightMargin = virtualKeyHeight;
-            fmp.leftMargin = 0;
-        } else {
-            fmp.bottomMargin = virtualKeyHeight;
-            fmp.leftMargin = 0;
-            fmp.rightMargin = 0;
-        }
-    }
-
-    private static final int CALL_OPTIONS_REQUEST = 3222;
-
-    public synchronized void showCallOptions() {
-       /* Intent i = new Intent(this, CallOptionsActivity.class);
-        startActivityForResult(i, CALL_OPTIONS_REQUEST);*/
-    }
-
-
-    public void onClickHideIME(View view) {
-        //log.debug("onClickHideIME " + view);
-        closeIME(findViewById(R.id.msg_content));
-        findViewById(R.id.msg_input_container).setVisibility(View.GONE);
-        findViewById(R.id.bottom_action_container).setVisibility(View.VISIBLE);
-    }
-
-    private void initMessageList() {
-//        mMsgList = new ArrayList<>();
-//        RecyclerView msgListView = (RecyclerView) findViewById(R.id.msg_list);
-//
-//        mMsgAdapter = new InChannelMessageListAdapter(this, mMsgList);
-//        mMsgAdapter.setHasStableIds(true);
-//        msgListView.setAdapter(mMsgAdapter);
-//        msgListView.setLayoutManager(new LinearLayoutManager(getApplicationContext(), RecyclerView.VERTICAL, false));
-//        msgListView.addItemDecoration(new MessageListDecoration());
-    }
-
-//    private void notifyMessageChanged(Message msg) {
-//        mMsgList.add(msg);
-//        int MAX_MESSAGE_COUNT = 16;
-//        if (mMsgList.size() > MAX_MESSAGE_COUNT) {
-//            int toRemove = mMsgList.size() - MAX_MESSAGE_COUNT;
-//            for (int i = 0; i < toRemove; i++) {
-//                mMsgList.remove(i);
-//            }
-//        }
-//
-//        mMsgAdapter.notifyDataSetChanged();
-//    }
 
     private void optional() {
         setVolumeControlStream(AudioManager.STREAM_VOICE_CALL);
@@ -650,39 +562,6 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
         configEngine(videoDimension, videoFps, encryptionKey, encryptionMode);
     }
 
-    public void onSwitchCameraClicked(View view) {
-        RtcEngine rtcEngine = rtcEngine();
-        //rtcEngine().enableVirtualBackground(true,new VirtualBackgroundSource(VirtualBackgroundSource.BACKGROUND_IMG,0,));
-        // Switches between front and rear cameras.
-        rtcEngine.switchCamera();
-    }
-
-    public void onSwitchSpeakerClicked(View view) {
-        RtcEngine rtcEngine = rtcEngine();
-        /*
-          Enables/Disables the audio playback route to the speakerphone.
-          This method sets whether the audio is routed to the speakerphone or earpiece.
-          After calling this method, the SDK returns the onAudioRouteChanged callback
-          to indicate the changes.
-         */
-        rtcEngine.setEnableSpeakerphone(mAudioRouting != Constants.AUDIO_ROUTE_SPEAKERPHONE);
-    }
-
-    public void onFilterClicked(View view) {
-        Constant.BEAUTY_EFFECT_ENABLED = !Constant.BEAUTY_EFFECT_ENABLED;
-
-        if (Constant.BEAUTY_EFFECT_ENABLED) {
-
-            setBeautyEffectParameters(Constant.BEAUTY_EFFECT_DEFAULT_LIGHTNESS, Constant.BEAUTY_EFFECT_DEFAULT_SMOOTHNESS, Constant.BEAUTY_EFFECT_DEFAULT_REDNESS);
-            enablePreProcessor();
-        } else {
-            disablePreProcessor();
-        }
-
-        ImageView iv = (ImageView) view;
-
-        iv.setImageResource(Constant.BEAUTY_EFFECT_ENABLED ? R.drawable.ic_auto_awesome_black_24dp : R.drawable.ic_auto_awesome_gray_24dp);
-    }
 
     @Override
     protected void deInitUIandEvent() {
@@ -693,194 +572,14 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
     }
 
     private void doLeaveChannel() {
-        leaveChannel(config().mChannel,SessionManager.get_user_name(prefs));
+        leaveChannel(config().mChannel, SessionManager.get_user_name(prefs));
         preview(false, null, 0);
 
-    }
-    //ScreenSharing code..
-
-//    private VideoEncoderConfiguration.VideoDimensions getScreenDimensions(){
-//        WindowManager manager = (WindowManager) getBaseContext().getSystemService(Context.WINDOW_SERVICE);
-//        DisplayMetrics outMetrics = new DisplayMetrics();
-//        manager.getDefaultDisplay().getMetrics(outMetrics);
-//        return new VideoEncoderConfiguration.VideoDimensions(outMetrics.widthPixels / 2, outMetrics.heightPixels / 2);
-//    }
-//    public void onScreenShare(View view){
-//        if (!isSharing) {
-//            mSSClient.start(getBaseContext(), getResources().getString(R.string.agora_app_id), null,
-//                    channelName, SCREEN_SHARE_UID, new VideoEncoderConfiguration(
-//                            getScreenDimensions(),
-//                            FRAME_RATE_FPS_30,
-//                            STANDARD_BITRATE,
-//                            ORIENTATION_MODE_ADAPTIVE
-//                    ));
-//            tv_shareScreen.setText(getResources().getString(R.string.stop));
-//            isSharing = true;
-//        } else {
-//            mSSClient.stop(getBaseContext());
-//            tv_shareScreen.setText(getResources().getString(R.string.share_screen));
-//            isSharing = false;
-//        }
-//    }
-    //@Override
-   // public void onDestroy()
-//    {
-//        super.onDestroy();
-//        /**leaveChannel and Destroy the RtcEngine instance*/
-//        if(rtcEngine() != null)
-//        {
-//            rtcEngine().leaveChannel();
-//        }
-//        if (isSharing) {
-//            mSSClient.stop(getBaseContext());
-//        }
-////        handler.post(RtcEngine::destroy);
-////        rtcEngine() = null;
-//    }
-    // end of screensharing..
-
-    public void onHangupClicked(View view) {
-        //log.info("onHangupClicked " + view);
-        sessionCancelAlertDialog();
-    }
-
-    public void onVideoMuteClicked(View view) {
-        // log.info("onVoiceChatClicked " + view + " " + mUidsList.size() + " video_status: " + mVideoMuted + " audio_status: " + mAudioMuted);
-        if (mUidsList.size() == 0) {
-            return;
-        }
-
-        SurfaceView surfaceV = getLocalView();
-        ViewParent parent;
-        if (surfaceV == null || (parent = surfaceV.getParent()) == null) {
-            // log.warn("onVoiceChatClicked " + view + " " + surfaceV);
-            return;
-        }
-
-        RtcEngine rtcEngine = rtcEngine();
-        mVideoMuted = !mVideoMuted;
-
-        if (mVideoMuted) {
-            rtcEngine.disableVideo();
-        } else {
-            rtcEngine.enableVideo();
-        }
-
-        ImageView iv = (ImageView) view;
-
-        iv.setImageResource(mVideoMuted ? R.drawable.ic_videocam_off_black_24dp : R.drawable.ic_videocam_black_24dp);
-
-        hideLocalView(mVideoMuted);
-    }
-
-    private SurfaceView getLocalView() {
-        for (HashMap.Entry<Integer, SurfaceView> entry : mUidsList.entrySet()) {
-            if (entry.getKey() == 0 || entry.getKey() == config().mUid) {
-                return entry.getValue();
-            }
-        }
-
-        return null;
-    }
-
-    private void hideLocalView(boolean hide) {
-        int uid = config().mUid;
-        doHideTargetView(uid, hide);
-    }
-
-    private void doHideTargetView(int targetUid, boolean hide) {
-        HashMap<Integer, Integer> status = new HashMap<>();
-        status.put(targetUid, hide ? UserStatusData.VIDEO_MUTED : UserStatusData.DEFAULT_STATUS);
-        if (mLayoutType == LAYOUT_TYPE_DEFAULT) {
-            mGridVideoViewContainer.notifyUiChanged(mUidsList, targetUid, status, null);
-        } else if (mLayoutType == LAYOUT_TYPE_SMALL) {
-            UserStatusData bigBgUser = mGridVideoViewContainer.getItem(0);
-            if (bigBgUser.mUid == targetUid) { // big background is target view
-                mGridVideoViewContainer.notifyUiChanged(mUidsList, targetUid, status, null);
-            } else { // find target view in small video view list
-                //log.warn("SmallVideoViewAdapter call notifyUiChanged " + mUidsList + " " + (bigBgUser.mUid & 0xFFFFFFFFL) + " target: " + (targetUid & 0xFFFFFFFFL) + "==" + targetUid + " " + status);
-                mSmallVideoViewAdapter.notifyUiChanged(mUidsList, bigBgUser.mUid, status, null);
-            }
-        }
-    }
-
-    public void onChatClicked(View view){
-        slideUp.show();
-        //loadWebView();
-        //startActivity(new Intent(this,MessageActivity.class).putExtra(ConstantApp.ACTION_KEY_CHANNEL_NAME,channelName).putExtra("UserId",userId).putExtra("CoachId",coachId));
-
-    }
-    public void onVoiceMuteClicked(View view) {
-        // log.info("onVoiceMuteClicked " + view + " " + mUidsList.size() + " video_status: " + mVideoMuted + " audio_status: " + mAudioMuted);
-        if (mUidsList.size() == 0) {
-            return;
-        }
-
-        RtcEngine rtcEngine = rtcEngine();
-        rtcEngine.muteLocalAudioStream(mAudioMuted = !mAudioMuted);
-
-        ImageView iv = (ImageView) view;
-
-        iv.setImageResource(mAudioMuted ? R.drawable.ic_mic_off_black_24dp : R.drawable.ic_mic_black_24dp);
-    }
-
-    public void onMixingAudioClicked(View view) {
-        //log.info("onMixingAudioClicked " + view + " " + mUidsList.size() + " video_status: " + mVideoMuted + " audio_status: " + mAudioMuted + " mixing_audio: " + mMixingAudio);
-
-        if (mUidsList.size() == 0) {
-            return;
-        }
-
-        mMixingAudio = !mMixingAudio;
-
-        RtcEngine rtcEngine = rtcEngine();
-        if (mMixingAudio) {
-            rtcEngine.startAudioMixing(Constant.MIX_FILE_PATH, false, false, -1);
-        } else {
-            rtcEngine.stopAudioMixing();
-        }
-
-        ImageView iv = (ImageView) view;
-        iv.setImageResource(mMixingAudio ? R.drawable.btn_audio_mixing : R.drawable.btn_audio_mixing_off);
     }
 
     @Override
     public void onUserJoined(int uid) {
-//        if (SCREEN_SHARE_UID == uid){
-//            return;
-//        }
-//        handler.post(() ->
-//        {
-//            /**Display remote video stream*/
-//            SurfaceView surfaceView = null;
-//            if (fl_remote.getChildCount() > 0)
-//            {
-//                fl_remote.removeAllViews();
-//            }
-//            // Create render view by RtcEngine
-//            surfaceView = RtcEngine.CreateRendererView(context);
-//            surfaceView.setZOrderMediaOverlay(true);
-//            // Add to the remote container
-//            fl_remote.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-//
-//            // Setup remote video to render
-//            engine.setupRemoteVideo(new VideoCanvas(surfaceView, RENDER_MODE_HIDDEN, uid));
-//        });
-        //log.debug("onUserJoined " + (uid & 0xFFFFFFFFL));
-
-//        runOnUiThread(new Runnable() {
-//            @Override
-//            public void run() {
-//                //notifyMessageChanged(new Message(new User(0, null), "user " + (uid & 0xFFFFFFFFL) + " joined"));
-//            }
-//        });
-        // screenSharing
-//        rl_share_screen.setVisibility(View.VISIBLE);
-//        rl_share_screen.setEnabled(true);
-//        isSharing=true;
-        // end of screen sharing..
-
-        joinType ="join";
+        joinType = "join";
         if (Global.isOnline(mActivity)) {
             getSessionLog();
         } else {
@@ -889,13 +588,21 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                li_tap.setVisibility(View.VISIBLE);
+
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        li_tap.setVisibility(View.GONE);
+                    }
+                },4000);
 
                 tv_timeDuration.setVisibility(View.VISIBLE);
                 new CountDownTimer(timeDuration, 1000) {
 
                     @SuppressLint("SetTextI18n")
                     public void onTick(long millisUntilFinished) {
-                        tv_timeDuration.setText("Remaining time: " + Global.convertSecondsTomSs(millisUntilFinished/1000));
+                        tv_timeDuration.setText("Remaining time: " + Global.convertSecondsTomSs(millisUntilFinished / 1000));
                         //here you can have your logic to set text to edittext
                     }
 
@@ -907,31 +614,39 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
                 }.start();
 
                 lin_log.setVisibility(View.VISIBLE);
-                if(userId.equalsIgnoreCase(SessionManager.get_user_id(prefs))){
-//                    log_text.setVisibility(View.VISIBLE);
-//                    log_text.setText("You have joined" +" "+"successfully");
-
+                if (userId.equalsIgnoreCase(SessionManager.get_user_id(prefs))) {
                     new Handler().postDelayed(new Runnable() {
                         @SuppressLint("SetTextI18n")
                         @Override
                         public void run() {
-                            log_texth_other.setVisibility(View.VISIBLE);
-                            log_texth_other.setText(Global.capitizeString(coachName) +" "+"joined");
+
+                            if(uid==com.pb.criconet.sharedscreen.Constant.SCREEN_SHARE_UID){
+                                log_texth_other.setVisibility(View.VISIBLE);
+                                log_texth_other.setText(Global.capitizeString(coachName) + " " + "is sharing the screen");
+                            }else{
+
+                                log_texth_other.setVisibility(View.VISIBLE);
+                                log_texth_other.setText(Global.capitizeString(coachName) + " " + "joined");
+                            }
+
+
                         }
-                    },1000);
+                    }, 1000);
 
-                    //mLogView.logI(coachName +" join successfully");
-                }else if(coachId.equalsIgnoreCase(SessionManager.get_user_id(prefs))){
-//                    log_text.setVisibility(View.VISIBLE);
-//                    log_text.setText("You have joined" +" "+"successfully");
-
+                } else if (coachId.equalsIgnoreCase(SessionManager.get_user_id(prefs))) {
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            log_texth_other.setVisibility(View.VISIBLE);
-                            log_texth_other.setText(Global.capitizeString(coachName) +" "+"joined");
+                            if(uid==com.pb.criconet.sharedscreen.Constant.SCREEN_SHARE_UID){
+                                log_texth_other.setVisibility(View.VISIBLE);
+                                log_texth_other.setText(Global.capitizeString(coachName) + " " + "is sharing the screen");
+                            }else{
+
+                                log_texth_other.setVisibility(View.VISIBLE);
+                                log_texth_other.setText(Global.capitizeString(coachName) + " " + "joined");
+                            }
                         }
-                    },1000);
+                    }, 1000);
 
                 }
 
@@ -940,7 +655,7 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
                     public void run() {
                         lin_log.setVisibility(View.GONE);
                     }
-                },4000);
+                }, 4000);
 
 
             }
@@ -959,54 +674,6 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
 
     }
 
-    private void doRenderRemoteUi(final int uid) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (isFinishing()) {
-                    return;
-                }
-
-                if (mUidsList.containsKey(uid)) {
-                    return;
-                }
-
-                /*
-                  Creates the video renderer view.
-                  CreateRendererView returns the SurfaceView type. The operation and layout of the
-                  view are managed by the app, and the Agora SDK renders the view provided by the
-                  app. The video display view must be created using this method instead of
-                  directly calling SurfaceView.
-                 */
-                SurfaceView surfaceV = RtcEngine.CreateRendererView(getApplicationContext());
-                mUidsList.put(uid, surfaceV);
-
-                boolean useDefaultLayout = mLayoutType == LAYOUT_TYPE_DEFAULT;
-
-                surfaceV.setZOrderOnTop(true);
-                surfaceV.setZOrderMediaOverlay(true);
-
-                /*
-                  Initializes the video view of a remote user.
-                  This method initializes the video view of a remote stream on the local device. It affects only the video view that the local user sees.
-                  Call this method to bind the remote video stream to a video view and to set the rendering and mirror modes of the video view.
-                 */
-                rtcEngine().setupRemoteVideo(new VideoCanvas(surfaceV, VideoCanvas.RENDER_MODE_HIDDEN, uid));
-
-                if (useDefaultLayout) {
-                    //log.debug("doRenderRemoteUi LAYOUT_TYPE_DEFAULT " + (uid & 0xFFFFFFFFL));
-                    switchToDefaultVideoView();
-                } else {
-                    int bigBgUid = mSmallVideoViewAdapter == null ? uid : mSmallVideoViewAdapter.getExceptedUid();
-                    //log.debug("doRenderRemoteUi LAYOUT_TYPE_SMALL " + (uid & 0xFFFFFFFFL) + " " + (bigBgUid & 0xFFFFFFFFL));
-                    switchToSmallVideoView(bigBgUid);
-                }
-
-                //notifyMessageChanged(new Message(new User(0, null), "video from user " + (uid & 0xFFFFFFFFL) + " decoded"));
-            }
-        });
-    }
-
     @Override
     public void onJoinChannelSuccess(String channel, final int uid, int elapsed) {
         //ScreenShare..
@@ -1021,37 +688,50 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
     @Override
     public void onUserOffline(int uid, int reason) {
         //log.debug("onUserOffline " + (uid & 0xFFFFFFFFL) + " " + reason);
-        joinType="leave";
-        //screensharing..
-//        rl_share_screen.setVisibility(View.GONE);
-//        rl_share_screen.setEnabled(false);
-//        isSharing=false;
-        //end of screensharing..
+        joinType = "leave";
         if (Global.isOnline(mActivity)) {
             getSessionLog();
         } else {
             Global.showDialog(mActivity);
         }
+
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if(userId.equalsIgnoreCase(SessionManager.get_user_id(prefs))){
+                if (userId.equalsIgnoreCase(SessionManager.get_user_id(prefs))) {
                     log_text.setVisibility(View.GONE);
-                    log_texth_other.setVisibility(View.VISIBLE);
-                    log_texth_other.setText(Global.capitizeString(coachName) +" "+"left successfully");
-                    //mLogView.logI(coachName +" join successfully");
-                }else if(coachId.equalsIgnoreCase(SessionManager.get_user_id(prefs))){
+
+                    if(uid==com.pb.criconet.sharedscreen.Constant.SCREEN_SHARE_UID){
+                        log_texth_other.setVisibility(View.VISIBLE);
+                        log_texth_other.setText(Global.capitizeString(coachName) + " " + "has stopped screen sharing");
+                    }else{
+
+                        log_texth_other.setVisibility(View.VISIBLE);
+                        log_texth_other.setText(Global.capitizeString(coachName) + " " + "left successfully");
+                    }
+
+                } else if (coachId.equalsIgnoreCase(SessionManager.get_user_id(prefs))) {
                     log_text.setVisibility(View.GONE);
-                    log_texth_other.setVisibility(View.VISIBLE);
-                    log_texth_other.setText(Global.capitizeString(coachName) +" "+"left successfully");
+                    if(uid==com.pb.criconet.sharedscreen.Constant.SCREEN_SHARE_UID){
+                        log_texth_other.setVisibility(View.VISIBLE);
+                        log_texth_other.setText(Global.capitizeString(coachName) + " " + "has stopped screen sharing");
+                    }else{
+
+                        log_texth_other.setVisibility(View.VISIBLE);
+                        log_texth_other.setText(Global.capitizeString(coachName) + " " + "left successfully");
+                    }
                 }
                 lin_log.setVisibility(View.VISIBLE);
+                li_tap.setVisibility(View.GONE);
+
+
+
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         lin_log.setVisibility(View.GONE);
                     }
-                },4000);
+                }, 4000);
             }
         });
         doRemoveRemoteUi(uid);
@@ -1148,12 +828,12 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
 
             case AGEventHandler.EVENT_TYPE_ON_APP_ERROR:
                 int subType = (int) data[0];
-                Toaster.customToast(subType+"");
+                Toaster.customToast(subType + "");
 
                 if (subType == ConstantApp.AppError.NO_CONNECTION_ERROR) {
                     String msg = getString(R.string.msg_connection_error);
                     //notifyMessageChanged(new Message(new User(0, null), msg));
-                    Toaster.customToast(subType+"");
+                    Toaster.customToast(subType + "");
                     //showLongToast(msg);
                 }
 
@@ -1186,6 +866,52 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
 
     private void requestRemoteStreamType(final int currentHostCount) {
         // log.debug("requestRemoteStreamType " + currentHostCount);
+    }
+
+    private void doRenderRemoteUi(final int uid) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (isFinishing()) {
+                    return;
+                }
+
+                if (mUidsList.containsKey(uid)) {
+                    return;
+                }
+
+                /*
+                  Creates the video renderer view.
+                  CreateRendererView returns the SurfaceView type. The operation and layout of the
+                  view are managed by the app, and the Agora SDK renders the view provided by the
+                  app. The video display view must be created using this method instead of
+                  directly calling SurfaceView.
+                 */
+                SurfaceView surfaceV = RtcEngine.CreateRendererView(getApplicationContext());
+                mUidsList.put(uid, surfaceV);
+
+                boolean useDefaultLayout = mLayoutType == LAYOUT_TYPE_DEFAULT;
+
+                surfaceV.setZOrderOnTop(true);
+                surfaceV.setZOrderMediaOverlay(true);
+
+                /*
+                  Initializes the video view of a remote user.
+                  This method initializes the video view of a remote stream on the local device. It affects only the video view that the local user sees.
+                  Call this method to bind the remote video stream to a video view and to set the rendering and mirror modes of the video view.
+                 */
+                rtcEngine().setupRemoteVideo(new VideoCanvas(surfaceV, VideoCanvas.RENDER_MODE_HIDDEN, uid));
+
+                if (useDefaultLayout) {
+                    //log.debug("doRenderRemoteUi LAYOUT_TYPE_DEFAULT " + (uid & 0xFFFFFFFFL));
+                    switchToDefaultVideoView();
+                } else {
+                    int bigBgUid = mSmallVideoViewAdapter == null ? uid : mSmallVideoViewAdapter.getExceptedUid();
+                    //log.debug("doRenderRemoteUi LAYOUT_TYPE_SMALL " + (uid & 0xFFFFFFFFL) + " " + (bigBgUid & 0xFFFFFFFFL));
+                    switchToSmallVideoView(bigBgUid);
+                }
+            }
+        });
     }
 
     private void doRemoveRemoteUi(final int uid) {
@@ -1348,6 +1074,217 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
         }
     }
 
+    /*All Container Click initialize here*/
+    public void onSwitchCameraClicked(View view) {
+        RtcEngine rtcEngine = rtcEngine();
+        rtcEngine.switchCamera();
+    }
+
+    public void onMixingAudioClicked(View view) {
+        //log.info("onMixingAudioClicked " + view + " " + mUidsList.size() + " video_status: " + mVideoMuted + " audio_status: " + mAudioMuted + " mixing_audio: " + mMixingAudio);
+
+        if (mUidsList.size() == 0) {
+            return;
+        }
+
+        mMixingAudio = !mMixingAudio;
+
+        RtcEngine rtcEngine = rtcEngine();
+        if (mMixingAudio) {
+            rtcEngine.startAudioMixing(Constant.MIX_FILE_PATH, false, false, -1);
+        } else {
+            rtcEngine.stopAudioMixing();
+        }
+
+        ImageView iv = (ImageView) view;
+        iv.setImageResource(mMixingAudio ? R.drawable.btn_audio_mixing : R.drawable.btn_audio_mixing_off);
+    }
+
+    public void onVoiceMuteClicked(View view) {
+        // log.info("onVoiceMuteClicked " + view + " " + mUidsList.size() + " video_status: " + mVideoMuted + " audio_status: " + mAudioMuted);
+        if (mUidsList.size() == 0) {
+            return;
+        }
+
+        RtcEngine rtcEngine = rtcEngine();
+        rtcEngine.muteLocalAudioStream(mAudioMuted = !mAudioMuted);
+
+        ImageView iv = (ImageView) view;
+
+        iv.setImageResource(mAudioMuted ? R.drawable.ic_mic_off_black_24dp : R.drawable.ic_mic_black_24dp);
+    }
+
+    public void onChatClicked(View view) {
+        slideUp.show();
+        loadWebView();
+    }
+
+    public void onFilterClicked(View view) {
+        Constant.BEAUTY_EFFECT_ENABLED = !Constant.BEAUTY_EFFECT_ENABLED;
+
+        if (Constant.BEAUTY_EFFECT_ENABLED) {
+
+            setBeautyEffectParameters(Constant.BEAUTY_EFFECT_DEFAULT_LIGHTNESS, Constant.BEAUTY_EFFECT_DEFAULT_SMOOTHNESS, Constant.BEAUTY_EFFECT_DEFAULT_REDNESS);
+            enablePreProcessor();
+        } else {
+            disablePreProcessor();
+        }
+
+        ImageView iv = (ImageView) view;
+
+        iv.setImageResource(Constant.BEAUTY_EFFECT_ENABLED ? R.drawable.ic_auto_awesome_black_24dp : R.drawable.ic_auto_awesome_gray_24dp);
+    }
+
+    public void onSwitchSpeakerClicked(View view) {
+        RtcEngine rtcEngine = rtcEngine();
+        /*
+          Enables/Disables the audio playback route to the speakerphone.
+          This method sets whether the audio is routed to the speakerphone or earpiece.
+          After calling this method, the SDK returns the onAudioRouteChanged callback
+          to indicate the changes.
+         */
+        rtcEngine.setEnableSpeakerphone(mAudioRouting != Constants.AUDIO_ROUTE_SPEAKERPHONE);
+    }
+
+    public void onHangupClicked(View view) {
+        sessionCancelAlertDialog();
+    }
+
+
+    private void showOrHideStatusBar(boolean hide) {
+        // May fail on some kinds of devices
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            View decorView = getWindow().getDecorView();
+            int uiOptions = decorView.getSystemUiVisibility();
+
+            if (hide) {
+                uiOptions |= View.SYSTEM_UI_FLAG_FULLSCREEN;
+            } else {
+                uiOptions ^= View.SYSTEM_UI_FLAG_FULLSCREEN;
+            }
+
+            decorView.setSystemUiVisibility(uiOptions);
+        }
+    }
+
+    private void toggleFullscreen() {
+        mFullScreen = !mFullScreen;
+
+        showOrHideCtrlViews(mFullScreen);
+
+        mUIHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                showOrHideStatusBar(mFullScreen);
+            }
+        }, 200); // action bar fade duration
+    }
+
+    private void showOrHideCtrlViews(boolean hide) {
+        ActionBar ab = getSupportActionBar();
+        if (ab != null) {
+            if (hide) {
+                ab.hide();
+            } else {
+                ab.show();
+            }
+        }
+
+        findViewById(R.id.extra_ops_container).setVisibility(hide ? View.INVISIBLE : View.VISIBLE);
+        findViewById(R.id.bottom_action_container).setVisibility(hide ? View.INVISIBLE : View.VISIBLE);
+        findViewById(R.id.small_video_view_dock).setVisibility(hide ? View.INVISIBLE : View.VISIBLE);
+        findViewById(R.id.rl_share_screen).setVisibility(hide ? View.INVISIBLE : View.VISIBLE);
+
+    }
+
+    public void onClickHideIME(View view) {
+        closeIME(findViewById(R.id.msg_content));
+        findViewById(R.id.msg_input_container).setVisibility(View.GONE);
+        findViewById(R.id.bottom_action_container).setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(final Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_call, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle presses on the action bar items
+        switch (item.getItemId()) {
+            case R.id.action_options:
+                //showCallOptions();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+
+    /*END All Container Click initialize here*/
+
+    private void doHideTargetView(int targetUid, boolean hide) {
+        HashMap<Integer, Integer> status = new HashMap<>();
+        status.put(targetUid, hide ? UserStatusData.VIDEO_MUTED : UserStatusData.DEFAULT_STATUS);
+        if (mLayoutType == LAYOUT_TYPE_DEFAULT) {
+            mGridVideoViewContainer.notifyUiChanged(mUidsList, targetUid, status, null);
+        } else if (mLayoutType == LAYOUT_TYPE_SMALL) {
+            UserStatusData bigBgUser = mGridVideoViewContainer.getItem(0);
+            if (bigBgUser.mUid == targetUid) { // big background is target view
+                mGridVideoViewContainer.notifyUiChanged(mUidsList, targetUid, status, null);
+            } else { // find target view in small video view list
+                //log.warn("SmallVideoViewAdapter call notifyUiChanged " + mUidsList + " " + (bigBgUser.mUid & 0xFFFFFFFFL) + " target: " + (targetUid & 0xFFFFFFFFL) + "==" + targetUid + " " + status);
+                mSmallVideoViewAdapter.notifyUiChanged(mUidsList, bigBgUser.mUid, status, null);
+            }
+        }
+    }
+
+    public void onVideoMuteClicked(View view) {
+        // log.info("onVoiceChatClicked " + view + " " + mUidsList.size() + " video_status: " + mVideoMuted + " audio_status: " + mAudioMuted);
+        if (mUidsList.size() == 0) {
+            return;
+        }
+
+        SurfaceView surfaceV = getLocalView();
+        ViewParent parent;
+        if (surfaceV == null || (parent = surfaceV.getParent()) == null) {
+            // log.warn("onVoiceChatClicked " + view + " " + surfaceV);
+            return;
+        }
+
+        RtcEngine rtcEngine = rtcEngine();
+        mVideoMuted = !mVideoMuted;
+
+        if (mVideoMuted) {
+            rtcEngine.disableVideo();
+        } else {
+            rtcEngine.enableVideo();
+        }
+
+        ImageView iv = (ImageView) view;
+
+        iv.setImageResource(mVideoMuted ? R.drawable.ic_videocam_off_black_24dp : R.drawable.ic_videocam_black_24dp);
+
+        hideLocalView(mVideoMuted);
+    }
+
+    private void hideLocalView(boolean hide) {
+        int uid = config().mUid;
+        doHideTargetView(uid, hide);
+    }
+
+    private SurfaceView getLocalView() {
+        for (HashMap.Entry<Integer, SurfaceView> entry : mUidsList.entrySet()) {
+            if (entry.getKey() == 0 || entry.getKey() == config().mUid) {
+                return entry.getValue();
+            }
+        }
+
+        return null;
+    }
+
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
@@ -1372,7 +1309,7 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
         });
         FrameLayout fl_yes = dialog.findViewById(R.id.fl_yes);
         fl_yes.setOnClickListener(v -> {
-            joinType="leave";
+            joinType = "leave";
             if (Global.isOnline(mActivity)) {
                 getSessionLog();
             } else {
@@ -1397,9 +1334,9 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
             dialog.dismiss();
             // will show..after testing...............................................................
             Bundle args = new Bundle();
-            args.putSerializable("ARRAYLIST",(Serializable)feedBackFormChildData);
-            startActivity(new Intent(CallActivity.this,EndSessionFeedbackFormActivity.class)
-                    .putExtra("Certificate",args).putExtra("id",bookingId));
+            args.putSerializable("ARRAYLIST", (Serializable) feedBackFormChildData);
+            startActivity(new Intent(CallActivity.this, EndSessionFeedbackFormActivity.class)
+                    .putExtra("Certificate", args).putExtra("id", bookingId));
 
 
             finish();
@@ -1430,7 +1367,7 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
                 Map<String, String> param = new HashMap<String, String>();
                 param.put("user_id", SessionManager.get_user_id(prefs));
                 param.put("s", SessionManager.get_session_id(prefs));
-                param.put("booking_id",bookingId );
+                param.put("booking_id", bookingId);
                 param.put("activity", joinType);
                 Timber.e(param.toString());
                 return param;
@@ -1442,6 +1379,25 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
         queue.add(postRequest);
     }
 
+    private void callChatApi() {
+
+        Handler handler = new Handler();
+
+        final Runnable r = new Runnable() {
+            public void run() {
+                //Initiate your API here
+                if (Global.isOnline(mActivity)) {
+                    getChatNotification();
+                } else {
+                    Global.showDialog(mActivity);
+                }
+                handler.postDelayed(this, 2000);
+            }
+        };
+
+        handler.postDelayed(r, 2000);
+    }
+
     private void getSessionFeedbackForm() {
 //        progressDialog = Global.getProgressDialog(this, CCResource.getString(this, R.string.loading_dot), false);
         StringRequest postRequest = new StringRequest(Request.Method.POST, Global.URL + Global.GET_SESSION_FEEDBACKFORM, new Response.Listener<String>() {
@@ -1450,12 +1406,12 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
                 //  Log.d("SessionFeedback",response);
 
                 try {
-                    JSONObject  jsonObject= new JSONObject(response);
-                    if(jsonObject.getString("api_status").equalsIgnoreCase("200")) {
-                        JSONArray  jsonArray =jsonObject.getJSONArray("data");
-                        FeedBackFormChildData feedBackFormChildDataa=null;
-                        feedBackFormChildData =new ArrayList<>();
-                        for(int i=0;i<jsonArray.length();i++){
+                    JSONObject jsonObject = new JSONObject(response);
+                    if (jsonObject.getString("api_status").equalsIgnoreCase("200")) {
+                        JSONArray jsonArray = jsonObject.getJSONArray("data");
+                        FeedBackFormChildData feedBackFormChildDataa = null;
+                        feedBackFormChildData = new ArrayList<>();
+                        for (int i = 0; i < jsonArray.length(); i++) {
                             feedBackFormChildDataa = new FeedBackFormChildData(jsonArray.getJSONObject(i));
                             feedBackFormChildData.add(feedBackFormChildDataa);
                         }
@@ -1465,7 +1421,6 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
 
 
                 //Global.dismissDialog(progressDialog);
@@ -1500,14 +1455,14 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
     }
 
     @SuppressLint({"SetJavaScriptEnabled", "ObsoleteSdkInt"})
-    public void loadWebView(){
-        if(SessionManager.getProfileType(prefs).equalsIgnoreCase("Coach")){
-            webUrl= Global.URL_CHAT+"/"+"messages"+"/"+userId+"?"+"user_id="+SessionManager.get_user_id(prefs)+"&"+"s="+SessionManager.get_session_id(prefs);
-        }else{
-            webUrl= Global.URL_CHAT+"/"+"messages"+"/"+coachId+"?"+"user_id="+SessionManager.get_user_id(prefs)+"&"+"s="+SessionManager.get_session_id(prefs);
+    public void loadWebView() {
+        if (SessionManager.getProfileType(prefs).equalsIgnoreCase("Coach")) {
+            webUrl = Global.URL_CHAT + "/" + "messages" + "/" + userId + "?" + "user_id=" + SessionManager.get_user_id(prefs) + "&" + "s=" + SessionManager.get_session_id(prefs);
+        } else {
+            webUrl = Global.URL_CHAT + "/" + "messages" + "/" + coachId + "?" + "user_id=" + SessionManager.get_user_id(prefs) + "&" + "s=" + SessionManager.get_session_id(prefs);
         }
 
-        Log.d("WevURL",webUrl);
+        Log.d("WevURL", webUrl);
         if (Build.VERSION.SDK_INT >= 23 && (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)) {
             ActivityCompat.requestPermissions(CallActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA}, 1);
         }
@@ -1626,29 +1581,6 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
         File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
         return File.createTempFile(imageFileName, ".jpg", storageDir);
     }
-//
-//    @Override
-//    public boolean onKeyDown(int keyCode, @NonNull KeyEvent event) {
-//
-//        try{
-//            if (event.getAction() == KeyEvent.ACTION_DOWN) {
-//
-//                if (keyCode == KeyEvent.KEYCODE_BACK) {
-//                    if (webView.canGoBack()) {
-//                        webView.goBack();
-//                    } else {
-//                        finish();
-//                    }
-//                    return true;
-//                }
-//            }
-//
-//        }catch (Exception e){
-//            e.printStackTrace();
-//        }
-//
-//        return super.onKeyDown(keyCode, event);
-//    }
 
     public class Callback extends WebViewClient {
         @Override
@@ -1666,7 +1598,7 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
                 public void run() {
                     progressBar.stop();
                 }
-            },2000);
+            }, 2000);
 
             super.onPageFinished(view, url);
 
@@ -1687,20 +1619,21 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
         }
         return super.dispatchTouchEvent(ev);
     }
+
     private void getChatNotification() {
 //        progressDialog = Global.getProgressDialog(this, CCResource.getString(this, R.string.loading_dot), false);
         StringRequest postRequest = new StringRequest(Request.Method.POST, Global.URL + Global.GET_CHAT_NOTIFICATION, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Log.d("ChatNotification",response);
+                Log.d("ChatNotification", response);
 
                 try {
-                    JSONObject  jsonObject= new JSONObject(response);
-                    if(jsonObject.getString("api_status").equalsIgnoreCase("200")) {
-                        JSONObject  jsonArray =jsonObject.getJSONObject("data");
-                        if(jsonArray.getString("message_counter").equalsIgnoreCase("0")){
+                    JSONObject jsonObject = new JSONObject(response);
+                    if (jsonObject.getString("api_status").equalsIgnoreCase("200")) {
+                        JSONObject jsonArray = jsonObject.getJSONObject("data");
+                        if (jsonArray.getString("message_counter").equalsIgnoreCase("0")) {
                             rl_count.setVisibility(View.GONE);
-                        }else{
+                        } else {
                             rl_count.setVisibility(View.VISIBLE);
                             tv_count.setText(jsonArray.getString("message_counter"));
                         }
@@ -1735,61 +1668,5 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
         queue.add(postRequest);
     }
 
-//    private void openFile(File url) {
-//
-////        try {
-////
-////            Uri uri = Uri.fromFile(url);
-////
-////            Intent intent = new Intent(Intent.ACTION_VIEW);
-////            if (url.toString().contains(".doc") || url.toString().contains(".docx")) {
-////                // Word document
-////                intent.setDataAndType(uri, "application/msword");
-////            } else if (url.toString().contains(".pdf")) {
-////                // PDF file
-////                intent.setDataAndType(uri, "application/pdf");
-////            } else if (url.toString().contains(".ppt") || url.toString().contains(".pptx")) {
-////                // Powerpoint file
-////                intent.setDataAndType(uri, "application/vnd.ms-powerpoint");
-////            } else if (url.toString().contains(".xls") || url.toString().contains(".xlsx")) {
-////                // Excel file
-////                intent.setDataAndType(uri, "application/vnd.ms-excel");
-////            } else if (url.toString().contains(".zip")) {
-////                // ZIP file
-////                intent.setDataAndType(uri, "application/zip");
-////            } else if (url.toString().contains(".rar")){
-////                // RAR file
-////                intent.setDataAndType(uri, "application/x-rar-compressed");
-////            } else if (url.toString().contains(".rtf")) {
-////                // RTF file
-////                intent.setDataAndType(uri, "application/rtf");
-////            } else if (url.toString().contains(".wav") || url.toString().contains(".mp3")) {
-////                // WAV audio file
-////                intent.setDataAndType(uri, "audio/x-wav");
-////            } else if (url.toString().contains(".gif")) {
-////                // GIF file
-////                intent.setDataAndType(uri, "image/gif");
-////            } else if (url.toString().contains(".jpg") || url.toString().contains(".jpeg") || url.toString().contains(".png")) {
-////                // JPG file
-////                intent.setDataAndType(uri, "image/jpeg");
-////            } else if (url.toString().contains(".txt")) {
-////                // Text file
-////                intent.setDataAndType(uri, "text/plain");
-////            } else if (url.toString().contains(".3gp") || url.toString().contains(".mpg") ||
-////                    url.toString().contains(".mpeg") || url.toString().contains(".mpe") || url.toString().contains(".mp4") || url.toString().contains(".avi")) {
-////                // Video files
-////                intent.setDataAndType(uri, "video/*");
-////            } else {
-////                intent.setDataAndType(uri, "*/*");
-////            }
-////
-////            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-////            startActivity(intent);
-////        } catch (ActivityNotFoundException e) {
-////            Toast.makeText(mActivity, "No application found which can open the file", Toast.LENGTH_SHORT).show();
-////        }
-//    }
-
 }
-
 

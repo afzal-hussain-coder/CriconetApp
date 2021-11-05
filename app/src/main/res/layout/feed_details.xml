@@ -12,7 +12,6 @@
         layout="@layout/toolbar" />
 
     <ScrollView
-        android:id="@+id/scrv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/bckground_light"
@@ -48,7 +47,7 @@
                     android:text=" Hi"
                     android:fontFamily="@font/opensans_semibold"
                     android:textColor="@color/colorPrimary"
-                    android:textSize="@dimen/_10sdp"
+                    android:textSize="@dimen/_8sdp"
                     android:visibility="gone" />
 
                 <ImageView
@@ -76,7 +75,7 @@
                     android:paddingBottom="@dimen/_4sdp"
                     android:textColor="@color/light_text_color"
                     android:fontFamily="@font/opensans_semibold"
-                    android:textSize="@dimen/_10sdp"
+                    android:textSize="@dimen/_8sdp"
                     android:visibility="gone" />
 
                 <TextView
@@ -91,7 +90,7 @@
                     android:text=" "
                     android:fontFamily="@font/opensans_semibold"
                     android:textColor="@color/light_text_color"
-                    android:textSize="@dimen/_10sdp"
+                    android:textSize="@dimen/_8sdp"
                     android:visibility="gone" />
 
                 <com.pierfrancescosoffritti.youtubeplayer.player.YouTubePlayerView
@@ -132,35 +131,44 @@
 
                 <FrameLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:background="#000"
+                    android:visibility="visible">
 
+                    <VideoView
+                        android:id="@+id/videoview"
+                        android:layout_width="match_parent"
+                        android:layout_gravity="center_horizontal"
+                        android:visibility="gone"
+                        android:layout_height="@dimen/post_height"/>
+                    <!--
                     <com.allattentionhere.autoplayvideos.AAH_VideoImage
                         android:id="@+id/AAH_video"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/post_height"
                         android:scaleType="centerInside"
                         android:tag="aah_vi"
-                        android:visibility="gone" />
+                        android:visibility="visible" />-->
 
-                    <ImageView
-                        android:id="@+id/img_playback"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="left|bottom"
-                        android:layout_margin="8dp"
-                        android:src="@drawable/ic_play"
-                        android:visibility="gone"
-                        app:tint="@color/light_text_color" />
+<!--                    <ImageView-->
+<!--                        android:id="@+id/img_playback"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_gravity="left|bottom"-->
+<!--                        android:layout_margin="8dp"-->
+<!--                        android:src="@drawable/ic_play"-->
+<!--                        android:visibility="gone"-->
+<!--                        app:tint="@color/light_text_color" />-->
 
-                    <ImageView
-                        android:id="@+id/img_vol"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="right|bottom"
-                        android:layout_margin="8dp"
-                        app:tint="@color/light_text_color"
-                        android:src="@drawable/ic_unmute"
-                        android:visibility="gone" />
+<!--                    <ImageView-->
+<!--                        android:id="@+id/img_vol"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_gravity="right|bottom"-->
+<!--                        android:layout_margin="8dp"-->
+<!--                        app:tint="@color/light_text_color"-->
+<!--                        android:src="@drawable/ic_unmute"-->
+<!--                        android:visibility="gone" />-->
                 </FrameLayout>
 
             </LinearLayout>

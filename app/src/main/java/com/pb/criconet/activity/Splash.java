@@ -63,7 +63,7 @@ public class Splash extends Activity {
                 booking_id =bundle.getString("booking_id");
             }
 
-          Log.d("SpashNo",type+"/"+booking_id);
+          //Log.d("SpashNo",type+"/"+booking_id);
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -220,7 +220,7 @@ public class Splash extends Activity {
         timer.schedule(task, 1000);
     }
 
-    private void calculateHashKey(String yourPackageName) {
+    /*private void calculateHashKey(String yourPackageName) {
         try {
             PackageInfo info = getPackageManager().getPackageInfo(
                     yourPackageName,
@@ -236,6 +236,6 @@ public class Splash extends Activity {
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
-    }
+    }*/
 
 }

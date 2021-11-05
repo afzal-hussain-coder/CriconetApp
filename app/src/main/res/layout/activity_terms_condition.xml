@@ -69,7 +69,6 @@
                 android:scrollbarAlwaysDrawVerticalTrack="true"
                 android:layout_below="@+id/view">
             <com.pb.criconet.fontsview.OSLTextView
-                android:id="@+id/textTermsOfUse"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"

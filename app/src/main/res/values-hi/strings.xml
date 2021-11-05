@@ -290,50 +290,10 @@
     <string name="page_des">Your Page description, maximum 900 characters please.</string>
     <string name="create">Create</string>
     <string name="edit">Edit</string>
-    <string-array name="color_list">
-
-        <item>#FB9CDE</item>
-        <item>#56C4C5</item>
-        <item>#70A0E0</item>
-        <item>#A085E2</item>
-        <item>#ED9E6A</item>
-        <item>#ED9E6A</item>
-        <item>#F1812B</item>
-        <item>#A84849</item>
-        <item>#FE72D2</item>
-        <item>#01A5A5</item>
-        <item>#01A5A5</item>
-        <item>#2B87CE</item>
-        <item>#5462A5</item>
-        <item>#008484</item>
-        <item>#A1CE79</item>
-        <item>#8EC96C</item>
-        <item>#51BCBC</item>
-        <item>#0E71EA</item>
-        <item>#056BBA</item>
-        <item>#0BA05D</item>
-        <item>#F9A722</item>
-        <item>#F33D4C</item>
-        <item>#609B41</item>
-        <item>#C9605E</item>
-        <item>#B582AF</item>
-        <item>#50F70C</item>
-        <item>#574040</item>
-        <item>#898181</item>
-        <item>#2A0B0B</item>
-        <item>#581818</item>
-
-    </string-array>
 
 
     <!--Chat app string-->
-    <string name="account_offline">Connection lost</string>
-    <string name="join_channel_failed">Join channel failed</string>
-    <string name="message_cached">Message cached by server</string>
-    <string name="peer_offline">Peer is offline</string>
-    <string name="reconnecting">Network reconnecting ...</string>
     \
-    <string name="send_msg_failed">Failed to send message</string>
     <string name="e_coaching_session">e-Coaching Session</string>
     <string name="ecoahing_compleated">Is your e-Coaching session complete?</string>
     <string name="sort">Shorting Coach with price and experience</string>
@@ -360,7 +320,6 @@
     <string name="address">Address</string>
     <string name="pin_code">Pin Code</string>
     <string name="submit_details">Submit Details</string>
-    <string name="fill_deatils">Please fill the form, our executive will collect after session</string>
     <string name="enter_your_pin">Enter pin code</string>
     <string name="enter_alterenate_mobile_no">Enter alternate mobile no.</string>
     <string name="terms_pay_later">I Give permission for my child’s picture to be posted on social media</string>
@@ -377,8 +336,6 @@
     <string name="parent_signature">Parent/Guardian Signature</string>
     <string name="upload_signature">Upload Signature</string>
     <string name="game">Super Six</string>
-    <string name="share_screen">Share Screen</string>
-    <string name="stop">Stop</string>
 
 
 </resources>

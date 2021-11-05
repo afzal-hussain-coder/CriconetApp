@@ -31,6 +31,8 @@ public class SessionManager {
     private static String coach_name = "coach_name";
     private static String country_code="country_code";
     private static String user_type = "user_type";
+    private static String token_type = "token_type";
+    private static String chanelId = "chanelId";
     private static String SESSION_CHECK_LOGIN = "SESSION_CHECK_LOGIN";
     private static String check_agreement = "CHECK_AGREEMENT";
     private static String password = "password";
@@ -81,7 +83,6 @@ public class SessionManager {
 //    private static String carTypeName = "carTypeName";
 //    private static String barnd = "barnd";
 //    private static String model = "model";
-
 
     public static void savePreference(SharedPreferences prefs, String key, Boolean value) {
         Editor e = prefs.edit();
@@ -271,9 +272,26 @@ public class SessionManager {
         return prefs.getString(select_type, "");
     }
 
+
+    public static void save_accessToken(SharedPreferences prefs, String value) {
+        SessionManager.savePreference(prefs, token_type, value);
+    }
+
+    public static String get_accessToken(SharedPreferences prefs) {
+        return prefs.getString(token_type, "");
+    }
+    public static void save_chanelId(SharedPreferences prefs, String value) {
+        SessionManager.savePreference(prefs, chanelId, value);
+    }
+
+    public static String get_chanelId(SharedPreferences prefs) {
+        return prefs.getString(chanelId, "");
+    }
+
     public static void save_userType(SharedPreferences prefs, String value) {
         SessionManager.savePreference(prefs, user_type, value);
     }
+
 
     public static String get_userType(SharedPreferences prefs) {
         return prefs.getString(user_type, "");

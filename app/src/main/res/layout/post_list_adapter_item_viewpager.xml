@@ -41,7 +41,6 @@
                     android:orientation="vertical"
                     android:layout_toEndOf="@+id/post_user_image">
                 <RelativeLayout
-                    android:id="@+id/rl_post"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_5sdp"

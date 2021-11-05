@@ -398,8 +398,9 @@ public class ActivityCheckoutDetails extends AppCompatActivity implements Paymen
             //You can omit the image option to fetch the image from dashboard
             options.put("image", modelArrayList.getData().getAvatar());
             options.put("currency", "INR");
+            Log.d("Payableamoou nt",payableAmount);
             if (coupon_status.equalsIgnoreCase("apply")) {
-                options.put("amount", payableAmount.toString().trim());
+                options.put("amount", payableAmount);
             } else {
                 options.put("amount", payableAmount);
             }
@@ -449,7 +450,7 @@ public class ActivityCheckoutDetails extends AppCompatActivity implements Paymen
         try {
             //Toast.makeText(this, "Payment failed: " + code + " " + response, Toast.LENGTH_SHORT).show();
         } catch (Exception e) {
-            Log.e(TAG, "Exception in onPaymentError", e);
+            //Log.e(TAG, "Exception in onPaymentError", e);
         }
     }
 
@@ -566,7 +567,7 @@ public class ActivityCheckoutDetails extends AppCompatActivity implements Paymen
                             rel_apply.setVisibility(View.VISIBLE);
                             fl_removecoupon.setVisibility(View.GONE);
                         }
-                        //payableAmount =jsonObject1.getString("payment_amount");
+                       // payableAmount =jsonObject1.getString("payment_amount");
                         payableAmount = jsonObject1.getString("total_payable_amount");
 
 
