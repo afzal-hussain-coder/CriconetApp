@@ -67,6 +67,7 @@ public class Global {
     //public static final String URL_CHAT = "https://stage.criconetonline.com";
     //public static String GameURL = "https://criconetonline.com/cricket_js/index.php?";
 
+
     /*for live*/
     public static final String URL = "https://www.criconet.com/app_api.php?type=";
     public static final String URL_CHAT = "https://www.criconet.com";
@@ -103,6 +104,8 @@ public class Global {
     public static final String GET_CHAT_NOTIFICATION = "get_message_notifications";
     public static final String UPLOAD_VIDEO = "recording_upload";
     public static final String GET_RECORDED_VIDEO = "get_recording_video";
+    public static final String GET_BOOKING_DETAILS = "get_booking_details";
+
 
 
 
@@ -466,14 +469,14 @@ public class Global {
     }
 
 
-    public static ProgressDialog getProgressDialog(Context context, String message, Boolean canceleable) {
-        ProgressDialog dialog = new ProgressDialog(context);
-        dialog.setMessage(message);
-        dialog.setCancelable(canceleable);
-        dialog.setProgressDrawable(ContextCompat.getDrawable(context, R.drawable.loading_placeholder));
-        dialog.show();
-        return dialog;
-    }
+//    public static ProgressDialog getProgressDialog(Context context, String message, Boolean canceleable) {
+//        ProgressDialog dialog = new ProgressDialog(context);
+//        dialog.setMessage(message);
+//        dialog.setCancelable(canceleable);
+//        dialog.setProgressDrawable(ContextCompat.getDrawable(context, R.drawable.loading_placeholder));
+//        dialog.show();
+//        return dialog;
+//    }
 
     public static void dismissDialog(ProgressDialog dialog) {
         if (dialog != null && dialog.isShowing())

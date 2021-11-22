@@ -163,7 +163,7 @@ public class MainActivity extends BaseActivity {
         text.add(new Drawer(getString(R.string.home), false, R.drawable.ic_home));
 
         // Record Video Code Commented
-        text.add(new Drawer(getString(R.string.recorded_video),false, R.drawable.record_video));
+        //text.add(new Drawer(getString(R.string.recorded_video),false, R.drawable.record_video));
 
         profile_pic.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -438,14 +438,14 @@ public class MainActivity extends BaseActivity {
                         e.printStackTrace();
                     }
                 }
-                else if (text.get(position).getTitle().equalsIgnoreCase(pageURL.getCarrer().getString("title"))) {
+                /*else if (text.get(position).getTitle().equalsIgnoreCase(pageURL.getCarrer().getString("title"))) {
                     try {
                         startActivity(new Intent(mActivity, WebViewActivity.class).putExtra("URL", pageURL.getCarrer().getString("url")).putExtra("title", pageURL.getCarrer().getString("title")));
                         finish();
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                }
+                }*/
                 else if (text.get(position).getTitle().equalsIgnoreCase(pageURL.getContact_us().getString("title"))) {
                     startActivity(new Intent(mActivity, WebViewActivity.class).putExtra("URL", pageURL.getContact_us().getString("url")).putExtra("title", pageURL.getContact_us().getString("title")));
                     finish();

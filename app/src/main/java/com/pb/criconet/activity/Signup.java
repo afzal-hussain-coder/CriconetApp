@@ -627,6 +627,7 @@ public class Signup extends AppCompatActivity {
                             SessionManager.save_sex(prefs, jsonObject2.getString("gender"));
                             SessionManager.save_password(prefs, jsonObject2.getString("password2"));
                             SessionManager.save_address(prefs, jsonObject2.getString("address"));
+                            SessionManager.save_mobile_verified(prefs, jsonObject2.getString("is_mobile_verified"));
 
                             if(jsonObject2.getString("profile_type")==null){
                                 SessionManager.save_profiletype(prefs, "");
@@ -702,6 +703,9 @@ public class Signup extends AppCompatActivity {
                                 SessionManager.save_sex(prefs, jsonObjectData.getString("gender"));
                                 SessionManager.save_image(prefs, jsonObjectData.getString("avatar"));
                                 SessionManager.save_cover(prefs, jsonObjectData.getString("cover"));
+                                SessionManager.save_mobile_verified(prefs, jsonObjectData.getString("is_mobile_verified"));
+
+
                                     if(jsonObjectData.getString("profile_type")==null){
 
                                         SessionManager.save_profiletype(prefs, jsonObjectData.getString("profile_type"));

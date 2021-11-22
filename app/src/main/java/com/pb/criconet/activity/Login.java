@@ -738,6 +738,7 @@ public class Login extends AppCompatActivity {
                                 SessionManager.save_fname(prefs, userData.getFirst_name());
                                 SessionManager.save_lname(prefs, userData.getLast_name());
                                 SessionManager.save_profiletype(prefs, userData.getProfile_type());
+                                SessionManager.save_mobile_verified(prefs, userData.getIs_mobile_verified());
                                 if(userData.getProfile_type().equalsIgnoreCase("coach")){
 
                                     if(jsonData.has("coachProfile")){
@@ -820,6 +821,7 @@ public class Login extends AppCompatActivity {
                                 SessionManager.save_image(prefs, userData.getAvatar());
                                 SessionManager.save_cover(prefs, userData.getCover());
                                 SessionManager.save_profiletype(prefs, userData.getProfile_type());
+                                SessionManager.save_mobile_verified(prefs, userData.getIs_mobile_verified());
 
                                 if(userData.getProfile_type().equalsIgnoreCase("coach")){
                                     JSONObject  jsonObject1= jsonData.getJSONObject("coachProfile");
@@ -857,18 +859,6 @@ public class Login extends AppCompatActivity {
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> param = new HashMap<String, String>();
-//                "provider:Facebook
-//                identifier:134464588258955
-//                first_name:Kundan
-//                last_name:Singh
-//                email:criconetonline12@gmail.com
-//                description:
-//                gender:
-//                profileURL:
-//                photoURL:https://graph.facebook.com/134464588258955/picture?width=150&height=150
-//                device_id:23243432dfdfdfdf
-//                device:android"
-
                 param.put("provider", logintype);
                 param.put("identifier", personid);
                 param.put("first_name", name_string);
@@ -1094,7 +1084,6 @@ public class Login extends AppCompatActivity {
 
 
     }
-
 
     protected void setGooglePlusButtonText(SignInButton signInButton, String buttonText) {
         // Find the TextView that is inside of the SignInButton and set its text

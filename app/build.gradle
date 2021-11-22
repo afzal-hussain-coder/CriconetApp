@@ -16,8 +16,8 @@ android {
         applicationId "com.pb.criconet"
         minSdkVersion 21
         targetSdkVersion 31
-        versionCode 27
-        versionName "1.1.4"
+        versionCode 30
+        versionName "1.1.7"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"

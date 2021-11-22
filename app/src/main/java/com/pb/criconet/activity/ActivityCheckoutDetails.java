@@ -58,6 +58,7 @@ import com.razorpay.Checkout;
 import com.razorpay.PaymentResultListener;
 import com.rilixtech.widget.countrycodepicker.CountryCodePicker;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -111,7 +112,7 @@ public class ActivityCheckoutDetails extends AppCompatActivity implements Paymen
     FrameLayout flSubmitDetails;
     TextView tvPricee, tvOfferPricee, tvTotalAmountt, tvCouponDiss, tvSubtotall, tvTaxx;
     LinearLayout li_offerr;
-    String payLater_settings_status="",coupon_code_settings_status="";
+    String payLater_settings_status = "", coupon_code_settings_status = "";
 
 
     @Override
@@ -149,6 +150,7 @@ public class ActivityCheckoutDetails extends AppCompatActivity implements Paymen
         } else {
             Global.showDialog(mActivity);
         }
+
     }
 
     private void initializeView() {
@@ -307,7 +309,7 @@ public class ActivityCheckoutDetails extends AppCompatActivity implements Paymen
                             Global.showDialog(mActivity);
                         }
                     }
-
+                    //njkk
 
                 }
             } catch (Exception e) {
@@ -398,7 +400,7 @@ public class ActivityCheckoutDetails extends AppCompatActivity implements Paymen
             //You can omit the image option to fetch the image from dashboard
             options.put("image", modelArrayList.getData().getAvatar());
             options.put("currency", "INR");
-            Log.d("Payableamoou nt",payableAmount);
+            Log.d("Payableamoou nt", payableAmount);
             if (coupon_status.equalsIgnoreCase("apply")) {
                 options.put("amount", payableAmount);
             } else {
@@ -417,6 +419,8 @@ public class ActivityCheckoutDetails extends AppCompatActivity implements Paymen
             e.printStackTrace();
         }
     }
+
+
 
     /**
      * The name of the function has to be
@@ -567,10 +571,8 @@ public class ActivityCheckoutDetails extends AppCompatActivity implements Paymen
                             rel_apply.setVisibility(View.VISIBLE);
                             fl_removecoupon.setVisibility(View.GONE);
                         }
-                       // payableAmount =jsonObject1.getString("payment_amount");
+                        // payableAmount =jsonObject1.getString("payment_amount");
                         payableAmount = jsonObject1.getString("total_payable_amount");
-
-
 
                     } else if (jsonObject.optString("api_text").equalsIgnoreCase("failed")) {
                         Toaster.customToast(jsonObject.optJSONObject("errors").optString("error_text"));
@@ -687,25 +689,25 @@ public class ActivityCheckoutDetails extends AppCompatActivity implements Paymen
 
 
                         // Log.d("Payment",ordercreate.getPayment()+".....");
-                         if(ordercreate.getPayment()==0){
-                              loaderView.showLoader();
-                             new Handler().postDelayed(new Runnable() {
-                                 @Override
-                                 public void run() {
+                        if (ordercreate.getPayment() == 0) {
+                            loaderView.showLoader();
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
                                     loaderView.hideLoader();
-                                     Intent intent = new Intent(ActivityCheckoutDetails.this, BookingActivity.class);
-                                     startActivity(intent);
-                                     finish();
-                                 }
-                             },2000);
+                                    Intent intent = new Intent(ActivityCheckoutDetails.this, BookingActivity.class);
+                                    startActivity(intent);
+                                    finish();
+                                }
+                            }, 2000);
 
-                         }else{
-                             if (Global.isOnline(mActivity)) {
-                                 startPayment();
-                             } else {
-                                 Global.showDialog(mActivity);
-                             }
-                         }
+                        } else {
+                            if (Global.isOnline(mActivity)) {
+                                startPayment();
+                            } else {
+                                Global.showDialog(mActivity);
+                            }
+                        }
 
                     } else {
                         if (ordercreate == null) {
@@ -902,6 +904,7 @@ public class ActivityCheckoutDetails extends AppCompatActivity implements Paymen
         postRequest.setRetryPolicy(policy);
         queue.add(postRequest);
     }
+
     private void checkAppSettings() {
         StringRequest postRequest = new StringRequest(Request.Method.GET, Global.URL + Global.GET_APP_SETTINGS, new Response.Listener<String>() {
             @Override
@@ -912,12 +915,12 @@ public class ActivityCheckoutDetails extends AppCompatActivity implements Paymen
                     if (jsonObject.getString("api_text").equalsIgnoreCase("success")) {
                         JSONObject jsonObject1 = jsonObject.getJSONObject("data");
 
-                        if(jsonObject1.has("paylater")) {
+                        if (jsonObject1.has("paylater")) {
                             try {
                                 payLater_settings_status = jsonObject1.getString("paylater");
-                                if(payLater_settings_status.equalsIgnoreCase("0")){
+                                if (payLater_settings_status.equalsIgnoreCase("0")) {
                                     btnPayLater.setVisibility(View.GONE);
-                                }else{
+                                } else {
                                     btnPayLater.setVisibility(View.VISIBLE);
                                 }
 
@@ -925,12 +928,12 @@ public class ActivityCheckoutDetails extends AppCompatActivity implements Paymen
                                 jsonException.printStackTrace();
                             }
                         }
-                        if(jsonObject1.has("coupon_code")) {
+                        if (jsonObject1.has("coupon_code")) {
                             try {
                                 coupon_code_settings_status = jsonObject1.getString("coupon_code");
-                                if(coupon_code_settings_status.equalsIgnoreCase("0")){
+                                if (coupon_code_settings_status.equalsIgnoreCase("0")) {
                                     rel_apply.setVisibility(View.GONE);
-                                }else{
+                                } else {
                                     rel_apply.setVisibility(View.VISIBLE);
                                 }
 
@@ -955,7 +958,7 @@ public class ActivityCheckoutDetails extends AppCompatActivity implements Paymen
                 error.printStackTrace();
                 //Global.msgDialog((Activity) mActivity, "Error from server");
             }
-        }) ;
+        });
         int socketTimeout = 30000;
         RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
         postRequest.setRetryPolicy(policy);

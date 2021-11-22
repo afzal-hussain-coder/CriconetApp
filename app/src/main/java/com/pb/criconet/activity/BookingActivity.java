@@ -316,10 +316,10 @@ public class BookingActivity extends AppCompatActivity implements BookingHistory
 
     @SuppressLint("SetJavaScriptEnabled")
     private void initializeView() {
-//        fabCreate = (FloatingTextButton)findViewById(R.id.action_button);
-//        fabCreate.setOnClickListener(view -> {
-//            openCameraVideo();
-//        });
+        fabCreate = (FloatingTextButton)findViewById(R.id.action_button);
+        fabCreate.setOnClickListener(view -> {
+            openCameraVideo();
+        });
         webView =findViewById(R.id.web_chat);
         progressBar = findViewById(R.id.loadingVieww);
         webView.setWebViewClient(new Callback());

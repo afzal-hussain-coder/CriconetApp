@@ -209,6 +209,7 @@
             android:fontFamily="@font/opensans_semibold"
             android:visibility="gone" />
             <ru.dimorinny.floatingtextbutton.FloatingTextButton
+                android:id="@+id/action_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
@@ -216,7 +217,7 @@
                 android:layout_marginRight="@dimen/_10sdp"
                 android:layout_marginBottom="@dimen/_40sdp"
                 android:padding="@dimen/_2sdp"
-                android:visibility="visible"
+                android:visibility="gone"
                 app:floating_title="@string/record_video"
                 app:floating_background_color="@color/colorPrimary"
                 app:floating_left_icon="@drawable/recording_icon"

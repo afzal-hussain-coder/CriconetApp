@@ -43,6 +43,7 @@ import com.pb.criconet.Utills.Global;
 import com.pb.criconet.Utills.SessionManager;
 import com.pb.criconet.Utills.Toaster;
 import com.pb.criconet.event.SlotId;
+import com.pb.criconet.models.BookingPaymentsDetails;
 import com.pb.criconet.models.CoachDetails;
 import com.pb.criconet.models.DateSlotes;
 import com.pb.criconet.models.OrderCreate;
@@ -51,6 +52,8 @@ import com.rilixtech.widget.countrycodepicker.CountryCodePicker;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import java.io.Serializable;
 import java.text.DateFormat;
@@ -100,6 +103,9 @@ public class CoachDetailsActivity extends BaseActivity {
     private LinearLayout li_support;
     private LinearLayout li_offer;
     Date previousDate;
+    String coupon_code = "", percentage;
+    BookingPaymentsDetails bookingPaymentsDetails;
+    OrderCreate ordercreate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -162,11 +168,21 @@ public class CoachDetailsActivity extends BaseActivity {
             } else if (mslotId.equalsIgnoreCase("")) {
                 Toaster.customToast("Select Time Slot");
             } else {
-                if (Global.isOnline(mActivity)) {
-                    BookCoach();
-                } else {
-                    Global.showDialog(mActivity);
+
+                String is_contact_verify = SessionManager.get_mobile_verified(prefs);
+                //is_contact_verify="0";
+
+                if (is_contact_verify.equalsIgnoreCase("0")) {
+                    EmailOtpDialog(modelArrayList, ordercreate);
+                }else{
+                    if (Global.isOnline(mActivity)) {
+                        BookCoach();
+                    } else {
+                        Global.showDialog(mActivity);
+                    }
                 }
+
+
 
             }
         });
@@ -199,6 +215,7 @@ public class CoachDetailsActivity extends BaseActivity {
         }
 
         datePicker.setOnDayClickListener(eventDay -> {
+            mslotId="";
             dateGott = Global.getDateGot(eventDay.getCalendar().getTime().toString());
             if(previousDate.compareTo(eventDay.getCalendar().getTime()) ==-1){
                 if (Global.isOnline(mActivity)) {
@@ -230,6 +247,12 @@ public class CoachDetailsActivity extends BaseActivity {
             getCoachDete();
         });
 
+        if (Global.isOnline(mActivity)) {
+        getOffer();
+    } else {
+        Global.showDialog(mActivity);
+    }
+
     }
 
     @Override
@@ -240,6 +263,88 @@ public class CoachDetailsActivity extends BaseActivity {
     @Override
     protected void deInitUIandEvent() {
 
+    }
+
+
+    private void getOffer() {
+        loaderView.showLoader();
+        StringRequest postRequest = new StringRequest(Request.Method.POST, Global.URL + Global.getOffet, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.d("offer_res", response);
+                loaderView.hideLoader();
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    if (jsonObject.getString("api_status").equalsIgnoreCase("200")) {
+
+
+                        JSONObject jsonObject1 = jsonObject.getJSONObject("data");
+                        JSONArray jsonArray = null;
+
+
+                        if (jsonObject1.has("coupon_code")) {
+                            coupon_code = jsonObject1.getString("coupon_code");
+                            SessionManager.save_coupon_code(prefs, coupon_code);
+                        }
+                        if (jsonObject1.has("offer_details")) {
+                            jsonArray = jsonObject1.getJSONArray("offer_details");
+                        }
+                        JSONObject  jsonObject2=new JSONObject();
+                        for(int i=0;i<jsonArray.length();i++){
+                            jsonObject2=jsonArray.getJSONObject(0);
+                        }
+
+                        if(jsonObject2.has("offer_percentage")){
+                            percentage = jsonObject2.getString("offer_percentage");
+                            Log.d("Perstage",percentage);
+                        }
+
+//                        if (jsonArray.length()==0) {
+//                            img_banner.setVisibility(View.GONE);
+//                        }else{
+//                            img_banner.setVisibility(View.VISIBLE);
+//                            JSONObject jsonObject2= jsonArray.getJSONObject(0);
+//                            if (!jsonObject2.getString("banner").isEmpty()) {
+//                                Glide.with(getActivity()).load(jsonObject2.getString("banner"))
+//                                        .into(img_banner);
+//                            } else {
+//                                Glide.with(getActivity()).load(R.drawable.bg_coach)
+//                                        .into(img_banner);
+//                            }
+//                        }
+
+
+                    } else {
+                        Toaster.customToast(getString(R.string.socket_timeout));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                loaderView.hideLoader();
+                //Global.dismissDialog(progressDialog);
+                Global.msgDialog(mActivity, "Error from server");
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> param = new HashMap<String, String>();
+                param.put("user_id", SessionManager.get_user_id(prefs));
+                param.put("s", SessionManager.get_session_id(prefs));
+                Timber.e(param.toString());
+                return param;
+            }
+        };
+        int socketTimeout = 30000;
+        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        postRequest.setRetryPolicy(policy);
+        queue.add(postRequest);
     }
 
     private void getCoachDetails() {
@@ -444,22 +549,36 @@ public class CoachDetailsActivity extends BaseActivity {
                 loaderView.hideLoader();
                 try{
                     Gson gson = new Gson();
-                    OrderCreate ordercreate = gson.fromJson(response, OrderCreate.class);
-                    if (ordercreate != null && ordercreate.getStatus() == 200) {
+                    ordercreate = gson.fromJson(response, OrderCreate.class);
 
-                        String is_contact_verify = ordercreate.getPaymentOption().getPrefill().getIs_conatct_verified();
-                        //is_contact_verify="0";
-                        if (is_contact_verify.equalsIgnoreCase("0")) {
-                            EmailOtpDialog(modelArrayList, ordercreate);
-                        } else {
-                            Intent intent = new Intent(mActivity, ActivityCheckoutDetails.class);
-                            intent.putExtra("key", (Serializable) modelArrayList);
-                            intent.putExtra("key1", (Serializable) ordercreate);
-                            intent.putExtra("booking_slot_date", dateGott);
-                            intent.putExtra("booking_slot_id",mslotId);
-                            startActivity(intent);
+                    if (ordercreate != null && ordercreate.getStatus() == 200) {
+                        //JSONObject jsonObject1 = ordercreate.getJSONObject("data");
+
+                        SessionManager.save_mobile_verified(prefs,ordercreate.getPaymentOption().getPrefill().getIs_conatct_verified());
+
+
+                            if (ordercreate.getPayment() == 0) {
+                                //BookingPaymentsDetails bookingPaymentsDetails = new BookingPaymentsDetails(jsonObject1);
+
+                                if (Global.isOnline(mActivity)) {
+                                    sendPaymentSuccess();
+                                } else {
+                                    Global.showDialog(mActivity);
+                                }
+
+                            }else{
+
+                                Intent intent = new Intent(mActivity, ActivityCheckoutDetails.class);
+                                intent.putExtra("key", (Serializable) modelArrayList);
+                                intent.putExtra("key1", (Serializable) ordercreate);
+                                intent.putExtra("booking_slot_date", dateGott);
+                                intent.putExtra("booking_slot_id",mslotId);
+                                startActivity(intent);
+                            }
+
+
                             //finish();
-                        }
+
 
                     } else {
                         Toaster.customToast(ordercreate.getErrors().getErrorText());
@@ -664,10 +783,13 @@ public class CoachDetailsActivity extends BaseActivity {
                             JSONObject jsonObject = new JSONObject(response.toString());
                             if (jsonObject.optString("api_text").equalsIgnoreCase("success")) {
                                 dialog.dismiss();
-                                Intent intent = new Intent(mActivity, ActivityCheckoutDetails.class);
-                                intent.putExtra("key", (Serializable) modelArrayList);
-                                intent.putExtra("key1", (Serializable) ordercreate);
-                                startActivity(intent);
+
+                                if (Global.isOnline(mActivity)) {
+                                    BookCoach();
+                                } else {
+                                    Global.showDialog(mActivity);
+                                }
+
                                 //finish();
                             } else if (jsonObject.optString("api_text").equalsIgnoreCase("failed")) {
                                 otpView.setText("");
@@ -778,6 +900,62 @@ public class CoachDetailsActivity extends BaseActivity {
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
         Date date = new Date();
         return dateFormat.format(date);
+    }
+
+    private void sendPaymentSuccess() {
+
+        loaderView.showLoader();
+        StringRequest postRequest = new StringRequest(Request.Method.POST, Global.URL + Global.GET_BOOKING_DETAILS, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.d("Booking Details", response);
+                loaderView.hideLoader();
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    if (jsonObject.getString("api_text").equalsIgnoreCase("success")) {
+                        JSONObject jsonObject1 = jsonObject.getJSONObject("data");
+                        BookingPaymentsDetails bookingPaymentsDetails = new BookingPaymentsDetails(jsonObject1);
+
+                        Intent intent = new Intent(CoachDetailsActivity.this, BookingDetailsActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        intent.putExtra("Data", (Serializable) bookingPaymentsDetails);
+                        intent.putExtra("FROM", "1");
+                        intent.putExtra("PAYLATER", "PAID");
+                        startActivity(intent);
+                        finish();
+                    } else if (jsonObject.optString("api_text").equalsIgnoreCase("failed")) {
+                        Toaster.customToast(jsonObject.optJSONObject("errors").optString("error_text"));
+                    } else {
+                        Toaster.customToast(getResources().getString(R.string.socket_timeout));
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                loaderView.hideLoader();
+                Global.msgDialog(mActivity, "Error from server");
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> param = new HashMap<String, String>();
+                param.put("user_id", SessionManager.get_user_id(prefs));
+                param.put("s", SessionManager.get_session_id(prefs));
+                param.put("booking_id", String.valueOf(ordercreate.getBookingId()));
+                Log.d("Param", param.toString());
+                return param;
+            }
+
+        };
+
+        int socketTimeout = 30000;
+        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        postRequest.setRetryPolicy(policy);
+        queue.add(postRequest);
     }
 
 }

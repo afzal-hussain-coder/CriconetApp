@@ -43,6 +43,16 @@ public class UserData implements Parcelable {
     private String birth_privacy;
     private String visit_privacy;
     private String verified;
+
+    public String getIs_mobile_verified() {
+        return is_mobile_verified;
+    }
+
+    public void setIs_mobile_verified(String is_mobile_verified) {
+        this.is_mobile_verified = is_mobile_verified;
+    }
+
+    private String is_mobile_verified;
     private String lastseen;
     private String showlastseen;
     private String status;
@@ -178,6 +188,7 @@ public class UserData implements Parcelable {
             b.birth_privacy = jsonObject.optString("birth_privacy");
             b.visit_privacy = jsonObject.optString("visit_privacy");
             b.verified = jsonObject.optString("verified");
+            b.is_mobile_verified = jsonObject.optString("is_mobile_verified");
             b.lastseen = jsonObject.optString("lastseen");
             b.showlastseen = jsonObject.optString("showlastseen");
             b.status = jsonObject.optString("status");
@@ -295,6 +306,7 @@ public class UserData implements Parcelable {
         this.birth_privacy = ((String) in.readValue((String.class.getClassLoader())));
         this.visit_privacy = ((String) in.readValue((String.class.getClassLoader())));
         this.verified = ((String) in.readValue((String.class.getClassLoader())));
+        this.is_mobile_verified = ((String) in.readValue((String.class.getClassLoader())));
         this.lastseen = ((String) in.readValue((String.class.getClassLoader())));
         this.showlastseen = ((String) in.readValue((String.class.getClassLoader())));
         this.status = ((String) in.readValue((String.class.getClassLoader())));
@@ -375,6 +387,7 @@ public class UserData implements Parcelable {
         dest.writeValue(birth_privacy);
         dest.writeValue(visit_privacy);
         dest.writeValue(verified);
+        dest.writeValue(is_mobile_verified);
         dest.writeValue(lastseen);
         dest.writeValue(showlastseen);
         dest.writeValue(status);

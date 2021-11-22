@@ -160,7 +160,8 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
     RelativeLayout rl_share_screen;
     TextView tv_doubleClick;
     LinearLayout li_tap;
-    String shareType="";
+    boolean mSS;
+    int shareId=0;
 
 
     // End of ScreenSharing
@@ -259,6 +260,8 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
         queue = Volley.newRequestQueue(this);
         user = new com.pb.criconet.chatModel.User(SessionManager.get_user_id(prefs));
         userId = getIntent().getStringExtra("UserId");
+
+        Log.d("USERID",userId+"/"+SessionManager.get_user_id(prefs));
         coachId = getIntent().getStringExtra("CoachId");
         coachName = getIntent().getStringExtra("Name");
         FROM = getIntent().getStringExtra("FROM");
@@ -271,12 +274,10 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
         lin_log = findViewById(R.id.lin_log);
         tv_timeDuration = findViewById(R.id.tv_timeDuration);
         rl_share_screen = findViewById(R.id.rl_share_screen);
-
+        ///user ........profiletype
+        ///coach
         li_tap = findViewById(R.id.li_tap);
         tv_doubleClick = (TextView) findViewById(R.id.tv_doubleClick );
-
-
-
         Animation anim = new AlphaAnimation(0.0f, 1.0f);
         anim.setDuration(100); //You can manage the blinking time with this parameter
         anim.setStartOffset(50);
@@ -391,17 +392,20 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
         button.setSelected(!selected);
 
         if (button.isSelected()) {
+            shareId=1;
             mSSClient.start(getApplicationContext(), getResources().getString(R.string.agora_app_id), accessToken,
                     channelName, com.pb.criconet.sharedscreen.Constant.SCREEN_SHARE_UID, mVEC);
+
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     tv_share.setText(getResources().getString(R.string.label_stop_sharing_your_screen));
                 }
             },3000);
-
-
+            mSS=true;
         } else {
+            mSS=false;
+            shareId=2;
             mSSClient.stop(getApplicationContext());
             tv_share.setText(getResources().getString(R.string.label_start_sharing_your_screen));
         }
@@ -574,12 +578,14 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
     private void doLeaveChannel() {
         leaveChannel(config().mChannel, SessionManager.get_user_name(prefs));
         preview(false, null, 0);
-
     }
 
     @Override
     public void onUserJoined(int uid) {
+
+        Log.d("UID",uid+"");
         joinType = "join";
+
         if (Global.isOnline(mActivity)) {
             getSessionLog();
         } else {
@@ -595,7 +601,7 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
                     public void run() {
                         li_tap.setVisibility(View.GONE);
                     }
-                },4000);
+                },2000);
 
                 tv_timeDuration.setVisibility(View.VISIBLE);
                 new CountDownTimer(timeDuration, 1000) {
@@ -614,40 +620,18 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
                 }.start();
 
                 lin_log.setVisibility(View.VISIBLE);
-                if (userId.equalsIgnoreCase(SessionManager.get_user_id(prefs))) {
-                    new Handler().postDelayed(new Runnable() {
-                        @SuppressLint("SetTextI18n")
-                        @Override
-                        public void run() {
+                if (String.valueOf(uid).equalsIgnoreCase(SessionManager.get_user_id(prefs))) {
+                    log_texth_other.setVisibility(View.GONE);
 
-                            if(uid==com.pb.criconet.sharedscreen.Constant.SCREEN_SHARE_UID){
-                                log_texth_other.setVisibility(View.VISIBLE);
-                                log_texth_other.setText(Global.capitizeString(coachName) + " " + "is sharing the screen");
-                            }else{
+                }else if(uid==com.pb.criconet.sharedscreen.Constant.SCREEN_SHARE_UID){
+                    log_texth_other.setVisibility(View.VISIBLE);
+                    log_texth_other.setText("Screen sharing has started");
 
-                                log_texth_other.setVisibility(View.VISIBLE);
-                                log_texth_other.setText(Global.capitizeString(coachName) + " " + "joined");
-                            }
+                }
+                else{
 
-
-                        }
-                    }, 1000);
-
-                } else if (coachId.equalsIgnoreCase(SessionManager.get_user_id(prefs))) {
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            if(uid==com.pb.criconet.sharedscreen.Constant.SCREEN_SHARE_UID){
-                                log_texth_other.setVisibility(View.VISIBLE);
-                                log_texth_other.setText(Global.capitizeString(coachName) + " " + "is sharing the screen");
-                            }else{
-
-                                log_texth_other.setVisibility(View.VISIBLE);
-                                log_texth_other.setText(Global.capitizeString(coachName) + " " + "joined");
-                            }
-                        }
-                    }, 1000);
-
+                    log_texth_other.setVisibility(View.VISIBLE);
+                    log_texth_other.setText(Global.capitizeString(coachName) + " " + "joined");
                 }
 
                 new Handler().postDelayed(new Runnable() {
@@ -655,11 +639,45 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
                     public void run() {
                         lin_log.setVisibility(View.GONE);
                     }
-                }, 4000);
+                }, 2000);
+
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        if(uid==2){
+                            if(uid==2 && shareId==1){
+                            }
+                            else{
+                                shareId=0;
+                                rl_share_screen.setVisibility(View.GONE);
+                            }
+                        }else{
+                            rl_share_screen.setVisibility(View.VISIBLE);
+                        }
+
+
+                    }
+                });
 
 
             }
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        if (rtcEngine() != null) {
+            doLeaveChannel();
+            RtcEngine.destroy();
+        }
+
+        if (mSS) {
+            mSSClient.stop(getApplicationContext());
+        }
     }
 
     @Override
@@ -688,6 +706,7 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
     @Override
     public void onUserOffline(int uid, int reason) {
         //log.debug("onUserOffline " + (uid & 0xFFFFFFFFL) + " " + reason);
+        Log.d("UID",uid+"");
         joinType = "leave";
         if (Global.isOnline(mActivity)) {
             getSessionLog();
@@ -695,32 +714,25 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
             Global.showDialog(mActivity);
         }
 
+
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if (userId.equalsIgnoreCase(SessionManager.get_user_id(prefs))) {
+                if (String.valueOf(uid).equalsIgnoreCase(SessionManager.get_user_id(prefs))) {
                     log_text.setVisibility(View.GONE);
+                    log_texth_other.setVisibility(View.GONE);
 
-                    if(uid==com.pb.criconet.sharedscreen.Constant.SCREEN_SHARE_UID){
-                        log_texth_other.setVisibility(View.VISIBLE);
-                        log_texth_other.setText(Global.capitizeString(coachName) + " " + "has stopped screen sharing");
-                    }else{
 
-                        log_texth_other.setVisibility(View.VISIBLE);
-                        log_texth_other.setText(Global.capitizeString(coachName) + " " + "left successfully");
-                    }
+                }else if(uid==com.pb.criconet.sharedscreen.Constant.SCREEN_SHARE_UID){
+                    log_texth_other.setVisibility(View.VISIBLE);
+                    log_texth_other.setText("Screen sharing has stopped ");
 
-                } else if (coachId.equalsIgnoreCase(SessionManager.get_user_id(prefs))) {
-                    log_text.setVisibility(View.GONE);
-                    if(uid==com.pb.criconet.sharedscreen.Constant.SCREEN_SHARE_UID){
-                        log_texth_other.setVisibility(View.VISIBLE);
-                        log_texth_other.setText(Global.capitizeString(coachName) + " " + "has stopped screen sharing");
-                    }else{
-
-                        log_texth_other.setVisibility(View.VISIBLE);
-                        log_texth_other.setText(Global.capitizeString(coachName) + " " + "left successfully");
-                    }
                 }
+                else{
+                    log_texth_other.setVisibility(View.VISIBLE);
+                    log_texth_other.setText(Global.capitizeString(coachName) + " " + "left successfully");
+                }
+
                 lin_log.setVisibility(View.VISIBLE);
                 li_tap.setVisibility(View.GONE);
 
@@ -731,9 +743,32 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
                     public void run() {
                         lin_log.setVisibility(View.GONE);
                     }
-                }, 4000);
+                }, 2000);
             }
         });
+
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+
+                if(uid==2){
+                    if(uid==2 && shareId==2){
+                    }
+                    else{
+                        shareId=0;
+                        rl_share_screen.setVisibility(View.VISIBLE);
+                    }
+                }else{
+                    rl_share_screen.setVisibility(View.GONE);
+                }
+
+            }
+        });
+
+
+
+
         doRemoveRemoteUi(uid);
     }
 
@@ -1193,7 +1228,7 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
         findViewById(R.id.extra_ops_container).setVisibility(hide ? View.INVISIBLE : View.VISIBLE);
         findViewById(R.id.bottom_action_container).setVisibility(hide ? View.INVISIBLE : View.VISIBLE);
         findViewById(R.id.small_video_view_dock).setVisibility(hide ? View.INVISIBLE : View.VISIBLE);
-        findViewById(R.id.rl_share_screen).setVisibility(hide ? View.INVISIBLE : View.VISIBLE);
+        //findViewById(R.id.rl_share_screen).setVisibility(hide ? View.INVISIBLE : View.VISIBLE);
 
     }
 

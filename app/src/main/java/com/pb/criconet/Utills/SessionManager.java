@@ -60,6 +60,7 @@ public class SessionManager {
     private static String Notification_count = "NOTIFICATION_COUNT";
     private static String languagecode = "LANGUAGECODE";
     private static String languagekey = "LANGUAGEKEY";
+    private static String is_no_verified = "is_mobile_verified";
 
 //    private static String CARTYPEID = "CARTYPEID";
 //    private static String CARTYPENAME = "CARTYPENAME";
@@ -474,6 +475,14 @@ public class SessionManager {
 
     public static String get_languagekey(SharedPreferences prefs) {
         return prefs.getString(languagekey, "home");
+    }
+
+    public static void save_mobile_verified(SharedPreferences prefs, String value) {
+        SessionManager.savePreference(prefs, is_no_verified, value);
+    }
+
+    public static String get_mobile_verified(SharedPreferences prefs) {
+        return prefs.getString(is_no_verified, "home");
     }
 
 }
