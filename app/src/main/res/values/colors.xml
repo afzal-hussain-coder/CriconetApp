@@ -9,6 +9,10 @@
     <color name="app_green">#8bbb51</color>
     <color name="gray">#D3D3D3</color>
     <color name="blue">#32c5f3</color>
+    <color name="blue_dark">#039BE5</color>
+    <color name="deep_blue">#E6B32D</color>
+
+
 <!--    //428f42-->
     <color name="edit_text_color_hint">#8c8979</color>
     <color name="edit_text_color">#8c8979</color>

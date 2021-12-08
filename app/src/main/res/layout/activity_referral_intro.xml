@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bckground_light"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar" />
+
+    <TextView
+        android:id="@+id/tv_refer_intro"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/toolbar"
+        android:background="@color/bckground"
+        android:fontFamily="@font/opensans_regular"
+        android:gravity="center_horizontal"
+        android:paddingBottom="@dimen/_15sdp"
+        android:paddingTop="@dimen/_15sdp"
+        android:text="Refer Friends and get more Rewards"
+        android:textColor="@color/white_smoke"
+        android:textSize="@dimen/_14sdp" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvRewards"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_refer_intro"
+        android:layout_margin="@dimen/_5sdp"
+        android:layout_marginTop="@dimen/_10sdp" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/rvRewards"
+        android:padding="@dimen/_10sdp"
+        android:paddingBottom="@dimen/_15sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:background="@color/bckground">
+
+        <RelativeLayout
+            android:id="@+id/rl_mid"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginEnd="@dimen/_10sdp">
+
+            <View
+                android:id="@+id/v"
+                android:layout_width="@dimen/_100sdp"
+                android:layout_height="@dimen/_1sdp"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:layout_toLeftOf="@+id/tv_refer_progress"
+                android:layout_marginEnd="@dimen/_2sdp"
+                android:background="@color/deep_blue" />
+
+            <TextView
+                android:id="@+id/tv_refer_progress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:fontFamily="@font/opensans_semibold"
+                android:text="@string/your_progress"
+                android:textAllCaps="true"
+                android:textColor="@color/deep_blue"
+                android:textSize="@dimen/_12sdp" />
+
+            <View
+                android:layout_width="@dimen/_100sdp"
+                android:layout_height="@dimen/_1sdp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/tv_refer_progress"
+                android:layout_marginStart="@dimen/_2sdp"
+                android:background="@color/deep_blue" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rlProgress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/rl_mid"
+            android:layout_marginTop="@dimen/_10sdp">
+
+            <TextView
+                android:id="@+id/tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:fontFamily="@font/opensans_semibold"
+                android:text="1"
+                android:layout_marginRight="-5dp"
+                android:layout_alignParentStart="true"
+                android:textColor="@color/deep_blue"
+                android:textSize="@dimen/_10sdp" />
+            <SeekBar
+                android:id="@+id/seekBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxHeight="@dimen/_10sdp"
+                android:min="1"
+                android:layout_toLeftOf="@+id/tv1"
+                android:layout_toRightOf="@+id/tv"
+                android:max="100"
+                android:progressDrawable="@drawable/custom_seekbar_progress"
+                android:splitTrack="false"
+                />
+            <TextView
+                android:id="@+id/tv1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="-5dp"
+                android:fontFamily="@font/opensans_semibold"
+                android:text="100"
+                android:textAllCaps="true"
+                android:layout_alignParentEnd="true"
+                android:textColor="@color/gray"
+                android:textSize="@dimen/_10sdp" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_20sdp"
+            android:layout_below="@+id/rlProgress">
+
+            <LinearLayout
+                android:id="@+id/li"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:fontFamily="@font/opensans_semibold"
+                    android:text="@string/number_ofReferral"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_10sdp" />
+
+                <TextView
+                    android:id="@+id/tv_referralNumber"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:fontFamily="@font/opensans_semibold"
+                    android:text="60"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:textColor="@color/deep_blue"
+                    android:textSize="@dimen/_10sdp" />
+            </LinearLayout>
+            <FrameLayout
+                android:id="@+id/fl_referFriend"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_35sdp"
+                android:layout_below="@+id/li"
+                android:layout_marginTop="@dimen/_20sdp"
+                android:layout_marginBottom="@dimen/_5sdp"
+                android:background="@color/colorPrimary">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_1sdp"
+                    android:background="#ca9191"/>
+                <View
+                    android:layout_width="0.9dp"
+                    android:layout_height="match_parent"
+                    android:background="#ca9191"/>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_1sdp"
+                    android:layout_gravity="bottom"
+                    android:background="#592627"/>
+                <View
+                    android:layout_width="@dimen/_1sdp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="end"
+                    android:background="#592627"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:padding="@dimen/_5sdp"
+                    android:text="@string/refer_a_friend"
+                    app:fontFamily="@font/opensans_semibold"
+                    android:textColor="@color/light_text_color"
+                    android:textSize="@dimen/_10sdp"/>
+
+            </FrameLayout>
+
+        </RelativeLayout>
+
+
+
+
+    </RelativeLayout>
+
+
+</RelativeLayout>

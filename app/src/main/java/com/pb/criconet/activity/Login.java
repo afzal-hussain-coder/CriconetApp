@@ -577,6 +577,7 @@ public class Login extends AppCompatActivity {
 //            }
 //        });
 
+
         FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(Login.this, new OnSuccessListener<InstanceIdResult>() {
             @Override
             public void onSuccess(InstanceIdResult instanceIdResult) {

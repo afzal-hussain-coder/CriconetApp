@@ -7,15 +7,24 @@
     android:background="@drawable/bg2">
     <!--android:background="@drawable/appbg"-->
 
+
     <include
         android:id="@+id/toolbar"
         layout="@layout/toolbar_login" />
+
+    <ImageView
+        android:id="@+id/img_banner"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_50sdp"
+        android:visibility="gone"
+        android:layout_below="@+id/toolbar"
+        android:scaleType="fitXY" />
 
     <RelativeLayout
         android:id="@+id/rlt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/toolbar"
+        android:layout_below="@+id/img_banner"
         android:background="#BF220e32"
         android:visibility="gone">
 
@@ -42,11 +51,11 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:layout_marginLeft="@dimen/_20sdp"
-        android:layout_marginTop="@dimen/_30sdp"
+        android:layout_marginTop="@dimen/_10sdp"
         android:layout_marginRight="@dimen/_20sdp"
         android:layout_marginBottom="@dimen/_10sdp"
         android:background="@color/white"
-        android:layout_below="@+id/toolbar"
+        android:layout_below="@+id/img_banner"
         android:visibility="visible"
         app:cardCornerRadius="@dimen/_1sdp"
         app:cardElevation="@dimen/_5sdp"
@@ -58,8 +67,6 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-
-
 
                 <LinearLayout
                     android:id="@+id/top"
@@ -481,6 +488,75 @@
                         </RelativeLayout>
                     </LinearLayout>
 
+                    <LinearLayout
+                        android:id="@+id/li_referral"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:orientation="vertical">
+
+
+                        <TextView
+                            android:id="@+id/edt_referral_code"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/edit_text_bg"
+                            android:text="@string/enter_referral_code"
+                            android:fontFamily="@font/opensans_regular"
+                            android:padding="@dimen/_9sdp"
+                            android:textColor="@color/edit_text_color"
+                            android:textSize="@dimen/_12sdp"
+                            android:visibility="visible" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/_2sdp"
+                            android:textSize="@dimen/_10sdp"
+                            android:visibility="gone" />
+
+                        <RelativeLayout
+                            android:id="@+id/rel_referral_bg_red"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/edit_text_bg_red"
+                            android:visibility="gone">
+
+                            <RelativeLayout
+                                android:id="@+id/rel_referral"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@color/colorPrimary"
+                                android:padding="@dimen/_9sdp">
+
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerInParent="true"
+                                    android:contentDescription="@string/app_name"
+                                    app:srcCompat="@drawable/code" />
+                            </RelativeLayout>
+
+                            <EditText
+                                android:id="@+id/edit_referral_red_bg"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:layout_toEndOf="@+id/rel_referral"
+                                android:background="@null"
+                                android:hint="@string/enter_referral_code"
+                                android:imeOptions="actionNext"
+                                android:fontFamily="@font/opensans_regular"
+                                android:importantForAutofill="no"
+                                android:inputType="textEmailAddress"
+                                android:padding="@dimen/_9sdp"
+                                android:singleLine="true"
+                                android:textColor="@color/edit_text_color"
+                                android:textColorHint="@color/edit_text_color_hint"
+                                android:textSize="@dimen/_12sdp" />
+                        </RelativeLayout>
+                    </LinearLayout>
+
                     <com.pb.criconet.Utills.DropDownView
                         android:id="@+id/drop_gender"
                         style="@style/formDropDown"
@@ -513,6 +589,7 @@
                         android:textColorHint="@color/light_black"
                         android:textSize="@dimen/_12sdp"
                         app:drawableTint="@color/light_black" />
+
 
                     <TextView
                         android:id="@+id/terms"

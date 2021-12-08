@@ -63,15 +63,15 @@ public class Global {
 
     public static final String FILE_UPLOAD_URL = "https://criconetonline.com/app_api.php?type=new_post";
     /*for debug*/
-    //public static final String URL = "https://stage.criconetonline.com/app_api.php?type=";
-    //public static final String URL_CHAT = "https://stage.criconetonline.com";
-    //public static String GameURL = "https://criconetonline.com/cricket_js/index.php?";
+    public static final String URL = "https://stage.criconetonline.com/app_api.php?type=";
+    public static final String URL_CHAT = "https://stage.criconetonline.com";
+    public static String GameURL = "https://criconetonline.com/cricket_js/index.php?";
 
 
     /*for live*/
-    public static final String URL = "https://www.criconet.com/app_api.php?type=";
-    public static final String URL_CHAT = "https://www.criconet.com";
-    public static String GameURL ="https://www.criconet.com/cricket_js/index.php?";
+   // public static final String URL = "https://www.criconet.com/app_api.php?type=";
+    //public static final String URL_CHAT = "https://www.criconet.com";
+    //public static String GameURL ="https://www.criconet.com/cricket_js/index.php?";
     
     // for video upload testing..
     //public static final String URL = "https://www.criconet.com/app_api.php?type=";
@@ -105,6 +105,8 @@ public class Global {
     public static final String UPLOAD_VIDEO = "recording_upload";
     public static final String GET_RECORDED_VIDEO = "get_recording_video";
     public static final String GET_BOOKING_DETAILS = "get_booking_details";
+    public static final String GET_REFERRAL_CODE = "generate_referal_code";
+
 
 
 

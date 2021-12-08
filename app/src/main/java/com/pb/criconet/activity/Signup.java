@@ -42,7 +42,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.text.HtmlCompat;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
@@ -65,7 +64,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
-import com.mukesh.OnOtpCompletionListener;
 import com.mukesh.OtpView;
 import com.pb.criconet.R;
 import com.pb.criconet.Utills.CustomLoaderView;
@@ -75,14 +73,14 @@ import com.pb.criconet.Utills.Global;
 import com.pb.criconet.Utills.MultipartRequest;
 import com.pb.criconet.Utills.SessionManager;
 import com.pb.criconet.Utills.Toaster;
-import com.pb.criconet.activity.Login;
-import com.pb.criconet.activity.MainActivity;
+import com.pb.criconet.models.Drawer;
 import com.pb.criconet.models.FBUser;
 import com.rilixtech.widget.countrycodepicker.CountryCodePicker;
 
 import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.entity.mime.content.StringBody;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
@@ -122,15 +120,16 @@ public class Signup extends AppCompatActivity {
     Uri URIid = null;
     Uri selectedImageid, mCapturedImageURIid;
     String file_pathid = "", image_pathid = "";
+    String referralCode ="";
     DropDownView drop_gender, drop_type;
     private ArrayList<DataModel> option = new ArrayList<>();
     private ArrayList<DataModel> option_type = new ArrayList<>();
 
     // Afzal code here...
-    TextView txt_login, textterms, edt_username, edtEmailId, edttxt_password, edit_confirm_password;
-    EditText edit_username_red_bg, edit_email_red_bg, edit_username_phone, edit_password_red_bg, edit_confirm_password_red;
+    TextView txt_login, textterms, edt_username, edtEmailId, edttxt_password, edit_confirm_password,edt_referral_code;
+    EditText edit_username_red_bg, edit_email_red_bg, edit_username_phone, edit_password_red_bg, edit_confirm_password_red,edit_referral_red_bg;
     CountryCodePicker ccp;
-    RelativeLayout rel_user_bg_red, rel_email_bg_red, rel_password_bg_red, rel_confirm_password_bg_red;
+    RelativeLayout rel_user_bg_red, rel_email_bg_red, rel_password_bg_red, rel_confirm_password_bg_red,rel_referral_bg_red;
     LinearLayout lin_register;
     String userName, email, password, confirmPassword, gender, profileType = "", phoneCode, phoneNumber;
     CustomLoaderView loaderView;
@@ -139,6 +138,9 @@ public class Signup extends AppCompatActivity {
     private OtpView otpView;
     private Activity activity;
     private String mobile_no;
+    ImageView img_banner;
+    String register_page_banner_status, register_page_banner_img,referral_code_status;
+    LinearLayout li_referral;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -192,11 +194,17 @@ public class Signup extends AppCompatActivity {
         });
 
         initializeView();
+        if (Global.isOnline(activity)) {
+            checkAppSettings();
+        } else {
+            Global.showDialog(activity);
+        }
 
     }
 
     private void initializeView() {
-
+        img_banner = findViewById(R.id.img_banner);
+        li_referral = findViewById(R.id.li_referral);
         rel_message = findViewById(R.id.rel_message);
         signup_card = findViewById(R.id.signup_card);
         txt_login = findViewById(R.id.txt_login);
@@ -211,11 +219,14 @@ public class Signup extends AppCompatActivity {
         edit_password_red_bg = findViewById(R.id.edit_password_red_bg);
 //        edit_confirm_password = findViewById(R.id.edit_confirm_password);
 //        edit_confirm_password_red = findViewById(R.id.edit_confirm_password_red);
+        edt_referral_code = findViewById(R.id.edt_referral_code);
+        edit_referral_red_bg = findViewById(R.id.edit_referral_red_bg);
 
         rel_user_bg_red = findViewById(R.id.rel_user_bg_red);
         rel_email_bg_red = findViewById(R.id.rel_email_bg_red);
         rel_password_bg_red = findViewById(R.id.rel_password_bg_red);
         rel_confirm_password_bg_red = findViewById(R.id.rel_confirm_password_bg_red);
+        rel_referral_bg_red = findViewById(R.id.rel_referral_bg_red);
 
         ib_visible_p = findViewById(R.id.ib_visible_p);
         ib_visible_p.setTag("InVisible");
@@ -253,9 +264,9 @@ public class Signup extends AppCompatActivity {
         textterms = findViewById(R.id.terms);
         textterms.setOnClickListener(v -> {
 
-            String url ="https:\\/\\/www.criconet.com\\/terms\\/terms?rst=app";
-            startActivity(new Intent(activity, WebViewSignUpTermsActivity.class).putExtra("URL", url).putExtra("title","Terms"));
-             finish();
+            String url = "https:\\/\\/www.criconet.com\\/terms\\/terms?rst=app";
+            startActivity(new Intent(activity, WebViewSignUpTermsActivity.class).putExtra("URL", url).putExtra("title", "Terms"));
+            finish();
             //startActivity(new Intent(this, TermsCondition.class));
         });
 
@@ -303,9 +314,7 @@ public class Signup extends AppCompatActivity {
             }
         });
 
-
         lin_register = findViewById(R.id.lin_register);
-
 
         edt_username.setOnClickListener(v -> {
             edt_username.setVisibility(View.GONE);
@@ -325,6 +334,11 @@ public class Signup extends AppCompatActivity {
             edttxt_password.setVisibility(View.GONE);
             rel_password_bg_red.setVisibility(View.VISIBLE);
             edit_password_red_bg.requestFocus();
+        });
+        edt_referral_code.setOnClickListener(v -> {
+            edt_referral_code.setVisibility(View.GONE);
+            rel_referral_bg_red.setVisibility(View.VISIBLE);
+            edit_referral_red_bg.requestFocus();
         });
 //        edit_confirm_password.setOnClickListener(v -> {
 //            edit_confirm_password.setVisibility(View.GONE);
@@ -355,17 +369,17 @@ public class Signup extends AppCompatActivity {
             }
         });
 
-//        edit_password_red_bg.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-//            @Override
-//            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-//
-//                if (actionId == EditorInfo.IME_ACTION_NEXT) {
-//                    edit_confirm_password.setVisibility(View.GONE);
-//                    rel_confirm_password_bg_red.setVisibility(View.VISIBLE);
-//                }
-//                return false;
-//            }
-//        });
+        edit_password_red_bg.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+
+                if (actionId == EditorInfo.IME_ACTION_NEXT) {
+                    edt_referral_code.setVisibility(View.GONE);
+                    rel_referral_bg_red.setVisibility(View.VISIBLE);
+                }
+                return false;
+            }
+        });
 
 
         txt_login.setOnClickListener(new View.OnClickListener() {
@@ -388,14 +402,14 @@ public class Signup extends AppCompatActivity {
 
                 password = edit_password_red_bg.getText().toString().trim();
                 //confirmPassword = edit_confirm_password_red.getText().toString().trim();
+                referralCode= edit_referral_red_bg.getText().toString().trim();
 
 //                address_String = edttxt_address.getText().toString().trim();
                 if (userName.isEmpty()) {
                     Toaster.customToast(getResources().getString(R.string.name_empty_validation));
-                }else if(!userName.matches("[a-zA-Z0-9.? ]*")){
+                } else if (!userName.matches("[a-zA-Z0-9.? ]*")) {
                     Toaster.customToast("Special character not allowed");
-                }
-                else if (userName.length() < 3) {
+                } else if (userName.length() < 3) {
                     Toaster.customToast(getResources().getString(R.string.name_limit_validation));
                 } else if (!Global.validateName(email)) {
                     Toaster.customToast(getResources().getString(R.string.email_empty_validation));
@@ -403,10 +417,9 @@ public class Signup extends AppCompatActivity {
                     Toaster.customToast(getResources().getString(R.string.email_invalid_validation));
                 } else if (phoneNumber.isEmpty()) {
                     Toaster.customToast(getResources().getString(R.string.phone_error));
-                }else if(!phoneNumber.matches("[0-9.? ]*")){
+                } else if (!phoneNumber.matches("[0-9.? ]*")) {
                     Toaster.customToast("Special character not allowed");
-                }
-                else if (!Global.isValidPhoneNumber(phoneNumber)) {
+                } else if (!Global.isValidPhoneNumber(phoneNumber)) {
                     Toaster.customToast(getResources().getString(R.string.error_invalid_phone));
                 } else if (password.isEmpty()) {
                     Toaster.customToast(getResources().getString(R.string.password_cannot_empty));
@@ -586,7 +599,6 @@ public class Signup extends AppCompatActivity {
         return cursor.getString(idx);
     }
 
-
     public void signup_task(String url, String path) {
         try {
             MultipartEntity entity = new MultipartEntity();
@@ -629,9 +641,9 @@ public class Signup extends AppCompatActivity {
                             SessionManager.save_address(prefs, jsonObject2.getString("address"));
                             SessionManager.save_mobile_verified(prefs, jsonObject2.getString("is_mobile_verified"));
 
-                            if(jsonObject2.getString("profile_type")==null){
+                            if (jsonObject2.getString("profile_type") == null) {
                                 SessionManager.save_profiletype(prefs, "");
-                            }else{
+                            } else {
                                 SessionManager.save_profiletype(prefs, jsonObject2.getString("profile_type"));
                             }
 
@@ -693,34 +705,34 @@ public class Signup extends AppCompatActivity {
                                 SessionManager.save_user_id(prefs, jsonObject.getString("user_id"));
                                 SessionManager.save_session_id(prefs, jsonObject.getString("session_id"));
 
-                                if(jsonObject.has("data")){
-                                JSONObject jsonObjectData = jsonObject.getJSONObject("data");
-                                phoneNumber = jsonObjectData.getString("temp_mobile_no");
-                                SessionManager.save_name(prefs, jsonObjectData.getString("username"));
-                                SessionManager.save_emailid(prefs, jsonObjectData.getString("email"));
-                                SessionManager.savePhone(prefs, jsonObjectData.getString("phone_number"));
-                                SessionManager.savePhoneCode(prefs, jsonObjectData.getString("phone_code"));
-                                SessionManager.save_sex(prefs, jsonObjectData.getString("gender"));
-                                SessionManager.save_image(prefs, jsonObjectData.getString("avatar"));
-                                SessionManager.save_cover(prefs, jsonObjectData.getString("cover"));
-                                SessionManager.save_mobile_verified(prefs, jsonObjectData.getString("is_mobile_verified"));
+                                if (jsonObject.has("data")) {
+                                    JSONObject jsonObjectData = jsonObject.getJSONObject("data");
+                                    phoneNumber = jsonObjectData.getString("temp_mobile_no");
+                                    SessionManager.save_name(prefs, jsonObjectData.getString("username"));
+                                    SessionManager.save_emailid(prefs, jsonObjectData.getString("email"));
+                                    SessionManager.savePhone(prefs, jsonObjectData.getString("phone_number"));
+                                    SessionManager.savePhoneCode(prefs, jsonObjectData.getString("phone_code"));
+                                    SessionManager.save_sex(prefs, jsonObjectData.getString("gender"));
+                                    SessionManager.save_image(prefs, jsonObjectData.getString("avatar"));
+                                    SessionManager.save_cover(prefs, jsonObjectData.getString("cover"));
+                                    SessionManager.save_mobile_verified(prefs, jsonObjectData.getString("is_mobile_verified"));
 
 
-                                    if(jsonObjectData.getString("profile_type")==null){
+                                    if (jsonObjectData.getString("profile_type") == null) {
 
                                         SessionManager.save_profiletype(prefs, jsonObjectData.getString("profile_type"));
-                                    }else{
+                                    } else {
                                         SessionManager.save_profiletype(prefs, jsonObjectData.getString("profile_type"));
                                     }
 
-                                SessionManager.save_check_login(prefs, true);
+                                    SessionManager.save_check_login(prefs, true);
 
-                                edit_username_red_bg.setText("");
-                                edit_email_red_bg.setText("");
-                                edit_password_red_bg.setText("");
-                                edit_username_phone.setText("");
-                                EmailOtpDialog(phoneNumber);
-                                  }
+                                    edit_username_red_bg.setText("");
+                                    edit_email_red_bg.setText("");
+                                    edit_password_red_bg.setText("");
+                                    edit_username_phone.setText("");
+                                    EmailOtpDialog(phoneNumber);
+                                }
 
 
                             } else if (jsonObject.optString("api_text").equalsIgnoreCase("failed")) {
@@ -750,6 +762,8 @@ public class Signup extends AppCompatActivity {
                 param.put("email", email);
                 param.put("phone_number", phoneNumber);
                 param.put("phone_code", phoneCode);
+                param.put("ref_code", referralCode);
+
                 if (profileType.equalsIgnoreCase("")) {
                     param.put("profile_type", "");
                 } else {
@@ -1016,5 +1030,74 @@ public class Signup extends AppCompatActivity {
             }
 
         }.start();
+    }
+
+    private void checkAppSettings() {
+        StringRequest postRequest = new StringRequest(Request.Method.GET, Global.URL + Global.GET_APP_SETTINGS, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.d("AppSettingsResponse", response);
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    if (jsonObject.getString("api_text").equalsIgnoreCase("success")) {
+                        JSONObject jsonObject1 = jsonObject.getJSONObject("data");
+
+                        if (jsonObject1.has("register_page_banner")) {
+                            register_page_banner_status = jsonObject1.getString("register_page_banner");
+                        }
+
+                        if (jsonObject1.has("register_page_banner_img")) {
+                            register_page_banner_img = jsonObject1.getString("register_page_banner_img");
+                        }
+
+                        if (register_page_banner_status.equalsIgnoreCase("1")) {
+                            img_banner.setVisibility(View.VISIBLE);
+                            if (!register_page_banner_img.isEmpty()) {
+                                Glide.with(activity).load(register_page_banner_img)
+                                        .into(img_banner);
+                            } else {
+                                Glide.with(activity).load(R.drawable.bg_coach)
+                                        .into(img_banner);
+                            }
+                        } else {
+                            img_banner.setVisibility(View.GONE);
+                        }
+
+                        if(jsonObject1.has("referral_code")) {
+                            try {
+                                referral_code_status = jsonObject1.getString("referral_code");
+                            } catch (JSONException jsonException) {
+                                jsonException.printStackTrace();
+                            }
+                        }
+                        //referral_code_status="0";
+                        if(referral_code_status.equalsIgnoreCase("1")){
+                            li_referral.setVisibility(View.VISIBLE);
+                        }else{
+                            li_referral.setVisibility(View.GONE);
+                        }
+
+
+                    } else if (jsonObject.optString("api_text").equalsIgnoreCase("failed")) {
+                        //Toaster.customToast(jsonObject.optJSONObject("errors").optString("error_text"));
+                    } else {
+                        //Toaster.customToast(getResources().getString(R.string.socket_timeout));
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                //Global.msgDialog((Activity) mActivity, "Error from server");
+            }
+        });
+        int socketTimeout = 30000;
+        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        postRequest.setRetryPolicy(policy);
+        queue.add(postRequest);
     }
 }

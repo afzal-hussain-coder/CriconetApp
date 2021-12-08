@@ -1,27 +1,25 @@
 package com.pb.criconet.activity;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.se.omapi.Session;
+import android.provider.MediaStore;
+import android.text.Html;
 import android.util.Log;
-import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,7 +28,6 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
@@ -46,12 +43,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.androidadvance.topsnackbar.TSnackbar;
 import com.bumptech.glide.Glide;
-import com.facebook.AccessToken;
-import com.facebook.LoginStatusCallback;
-import com.facebook.login.LoginManager;
-import com.facebook.login.widget.LoginButton;
-import com.google.android.material.bottomnavigation.LabelVisibilityMode;
-import com.google.android.material.snackbar.Snackbar;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.play.core.appupdate.AppUpdateInfo;
 import com.google.android.play.core.appupdate.AppUpdateManager;
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory;
@@ -60,16 +52,15 @@ import com.google.android.play.core.install.model.AppUpdateType;
 import com.google.android.play.core.install.model.InstallStatus;
 import com.google.android.play.core.install.model.UpdateAvailability;
 import com.google.android.play.core.tasks.Task;
-import com.google.gson.Gson;
+import com.google.firebase.dynamiclinks.DynamicLink;
+import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
+import com.google.firebase.dynamiclinks.ShortDynamicLink;
 import com.pb.criconet.R;
 import com.pb.criconet.Utills.CustomLoaderView;
 import com.pb.criconet.Utills.Global;
-import com.pb.criconet.Utills.MytextviewBold;
 import com.pb.criconet.Utills.SessionManager;
 import com.pb.criconet.Utills.Toaster;
-import com.pb.criconet.adapters.BookingHistoryAdapter;
 import com.pb.criconet.adapters.MenuAdapter;
-import com.pb.criconet.models.BookingHistory;
 import com.pb.criconet.models.Drawer;
 import com.pb.criconet.models.PageURL;
 
@@ -77,17 +68,20 @@ import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import it.sephiroth.android.library.bottomnavigation.BottomNavigation;
-import timber.log.Timber;
 
 
 public class MainActivity extends BaseActivity {
-
+    private static final String TAG = "MainActivity";
     public static BottomNavigation bottomNavigation;
     private FragmentManager manager;
     private ListView list_nav;
@@ -109,7 +103,11 @@ public class MainActivity extends BaseActivity {
     private AppUpdateManager appUpdateManager;
     private InstallStateUpdatedListener installStateUpdatedListener;
     private static final int FLEXIBLE_APP_UPDATE_REQ_CODE = 123;
-    String gameSettingsStataus="";
+    String gameSettingsStataus="",referral_code_status="";
+
+
+    private static final String DEEP_LINK_URL = "https://criconet.page.link/invite";
+    DynamicLink dynamicLink;
 
     @SuppressLint("WrongViewCast")
     @Override
@@ -139,11 +137,6 @@ public class MainActivity extends BaseActivity {
         } else {
             Global.showDialog(mActivity);
         }
-        if (Global.isOnline(this)) {
-            getPageUrl();
-        } else {
-            Global.showDialog(this);
-        }
 
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -161,6 +154,7 @@ public class MainActivity extends BaseActivity {
         list_nav = findViewById(R.id.list_nav);
         text = new ArrayList<>();
         text.add(new Drawer(getString(R.string.home), false, R.drawable.ic_home));
+
 
         // Record Video Code Commented
         //text.add(new Drawer(getString(R.string.recorded_video),false, R.drawable.record_video));
@@ -275,9 +269,10 @@ public class MainActivity extends BaseActivity {
             }
            // Log.d("Type",getIntent().getExtras().getString("type"));
         }
-       // Log.d("Type",getIntent().getExtras().getString("type"));
-        //socialLink();
+
+
     }
+
 
     @Override
     protected void onResume() {
@@ -341,6 +336,8 @@ public class MainActivity extends BaseActivity {
 
     }*/
 
+
+
     @Override
     public void onBackPressed() {
 
@@ -359,6 +356,34 @@ public class MainActivity extends BaseActivity {
         }
     }
 
+    public Bitmap DownloadImageFromPath(String path){
+        InputStream in =null;
+        Bitmap bmp=null;
+        ImageView iv = (ImageView)findViewById(R.id.img1);
+        int responseCode = -1;
+        try{
+
+            URL url = new URL(path);//"http://192.xx.xx.xx/mypath/img1.jpg
+            HttpURLConnection con = (HttpURLConnection)url.openConnection();
+            con.setDoInput(true);
+            con.connect();
+            responseCode = con.getResponseCode();
+            if(responseCode == HttpURLConnection.HTTP_OK)
+            {
+                //download
+                in = con.getInputStream();
+                bmp = BitmapFactory.decodeStream(in);
+                in.close();
+                iv.setImageBitmap(bmp);
+            }
+
+        }
+        catch(Exception ex){
+            Log.e("Exception",ex.toString());
+        }
+        return bmp;
+    }
+
     public void updatedisplay(int position) {
         Intent intent;
         drawer = findViewById(R.id.drawer_layout);
@@ -369,6 +394,10 @@ public class MainActivity extends BaseActivity {
             navigationController.navigateToHomeFragment();
         } else if (text.get(position).getTitle().equalsIgnoreCase("Slot")) {
             navigationController.navigatoMenuFragment(true);
+        } else if(text.get(position).getTitle().equalsIgnoreCase("Refer & Rewards")){
+            startActivity(new Intent(mActivity,ReferralIntroActivity.class));
+            finish();
+
         }
         // Record Video Commented ...if require please unCommented code hare.
         else if (text.get(position).getTitle().equalsIgnoreCase("Recorded Video")) {
@@ -548,6 +577,65 @@ public class MainActivity extends BaseActivity {
         queue.add(jsonObjectRequest);
     }
 
+    private void checkAppSettings() {
+        StringRequest postRequest = new StringRequest(Request.Method.GET, Global.URL + Global.GET_APP_SETTINGS, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.d("AppSettingsResponse", response);
+                try {
+                    if (Global.isOnline(mActivity)) {
+                        getPageUrl();
+                    } else {
+                        Global.showDialog(mActivity);
+                    }
+
+                    JSONObject jsonObject = new JSONObject(response);
+                    if (jsonObject.getString("api_text").equalsIgnoreCase("success")) {
+                        JSONObject jsonObject1 = jsonObject.getJSONObject("data");
+
+
+                        if(jsonObject1.has("game")) {
+                            try {
+                                gameSettingsStataus = jsonObject1.getString("game");
+                                // gameSettingsStataus="1";
+
+                            } catch (JSONException jsonException) {
+                                jsonException.printStackTrace();
+                            }
+                        }
+                        if(jsonObject1.has("referral_code")) {
+                            try {
+                                referral_code_status = jsonObject1.getString("referral_code");
+                            } catch (JSONException jsonException) {
+                                jsonException.printStackTrace();
+                            }
+                        }
+
+
+
+                    } else if (jsonObject.optString("api_text").equalsIgnoreCase("failed")) {
+                        //Toaster.customToast(jsonObject.optJSONObject("errors").optString("error_text"));
+                    } else {
+                        //Toaster.customToast(getResources().getString(R.string.socket_timeout));
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                //Global.msgDialog((Activity) mActivity, "Error from server");
+            }
+        }) ;
+        int socketTimeout = 30000;
+        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        postRequest.setRetryPolicy(policy);
+        queue.add(postRequest);
+    }
+
     private void getPageUrl() {
 //        progressDialog = Global.getProgressDialog(this, CCResource.getString(this, R.string.loading_dot), false);
         StringRequest postRequest = new StringRequest(Request.Method.POST, Global.URL + "page_url", new Response.Listener<String>() {
@@ -564,8 +652,10 @@ public class MainActivity extends BaseActivity {
                         if (gameSettingsStataus.equalsIgnoreCase("1")) {
                             text.add(new Drawer(getString(R.string.game), false, R.drawable.super_six));
                         }//text.add(new Drawer(getString(R.string.game), false, R.drawable.super_six));
-
-
+                        //referral_code_status="0";
+                        if(referral_code_status.equalsIgnoreCase("1")){
+                            text.add(new Drawer(getString(R.string.referrar_rewards), false, R.drawable.referral_icon));
+                        }
                         try {
                             text.add(new Drawer(pageURL.getAboutECoaching().getString("title"), false, R.drawable.e_coaching));
                         } catch (JSONException e) {
@@ -636,50 +726,6 @@ public class MainActivity extends BaseActivity {
 //                return param;
 //            }
         };
-        int socketTimeout = 30000;
-        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-        postRequest.setRetryPolicy(policy);
-        queue.add(postRequest);
-    }
-
-    private void checkAppSettings() {
-        StringRequest postRequest = new StringRequest(Request.Method.GET, Global.URL + Global.GET_APP_SETTINGS, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                Log.d("AppSettingsResponse", response);
-                try {
-                    JSONObject jsonObject = new JSONObject(response);
-                    if (jsonObject.getString("api_text").equalsIgnoreCase("success")) {
-                        JSONObject jsonObject1 = jsonObject.getJSONObject("data");
-
-
-                        if(jsonObject1.has("game")) {
-                            try {
-                                gameSettingsStataus = jsonObject1.getString("game");
-                               // gameSettingsStataus="1";
-
-                            } catch (JSONException jsonException) {
-                                jsonException.printStackTrace();
-                            }
-                        }
-
-                    } else if (jsonObject.optString("api_text").equalsIgnoreCase("failed")) {
-                        //Toaster.customToast(jsonObject.optJSONObject("errors").optString("error_text"));
-                    } else {
-                        //Toaster.customToast(getResources().getString(R.string.socket_timeout));
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
-                //Global.msgDialog((Activity) mActivity, "Error from server");
-            }
-        }) ;
         int socketTimeout = 30000;
         RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
         postRequest.setRetryPolicy(policy);
@@ -766,4 +812,6 @@ public class MainActivity extends BaseActivity {
         removeInstallStateUpdateListener();
     }
    /*End of In App Update Code*/
+     //TXT RECORD for invite referral
+    //google-site-verification=woqkXiB17vBE_hfOByspqflgreBWBT3K_DWA72GAE14
 }

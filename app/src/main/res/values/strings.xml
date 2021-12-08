@@ -345,6 +345,11 @@
 
     <!--//new.-->
     <string name="double_click">Double tap for full screen</string>
+    <string name="enter_referral_code">Enter Referral Code</string>
+    <string name="referrar_rewards"><![CDATA[Refer & Rewards]]></string>
+    <string name="your_progress">Your Progress</string>
+    <string name="number_ofReferral">Number of Referrals :</string>
+    <string name="refer_a_friend">Refer a friend</string>
 
 
 </resources>
