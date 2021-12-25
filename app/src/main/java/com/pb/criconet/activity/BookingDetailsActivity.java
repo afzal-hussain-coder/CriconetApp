@@ -96,7 +96,7 @@ public class BookingDetailsActivity extends AppCompatActivity {
         });
 
         TextView mTitle = (TextView) toolbar.findViewById(R.id.toolbartext);
-        mTitle.setText("Booking Details");
+        mTitle.setText(getResources().getString(R.string.Booking_Details));
 
         ivProfileImagee = findViewById(R.id.ivProfileImagee);
         tvCoachNamee = findViewById(R.id.tvCoachNamee);
@@ -156,7 +156,7 @@ public class BookingDetailsActivity extends AppCompatActivity {
                         .into(ivProfileImagee);
             }
             tvCoachNamee.setText(bookingPaymentsDetails.getCoachName());
-            tvSessionDetails.setText("Booking ID: " + " " + bookingPaymentsDetails.getBooking_id());
+            tvSessionDetails.setText(getResources().getString(R.string.bookingId) + " " + bookingPaymentsDetails.getBooking_id());
             tvSessionDateTime.setText(Global.convertUTCDateToLocalDate(bookingPaymentsDetails.getOnlineSessionStartTime()) + " , " + bookingPaymentsDetails.getBookingSlotTxt());
             tvBookingDate.setText(Global.getDate(Long.parseLong(bookingPaymentsDetails.getBookingTime())));
 
@@ -178,7 +178,7 @@ public class BookingDetailsActivity extends AppCompatActivity {
             if (bookingPaymentsDetails.getBookingStatus().equalsIgnoreCase("1")) {
                 tvBookingStataus.setText(getString(R.string.booking_confirmed));
             } else {
-                tvBookingStataus.setText("Booking in processing!");
+                tvBookingStataus.setText(getResources().getString(R.string.Booking_in_processing));
             }
 
         } catch (Exception e) {
@@ -239,7 +239,7 @@ public class BookingDetailsActivity extends AppCompatActivity {
                 error.printStackTrace();
                 loaderView.hideLoader();
                 //Global.dismissDialog(progressDialog);
-                Global.msgDialog((Activity) mActivity, "Error from server");
+                Global.msgDialog((Activity) mActivity, getResources().getString(R.string.error_server));
             }
         }) {
             @Override

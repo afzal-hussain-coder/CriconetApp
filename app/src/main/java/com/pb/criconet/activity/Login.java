@@ -363,7 +363,7 @@ public class Login extends AppCompatActivity {
         fb = findViewById(R.id.fb);
         fb_login = (LoginButton) findViewById(R.id.fb_login);
         gmail_login = (SignInButton) findViewById(R.id.gmail_login);
-        setGooglePlusButtonText(gmail_login,"Continue with Google");
+        setGooglePlusButtonText(gmail_login,getResources().getString(R.string.Continue_with_Google));
 
         click_signup = findViewById(R.id.txt_register);
         forgot_password = (TextView) findViewById(R.id.forgot_password);
@@ -522,13 +522,13 @@ public class Login extends AppCompatActivity {
                 email_String = edit_text_email_red.getText().toString().trim();
                 password_String = editText_password_red.getText().toString().trim();
                 if (!Global.validateName(email_String)) {
-                    Toaster.customToast("Username and email id can’t be empty!");
+                    Toaster.customToast(getResources().getString(R.string.Username_and_email_id_cant_be_empty));
                     edit_text_email.setVisibility(View.GONE);
                     rel_username_bg_red.setVisibility(View.VISIBLE);
                     edit_text_email_red.requestFocus();
                     edit_text_email_red.setCursorVisible(true);
                 } else if (!Global.validateName(password_String)) {
-                    Toaster.customToast("The Password Can’t be empty!");
+                    Toaster.customToast(getResources().getString(R.string.The_Password_Cant_be_empty));
                     edit_text_password.setVisibility(View.GONE);
                     rel_password_bg_red.setVisibility(View.VISIBLE);
                     editText_password_red.requestFocus();
@@ -740,6 +740,27 @@ public class Login extends AppCompatActivity {
                                 SessionManager.save_lname(prefs, userData.getLast_name());
                                 SessionManager.save_profiletype(prefs, userData.getProfile_type());
                                 SessionManager.save_mobile_verified(prefs, userData.getIs_mobile_verified());
+                                if(jsonData.has("ambassadorProfile")){
+                                   JSONObject ambassadorProfile = jsonData.getJSONObject("ambassadorProfile");
+
+                                  if(ambassadorProfile.length()>0){
+                                      SessionManager.save_is_ambassador(prefs,"1");
+                                      SessionManager.save_is_amb_name(prefs,ambassadorProfile.getString("name"));
+                                      SessionManager.save_is_amb_fullname(prefs,ambassadorProfile.getString("full_name"));
+                                      SessionManager.save_is_amb_email(prefs,ambassadorProfile.getString("email"));
+                                      SessionManager.save_is_amb_phone(prefs,ambassadorProfile.getString("phone_number"));
+                                      SessionManager.save_is_amb_college(prefs,ambassadorProfile.getString("school_college_name"));
+                                      SessionManager.save_is_amb_highestQ(prefs,ambassadorProfile.getString("height_qualification"));
+                                      SessionManager.save_is_ambs_have_you_org_event_flag(prefs,ambassadorProfile.getString("have_you_org_event_flag"));
+                                      SessionManager.save_is_ambs_have_you_org_event_txt(prefs,ambassadorProfile.getString("have_you_org_event_txt"));
+                                      SessionManager.save_is_ambs_innovative_thing(prefs,ambassadorProfile.getString("innovative_thing"));
+                                      SessionManager.save_is_ambs_how_many_hrs_per_week(prefs,ambassadorProfile.getString("how_many_hrs_per_week"));
+                                      SessionManager.save_is_ambs_passionate_thing(prefs,ambassadorProfile.getString("passionate_thing"));
+                                      SessionManager.save_is_ambs_do_you_want_campus_ambassdor(prefs,ambassadorProfile.getString("do_you_want_campus_ambassdor"));
+                                      SessionManager.save_is_ambs_thing_you_are_know_criconet(prefs,ambassadorProfile.getString("thing_you_are_know_criconet"));
+                                  }
+                                   //Toaster.customToast(ambassadorProfile.length()+"");
+                                }
                                 if(userData.getProfile_type().equalsIgnoreCase("coach")){
 
                                     if(jsonData.has("coachProfile")){
@@ -948,7 +969,7 @@ public class Login extends AppCompatActivity {
             signup_tasksocial(Global.URL + "social_login", name, email, logintype, id, imageurl);
 
         } else {
-            Toast.makeText(this, "SignIn failed", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getResources().getString(R.string.SignIn_failed), Toast.LENGTH_SHORT).show();
         }
     }
 

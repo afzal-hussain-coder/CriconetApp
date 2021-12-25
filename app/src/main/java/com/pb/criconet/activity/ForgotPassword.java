@@ -131,9 +131,9 @@ public class ForgotPassword extends AppCompatActivity {
 
 
             if (email_String.length()<1) {
-                Toaster.customToast("Email Can’t be empty!");
+                Toaster.customToast(getResources().getString(R.string.Email_Cant_be_empty));
             } else if (!Global.ValidEmail(email_String)) {
-                Toaster.customToast("Invalid email format!");
+                Toaster.customToast(getResources().getString(R.string.Invalid_email_format));
             } else {
                 if (Global.isOnline(ForgotPassword.this)) {
                     forgot_task(email_String);

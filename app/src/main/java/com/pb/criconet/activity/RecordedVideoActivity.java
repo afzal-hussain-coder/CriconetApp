@@ -121,7 +121,7 @@ public class RecordedVideoActivity extends AppCompatActivity {
                             } else if (jsonObject.optString("api_text").equalsIgnoreCase("failed")) {
                                 Global.msgDialog(mActivity, jsonObject.optJSONObject("errors").optString("error_text"));
                             } else {
-                                Global.msgDialog(mActivity, "Error in server");
+                                Global.msgDialog(mActivity, getResources().getString(R.string.error_server));
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -134,7 +134,7 @@ public class RecordedVideoActivity extends AppCompatActivity {
                         error.printStackTrace();
                         //progress.dismiss();
                         loaderView.hideLoader();
-                        Global.msgDialog(mActivity, "Error from server");
+                        Global.msgDialog(mActivity, getResources().getString(R.string.error_server));
 //                Global.msgDialog(getActivity(), "Internet connection is slow");
                     }
                 }

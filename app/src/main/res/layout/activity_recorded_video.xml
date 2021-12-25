@@ -25,7 +25,7 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:gravity="center"
-        android:text="Sorry \n No Live Streams Found"
+        android:text="@string/sorry_no_live_streams_found"
         android:textSize="18sp"
         android:visibility="gone" />
 

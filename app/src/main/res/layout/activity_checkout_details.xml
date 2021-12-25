@@ -153,7 +153,7 @@
                                         android:layout_gravity="left"
                                         android:fontFamily="@font/opensans_semibold"
                                         android:gravity="left"
-                                        android:text="Session Date"
+                                        android:text="@string/session_date"
                                         android:textColor="@color/bckground_light"
                                         android:textSize="@dimen/_10sdp" />
 
@@ -182,7 +182,7 @@
                                         android:layout_gravity="left"
                                         android:fontFamily="@font/opensans_semibold"
                                         android:gravity="left"
-                                        android:text="Session Time"
+                                        android:text="@string/session_time"
                                         android:textColor="@color/bckground_light"
                                         android:textSize="@dimen/_10sdp" />
 
@@ -371,7 +371,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:padding="@dimen/_5sdp"
-                    android:text="Remove Coupon"
+                    android:text="@string/remove_coupon"
                     android:textAllCaps="true"
                     android:textColor="@color/light_text_color"
                     android:textSize="@dimen/_10sdp"

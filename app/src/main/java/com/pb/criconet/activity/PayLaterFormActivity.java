@@ -76,7 +76,7 @@ public class PayLaterFormActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         TextView mTitle = (TextView) toolbar.findViewById(R.id.toolbartext);
-        mTitle.setText("Pay Later Form");
+        mTitle.setText(getResources().getString(R.string.Pay_Later_Form));
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -105,10 +105,10 @@ public class PayLaterFormActivity extends AppCompatActivity {
         ch_terams = findViewById(R.id.ch_terams);
         ch_terams_no = findViewById(R.id.ch_terams_no);
 
-        tvTaxx.setText("Taxes : " + "\u20B9" + "4.50");
-        tvSubtotall.setText("Subtotal : " + "\u20B9" + "25.00");
-        tvOfferPricee.setText("\u20B9" + "25.00" + "/" + "Session");
-        tvTotalAmountt.setText("Total payable amount: " + "\u20B9" + "29.50");
+        tvTaxx.setText(getResources().getString(R.string.texex) + "\u20B9" + "4.50");
+        tvSubtotall.setText(getResources().getString(R.string.subtotal) + "\u20B9" + "25.00");
+        tvOfferPricee.setText("\u20B9" + "25.00" + "/" + getResources().getString(R.string.session));
+        tvTotalAmountt.setText(getResources().getString(R.string.total_payable_amount) + "\u20B9" + "29.50");
 
         flSubmitDetails.setOnClickListener(v -> {
             laterPayeeName = edit_fullName.getText().toString().trim();
@@ -117,17 +117,17 @@ public class PayLaterFormActivity extends AppCompatActivity {
             laterPayAlternateMobileNo = edit_alternateMobile.getText().toString().trim();
 
             if (laterPayeeName.isEmpty()) {
-                Toaster.customToastUp("Please Enter Full Name");
+                Toaster.customToastUp(getResources().getString(R.string.Please_Enter_Full_Name));
             } else if (laterPayeeAddress.isEmpty()) {
-                Toaster.customToastUp("Please Enter Address");
+                Toaster.customToastUp(getResources().getString(R.string.Please_Enter_Address));
             } else if (laterPayeePin.isEmpty()) {
-                Toaster.customToastUp("Please Enter Pin Code");
+                Toaster.customToastUp(getResources().getString(R.string.Please_Enter_Pin_Code));
             } else if (!Global.isValidPincode(laterPayeePin)) {
-                Toaster.customToastUp("Please Enter Valid Pin Code");
+                Toaster.customToastUp(getResources().getString(R.string.Please_Enter_Valid_Pin_Code));
             } else if (laterPayAlternateMobileNo.isEmpty()) {
-                Toaster.customToastUp("Please enter alternate number");
+                Toaster.customToastUp(getResources().getString(R.string.Please_enter_alternate_number));
             } else if (!Global.isValidPhoneNumber(laterPayAlternateMobileNo)) {
-                Toaster.customToastUp("Please enter valid alternate number");
+                Toaster.customToastUp(getResources().getString(R.string.Please_enter_valid_alternate_number));
             } else {
 
 //                if (coupon_status.equalsIgnoreCase("apply")) {

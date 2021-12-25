@@ -45,7 +45,7 @@ public class WebViewGameFragment extends Fragment {
 
         Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
         TextView mTitle = (TextView) toolbar.findViewById(R.id.toolbartext);
-        mTitle.setText("Game");
+        mTitle.setText(getResources().getString(R.string.game));
         ImageView img_addpost = toolbar.findViewById(R.id.img_addpost);
         TextView tv_post = toolbar.findViewById(R.id.tv_post);
         tv_post.setVisibility(View.GONE);

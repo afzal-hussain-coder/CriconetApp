@@ -105,9 +105,9 @@ public class CoachFragment extends Fragment {
         TextView mTitle = (TextView) toolbar.findViewById(R.id.toolbartext);
 
         if (SessionManager.getProfileType(prefs).equalsIgnoreCase("coach")) {
-            mTitle.setText("VIEW YOUR PROFILE");
+            mTitle.setText(getResources().getString(R.string.VIEW_YOUR_PROFILE));
         } else {
-            mTitle.setText("BOOK YOUR COACH");
+            mTitle.setText(getResources().getString(R.string.BOOK_YOUR_COACH));
         }
 
         TextView tv_post = toolbar.findViewById(R.id.tv_post);
@@ -137,7 +137,7 @@ public class CoachFragment extends Fragment {
                 filterType = "";
                 experience = exp;
                 price = pri;
-                tv_sorting.setText("Experience : " + experience + " , " + "Price : " + price);
+                tv_sorting.setText(getResources().getString(R.string.Experience) + experience + " , " + getResources().getString(R.string.price) + price);
                 if (Global.isOnline(getActivity())) {
                     getCoachList();
                 } else {
@@ -241,7 +241,7 @@ public class CoachFragment extends Fragment {
                 error.printStackTrace();
                 loaderView.hideLoader();
                 //Global.dismissDialog(progressDialog);
-                Global.msgDialog(getActivity(), "Error from server");
+                Global.msgDialog(getActivity(), getResources().getString(R.string.error_server));
             }
         }) {
             @Override
@@ -295,7 +295,7 @@ public class CoachFragment extends Fragment {
                 error.printStackTrace();
                 loaderView.hideLoader();
                 //Global.dismissDialog(progressDialog);
-                Global.msgDialog(getActivity(), "Error from server");
+                Global.msgDialog(getActivity(), getResources().getString(R.string.error_server));
             }
         }) {
 //            @Override
@@ -370,7 +370,7 @@ public class CoachFragment extends Fragment {
                 error.printStackTrace();
                 loaderView.hideLoader();
                 //Global.dismissDialog(progressDialog);
-                Global.msgDialog(getActivity(), "Error from server");
+                Global.msgDialog(getActivity(), getResources().getString(R.string.error_server));
             }
         }) {
             @Override

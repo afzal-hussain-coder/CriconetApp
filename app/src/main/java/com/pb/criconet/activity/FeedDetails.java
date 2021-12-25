@@ -200,7 +200,7 @@ public class FeedDetails extends AppCompatActivity {
                     } else if (jsonObject.optString("api_text").equalsIgnoreCase("failed")) {
                         Global.msgDialog(FeedDetails.this, jsonObject.optJSONObject("errors").optString("error_text"));
                     } else {
-                        Global.msgDialog(FeedDetails.this, "Error in server");
+                        Global.msgDialog(FeedDetails.this, getResources().getString(R.string.error_server));
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -211,7 +211,7 @@ public class FeedDetails extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
                 progress.dismiss();
-                Global.msgDialog(FeedDetails.this, "Error from server");
+                Global.msgDialog(FeedDetails.this, getResources().getString(R.string.error_server));
             }
         }) {
             @Override
@@ -617,7 +617,7 @@ public class FeedDetails extends AppCompatActivity {
                     } else if (jsonObject.optString("api_text").equalsIgnoreCase("failed")) {
                         Global.msgDialog(FeedDetails.this, jsonObject.optJSONObject("errors").optString("error_text"));
                     } else {
-                        Global.msgDialog(FeedDetails.this, "Error in server");
+                        Global.msgDialog(FeedDetails.this, getResources().getString(R.string.error_server));
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -628,7 +628,7 @@ public class FeedDetails extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
                 progress.dismiss();
-                Global.msgDialog(FeedDetails.this, "Error from server");
+                Global.msgDialog(FeedDetails.this, getResources().getString(R.string.error_server));
             }
         }) {
             @Override
@@ -669,7 +669,7 @@ public class FeedDetails extends AppCompatActivity {
                     } else if (jsonObject.optString("api_text").equalsIgnoreCase("failed")) {
                         Global.msgDialog(FeedDetails.this, jsonObject.optJSONObject("errors").optString("error_text"));
                     } else {
-                        Global.msgDialog(FeedDetails.this, "Error in server");
+                        Global.msgDialog(FeedDetails.this, getResources().getString(R.string.error_server));
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -680,7 +680,7 @@ public class FeedDetails extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
                 progress.dismiss();
-                Global.msgDialog(FeedDetails.this, "Error from server");
+                Global.msgDialog(FeedDetails.this, getResources().getString(R.string.error_server));
             }
         }) {
             @Override
@@ -707,7 +707,7 @@ public class FeedDetails extends AppCompatActivity {
     public void ReportDialog(final String id) {
         AlertDialog.Builder alertbox = new AlertDialog.Builder(FeedDetails.this);
         alertbox.setTitle(FeedDetails.this.getResources().getString(R.string.app_name));
-        alertbox.setMessage("Are you sure you want to Report this feed?");
+        alertbox.setMessage(getResources().getString(R.string.Are_you_sure_you_want_to_Report_this_feed));
 
         LayoutInflater inflater = getLayoutInflater();
         View dialogLayout = inflater.inflate(R.layout.alert_dialog_with_edittext, null);
@@ -719,7 +719,7 @@ public class FeedDetails extends AppCompatActivity {
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface arg0, int arg1) {
                         if (input.getText().toString().equalsIgnoreCase("")) {
-                            Toast.makeText(FeedDetails.this, "Enter Reason First", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(FeedDetails.this, getResources().getString(R.string.Enter_Reason_First), Toast.LENGTH_SHORT).show();
                         } else {
                             ReportFeed(id, input.getText().toString());
                         }
@@ -742,13 +742,13 @@ public class FeedDetails extends AppCompatActivity {
                 try {
                     JSONObject jsonObject2, jsonObject = new JSONObject(response.toString());
                     if (jsonObject.optString("api_text").equalsIgnoreCase("Success")) {
-                        Global.msgDialog(FeedDetails.this, "Post reported Successfully.");
+                        Global.msgDialog(FeedDetails.this, getResources().getString(R.string.Post_reported_Successfully));
 //                        Toast.makeText(getActivity(), jsonObject.getString("msg"), Toast.LENGTH_SHORT).show();
 //                        ResetFeed();
                     } else if (jsonObject.optString("api_text").equalsIgnoreCase("failed")) {
                         Global.msgDialog(FeedDetails.this, jsonObject.optJSONObject("errors").optString("error_text"));
                     } else {
-                        Global.msgDialog(FeedDetails.this, "Error in server");
+                        Global.msgDialog(FeedDetails.this, getResources().getString(R.string.error_server));
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -759,7 +759,7 @@ public class FeedDetails extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
                 progress.dismiss();
-                Global.msgDialog(FeedDetails.this, "Error from server");
+                Global.msgDialog(FeedDetails.this, getResources().getString(R.string.error_server));
             }
         }) {
             @Override
@@ -1004,7 +1004,7 @@ public class FeedDetails extends AppCompatActivity {
                 public void onClick(View v) {
                     AlertDialog.Builder alertbox = new AlertDialog.Builder(mContext);
                     alertbox.setTitle(getResources().getString(R.string.app_name));
-                    alertbox.setMessage("Do you want to Delete this Comment ?");
+                    alertbox.setMessage(getResources().getString(R.string.Do_you_want_to_Delete_this_Comment));
                     alertbox.setPositiveButton("Yes",
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface arg0, int arg1) {

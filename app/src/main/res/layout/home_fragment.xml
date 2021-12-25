@@ -41,7 +41,7 @@
                 android:fontFamily="@font/opensans_regular"
                 android:gravity="center_vertical"
                 android:layout_marginRight="@dimen/_2sdp"
-                android:hint="Type here and click the post button"
+                android:hint="@string/type_here_and_click_the_post_button"
                 android:inputType="textMultiLine"
                 android:minHeight="@dimen/_40sdp"
                 android:textSize="@dimen/_10sdp"

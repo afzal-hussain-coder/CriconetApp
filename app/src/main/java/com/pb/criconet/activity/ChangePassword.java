@@ -233,19 +233,19 @@ public class ChangePassword extends AppCompatActivity {
         new_password = edit_new_password_red_bg.getText().toString().trim();
         repeat_password = edit_repeat_password_red_bg.getText().toString().trim();
         if (current_password.length() < 1) {
-            Toaster.customToast("Enter Current Password");
+            Toaster.customToast(getResources().getString(R.string.Enter_Current_Password));
         } else if (current_password.length() < 6) {
             Toaster.customToast(getResources().getString(R.string.password_too_short));
         } else if (new_password.length() < 1) {
-            Toaster.customToast("Enter New Password");
+            Toaster.customToast(getResources().getString(R.string.Enter_New_Password));
         } else if (new_password.length() < 6) {
             Toaster.customToast(getResources().getString(R.string.password_too_short));
         } else if (repeat_password.length() < 1) {
-            Toaster.customToast("Enter Repeat Password");
+            Toaster.customToast(getResources().getString(R.string.Enter_Repeat_Password));
         } else if (repeat_password.length() < 6) {
             Toaster.customToast(getResources().getString(R.string.password_too_short));
         } else if (!new_password.equals(repeat_password)) {
-            Toaster.customToast("Repeat password must be same as new password");
+            Toaster.customToast(getResources().getString(R.string.Repeat_password_must_be_same_as_new_password));
         } else {
             if (Global.isOnline(ChangePassword.this)) {
                 changePassword();
@@ -338,20 +338,20 @@ public class ChangePassword extends AppCompatActivity {
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if (task.isSuccessful()) {
                                         Log.d(TAG, "Password updated Fire Base");
-                                        Global.msgDialog(ChangePassword.this, "Password Changed Sucessfully");
+                                        Global.msgDialog(ChangePassword.this, getResources().getString(R.string.Password_Changed_Sucessfully));
                                         edit_current_password_red_bg.setText("");
                                         edit_new_password_red_bg.setText("");
                                         edit_repeat_password_red_bg.setText("");
 
                                     } else {
-                                        Global.msgDialog(ChangePassword.this, "Please check your password");
+                                        Global.msgDialog(ChangePassword.this, getResources().getString(R.string.Please_check_your_password));
                                         Log.d(TAG, "Error password not updated");
                                     }
                                 }
                             });
                         } else {
                             loaderView.hideLoader();
-                            Global.msgDialog(ChangePassword.this, "Change Password Failed");
+                            Global.msgDialog(ChangePassword.this, getResources().getString(R.string.Change_Password_Failed));
                             Log.d(TAG, "Error auth failed");
                         }
                     }

@@ -76,7 +76,7 @@
             android:paddingRight="@dimen/_10sdp"
             android:paddingBottom="@dimen/_3sdp"
             android:fontFamily="@font/opensans_semibold"
-            android:text="Follow"
+            android:text="@string/follow"
             android:textColor="@color/white"
             android:textSize="@dimen/_10sdp"
             />
@@ -162,7 +162,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/opensans_regular"
-                        android:text="Followers"
+                        android:text="@string/followers"
                         android:textColor="#838791"
                         android:textSize="@dimen/_10sdp" />
 
@@ -189,7 +189,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/opensans_regular"
-                        android:text="Following"
+                        android:text="@string/following"
                         android:textColor="#838791"
                         android:textSize="@dimen/_10sdp" />
 

@@ -91,7 +91,7 @@
             android:background="@drawable/round_corner_red"
             android:gravity="center"
             android:padding="@dimen/_5sdp"
-            android:text="Camera 1"
+            android:text="@string/cameraa"
             android:textAllCaps="true"
             android:textSize="@dimen/_10sdp"
             android:fontFamily="@font/opensans_semibold" />
@@ -105,7 +105,7 @@
             android:background="@drawable/round_border_red"
             android:gravity="center"
             android:padding="@dimen/_5sdp"
-            android:text="Camera 2"
+            android:text="@string/cameraaa"
             android:visibility="visible"
             android:textAllCaps="true"
             android:textSize="@dimen/_10sdp"
@@ -121,7 +121,7 @@
             android:background="@drawable/round_border_red"
             android:gravity="center"
             android:padding="@dimen/_5sdp"
-            android:text="Both"
+            android:text="@string/both"
             android:textAllCaps="true"
             android:textSize="@dimen/_10sdp"
             android:fontFamily="@font/opensans_semibold" />

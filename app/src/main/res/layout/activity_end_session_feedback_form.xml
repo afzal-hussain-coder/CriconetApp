@@ -54,7 +54,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Please rate your experience on the following parameters:-"
+                    android:text="@string/please_rate_your_experience_on_the_following_parameters"
                     android:layout_marginTop="@dimen/_5sdp"
                     android:layout_gravity="center_horizontal"
                     android:textColor="@color/bckground"
@@ -111,7 +111,7 @@
                                 android:gravity="top"
                                 android:scrollbars="vertical"
                                 android:overScrollMode="ifContentScrolls"
-                                android:hint="Type here..."
+                                android:hint="@string/type_here"
                                 android:cursorVisible="true"
                                 android:enabled="true"
                                 android:focusable="true"

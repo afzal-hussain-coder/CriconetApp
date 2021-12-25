@@ -8,9 +8,9 @@
 
 
     <LinearLayout
-        android:layout_width="@dimen/_20sdp"
-        android:layout_height="@dimen/_25sdp"
-        android:background="@drawable/thum_back"
+        android:layout_width="@dimen/_40sdp"
+        android:layout_height="@dimen/_40sdp"
+        android:background="@drawable/bal"
         android:gravity="center"
         android:orientation="vertical">
 
@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             android:text="0"
             android:fontFamily="@font/opensans_semibold"
-            android:textColor="@color/deep_blue"
+            android:textColor="@color/white"
             android:textSize="@dimen/_10sdp" />
 
     </LinearLayout>

@@ -30,7 +30,10 @@ import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -141,6 +144,8 @@ public class Signup extends AppCompatActivity {
     ImageView img_banner;
     String register_page_banner_status, register_page_banner_img,referral_code_status;
     LinearLayout li_referral;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -269,7 +274,6 @@ public class Signup extends AppCompatActivity {
             finish();
             //startActivity(new Intent(this, TermsCondition.class));
         });
-
 
         drop_gender = findViewById(R.id.drop_gender);
         option.add(new DataModel("Male"));
@@ -408,7 +412,7 @@ public class Signup extends AppCompatActivity {
                 if (userName.isEmpty()) {
                     Toaster.customToast(getResources().getString(R.string.name_empty_validation));
                 } else if (!userName.matches("[a-zA-Z0-9.? ]*")) {
-                    Toaster.customToast("Special character not allowed");
+                    Toaster.customToast(getResources().getString(R.string.Special_character_not_allowed));
                 } else if (userName.length() < 3) {
                     Toaster.customToast(getResources().getString(R.string.name_limit_validation));
                 } else if (!Global.validateName(email)) {
@@ -418,7 +422,7 @@ public class Signup extends AppCompatActivity {
                 } else if (phoneNumber.isEmpty()) {
                     Toaster.customToast(getResources().getString(R.string.phone_error));
                 } else if (!phoneNumber.matches("[0-9.? ]*")) {
-                    Toaster.customToast("Special character not allowed");
+                    Toaster.customToast(getResources().getString(R.string.Special_character_not_allowed));
                 } else if (!Global.isValidPhoneNumber(phoneNumber)) {
                     Toaster.customToast(getResources().getString(R.string.error_invalid_phone));
                 } else if (password.isEmpty()) {
@@ -446,6 +450,15 @@ public class Signup extends AppCompatActivity {
                 }
             }
         });
+
+//        fl_join_ambassdoar.setOnClickListener(view -> {
+//            v.setBackgroundColor(Color.parseColor(String.valueOf(R.color.v)));
+//            v1.setBackgroundColor(Color.parseColor(String.valueOf(R.color.v)));
+//            v2.setBackgroundColor(Color.parseColor(String.valueOf(R.color.v1)));
+//            v3.setBackgroundColor(Color.parseColor(String.valueOf(R.color.v1)));
+//            tv_join_as_ambassdoar.setTextColor(Color.parseColor(String.valueOf(R.color.white)));
+//            fl_join_ambassdoar.setBackgroundColor(Color.parseColor(String.valueOf(R.color.colorPrimary)));
+//        });
     }
 
     private void createAccount(final String email, final String password) {
@@ -459,7 +472,7 @@ public class Signup extends AppCompatActivity {
                         } else {
                             progress.dismiss();
                             Log.d("task data", task.getException().toString());
-                            Toast.makeText(Signup.this, "Sign Up Failed : " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(Signup.this, getResources().getString(R.string.Sign_Up_Failed) + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -669,7 +682,7 @@ public class Signup extends AppCompatActivity {
                 public void onErrorResponse(VolleyError error) {
                     progress.dismiss();
                     error.printStackTrace();
-                    Global.msgDialog(Signup.this, "Error from Server");
+                    Global.msgDialog(Signup.this, getResources().getString(R.string.error_server));
                 }
             }, entity);
 

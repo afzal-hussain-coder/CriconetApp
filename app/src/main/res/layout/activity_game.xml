@@ -27,7 +27,7 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:gravity="center"
-        android:text="Sorry! \n No Network Found"
+        android:text="@string/sorry_no_network_found"
         android:textColor="@color/black"
         android:textSize="18sp"
         android:visibility="gone" />

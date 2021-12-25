@@ -141,7 +141,7 @@ public class ActivityCheckoutDetails extends AppCompatActivity implements Paymen
         });
 
         TextView mTitle = (TextView) toolbar.findViewById(R.id.toolbartext);
-        mTitle.setText("Checkout Details");
+        mTitle.setText(R.string.check_out_details);
         prefs = PreferenceManager.getDefaultSharedPreferences(mActivity);
 
         initializeView();
@@ -221,19 +221,19 @@ public class ActivityCheckoutDetails extends AppCompatActivity implements Paymen
             laterPayAlternateMobileNo = edit_alternateMobile.getText().toString().trim();
 
             if (laterPayeeName.isEmpty()) {
-                Toaster.customToastUp("Please Enter Full Name");
+                Toaster.customToastUp(getResources().getString(R.string.enter_full_name));
             } else if (laterPayeeAddress.isEmpty()) {
-                Toaster.customToastUp("Please Enter Address");
+                Toaster.customToastUp(getResources().getString(R.string.enter_address));
             } else if (!Global.isValidAddress(laterPayeeAddress)) {
-                Toaster.customToastUp("Address must have min 5 character");
+                Toaster.customToastUp(getResources().getString(R.string.limit_character));
             } else if (laterPayeePin.isEmpty()) {
-                Toaster.customToastUp("Please Enter Pin Code");
+                Toaster.customToastUp(getResources().getString(R.string.enter_pincode));
             } else if (!Global.isValidPincode(laterPayeePin)) {
-                Toaster.customToastUp("Please Enter Valid Pin Code");
+                Toaster.customToastUp(getResources().getString(R.string.enter_valid_pin_code));
             } else if (laterPayAlternateMobileNo.isEmpty()) {
-                Toaster.customToastUp("Please enter alternate number");
+                Toaster.customToastUp(getResources().getString(R.string.enter_alternate_number));
             } else if (!Global.isValidPhoneNumber(laterPayAlternateMobileNo)) {
-                Toaster.customToastUp("Please enter valid alternate number");
+                Toaster.customToastUp(getResources().getString(R.string.enter_valid_alternate_number));
             } else {
 
                 if (coupon_status.equalsIgnoreCase("apply")) {
@@ -267,7 +267,7 @@ public class ActivityCheckoutDetails extends AppCompatActivity implements Paymen
             coupon_text = edit_text_apply_coupon.getText().toString().trim();
             coupon_status = "apply";
             if (coupon_text.equalsIgnoreCase("")) {
-                Toaster.customToast("Please Enter coupon code");
+                Toaster.customToast(getResources().getString(R.string.enter_coupon_code));
             } else {
                 if (Global.isOnline(mActivity)) {
                     checkCouponCode();
@@ -354,10 +354,10 @@ public class ActivityCheckoutDetails extends AppCompatActivity implements Paymen
             tvCoachName.setText(Global.capitizeString(modelArrayList.getData().getName()));
             tvCoacTitle.setText(modelArrayList.getData().getProfileTitle());
             tvCoacExp.setText(modelArrayList.getData().getExps());
-            tvPrice.setText("Price: " + "\u20B9" + modelArrayList.getData().getPrice().getCoachPrice());
-            tvTax.setText("Taxes : " + "\u20B9" + modelArrayList.getData().getPrice().getTaxesAmount());
-            tvTotalAmount.setText("Total payable amount: " + "\u20B9" + modelArrayList.getData().getPrice().getWithTaxesAmount());
-            tvSubtotal.setText("Subtotal : " + "\u20B9" + modelArrayList.getData().getPrice().getPaymentPrice());
+            tvPrice.setText(getResources().getString(R.string.price) + "\u20B9" + modelArrayList.getData().getPrice().getCoachPrice());
+            tvTax.setText(getResources().getString(R.string.texex) + "\u20B9" + modelArrayList.getData().getPrice().getTaxesAmount());
+            tvTotalAmount.setText(getResources().getString(R.string.total_payable_amount) + "\u20B9" + modelArrayList.getData().getPrice().getWithTaxesAmount());
+            tvSubtotal.setText(getResources().getString(R.string.subtotal) + "\u20B9" + modelArrayList.getData().getPrice().getPaymentPrice());
             tvDate.setText(Global.convertUTCDateToLocall(ordercreate.getPaymentOption().getSessionDate()));
             tvtime.setText(ordercreate.getPaymentOption().getSessionTime());
             if (modelArrayList.getData().getPrice().getOfferId().equalsIgnoreCase("0")) {
@@ -365,17 +365,17 @@ public class ActivityCheckoutDetails extends AppCompatActivity implements Paymen
             } else {
                 tvOfferPrice.setVisibility(View.VISIBLE);
                 tvPrice.setPaintFlags(tvPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                tvOfferPrice.setText("Offer price: " + "\u20B9" + modelArrayList.getData().getPrice().getPaymentPrice());
+                tvOfferPrice.setText(getResources().getString(R.string.offer_price) + "\u20B9" + modelArrayList.getData().getPrice().getPaymentPrice());
             }
-            tvPricee.setText("\u20B9" + modelArrayList.getData().getPrice().getCoachPrice() + "/" + "Session");
-            tvTotalAmountt.setText("Total payable amount: " + "\u20B9" + modelArrayList.getData().getPrice().getWithTaxesAmount());
-            tvTaxx.setText("Taxes : " + "\u20B9" + modelArrayList.getData().getPrice().getTaxesAmount());
-            tvSubtotall.setText("Subtotal : " + "\u20B9" + modelArrayList.getData().getPrice().getPaymentPrice());
+            tvPricee.setText("\u20B9" + modelArrayList.getData().getPrice().getCoachPrice() + "/" + getResources().getString(R.string.session));
+            tvTotalAmountt.setText(getResources().getString(R.string.total_payable_amount) + "\u20B9" + modelArrayList.getData().getPrice().getWithTaxesAmount());
+            tvTaxx.setText(getResources().getString(R.string.texex) + "\u20B9" + modelArrayList.getData().getPrice().getTaxesAmount());
+            tvSubtotall.setText(getResources().getString(R.string.subtotal) + "\u20B9" + modelArrayList.getData().getPrice().getPaymentPrice());
             if (modelArrayList.getData().getPrice().getOfferId().equalsIgnoreCase("0")) {
                 li_offerr.setVisibility(View.GONE);
             } else {
                 tvPricee.setPaintFlags(tvPricee.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                tvOfferPricee.setText("\u20B9" + modelArrayList.getData().getPrice().getPaymentPrice() + "/" + "Session");
+                tvOfferPricee.setText("\u20B9" + modelArrayList.getData().getPrice().getPaymentPrice() + "/" + getResources().getString(R.string.session));
                 li_offerr.setVisibility(View.VISIBLE);
             }
         }
@@ -414,7 +414,7 @@ public class ActivityCheckoutDetails extends AppCompatActivity implements Paymen
 
             co.open(activity, options);
         } catch (Exception e) {
-            Toast.makeText(activity, "Error in payment: " + e.getMessage(), Toast.LENGTH_SHORT)
+            Toast.makeText(activity, getResources().getString(R.string.error_in_payment) + e.getMessage(), Toast.LENGTH_SHORT)
                     .show();
             e.printStackTrace();
         }
@@ -493,7 +493,7 @@ public class ActivityCheckoutDetails extends AppCompatActivity implements Paymen
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
                 loaderView.hideLoader();
-                Global.msgDialog(mActivity, "Error from server");
+                Global.msgDialog(mActivity, getResources().getString(R.string.error_server));
             }
         }) {
             @Override
@@ -537,18 +537,18 @@ public class ActivityCheckoutDetails extends AppCompatActivity implements Paymen
 
                         if (jsonObject1.has("taxes_amount")) {
                             tax = jsonObject1.getString("taxes_amount");
-                            tvTax.setText("Taxes : " + "\u20B9" + jsonObject1.getString("taxes_amount"));
-                            tvTaxx.setText("Taxes : " + "\u20B9" + jsonObject1.getString("taxes_amount"));
+                            tvTax.setText(getResources().getString(R.string.texex) + "\u20B9" + jsonObject1.getString("taxes_amount"));
+                            tvTaxx.setText(getResources().getString(R.string.texex) + "\u20B9" + jsonObject1.getString("taxes_amount"));
                         }
                         if (jsonObject1.has("payment_amount")) {
                             payAmount = jsonObject1.getString("payment_amount");
-                            tvTotalAmount.setText("Total payable amount: " + "\u20B9" + jsonObject1.getString("payment_amount"));
-                            tvTotalAmountt.setText("Total payable amount: " + "\u20B9" + jsonObject1.getString("payment_amount"));
+                            tvTotalAmount.setText(getResources().getString(R.string.total_payable_amount) + "\u20B9" + jsonObject1.getString("payment_amount"));
+                            tvTotalAmountt.setText(getResources().getString(R.string.total_payable_amount) + "\u20B9" + jsonObject1.getString("payment_amount"));
                         }
                         if (jsonObject1.has("payment_price")) {
                             subtotal = jsonObject1.getString("payment_price");
-                            tvSubtotal.setText("Subtotal : " + "\u20B9" + jsonObject1.getString("payment_price"));
-                            tvSubtotall.setText("Subtotal : " + "\u20B9" + jsonObject1.getString("payment_price"));
+                            tvSubtotal.setText(getResources().getString(R.string.subtotal)+ "\u20B9" + jsonObject1.getString("payment_price"));
+                            tvSubtotall.setText(getResources().getString(R.string.subtotal)+ "\u20B9" + jsonObject1.getString("payment_price"));
                         }
 
                         if (jsonObject1.has("coupon_discount")) {
@@ -559,8 +559,8 @@ public class ActivityCheckoutDetails extends AppCompatActivity implements Paymen
                             } else {
                                 tvCouponDis.setVisibility(View.VISIBLE);
                                 tvCouponDiss.setVisibility(View.VISIBLE);
-                                tvCouponDis.setText("Coupon Discount : " + "\u20B9" + jsonObject1.getString("coupon_discount"));
-                                tvCouponDiss.setText("Coupon Discount : " + "\u20B9" + jsonObject1.getString("coupon_discount"));
+                                tvCouponDis.setText(getResources().getString(R.string.coupon_discount) + "\u20B9" + jsonObject1.getString("coupon_discount"));
+                                tvCouponDiss.setText(getResources().getString(R.string.coupon_discount) + "\u20B9" + jsonObject1.getString("coupon_discount"));
                             }
                         }
 
@@ -588,7 +588,7 @@ public class ActivityCheckoutDetails extends AppCompatActivity implements Paymen
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
                 loaderView.hideLoader();
-                Global.msgDialog(mActivity, "Error from server");
+                Global.msgDialog(mActivity, getResources().getString(R.string.error_server));
             }
         }) {
             @Override
@@ -652,7 +652,7 @@ public class ActivityCheckoutDetails extends AppCompatActivity implements Paymen
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
                 loaderView.hideLoader();
-                Global.msgDialog(mActivity, "Error from server");
+                Global.msgDialog(mActivity, getResources().getString(R.string.error_server));
             }
         }) {
             @Override
@@ -727,7 +727,7 @@ public class ActivityCheckoutDetails extends AppCompatActivity implements Paymen
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
                 //loaderView.hideLoader();
-                Global.msgDialog(mActivity, "Error from server");
+                Global.msgDialog(mActivity, getResources().getString(R.string.error_server));
             }
         }) {
 
@@ -805,7 +805,7 @@ public class ActivityCheckoutDetails extends AppCompatActivity implements Paymen
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
                 //loaderView.hideLoader();
-                Global.msgDialog(mActivity, "Error from server");
+                Global.msgDialog(mActivity, getResources().getString(R.string.error_server));
             }
         }) {
 
@@ -882,7 +882,7 @@ public class ActivityCheckoutDetails extends AppCompatActivity implements Paymen
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
                 loaderView.hideLoader();
-                Global.msgDialog((Activity) mActivity, "Error from server");
+                Global.msgDialog((Activity) mActivity, getResources().getString(R.string.error_server));
             }
         }) {
             @Override

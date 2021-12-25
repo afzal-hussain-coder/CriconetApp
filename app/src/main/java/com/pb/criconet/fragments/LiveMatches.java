@@ -78,7 +78,7 @@ public class LiveMatches extends Fragment {
 
         Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
         TextView mTitle = (TextView) toolbar.findViewById(R.id.toolbartext);
-        String text = "Live Matches";
+        String text = getString(R.string.Live_Matches);
         mTitle.setText(text.toUpperCase());
         ImageView img_addpost = toolbar.findViewById(R.id.img_addpost);
         TextView tv_post = toolbar.findViewById(R.id.tv_post);
@@ -142,7 +142,7 @@ public class LiveMatches extends Fragment {
                             } else if (jsonObject.optString("api_text").equalsIgnoreCase("failed")) {
                                 Global.msgDialog(getActivity(), jsonObject.optJSONObject("errors").optString("error_text"));
                             } else {
-                                Global.msgDialog(getActivity(), "Error in server");
+                                Global.msgDialog(getActivity(), getResources().getString(R.string.error_server));
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -155,7 +155,7 @@ public class LiveMatches extends Fragment {
                         error.printStackTrace();
                         //progress.dismiss();
                         loaderView.hideLoader();
-                        Global.msgDialog(getActivity(), "Error from server");
+                        Global.msgDialog(getActivity(), getResources().getString(R.string.error_server));
 //                Global.msgDialog(getActivity(), "Internet connection is slow");
                     }
                 }

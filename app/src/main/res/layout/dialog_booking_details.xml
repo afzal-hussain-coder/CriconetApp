@@ -8,9 +8,6 @@
     android:paddingTop="@dimen/_16sdp"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     >
-    //
-
-
 
     <RelativeLayout
         android:id="@+id/slideView"

@@ -3,32 +3,28 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bckground_light"
+    android:background="@color/bckground"
     android:orientation="vertical">
 
     <include
         android:id="@+id/toolbar"
         layout="@layout/toolbar" />
 
-    <TextView
-        android:id="@+id/tv_refer_intro"
+    <ImageView
+        android:id="@+id/iv_banner"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/_70sdp"
         android:layout_below="@+id/toolbar"
-        android:background="@color/bckground"
-        android:fontFamily="@font/opensans_regular"
-        android:gravity="center_horizontal"
-        android:paddingBottom="@dimen/_15sdp"
-        android:paddingTop="@dimen/_15sdp"
-        android:text="Refer Friends and get more Rewards"
-        android:textColor="@color/white_smoke"
-        android:textSize="@dimen/_14sdp" />
+        android:scaleType="fitXY"
+        android:contentDescription="@string/app_name"
+        />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvRewards"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tv_refer_intro"
+        android:layout_below="@+id/iv_banner"
+        android:background="@color/bckground_light"
         android:layout_margin="@dimen/_5sdp"
         android:layout_marginTop="@dimen/_10sdp" />
 
@@ -96,20 +92,31 @@
                 android:text="1"
                 android:layout_marginRight="-5dp"
                 android:layout_alignParentStart="true"
-                android:textColor="@color/deep_blue"
+                android:textColor="@color/white"
                 android:textSize="@dimen/_10sdp" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_40sdp"
+                android:layout_toLeftOf="@+id/tv1"
+                android:layout_toRightOf="@+id/tv"
+                android:contentDescription="@string/app_name"
+                android:src="@drawable/baat_gray"
+                android:visibility="gone" />
+
             <SeekBar
                 android:id="@+id/seekBar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:maxHeight="@dimen/_10sdp"
+                android:layout_marginStart="@dimen/_2sdp"
                 android:min="1"
+                android:layout_marginEnd="@dimen/_2sdp"
+                android:maxHeight="@dimen/_16sdp"
                 android:layout_toLeftOf="@+id/tv1"
                 android:layout_toRightOf="@+id/tv"
                 android:max="100"
-                android:progressDrawable="@drawable/custom_seekbar_progress"
-                android:splitTrack="false"
-                />
+                android:progressDrawable="@drawable/seekbar_progress"
+                android:splitTrack="false" />
             <TextView
                 android:id="@+id/tv1"
                 android:layout_width="wrap_content"
@@ -157,12 +164,62 @@
                     android:textColor="@color/deep_blue"
                     android:textSize="@dimen/_10sdp" />
             </LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/li_copy"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/li"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="@dimen/_30sdp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tv_copy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_toLeftOf="@+id/li_copyy"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:fontFamily="@font/opensans_semibold"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_10sdp" />
+                <LinearLayout
+                    android:id="@+id/li_copyy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_copied"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Copied"
+                        android:visibility="gone"
+                        android:layout_marginBottom="@dimen/_5sdp"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:textColor="@color/green"
+                        android:textSize="@dimen/_10sdp" />
+                    <ImageView
+                        android:id="@+id/iv_copy"
+                        android:layout_width="@dimen/_20sdp"
+                        android:layout_height="@dimen/_20sdp"
+                        android:src="@drawable/ic_content_copy_white_24dp" />
+                </LinearLayout>
+
+
+            </RelativeLayout>
+
+
             <FrameLayout
                 android:id="@+id/fl_referFriend"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_35sdp"
-                android:layout_below="@+id/li"
-                android:layout_marginTop="@dimen/_20sdp"
+                android:layout_below="@+id/li_copy"
+                android:layout_marginTop="@dimen/_25sdp"
                 android:layout_marginBottom="@dimen/_5sdp"
                 android:background="@color/colorPrimary">
 

@@ -225,7 +225,7 @@ public class Following extends Fragment {
                             } else if (jsonObject.optString("api_text").equalsIgnoreCase("failed")) {
                                 Global.msgDialog(mContext, jsonObject.optJSONObject("errors").optString("error_text"));
                             } else {
-                                Global.msgDialog(mContext, "Error in server");
+                                Global.msgDialog(mContext, getResources().getString(R.string.error_server));
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -237,7 +237,7 @@ public class Following extends Fragment {
                     public void onErrorResponse(VolleyError error) {
                         error.printStackTrace();
                         progress.dismiss();
-                        Global.msgDialog(mContext, "Error from server");
+                        Global.msgDialog(mContext, getResources().getString(R.string.error_server));
 //                Global.msgDialog(EditProfile.this, "Internet connection is slow");
                     }
                 }

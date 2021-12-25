@@ -608,7 +608,7 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
 
                     @SuppressLint("SetTextI18n")
                     public void onTick(long millisUntilFinished) {
-                        tv_timeDuration.setText("Remaining time: " + Global.convertSecondsTomSs(millisUntilFinished / 1000));
+                        tv_timeDuration.setText(getResources().getString(R.string.Remaining_time) + Global.convertSecondsTomSs(millisUntilFinished / 1000));
                         //here you can have your logic to set text to edittext
                     }
 
@@ -625,13 +625,13 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
 
                 }else if(uid==com.pb.criconet.sharedscreen.Constant.SCREEN_SHARE_UID){
                     log_texth_other.setVisibility(View.VISIBLE);
-                    log_texth_other.setText("Screen sharing has started");
+                    log_texth_other.setText(getResources().getString(R.string.Screen_sharing_has_started));
 
                 }
                 else{
 
                     log_texth_other.setVisibility(View.VISIBLE);
-                    log_texth_other.setText(Global.capitizeString(coachName) + " " + "joined");
+                    log_texth_other.setText(Global.capitizeString(coachName) + " " + getResources().getString(R.string.joined));
                 }
 
                 new Handler().postDelayed(new Runnable() {
@@ -725,12 +725,12 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
 
                 }else if(uid==com.pb.criconet.sharedscreen.Constant.SCREEN_SHARE_UID){
                     log_texth_other.setVisibility(View.VISIBLE);
-                    log_texth_other.setText("Screen sharing has stopped ");
+                    log_texth_other.setText(getResources().getString(R.string.Screen_sharing_has_stopped));
 
                 }
                 else{
                     log_texth_other.setVisibility(View.VISIBLE);
-                    log_texth_other.setText(Global.capitizeString(coachName) + " " + "left successfully");
+                    log_texth_other.setText(Global.capitizeString(coachName) + " " + getResources().getString(R.string.left_successfully));
                 }
 
                 lin_log.setVisibility(View.VISIBLE);
@@ -1642,7 +1642,7 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
         // ProgressBar will disappear once page is loaded
 
         public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
-            Toast.makeText(getApplicationContext(), "Failed loading app!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), getResources().getString(R.string.Failed_loading_app), Toast.LENGTH_SHORT).show();
         }
     }
 

@@ -1,0 +1,699 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bckground_light"
+    tools:context=".activity.WebViewActivity">
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/signup_card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/toolbar"
+        android:layout_centerInParent="true"
+        android:layout_marginLeft="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_marginRight="@dimen/_10sdp"
+        android:layout_marginBottom="@dimen/_10sdp"
+        android:background="@color/white"
+        android:visibility="visible"
+        app:cardCornerRadius="@dimen/_1sdp"
+        app:cardElevation="@dimen/_5sdp"
+        app:cardMaxElevation="@dimen/_10sdp">
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:overScrollMode="always">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:id="@+id/top"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/_20sdp"
+                    android:layout_marginTop="@dimen/_18sdp"
+                    android:layout_marginRight="@dimen/_20sdp"
+                    android:orientation="vertical">
+
+                    <EditText
+                        android:id="@+id/edit_username_red_bg"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:background="@drawable/edit_text_bg"
+                        android:fontFamily="@font/opensans_regular"
+                        android:hint="@string/full_name"
+                        android:imeOptions="actionNext"
+                        android:importantForAutofill="no"
+                        android:inputType="textEmailAddress"
+                        android:padding="@dimen/_9sdp"
+                        android:singleLine="true"
+                        android:textColor="@color/edit_text_color"
+                        android:textColorHint="@color/edit_text_color_hint"
+                        android:textSize="@dimen/_12sdp" />
+
+                    <EditText
+                        android:id="@+id/edit_email_red_bg"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:background="@drawable/edit_text_bg"
+                        android:fontFamily="@font/opensans_regular"
+                        android:hint="@string/email_address"
+                        android:visibility="visible"
+                        android:imeOptions="actionNext"
+                        android:importantForAutofill="no"
+                        android:inputType="textEmailAddress"
+                        android:padding="@dimen/_9sdp"
+                        android:singleLine="true"
+                        android:textColor="@color/edit_text_color"
+                        android:textColorHint="@color/edit_text_color_hint"
+                        android:textSize="@dimen/_12sdp" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:visibility="visible"
+                        android:layout_marginTop="@dimen/_10sdp">
+
+                        <com.rilixtech.widget.countrycodepicker.CountryCodePicker
+                            android:id="@+id/ccp"
+                            android:layout_width="@dimen/_70sdp"
+                            android:layout_height="match_parent"
+                            android:layout_alignParentStart="true"
+                            android:layout_alignParentLeft="true"
+                            android:layout_centerVertical="true"
+                            android:background="@drawable/edit_text_bg"
+                            android:paddingStart="@dimen/_5sdp"
+                            android:paddingTop="@dimen/_9sdp"
+                            android:paddingRight="@dimen/_2sdp"
+                            android:paddingBottom="@dimen/_9sdp"
+                            app:ccp_arrowSize="@dimen/_12sdp"
+                            app:ccp_backgroundColor="@color/white"
+                            app:ccp_clickable="false"
+                            app:ccp_defaultCode="91"
+                            app:ccp_showFlag="false"
+                            app:ccp_textColor="@color/edit_text_color"
+                            app:ccp_textFont="opensans_regular.ttf"
+                            app:ccp_textSize="@dimen/_12sdp" />
+
+                        <EditText
+                            android:id="@+id/edit_username_phone"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginStart="@dimen/_5sdp"
+                            android:layout_marginRight="@dimen/_5sdp"
+                            android:layout_toEndOf="@+id/ccp"
+                            android:background="@drawable/edit_text_bg"
+                            android:fontFamily="@font/opensans_regular"
+                            android:hint="@string/phone"
+                            android:imeOptions="actionNext"
+                            android:importantForAutofill="no"
+                            android:inputType="phone"
+                            android:maxLength="12"
+                            android:paddingStart="@dimen/_5sdp"
+                            android:paddingTop="@dimen/_9sdp"
+                            android:paddingBottom="@dimen/_9sdp"
+                            android:singleLine="true"
+                            android:textColor="@color/edit_text_color"
+                            android:textColorHint="@color/edit_text_color_hint"
+                            android:textSize="@dimen/_12sdp" />
+                    </RelativeLayout>
+
+
+                    <RelativeLayout
+                        android:id="@+id/rel_password_bg_red"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:background="@drawable/edit_text_bg"
+                        android:visibility="gone">
+
+                        <EditText
+                            android:id="@+id/edit_password_red_bg"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_toStartOf="@+id/ib_visible_p"
+                            android:autofillHints=""
+                            android:background="@null"
+                            android:fontFamily="@font/opensans_regular"
+                            android:hint="@string/password"
+                            android:imeOptions="actionNext"
+                            android:inputType="textPassword"
+                            android:padding="@dimen/_9sdp"
+                            android:singleLine="true"
+                            android:textColor="@color/edit_text_color"
+                            android:textColorHint="@color/edit_text_color_hint"
+                            android:textSize="@dimen/_12sdp" />
+
+                        <ImageButton
+                            android:id="@+id/ib_visible_p"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginEnd="@dimen/_10sdp"
+                            android:background="@null"
+                            android:clickable="true"
+                            android:contentDescription="@string/app_name"
+                            android:focusable="true"
+                            android:tint="@color/dark_grey"
+                            app:srcCompat="@drawable/ic_visibility_off_black_24dp" />
+                    </RelativeLayout>
+
+
+                    <!--<LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_12sdp"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/edit_text_bg"
+                            android:fontFamily="@font/opensans_regular"
+                            android:padding="@dimen/_9sdp"
+                            android:text="@string/confirm_password"
+                            android:textColor="@color/light_black"
+                            android:textSize="@dimen/_12sdp"
+                            android:visibility="visible" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/_2sdp"
+                            android:fontFamily="@font/opensans_regular"
+                            android:text="@string/password_too_short"
+                            android:textColor="@color/color_error_password"
+                            android:textSize="@dimen/_10sdp"
+                            android:visibility="gone" />
+
+                        <RelativeLayout
+                            android:id="@+id/rel_confirm_password_bg_red"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/edit_text_bg_red"
+                            android:visibility="gone">
+
+
+                            <RelativeLayout
+                                android:id="@+id/rel_confirm_password"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@color/colorPrimary"
+                                android:padding="@dimen/_9sdp">
+
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerInParent="true"
+                                    android:contentDescription="@string/app_name"
+                                    app:srcCompat="@drawable/ic_vpn_key_white_24dp" />
+                            </RelativeLayout>
+
+                            <EditText
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:layout_toStartOf="@+id/ib_visible_cp"
+                                android:layout_toEndOf="@+id/rel_confirm_password"
+                                android:autofillHints=""
+                                android:background="@null"
+                                android:fontFamily="@font/opensans_regular"
+                                android:hint="@string/confirm_password"
+                                android:imeOptions="actionNext"
+                                android:inputType="textPassword"
+                                android:padding="@dimen/_9sdp"
+                                android:singleLine="true"
+                                android:textColor="@color/light_black"
+                                android:textColorHint="@color/light_black"
+                                android:textSize="@dimen/_12sdp" />
+
+                            <ImageButton
+                                android:id="@+id/ib_visible_cp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:layout_centerVertical="true"
+                                android:layout_marginEnd="@dimen/_10sdp"
+                                android:background="@null"
+                                android:clickable="true"
+                                android:contentDescription="@string/app_name"
+                                android:focusable="true"
+                                android:tint="@color/dark_grey"
+                                app:srcCompat="@drawable/ic_visibility_off_black_24dp" />
+                        </RelativeLayout>
+                    </LinearLayout>-->
+
+                    <!--<LinearLayout
+                        android:id="@+id/li_referral"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:orientation="vertical">
+
+
+                        <TextView
+                            android:id="@+id/edt_referral_code"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/edit_text_bg"
+                            android:fontFamily="@font/opensans_regular"
+                            android:padding="@dimen/_9sdp"
+                            android:text="@string/enter_referral_code"
+                            android:textColor="@color/edit_text_color"
+                            android:textSize="@dimen/_12sdp"
+                            android:visibility="visible" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/_2sdp"
+                            android:textSize="@dimen/_10sdp"
+                            android:visibility="gone" />
+
+                        <RelativeLayout
+                            android:id="@+id/rel_referral_bg_red"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/edit_text_bg_red"
+                            android:visibility="gone">
+
+                            <RelativeLayout
+                                android:id="@+id/rel_referral"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@color/colorPrimary"
+                                android:padding="@dimen/_9sdp">
+
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerInParent="true"
+                                    android:contentDescription="@string/app_name"
+                                    app:srcCompat="@drawable/code" />
+                            </RelativeLayout>
+
+                            <EditText
+                                android:id="@+id/edit_referral_red_bg"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:layout_toEndOf="@+id/rel_referral"
+                                android:background="@null"
+                                android:fontFamily="@font/opensans_regular"
+                                android:hint="@string/enter_referral_code"
+                                android:imeOptions="actionNext"
+                                android:importantForAutofill="no"
+                                android:inputType="textEmailAddress"
+                                android:padding="@dimen/_9sdp"
+                                android:singleLine="true"
+                                android:textColor="@color/edit_text_color"
+                                android:textColorHint="@color/edit_text_color_hint"
+                                android:textSize="@dimen/_12sdp" />
+                        </RelativeLayout>
+                    </LinearLayout>-->
+
+                    <com.pb.criconet.Utills.DropDownView
+                        android:id="@+id/drop_gender"
+                        style="@style/formDropDown"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:background="@drawable/edit_text_bg"
+                        android:drawableEnd="@drawable/ic_keyboard_arrow_down_black_24dp"
+                        android:hint="@string/select_sport"
+                        android:visibility="gone"
+                        android:padding="@dimen/_9sdp"
+                        android:paddingStart="@dimen/_10sdp"
+                        android:textColor="@color/edit_text_color"
+                        android:textColorHint="@color/edit_text_color"
+                        android:textSize="@dimen/_12sdp"
+                        app:drawableTint="@color/light_black" />
+
+                    <com.pb.criconet.Utills.DropDownView
+                        android:id="@+id/drop_user_type"
+                        style="@style/formDropDown"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:background="@drawable/edit_text_bg"
+                        android:drawableEnd="@drawable/ic_keyboard_arrow_down_black_24dp"
+                        android:hint="@string/select_type"
+                        android:padding="@dimen/_9sdp"
+                        android:paddingStart="@dimen/_10sdp"
+                        android:textColor="@color/light_black"
+                        android:textColorHint="@color/light_black"
+                        android:textSize="@dimen/_12sdp"
+                        android:visibility="gone"
+                        app:drawableTint="@color/light_black" />
+
+                    <!--//...Ambassdoar code form here start..-->
+
+
+                    <EditText
+                        android:id="@+id/edit_school_red_bg"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:background="@drawable/edit_text_bg"
+                        android:fontFamily="@font/opensans_regular"
+                        android:hint="@string/enter_school_name"
+                        android:imeOptions="actionNext"
+                        android:importantForAutofill="no"
+                        android:inputType="textEmailAddress"
+                        android:padding="@dimen/_9sdp"
+                        android:singleLine="true"
+                        android:textColor="@color/edit_text_color"
+                        android:textColorHint="@color/edit_text_color_hint"
+                        android:textSize="@dimen/_12sdp" />
+
+
+                    <EditText
+                        android:id="@+id/edit_higestQualification_red_bg"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:background="@drawable/edit_text_bg"
+                        android:fontFamily="@font/opensans_regular"
+                        android:hint="@string/enter_higestQualification"
+                        android:imeOptions="actionNext"
+                        android:importantForAutofill="no"
+                        android:inputType="textEmailAddress"
+                        android:padding="@dimen/_9sdp"
+                        android:singleLine="true"
+                        android:textColor="@color/edit_text_color"
+                        android:textColorHint="@color/edit_text_color_hint"
+                        android:textSize="@dimen/_12sdp" />
+
+
+                    <LinearLayout
+                        android:id="@+id/li_whywantbecomeambassodoar"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/opensans_semibold"
+                            android:text="@string/whywantbecomeambassodoar"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/_8sdp"
+                            android:visibility="visible" />
+
+                        <LinearLayout
+                            android:id="@+id/li_edit"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/_60sdp"
+                            android:background="@drawable/edit_text_bg">
+
+                            <EditText
+                                android:id="@+id/edit_whywantbecomeambassodoar_red_bg"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="textMultiLine"
+                                android:scrollbars="vertical"
+                                android:cursorVisible="true"
+                                android:background="@null"
+                                android:enabled="true"
+                                android:focusable="true"
+                                android:hint="@string/Enter_Description"
+                                android:padding="@dimen/_7sdp"
+                                android:textColor="@color/edit_text_color"
+                                android:textColorHint="@color/edit_text_color_hint"
+                                android:textSize="@dimen/_10sdp"
+                                app:fontFamily="@font/opensans_semibold" />
+                        </LinearLayout>
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/li_knowaboutcriconet"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/opensans_semibold"
+                            android:text="@string/knowaboutcriconet"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/_8sdp"
+                            android:visibility="visible" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/_60sdp"
+                            android:background="@drawable/edit_text_bg">
+
+                            <EditText
+                                android:id="@+id/edit_knowaboutcriconet_red_bg"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="textMultiLine"
+                                android:scrollbars="vertical"
+                                android:cursorVisible="true"
+                                android:background="@null"
+                                android:enabled="true"
+                                android:focusable="true"
+                                android:hint="@string/Enter_Description"
+                                android:padding="@dimen/_7sdp"
+                                android:textColor="@color/edit_text_color"
+                                android:textColorHint="@color/edit_text_color_hint"
+                                android:textSize="@dimen/_10sdp"
+                                app:fontFamily="@font/opensans_semibold" />
+                        </LinearLayout>
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/li_eventBefore"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/opensans_semibold"
+                            android:text="@string/eventBefore"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/_8sdp"
+                            android:visibility="visible" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_2sdp"
+                            android:orientation="horizontal">
+
+                            <RadioButton
+                                android:id="@+id/rb_yes"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/opensans_semibold"
+                                android:layout_gravity="center_horizontal"
+                                android:text="@string/Yes"
+                                android:textSize="@dimen/_10sdp" />
+
+                            <RadioButton
+                                android:id="@+id/rb_no"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/opensans_semibold"
+                                android:text="@string/No"
+                                android:textSize="@dimen/_10sdp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/li_organized"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/_60sdp"
+                            android:visibility="gone"
+                            android:background="@drawable/edit_text_bg">
+
+                            <EditText
+                                android:id="@+id/edit_eventBefore_red_bg"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="textMultiLine"
+                                android:scrollbars="vertical"
+                                android:cursorVisible="true"
+                                android:background="@null"
+                                android:enabled="true"
+                                android:focusable="true"
+                                android:hint="@string/Enter_Description"
+                                android:layout_margin="@dimen/_7sdp"
+                                android:textColor="@color/edit_text_color"
+                                android:textColorHint="@color/edit_text_color_hint"
+                                android:textSize="@dimen/_10sdp"
+                                app:fontFamily="@font/opensans_semibold" />
+                        </LinearLayout>
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/li_mentiontwothings"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/opensans_semibold"
+                            android:text="@string/mentiontwothings"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/_8sdp"
+                            android:visibility="visible" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/_60sdp"
+                            android:background="@drawable/edit_text_bg">
+
+                            <EditText
+                                android:id="@+id/edit_mentiontwothings_red_bg"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="textMultiLine"
+                                android:scrollbars="vertical"
+                                android:cursorVisible="true"
+                                android:background="@null"
+                                android:enabled="true"
+                                android:focusable="true"
+                                android:hint="@string/Enter_Description"
+                                android:padding="@dimen/_7sdp"
+                                android:textColor="@color/edit_text_color"
+                                android:textColorHint="@color/edit_text_color_hint"
+                                android:textSize="@dimen/_10sdp"
+                                app:fontFamily="@font/opensans_semibold" />
+                        </LinearLayout>
+
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:text="@string/how_many_hours"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_8sdp"
+                        android:visibility="visible" />
+
+                    <com.pb.criconet.Utills.DropDownView
+                        android:id="@+id/drop_time"
+                        style="@style/formDropDown"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/edit_text_bg"
+                        android:drawableEnd="@drawable/ic_keyboard_arrow_down_black_24dp"
+                        android:hint="@string/select_hours"
+                        android:padding="@dimen/_9sdp"
+                        android:paddingStart="@dimen/_10sdp"
+                        android:textColor="@color/edit_text_color"
+                        android:textColorHint="@color/edit_text_color"
+                        android:textSize="@dimen/_12sdp"
+                        android:visibility="visible"
+                        app:drawableTint="@color/light_black" />
+
+                    <LinearLayout
+                        android:id="@+id/li_passionate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/opensans_semibold"
+                            android:text="@string/passionate"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/_8sdp"
+                            android:visibility="visible" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/_60sdp"
+                            android:background="@drawable/edit_text_bg">
+
+                            <EditText
+                                android:id="@+id/edit_passionate_red_bg"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="textMultiLine"
+                                android:scrollbars="vertical"
+                                android:cursorVisible="true"
+                                android:background="@null"
+                                android:enabled="true"
+                                android:focusable="true"
+                                android:hint="@string/Enter_Description"
+                                android:padding="@dimen/_7sdp"
+                                android:textColor="@color/edit_text_color"
+                                android:textColorHint="@color/edit_text_color_hint"
+                                android:textSize="@dimen/_10sdp"
+                                app:fontFamily="@font/opensans_semibold" />
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/lin_submit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/top"
+                    android:layout_marginTop="@dimen/_40sdp"
+                    android:background="@color/colorPrimary"
+                    android:orientation="vertical"
+                    android:padding="@dimen/_9sdp">
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:text="@string/submit"
+                        android:layout_gravity="center_horizontal"
+                        android:gravity="center_horizontal"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/_14sdp"
+                        android:visibility="visible"
+                        />
+                </LinearLayout>
+
+
+            </RelativeLayout>
+        </androidx.core.widget.NestedScrollView>
+    </com.google.android.material.card.MaterialCardView>
+
+
+</RelativeLayout>

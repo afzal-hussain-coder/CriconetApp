@@ -98,7 +98,7 @@
         android:gravity="center"
         android:textColor="@color/light_text_color"
         android:fontFamily="@font/opensans_semibold"
-        android:text="Match Not Found"
+        android:text="@string/match_not_found"
         android:textSize="@dimen/_12sdp"
         android:visibility="gone" />
 

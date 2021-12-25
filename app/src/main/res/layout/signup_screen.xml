@@ -7,7 +7,6 @@
     android:background="@drawable/bg2">
     <!--android:background="@drawable/appbg"-->
 
-
     <include
         android:id="@+id/toolbar"
         layout="@layout/toolbar_login" />
@@ -17,6 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/_50sdp"
         android:visibility="gone"
+        android:contentDescription="@string/app_name"
         android:layout_below="@+id/toolbar"
         android:scaleType="fitXY" />
 
@@ -35,6 +35,7 @@
             android:layout_margin="10dp"
             android:padding="5dp"
             android:scaleType="centerCrop"
+            android:contentDescription="@string/app_name"
             android:src="@drawable/picture" />
     </RelativeLayout>
 
@@ -123,17 +124,93 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_15sdp"
+                        android:layout_marginTop="@dimen/_10sdp"
                         android:orientation="vertical">
 
-                        <TextView
+
+                        <!--<RelativeLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:text="@string/terams_for_username"
-                            android:textColor="@color/bckground"
-                            android:fontFamily="@font/opensans_regular"
-                            android:textSize="@dimen/_8sdp" />
+                            android:layout_height="wrap_content">
+
+
+                            <FrameLayout
+                                android:id="@+id/fl_join_ambassdoar"
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/_35sdp"
+                                android:layout_marginBottom="@dimen/_5sdp"
+                                android:background="@color/join_frame_color">
+
+                                <View
+                                    android:id="@+id/v"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="@dimen/_1sdp"
+                                    android:background="#D7D2D2" />
+
+                                <View
+                                    android:id="@+id/v1"
+                                    android:layout_width="0.9dp"
+                                    android:layout_height="match_parent"
+                                    android:background="#D7D2D2" />
+
+                                <View
+                                    android:id="@+id/v2"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="@dimen/_1sdp"
+                                    android:layout_gravity="bottom"
+                                    android:background="#CBC6C6" />
+
+                                <View
+                                    android:id="@+id/v3"
+                                    android:layout_width="@dimen/_1sdp"
+                                    android:layout_height="match_parent"
+                                    android:layout_gravity="end"
+                                    android:background="#CBC6C6" />
+
+
+                                <RelativeLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="@dimen/_35sdp">
+
+                                    <CheckBox
+                                        android:id="@+id/cb_join"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_alignParentStart="true"
+                                        android:layout_centerVertical="true"
+                                        android:layout_marginStart="@dimen/_10sdp"
+                                        android:theme="@style/checkboxx"
+                                        tools:ignore="TooDeepLayout">
+
+                                    </CheckBox>
+
+                                    <TextView
+                                        android:id="@+id/tv_join_as_ambassdoar"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_centerHorizontal="true"
+                                        android:layout_centerVertical="true"
+                                        android:layout_gravity="center"
+                                        android:padding="@dimen/_5sdp"
+                                        android:text="@string/join_as_a_ambassdoar"
+                                        android:textAllCaps="true"
+                                        android:textColor="@color/join_amb_color"
+                                        android:textSize="@dimen/_10sdp"
+                                        app:fontFamily="@font/opensans_semibold" />
+                                </RelativeLayout>
+
+                            </FrameLayout>
+
+                        </RelativeLayout>-->
+
+                        <!--                        <TextView-->
+                        <!--                            android:layout_width="match_parent"-->
+                        <!--                            android:layout_height="wrap_content"-->
+                        <!--                            android:gravity="center_vertical"-->
+                        <!--                            android:text="@string/terams_for_username"-->
+                        <!--                            android:textColor="@color/bckground"-->
+                        <!--                            android:fontFamily="@font/opensans_regular"-->
+                        <!--                            android:textSize="@dimen/_8sdp" />-->
+
 
                         <TextView
                             android:id="@+id/edt_username"
@@ -590,7 +667,6 @@
                         android:textSize="@dimen/_12sdp"
                         app:drawableTint="@color/light_black" />
 
-
                     <TextView
                         android:id="@+id/terms"
                         android:layout_width="match_parent"
@@ -697,13 +773,14 @@
                 android:layout_height="@dimen/_80sdp"
                 android:layout_marginTop="@dimen/_40sdp"
                 android:layout_centerHorizontal="true"
-                app:srcCompat="@drawable/ic_check_white_48dp"/>
+                android:contentDescription="@string/app_name"
+                app:srcCompat="@drawable/ic_check_white_48dp" />
 
             <TextView
                 android:id="@+id/txt_sucess"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Welcome!"
+                android:text="@string/welcome"
                 android:textColor="@color/white"
                 android:padding="@dimen/_10sdp"
                 android:gravity="center_horizontal"

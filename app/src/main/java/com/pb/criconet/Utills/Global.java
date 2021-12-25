@@ -67,6 +67,9 @@ public class Global {
     public static final String URL_CHAT = "https://stage.criconetonline.com";
     public static String GameURL = "https://criconetonline.com/cricket_js/index.php?";
 
+    public static String GET_CAMPUS_AMBASSADOAR = "https://www.criconet.com/campus-ambassador?rst=app";
+
+
 
     /*for live*/
    // public static final String URL = "https://www.criconet.com/app_api.php?type=";
@@ -106,11 +109,7 @@ public class Global {
     public static final String GET_RECORDED_VIDEO = "get_recording_video";
     public static final String GET_BOOKING_DETAILS = "get_booking_details";
     public static final String GET_REFERRAL_CODE = "generate_referal_code";
-
-
-
-
-
+    public static final String GET_CAMPUS_AMBASSADOR = "reg_campus_ambassador";
 
     public static final int TYPE_VIDEO = 0,
             TYPE_IMAGE = 1, TYPE_MULTI_IMAGE = 2,
@@ -164,7 +163,7 @@ public class Global {
     }
 
     public static boolean isValidPhoneNumber(String testString) {
-        return (testString.length() >= 8 && testString.length() <= 12);
+        return (testString.length() >= 8 && testString.length() == 10);
     }
 
     public static boolean isValidPincode(String testString) {

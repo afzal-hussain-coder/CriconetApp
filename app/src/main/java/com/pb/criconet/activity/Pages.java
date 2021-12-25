@@ -133,7 +133,7 @@ public class Pages extends AppCompatActivity {
         friends_list.setLayoutManager(new LinearLayoutManager(this));
         etxt_search = (EditText) findViewById(R.id.etxt_search);
         notfound = (TextView) findViewById(R.id.notfound);
-        notfound.setText("Sorry No Page Found");
+        notfound.setText(getResources().getString(R.string.Sorry_No_Page_Found));
         modelArrayList = new ArrayList<>();
 
         etxt_search.addTextChangedListener(new TextWatcher() {
@@ -311,10 +311,10 @@ public class Pages extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                tv_setDes_count.setText("Page description remaining " + (900 - s.toString().length()) + " character");
+                tv_setDes_count.setText(getResources().getString(R.string.Page_description_remaining) + (900 - s.toString().length()) + getResources().getString(R.string.character));
                 tv_setDes_count.setTextColor(getResources().getColor(R.color.app_red_light));
                 if (s.toString().length() == 900) {
-                    tv_setDes_count.setText("Done");
+                    tv_setDes_count.setText(getResources().getString(R.string.Done));
                     tv_setDes_count.setTextColor(getResources().getColor(R.color.app_green));
                 }
 
@@ -326,9 +326,9 @@ public class Pages extends AppCompatActivity {
                 page_name = page_namee.getText().toString().trim();
                 page_dess = page_des.getText().toString().trim();
                 if (!Global.validateLength(page_name, 5)) {
-                    Toaster.customToast("Page Name must be at least 5 characters.");
+                    Toaster.customToast(getResources().getString(R.string.Page_Name_must_be_at_least_5_characters));
                 } else if (!Global.validateLength(page_dess, 32)) {
-                    Toaster.customToast("Enter Page Description at least 32 characters.!");
+                    Toaster.customToast(getResources().getString(R.string.Enter_Page_Description_at_least_32_characters));
                 } else {
                     createPage();
                 }
@@ -391,7 +391,7 @@ public class Pages extends AppCompatActivity {
                             } else if (jsonObject.optString("api_text").equalsIgnoreCase("failed")) {
                                 Global.msgDialog(Pages.this, jsonObject.optJSONObject("errors").optString("error_text"));
                             } else {
-                                Global.msgDialog(Pages.this, "Error in server");
+                                Global.msgDialog(Pages.this, getResources().getString(R.string.error_server));
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -403,7 +403,7 @@ public class Pages extends AppCompatActivity {
                     public void onErrorResponse(VolleyError error) {
                         error.printStackTrace();
                         progress.dismiss();
-                        Global.msgDialog(Pages.this, "Error from server");
+                        Global.msgDialog(Pages.this, getResources().getString(R.string.error_server));
 //                Global.msgDialog(EditProfile.this, "Internet connection is slow");
                     }
                 }
@@ -449,7 +449,7 @@ public class Pages extends AppCompatActivity {
 //                                Global.msgDialog(Pages.this, jsonObject.optJSONObject("errors").optString("error_text"));
                                 Global.msgDialog(Pages.this, jsonObject.optString("message"));
                             } else {
-                                Global.msgDialog(Pages.this, "Error in server");
+                                Global.msgDialog(Pages.this, getResources().getString(R.string.error_server));
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -461,7 +461,7 @@ public class Pages extends AppCompatActivity {
                     public void onErrorResponse(VolleyError error) {
                         error.printStackTrace();
                         progress.dismiss();
-                        Global.msgDialog(Pages.this, "Error from server");
+                        Global.msgDialog(Pages.this, getResources().getString(R.string.error_server));
 //                Global.msgDialog(EditProfile.this, "Internet connection is slow");
                     }
                 }

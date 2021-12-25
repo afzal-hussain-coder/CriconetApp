@@ -51,7 +51,7 @@ public class BookingDetails extends AppCompatActivity {
         tvCoachName.setText(datum.getName());
         tvTime.setText(datum.getBookingSlotTxt());
         tvBookingDate.setText(datum.getBookingSlotDate());
-        tvAmount.setText("Payment amount: "+"\u20B9"+datum.getBookingAmount()+"/Slot");
+        tvAmount.setText(getResources().getString(R.string.Payment_amount)+"\u20B9"+datum.getBookingAmount()+getResources().getString(R.string.Slot));
         tvStatusLabel.setText(datum.getBookingStatus());
 
 

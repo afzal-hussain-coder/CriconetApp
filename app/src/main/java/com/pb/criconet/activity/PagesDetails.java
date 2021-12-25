@@ -560,7 +560,7 @@ public class PagesDetails extends AppCompatActivity implements BSImagePicker.OnM
                         System.out.println("file.mblength() = " + mblength);
                         if (mblength > 50) {
                             System.out.println("file.length() = " + mblength);
-                            Global.msgDialog(PagesDetails.this, "File Size Too Large, \n Must be less than 50 MB");
+                            Global.msgDialog(PagesDetails.this, getResources().getString(R.string.File_Size_Too_Large_Must_be_less_than_50_MB));
                             progress.dismiss();
                         } else {
                             up_image.setVisibility(View.VISIBLE);
@@ -603,7 +603,7 @@ public class PagesDetails extends AppCompatActivity implements BSImagePicker.OnM
                         System.out.println("file.mblength() = " + mblength);
                         if (mblength > 50) {
                             System.out.println("file.length() = " + mblength);
-                            Global.msgDialog(PagesDetails.this, "File Size Too Large,\n Must be less than 50 MB");
+                            Global.msgDialog(PagesDetails.this, getResources().getString(R.string.File_Size_Too_Large_Must_be_less_than_50_MB));
                             progress.dismiss();
                         } else {
                             up_image.setVisibility(View.VISIBLE);
@@ -697,7 +697,7 @@ public class PagesDetails extends AppCompatActivity implements BSImagePicker.OnM
                         } else if (jsonObject.optString("api_text").equalsIgnoreCase("failed")) {
                             Global.msgDialog(PagesDetails.this, jsonObject.optJSONObject("errors").optString("error_text"));
                         } else {
-                            Global.msgDialog(PagesDetails.this, "Error in server");
+                            Global.msgDialog(PagesDetails.this, getResources().getString(R.string.error_server));
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -760,7 +760,7 @@ public class PagesDetails extends AppCompatActivity implements BSImagePicker.OnM
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
                 progress.dismiss();
-                Global.msgDialog(PagesDetails.this, "Error from server");
+                Global.msgDialog(PagesDetails.this, getResources().getString(R.string.error_server));
 //                Global.msgDialog(Login.this, "Internet connection is slow");
             }
         }) {
@@ -847,7 +847,7 @@ public class PagesDetails extends AppCompatActivity implements BSImagePicker.OnM
                             } else if (jsonObject.optString("api_text").equalsIgnoreCase("failed")) {
                                 Global.msgDialog(PagesDetails.this, jsonObject.optJSONObject("errors").optString("error_text"));
                             } else {
-                                Global.msgDialog(PagesDetails.this, "Error in server");
+                                Global.msgDialog(PagesDetails.this, getResources().getString(R.string.error_server));
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -859,7 +859,7 @@ public class PagesDetails extends AppCompatActivity implements BSImagePicker.OnM
                     public void onErrorResponse(VolleyError error) {
                         error.printStackTrace();
                         progress.dismiss();
-                        Global.msgDialog(PagesDetails.this, "Error from server");
+                        Global.msgDialog(PagesDetails.this, getResources().getString(R.string.error_server));
 //                Global.msgDialog(EditProfile.this, "Internet connection is slow");
                     }
                 }
@@ -899,9 +899,9 @@ public class PagesDetails extends AppCompatActivity implements BSImagePicker.OnM
             send_request.setVisibility(View.VISIBLE);
             send_panel.setVisibility(View.GONE);
             if (userData.getIs_liked()) {
-                status.setText("Unlike Page");
+                status.setText(getResources().getString(R.string.Unlike_Page));
             } else {
-                status.setText("Like Page");
+                status.setText(getResources().getString(R.string.Like_Page));
             }
         }
 
@@ -957,7 +957,7 @@ public class PagesDetails extends AppCompatActivity implements BSImagePicker.OnM
                     } else if (jsonObject.optString("api_text").equalsIgnoreCase("failed")) {
                         Global.msgDialog(PagesDetails.this, jsonObject.optJSONObject("errors").optString("error_text"));
                     } else {
-                        Global.msgDialog(PagesDetails.this, "Error in server");
+                        Global.msgDialog(PagesDetails.this, getResources().getString(R.string.error_server));
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -968,7 +968,7 @@ public class PagesDetails extends AppCompatActivity implements BSImagePicker.OnM
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
                 progress.dismiss();
-                Global.msgDialog(PagesDetails.this, "Error from server");
+                Global.msgDialog(PagesDetails.this, getResources().getString(R.string.error_server));
 //                Global.msgDialog(Login.this, "Internet connection is slow");
             }
         }) {
@@ -1067,7 +1067,7 @@ public class PagesDetails extends AppCompatActivity implements BSImagePicker.OnM
                             } else if (jsonObject.getString("status").equals("Fail")) {
                                 Global.msgDialog(PagesDetails.this, jsonObject.getString("msg"));
                             } else {
-                                Global.msgDialog(PagesDetails.this, "Error in server");
+                                Global.msgDialog(PagesDetails.this, getResources().getString(R.string.error_server));
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -1079,7 +1079,7 @@ public class PagesDetails extends AppCompatActivity implements BSImagePicker.OnM
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
                 progress.dismiss();
-                Global.msgDialog(PagesDetails.this, "Internet connection is slow");
+                Global.msgDialog(PagesDetails.this, getResources().getString(R.string.error_server));
             }
         });
         int socketTimeout = 30000;
@@ -1108,7 +1108,7 @@ public class PagesDetails extends AppCompatActivity implements BSImagePicker.OnM
             @Override
             public void onClick(View view) {
                 if (!Global.validateLength(input.getText().toString(), 5)) {
-                    input.setError("Enter your reason to report this post?");
+                    input.setError(getResources().getString(R.string.Enter_your_reason_to_report_this_post));
                 } else {
                     input.setError(null);
                     ReportUser(input.getText().toString());
@@ -1154,7 +1154,7 @@ public class PagesDetails extends AppCompatActivity implements BSImagePicker.OnM
                             } else if (jsonObject.getString("status").equals("Fail")) {
                                 Global.msgDialog(PagesDetails.this, jsonObject.getString("msg"));
                             } else {
-                                Global.msgDialog(PagesDetails.this, "Error in server");
+                                Global.msgDialog(PagesDetails.this, getResources().getString(R.string.error_server));
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -1166,7 +1166,7 @@ public class PagesDetails extends AppCompatActivity implements BSImagePicker.OnM
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
                 progress.dismiss();
-                Global.msgDialog(PagesDetails.this, "Internet connection is slow");
+                Global.msgDialog(PagesDetails.this, getResources().getString(R.string.error_server));
             }
         });
         int socketTimeout = 30000;
@@ -1265,7 +1265,7 @@ public class PagesDetails extends AppCompatActivity implements BSImagePicker.OnM
                     } else if (jsonObject.optString("api_text").equalsIgnoreCase("failed")) {
                         Global.msgDialog(PagesDetails.this, jsonObject.optJSONObject("errors").optString("error_text"));
                     } else {
-                        Global.msgDialog(PagesDetails.this, "Error in server");
+                        Global.msgDialog(PagesDetails.this, getResources().getString(R.string.error_server));
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -1276,7 +1276,7 @@ public class PagesDetails extends AppCompatActivity implements BSImagePicker.OnM
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
                 progress.dismiss();
-                Global.msgDialog(PagesDetails.this, "Error from server");
+                Global.msgDialog(PagesDetails.this, getResources().getString(R.string.error_server));
 //                Global.msgDialog(Login.this, "Internet connection is slow");
             }
         }) {
@@ -1312,7 +1312,7 @@ public class PagesDetails extends AppCompatActivity implements BSImagePicker.OnM
                     } else if (jsonObject.optString("api_text").equalsIgnoreCase("failed")) {
                         Global.msgDialog(PagesDetails.this, jsonObject.optJSONObject("errors").optString("error_text"));
                     } else {
-                        Global.msgDialog(PagesDetails.this, "Error in server");
+                        Global.msgDialog(PagesDetails.this, getResources().getString(R.string.error_server));
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -1323,7 +1323,7 @@ public class PagesDetails extends AppCompatActivity implements BSImagePicker.OnM
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
                 progress.dismiss();
-                Global.msgDialog(PagesDetails.this, "Error from server");
+                Global.msgDialog(PagesDetails.this, getResources().getString(R.string.error_server));
 //                Global.msgDialog(Login.this, "Internet connection is slow");
             }
         }) {
@@ -1360,7 +1360,7 @@ public class PagesDetails extends AppCompatActivity implements BSImagePicker.OnM
                     } else if (jsonObject.optString("api_text").equalsIgnoreCase("failed")) {
                         Global.msgDialog(PagesDetails.this, jsonObject.optJSONObject("errors").optString("error_text"));
                     } else {
-                        Global.msgDialog(PagesDetails.this, "Error in server");
+                        Global.msgDialog(PagesDetails.this, getResources().getString(R.string.error_server));
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -1371,7 +1371,7 @@ public class PagesDetails extends AppCompatActivity implements BSImagePicker.OnM
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
                 progress.dismiss();
-                Global.msgDialog(PagesDetails.this, "Error from server");
+                Global.msgDialog(PagesDetails.this, getResources().getString(R.string.error_server));
 //                Global.msgDialog(Login.this, "Internet connection is slow");
             }
         }) {
@@ -1407,7 +1407,7 @@ public class PagesDetails extends AppCompatActivity implements BSImagePicker.OnM
                     } else if (jsonObject.optString("api_text").equalsIgnoreCase("failed")) {
                         Global.msgDialog(PagesDetails.this, jsonObject.optJSONObject("errors").optString("error_text"));
                     } else {
-                        Global.msgDialog(PagesDetails.this, "Error in server");
+                        Global.msgDialog(PagesDetails.this, getResources().getString(R.string.error_server));
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -1418,7 +1418,7 @@ public class PagesDetails extends AppCompatActivity implements BSImagePicker.OnM
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
                 progress.dismiss();
-                Global.msgDialog(PagesDetails.this, "Error from server");
+                Global.msgDialog(PagesDetails.this, getResources().getString(R.string.error_server));
 //                Global.msgDialog(Login.this, "Internet connection is slow");
             }
         }) {
@@ -1450,13 +1450,13 @@ public class PagesDetails extends AppCompatActivity implements BSImagePicker.OnM
                 try {
                     JSONObject jsonObject2, jsonObject = new JSONObject(response.toString());
                     if (jsonObject.optString("api_text").equalsIgnoreCase("Success")) {
-                        Global.msgDialog(PagesDetails.this, "Post reported Successfully.");
+                        Global.msgDialog(PagesDetails.this, getResources().getString(R.string.Post_reported_Successfully));
 //                        Toast.makeText(getActivity(), jsonObject.getString("msg"), Toast.LENGTH_SHORT).show();
 //                        ResetFeed();
                     } else if (jsonObject.optString("api_text").equalsIgnoreCase("failed")) {
                         Global.msgDialog(PagesDetails.this, jsonObject.optJSONObject("errors").optString("error_text"));
                     } else {
-                        Global.msgDialog(PagesDetails.this, "Error in server");
+                        Global.msgDialog(PagesDetails.this, getResources().getString(R.string.error_server));
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -1467,7 +1467,7 @@ public class PagesDetails extends AppCompatActivity implements BSImagePicker.OnM
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
                 progress.dismiss();
-                Global.msgDialog(PagesDetails.this, "Error from server");
+                Global.msgDialog(PagesDetails.this, getResources().getString(R.string.error_server));
             }
         }) {
             @Override

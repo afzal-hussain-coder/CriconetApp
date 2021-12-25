@@ -236,11 +236,11 @@ public class HomeAdapter extends AAH_VideosAdapter {
                 if (data.getIs_liked_by_me()) {
                     Glide.with(context).load(R.drawable.like_active).into(((MyImageViewHolder) holder).like_icon);
                     ((MyImageViewHolder) holder).like_count.setTextColor(context.getResources().getColor(R.color.liked_color));
-                    ((MyImageViewHolder) holder).like_count.setText("Liked");
+                    ((MyImageViewHolder) holder).like_count.setText(context.getResources().getString(R.string.Liked));
                 } else {
                     Glide.with(context).load(R.drawable.like).into(((MyImageViewHolder) holder).like_icon);
                     ((MyImageViewHolder) holder).like_count.setTextColor(context.getResources().getColor(R.color.white));
-                    ((MyImageViewHolder) holder).like_count.setText("Like");
+                    ((MyImageViewHolder) holder).like_count.setText(context.getResources().getString(R.string.Like));
                 }
                 if (data.getIs_wondered_by_me()) {
                     Glide.with(context).load(R.drawable.dislike_active).into(((MyImageViewHolder) holder).dislike_icon);
@@ -393,13 +393,13 @@ public class HomeAdapter extends AAH_VideosAdapter {
                             ((MyImageViewHolder) holder).like_link.setText((likes_c + ""));
                             ((MyImageViewHolder) holder).like_count.setTextColor((context.getResources().getColor(R.color.white)));
                             Glide.with(context).load(R.drawable.like).into(((MyImageViewHolder) holder).like_icon);
-                            ((MyImageViewHolder) holder).like_count.setText("Like");
+                            ((MyImageViewHolder) holder).like_count.setText(context.getResources().getString(R.string.Like));
                         } else {
                             data.setIs_liked_by_me(true);
                             likes_c++;
                             data.setCount_post_likes(String.valueOf(likes_c));
                             ((MyImageViewHolder) holder).like_link.setText((likes_c + ""));
-                            ((MyImageViewHolder) holder).like_count.setText("Liked");
+                            ((MyImageViewHolder) holder).like_count.setText(context.getResources().getString(R.string.Liked));
                             ((MyImageViewHolder) holder).like_count.setTextColor((context.getResources().getColor(R.color.liked_color)));
                             Glide.with(context).load(R.drawable.like_active).into(((MyImageViewHolder) holder).like_icon);
                         }
@@ -507,11 +507,11 @@ public class HomeAdapter extends AAH_VideosAdapter {
                 if (data.getIs_liked_by_me()) {
                     Glide.with(context).load(R.drawable.like_active).into(((MyViewHolder) holder).like_icon);
                     ((MyViewHolder) holder).like_count.setTextColor(context.getResources().getColor(R.color.liked_color));
-                    ((MyViewHolder) holder).like_count.setText("Liked");
+                    ((MyViewHolder) holder).like_count.setText(context.getResources().getString(R.string.Liked));
                 } else {
                     Glide.with(context).load(R.drawable.like).into(((MyViewHolder) holder).like_icon);
                     ((MyViewHolder) holder).like_count.setTextColor(context.getResources().getColor(R.color.white));
-                    ((MyViewHolder) holder).like_count.setText("Like");
+                    ((MyViewHolder) holder).like_count.setText(context.getResources().getString(R.string.Like));
                 }
                 if (data.getIs_wondered_by_me()) {
                     Glide.with(context).load(R.drawable.dislike_active).into(((MyViewHolder) holder).dislike_icon);
@@ -695,7 +695,7 @@ public class HomeAdapter extends AAH_VideosAdapter {
                             data.setCount_post_likes(String.valueOf(likes_c));
                             ((MyViewHolder) holder).like_link.setText((likes_c + ""));
                             Glide.with(context).load(R.drawable.like).into(((MyViewHolder) holder).like_icon);
-                            ((MyViewHolder) holder).like_count.setText("Like");
+                            ((MyViewHolder) holder).like_count.setText(context.getResources().getString(R.string.Like));
                             ((MyViewHolder) holder).like_count.setTextColor((context.getResources().getColor(R.color.white)));
 
                         } else {
@@ -703,7 +703,7 @@ public class HomeAdapter extends AAH_VideosAdapter {
                             likes_c++;
                             data.setCount_post_likes(String.valueOf(likes_c));
                             ((MyViewHolder) holder).like_link.setText((likes_c + ""));
-                            ((MyViewHolder) holder).like_count.setText("Liked");
+                            ((MyViewHolder) holder).like_count.setText(context.getResources().getString(R.string.Liked));
                             ((MyViewHolder) holder).like_count.setTextColor((context.getResources().getColor(R.color.liked_color)));
                             Glide.with(context).load(R.drawable.like_active).into(((MyViewHolder) holder).like_icon);
                         }
@@ -789,7 +789,7 @@ public class HomeAdapter extends AAH_VideosAdapter {
                     //((MyImageViewHolder) holder).post_text.setVisibility(View.VISIBLE);
                     ((MyImageViewHolder) holder).post_content.setVisibility(View.VISIBLE);
 
-                    ((MyImageViewHolder) holder).post_status.setText("Shared a new Link");
+                    ((MyImageViewHolder) holder).post_status.setText(context.getResources().getString(R.string.Shared_a_new_Link));
                     ((MyImageViewHolder) holder).post_link.setText(data.getPostText_API());
                     //((MyImageViewHolder) holder).post_link.setLinkTextColor(Color.GREEN);
                     //((MyImageViewHolder) holder).post_link.setPaintFlags(((MyImageViewHolder) holder).post_link.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
@@ -809,7 +809,7 @@ public class HomeAdapter extends AAH_VideosAdapter {
                     ((MyImageViewHolder) holder).post_content.setText(data.getPostLinkContent());
 
                 } else if (getItemViewType(position) == TYPE_YOUTUBE) {
-                    ((MyImageViewHolder) holder).post_status.setText("Shared a YouTube Video");
+                    ((MyImageViewHolder) holder).post_status.setText(context.getResources().getString(R.string.Shared_a_YouTube_Video));
                     ((MyImageViewHolder) holder).youtube_view.setVisibility(View.VISIBLE);
                     ((MyImageViewHolder) holder).post_link_image.setVisibility(View.GONE);
                     ((MyImageViewHolder) holder).youtube_view.initialize(
@@ -827,7 +827,7 @@ public class HomeAdapter extends AAH_VideosAdapter {
                             }, true);
 
                 } else {
-                    ((MyImageViewHolder) holder).post_status.setText("Shared a Message");
+                    ((MyImageViewHolder) holder).post_status.setText(context.getResources().getString(R.string.Shared_a_Message));
                     ((MyImageViewHolder) holder).post_link_image.setVisibility(View.VISIBLE);
                     if (!data.getPostFile().isEmpty()) {
                         Glide.with(context).load(data.getPostFile()).dontAnimate()
@@ -937,11 +937,11 @@ public class HomeAdapter extends AAH_VideosAdapter {
                 // new work by me
                 if (data.getIs_liked_by_me()) {
                     Glide.with(context).load(R.drawable.like_active).into(((MyImageViewHolder) holder).like_icon);
-                    ((MyImageViewHolder) holder).like_count.setText("Liked");
+                    ((MyImageViewHolder) holder).like_count.setText(context.getResources().getString(R.string.Liked));
                     ((MyImageViewHolder) holder).like_count.setTextColor(context.getResources().getColor(R.color.liked_color));
                 } else {
                     Glide.with(context).load(R.drawable.like).into(((MyImageViewHolder) holder).like_icon);
-                    ((MyImageViewHolder) holder).like_count.setText("Like");
+                    ((MyImageViewHolder) holder).like_count.setText(context.getResources().getString(R.string.Like));
                     ((MyImageViewHolder) holder).like_count.setTextColor(context.getResources().getColor(R.color.white));
                 }
                 if (data.getIs_wondered_by_me()) {
@@ -992,7 +992,7 @@ public class HomeAdapter extends AAH_VideosAdapter {
                             data.setIs_liked_by_me(false);
                             likes_c--;
                             data.setCount_post_likes(String.valueOf(likes_c));
-                            ((MyImageViewHolder) holder).like_count.setText("Like");
+                            ((MyImageViewHolder) holder).like_count.setText(context.getResources().getString(R.string.Like));
                             ((MyImageViewHolder) holder).like_link.setText((String.valueOf(likes_c)));
                             Glide.with(context).load(R.drawable.like).into(((MyImageViewHolder) holder).like_icon);
                             //((MyImageViewHolder) holder).like_count.setTextColor((context.getResources().getColor(R.color.white)));
@@ -1001,7 +1001,7 @@ public class HomeAdapter extends AAH_VideosAdapter {
                             likes_c++;
                             data.setCount_post_likes(String.valueOf(likes_c));
                             ((MyImageViewHolder) holder).like_link.setText((String.valueOf(likes_c)));
-                            ((MyImageViewHolder) holder).like_count.setText("Liked");
+                            ((MyImageViewHolder) holder).like_count.setText(context.getResources().getString(R.string.Liked));
                             ((MyImageViewHolder) holder).like_link.setTextColor((context.getResources().getColor(R.color.liked_color)));
                             Glide.with(context).load(R.drawable.like_active).into(((MyImageViewHolder) holder).like_icon);
                             // ((MyImageViewHolder) holder).like_count.setTextColor((context.getResources().getColor(R.color.liked_color)));
@@ -1169,7 +1169,7 @@ public class HomeAdapter extends AAH_VideosAdapter {
             @Override
             public void onClick(View view) {
                 if (!Global.validateLength(input.getText().toString(), 5)) {
-                    input.setError("Enter your reason to report this post?");
+                    input.setError(context.getResources().getString(R.string.Enter_your_reason_to_report_this_post));
                 } else {
                     input.setError(null);
                     listeners.onReportFeedListener(id, input.getText().toString());
@@ -1333,7 +1333,7 @@ public class HomeAdapter extends AAH_VideosAdapter {
                             } else if (jsonObject.optString("api_text").equalsIgnoreCase("failed")) {
                                 Global.msgDialog(context, jsonObject.optJSONObject("errors").optString("error_text"));
                             } else {
-                                Global.msgDialog(context, "Error in server");
+                                Global.msgDialog(context, context.getResources().getString(R.string.error_server));
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -1342,7 +1342,7 @@ public class HomeAdapter extends AAH_VideosAdapter {
                 },
                 error -> {
                     error.printStackTrace();
-                    Global.msgDialog(context, "Error from server");
+                    Global.msgDialog(context, context.getResources().getString(R.string.error_server));
 //                Global.msgDialog(EditProfile.this, "Internet connection is slow");
                 }
         ) {

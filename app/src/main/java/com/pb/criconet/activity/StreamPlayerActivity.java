@@ -28,7 +28,7 @@ public class StreamPlayerActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         TextView mTitle = (TextView) toolbar.findViewById(R.id.toolbartext);
-        mTitle.setText("Recorded Matches");
+        mTitle.setText(getResources().getString(R.string.Recorded_Matches));
 
         player_view = (YouTubePlayerView) findViewById(R.id.player_view);
 

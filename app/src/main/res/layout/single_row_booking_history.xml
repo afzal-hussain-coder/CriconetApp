@@ -101,7 +101,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Date &amp; Session Time"
+                    android:text="@string/date_session_time"
                     android:textColor="#DCDCDC"
                     android:textSize="@dimen/_10sdp"
                     app:fontFamily="@font/opensans_semibold"
@@ -124,7 +124,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Slot Duration :"
+                            android:text="@string/slot_duration"
                             android:textColor="#DCDCDC"
                             android:textSize="@dimen/_10sdp"
                             app:fontFamily="@font/opensans_semibold"
@@ -149,7 +149,7 @@
                     android:id="@+id/tvBookingDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Booking Date"
+                    android:text="@string/booking_date"
                     android:textColor="#DCDCDC"
                     android:textSize="@dimen/_10sdp"
                     app:fontFamily="@font/opensans_semibold"

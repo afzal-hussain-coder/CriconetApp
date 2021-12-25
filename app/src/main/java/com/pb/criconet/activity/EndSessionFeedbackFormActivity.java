@@ -109,7 +109,7 @@ public class EndSessionFeedbackFormActivity extends AppCompatActivity {
         });
 
         TextView mTitle = (TextView) toolbar.findViewById(R.id.toolbartext);
-        mTitle.setText("e-Coaching Session Feedback");
+        mTitle.setText(getResources().getString(R.string.e_Coaching_Session_Feedback));
 
         initializeView();
 
@@ -134,9 +134,9 @@ public class EndSessionFeedbackFormActivity extends AppCompatActivity {
 
         //Toaster.customToast(SessionManager.getProfileType(prefs));
         if(SessionManager.getProfileType(prefs).equalsIgnoreCase("coach")){
-            tv_dear_coach.setText("Dear Coach,");
+            tv_dear_coach.setText(getResources().getString(R.string.Dear_Coach));
         }else{
-            tv_dear_coach.setText("Dear Students,");
+            tv_dear_coach.setText(getResources().getString(R.string.Dear_Students));
         }
         recycler_feedback.setAdapter(new EndSessionFeedbackAdapter(feedbackModelList, mContext, new EndSessionFeedbackAdapter.radioClickListenerr() {
             @Override
@@ -174,7 +174,7 @@ public class EndSessionFeedbackFormActivity extends AppCompatActivity {
         if(feedbackModelList.size()==0){
 
         }else{
-            tv_last_position.setText(feedbackModelList.size()+1+"."+"Do you have any suggestions?");
+            tv_last_position.setText(feedbackModelList.size()+1+"."+getResources().getString(R.string.Do_you_have_any_suggestions));
         }
 
         edit_type_feedback = findViewById(R.id.edit_type_feedback);
@@ -185,9 +185,9 @@ public class EndSessionFeedbackFormActivity extends AppCompatActivity {
 
             if(SessionManager.getProfileType(prefs).equalsIgnoreCase("coach")){
                 if (a5==0||a6==0||a7==0){
-                    Toaster.customToastDownn("Select Box");
+                    Toaster.customToastDownn(getResources().getString(R.string.Select_Box));
                 } else if(feedbackText.isEmpty()){
-                    Toaster.customToastDownn("Write suggestions");
+                    Toaster.customToastDownn(getResources().getString(R.string.Write_suggestions));
                 }
                 else{
                     if (Global.isOnline(mActivity)) {
@@ -198,9 +198,9 @@ public class EndSessionFeedbackFormActivity extends AppCompatActivity {
                 }
             }else{
                 if (a1==0 || a2==0 || a3==0 || a4==0){
-                    Toaster.customToastDownn("Select Box");
+                    Toaster.customToastDownn(getResources().getString(R.string.Select_Box));
                 } else if(feedbackText.isEmpty()){
-                    Toaster.customToastDownn("Write suggestions");
+                    Toaster.customToastDownn(getResources().getString(R.string.Write_suggestions));
                 }
                 else{
                     if (Global.isOnline(mActivity)) {
@@ -240,7 +240,7 @@ public class EndSessionFeedbackFormActivity extends AppCompatActivity {
                 error.printStackTrace();
                 loaderView.hideLoader();
                 //Global.dismissDialog(progressDialog);
-                 Global.msgDialog((Activity) mActivity, "Error from server");
+                 Global.msgDialog((Activity) mActivity, getResources().getString(R.string.error_server));
             }
         }) {
             @Override

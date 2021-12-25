@@ -103,7 +103,7 @@ public class CancellationFeedbackFormActivity extends AppCompatActivity {
         });
 
         TextView mTitle = (TextView) toolbar.findViewById(R.id.toolbartext);
-        mTitle.setText("Cancellation Feedback");
+        mTitle.setText(getResources().getString(R.string.Cancellation_Feedback));
 
         initializeView();
         getCancelBookingFeedbackForm();
@@ -257,18 +257,18 @@ public class CancellationFeedbackFormActivity extends AppCompatActivity {
     private boolean isValidate(){
         boolean isOk = true;
         if(lastCheckedRB==-1){
-            Toaster.customToastDown("Please choose option!");
+            Toaster.customToastDown(getResources().getString(R.string.Please_choose_option));
             isOk = false;
         }else if(lastCheckedRB == feedbackModelList.size()-1){
             if (edit_type_feedback.getText().toString().trim().isEmpty()) {
-                Toaster.customToastDown("Please type your feedback!");
+                Toaster.customToastDown(getResources().getString(R.string.Please_type_your_feedback));
                 isOk = false;
             }else if(!isTermsPolicyChecked){
-                Toaster.customToastDown("Please check to accept the Cancellation Policy");
+                Toaster.customToastDown(getResources().getString(R.string.Please_check_to_accept_the_Cancellation_Policy));
                 isOk = false;
             }
         }else if(!isTermsPolicyChecked){
-             Toaster.customToastDown("Please check to accept the cancellation policy");
+            Toaster.customToastDown(getResources().getString(R.string.Please_check_to_accept_the_Cancellation_Policy));
              isOk = false;
         }
         return isOk;

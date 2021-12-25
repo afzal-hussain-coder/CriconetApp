@@ -126,7 +126,7 @@
                                         android:layout_height="wrap_content"
                                         android:textColor="@color/app_green"
                                         android:layout_gravity="center_horizontal"
-                                        android:text="Offer Price"
+                                        android:text="@string/offer_pricee"
                                         android:textSize="@dimen/_10sdp"
                                         app:fontFamily="@font/opensans_semibold" />
                                     <TextView

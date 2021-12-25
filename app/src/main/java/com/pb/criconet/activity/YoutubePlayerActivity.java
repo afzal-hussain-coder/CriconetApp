@@ -37,7 +37,7 @@ public class YoutubePlayerActivity extends YouTubeBaseActivity implements  YouTu
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         TextView mTitle = (TextView) toolbar.findViewById(R.id.toolbartext);
-        mTitle.setText("Recorded Matches");
+        mTitle.setText(getResources().getString(R.string.Recorded_Matches));
         Bundle bundle = getIntent().getExtras();
         VIDEO_ID=getVideoKey(bundle.getString("url"));
         player_view = (YouTubePlayerView) findViewById(R.id.player_view);

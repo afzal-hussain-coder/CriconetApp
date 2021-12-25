@@ -163,7 +163,7 @@ public class BlockedUsers extends AppCompatActivity {
                             } else if (jsonObject.optString("api_text").equalsIgnoreCase("failed")) {
                                 Global.msgDialog(BlockedUsers.this, jsonObject.optJSONObject("errors").optString("error_text"));
                             } else {
-                                Global.msgDialog(BlockedUsers.this, "Error in server");
+                                Global.msgDialog(BlockedUsers.this, getResources().getString(R.string.error_server));
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -175,7 +175,7 @@ public class BlockedUsers extends AppCompatActivity {
                     public void onErrorResponse(VolleyError error) {
                         error.printStackTrace();
                         progress.dismiss();
-                        Global.msgDialog(BlockedUsers.this, "Error from server");
+                        Global.msgDialog(BlockedUsers.this, getResources().getString(R.string.error_server));
 //                Global.msgDialog(EditProfile.this, "Internet connection is slow");
                     }
                 }
@@ -211,7 +211,7 @@ public class BlockedUsers extends AppCompatActivity {
                             } else if (jsonObject.optString("api_text").equalsIgnoreCase("failed")) {
                                 Global.msgDialog(BlockedUsers.this, jsonObject.optJSONObject("errors").optString("error_text"));
                             } else {
-                                Global.msgDialog(BlockedUsers.this, "Error in server");
+                                Global.msgDialog(BlockedUsers.this, getResources().getString(R.string.error_server));
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -223,7 +223,7 @@ public class BlockedUsers extends AppCompatActivity {
                     public void onErrorResponse(VolleyError error) {
                         error.printStackTrace();
                         progress.dismiss();
-                        Global.msgDialog(BlockedUsers.this, "Error from server");
+                        Global.msgDialog(BlockedUsers.this, getResources().getString(R.string.error_server));
 //                Global.msgDialog(EditProfile.this, "Internet connection is slow");
                     }
                 }

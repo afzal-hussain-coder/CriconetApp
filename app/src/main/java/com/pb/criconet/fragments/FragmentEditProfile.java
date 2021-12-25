@@ -276,15 +276,15 @@ public class FragmentEditProfile extends Fragment implements AdapterView.OnItemS
         gender_String = spn_gender.getSelectedItem().toString();
 
         if (!Global.validateLength(name_String, 3)) {
-            Toast.makeText(getActivity(), "Enter Name", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), getResources().getString(R.string.Enter_Name), Toast.LENGTH_SHORT).show();
         } else if (!Global.validateLength(fname_String, 3)) {
-            Toast.makeText(getActivity(), "Enter First Name (at least 3 character)", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), getResources().getString(R.string.Enter_First_Name_at_least_3_character), Toast.LENGTH_SHORT).show();
         } else if (!Global.validateLength(lname_String, 3)) {
-            Toast.makeText(getActivity(), "Enter Last Name (at least 3 character)", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), getResources().getString(R.string.Enter_Last_Name_at_least_3_character), Toast.LENGTH_SHORT).show();
         } else if (!Global.ValidEmail(email_String)) {
-            Toast.makeText(getActivity(), "Enter EmailId", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), getResources().getString(R.string.Enter_EmailId), Toast.LENGTH_SHORT).show();
         } else if (spn_gender.getSelectedItemPosition() == 0) {
-            Toast.makeText(getActivity(), "Select Gender", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), getResources().getString(R.string.Select_Gender), Toast.LENGTH_SHORT).show();
         } else {
             if (Global.isOnline(getActivity())) {
                 editprofile_task();
@@ -445,7 +445,7 @@ public class FragmentEditProfile extends Fragment implements AdapterView.OnItemS
                             } else if (jsonObject.optString("api_text").equalsIgnoreCase("failed")) {
                                 Global.msgDialog(getActivity(), jsonObject.optJSONObject("errors").optString("error_text"));
                             } else {
-                                Global.msgDialog(getActivity(), "Error in server");
+                                Global.msgDialog(getActivity(), getResources().getString(R.string.error_server));
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -457,7 +457,7 @@ public class FragmentEditProfile extends Fragment implements AdapterView.OnItemS
                     public void onErrorResponse(VolleyError error) {
                         error.printStackTrace();
                         loaderView.hideLoader();
-                        Global.msgDialog(getActivity(), "Error from server");
+                        Global.msgDialog(getActivity(), getResources().getString(R.string.error_server));
 //                Global.msgDialog(EditProfile.this, "Internet connection is slow");
                     }
                 }
@@ -539,7 +539,7 @@ public class FragmentEditProfile extends Fragment implements AdapterView.OnItemS
         spinnerCountry.setEnabled(false);
         spinnerCity.setEnabled(false);
         spinnerState.setEnabled(false);
-        btn_login.setText("Click to Edit Profile");
+        btn_login.setText(getResources().getString(R.string.Click_to_Edit_Profile));
     }
 
     private void editprofile_task() {
@@ -559,7 +559,7 @@ public class FragmentEditProfile extends Fragment implements AdapterView.OnItemS
                             } else if (jsonObject.optString("api_text").equalsIgnoreCase("failed")) {
                                 Global.msgDialog(getActivity(), jsonObject.optString("errors"));
                             } else {
-                                Global.msgDialog(getActivity(), "Error in server");
+                                Global.msgDialog(getActivity(), getResources().getString(R.string.error_server));
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -571,7 +571,7 @@ public class FragmentEditProfile extends Fragment implements AdapterView.OnItemS
                     public void onErrorResponse(VolleyError error) {
                         error.printStackTrace();
                         loaderView.hideLoader();
-                        Global.msgDialog(getActivity(), "Error from server");
+                        Global.msgDialog(getActivity(), getResources().getString(R.string.error_server));
                     }
                 }
         ) {
@@ -636,7 +636,7 @@ public class FragmentEditProfile extends Fragment implements AdapterView.OnItemS
                         } else if (jsonObject.optString("api_text").equalsIgnoreCase("failed")) {
                             Global.msgDialog(getActivity(), jsonObject.optJSONObject("errors").optString("error_text"));
                         } else {
-                            Global.msgDialog(getActivity(), "Error in server");
+                            Global.msgDialog(getActivity(), getResources().getString(R.string.error_server));
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -719,7 +719,7 @@ public class FragmentEditProfile extends Fragment implements AdapterView.OnItemS
             @Override
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
-                Global.msgDialog(getActivity(), "Error from server");
+                Global.msgDialog(getActivity(), getResources().getString(R.string.error_server));
             }
         }) {
             @Override
@@ -766,7 +766,7 @@ public class FragmentEditProfile extends Fragment implements AdapterView.OnItemS
             public void onErrorResponse(VolleyError error) {
                 loaderView.hideLoader();
                 error.printStackTrace();
-                Global.msgDialog(getActivity(), "Error from server");
+                Global.msgDialog(getActivity(), getResources().getString(R.string.error_server));
             }
         });
         int socketTimeout = 30000;
@@ -802,7 +802,7 @@ public class FragmentEditProfile extends Fragment implements AdapterView.OnItemS
             public void onErrorResponse(VolleyError error) {
                 loaderView.hideLoader();
                 error.printStackTrace();
-                Global.msgDialog(getActivity(), "Error from server");
+                Global.msgDialog(getActivity(), getResources().getString(R.string.error_server));
             }
         }) ;
         int socketTimeout = 30000;

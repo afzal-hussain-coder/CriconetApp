@@ -203,7 +203,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:gravity="center"
-            android:text="No Booking Available"
+            android:text="@string/no_booking_available"
             android:textColor="@color/bckground"
             android:textSize="@dimen/_12sdp"
             android:fontFamily="@font/opensans_semibold"

@@ -210,7 +210,7 @@ public class Settings extends AppCompatActivity {
                     Intent i = new Intent(Intent.ACTION_SEND);
                     i.setType("text/plain");
                     i.putExtra(Intent.EXTRA_SUBJECT, R.string.app_name);
-                    String sAux = "\nI recommend this great App, download now and we can connect.\n\n";
+                    String sAux = getResources().getString(R.string.I_recommend_this_great_App_download_now_and_we_can_connect);
                     sAux = sAux + "Android : https://play.google.com/store/apps/details?id=" + Settings.this.getPackageName();
 //                    sAux = sAux + " \n\n IOS : https://itunes.apple.com/us/app/criconet/id1447634287?ls=1&mt=8";
                     i.putExtra(Intent.EXTRA_TEXT, sAux);
@@ -322,7 +322,7 @@ public class Settings extends AppCompatActivity {
                             } else if (jsonObject.getString("status").equals("Fail")) {
                                 Global.msgDialog(Settings.this, jsonObject.getString("msg"));
                             } else {
-                                Global.msgDialog(Settings.this, "Error in server");
+                                Global.msgDialog(Settings.this, getResources().getString(R.string.error_server));
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -334,7 +334,7 @@ public class Settings extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
                 progress.dismiss();
-                Global.msgDialog(Settings.this, "Internet connection is slow");
+                Global.msgDialog(Settings.this, getResources().getString(R.string.error_server));
             }
         });
         int socketTimeout = 30000;
@@ -372,7 +372,7 @@ public class Settings extends AppCompatActivity {
                             } else if (jsonObject.getString("status").equals("Fail")) {
                                 Global.msgDialog(Settings.this, jsonObject.getString("msg"));
                             } else {
-                                Global.msgDialog(Settings.this, "Error in server");
+                                Global.msgDialog(Settings.this, getResources().getString(R.string.error_server));
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -384,7 +384,7 @@ public class Settings extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
                 progress.dismiss();
-                Global.msgDialog(Settings.this, "Internet connection is slow");
+                Global.msgDialog(Settings.this, getResources().getString(R.string.error_server));
             }
         });
         int socketTimeout = 30000;

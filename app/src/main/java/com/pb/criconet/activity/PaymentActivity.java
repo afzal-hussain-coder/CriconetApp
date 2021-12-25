@@ -96,7 +96,7 @@ public class PaymentActivity extends Activity implements PaymentResultListener {
     @Override
     public void onPaymentSuccess(String razorpayPaymentID) {
         try {
-            Toast.makeText(this, "Payment Successful: " + razorpayPaymentID, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getResources().getString(R.string.Payment_Successful) + razorpayPaymentID, Toast.LENGTH_SHORT).show();
         } catch (Exception e) {
             Log.e(TAG, "Exception in onPaymentSuccess", e);
         }
@@ -111,7 +111,7 @@ public class PaymentActivity extends Activity implements PaymentResultListener {
     @Override
     public void onPaymentError(int code, String response) {
         try {
-            Toast.makeText(this, "Payment failed: " + code + " " + response, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getResources().getString(R.string.Payment_failed) + code + " " + response, Toast.LENGTH_SHORT).show();
         } catch (Exception e) {
             Log.e(TAG, "Exception in onPaymentError", e);
         }

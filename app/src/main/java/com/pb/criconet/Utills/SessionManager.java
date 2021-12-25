@@ -62,6 +62,21 @@ public class SessionManager {
     private static String languagekey = "LANGUAGEKEY";
     private static String is_no_verified = "is_mobile_verified";
 
+    private static String ambs_email = "email";
+    private static String ambs_phone_number = "phone_number";
+    private static String ambs_name = "name";
+    private static String ambs_full_name = "full_name";
+    private static String ambs_school_college_name = "school_college_name";
+    private static String ambs_height_qualification = "height_qualification";
+    private static String ambs_have_you_org_event_flag = "have_you_org_event_flag";
+    private static String ambs_have_you_org_event_txt = "have_you_org_event_txt";
+    private static String ambs_innovative_thing = "innovative_thing";
+    private static String ambs_how_many_hrs_per_week = "how_many_hrs_per_week";
+    private static String ambs_passionate_thing = "passionate_thing";
+    private static String ambs_do_you_want_campus_ambassdor = "do_you_want_campus_ambassdor";
+    private static String ambs_thing_you_are_know_criconet = "thing_you_are_know_criconet";
+
+
 //    private static String CARTYPEID = "CARTYPEID";
 //    private static String CARTYPENAME = "CARTYPENAME";
 //    private static String CARDDETAIL = "CARDDETAIL";
@@ -483,6 +498,105 @@ public class SessionManager {
 
     public static String get_mobile_verified(SharedPreferences prefs) {
         return prefs.getString(is_no_verified, "home");
+    }
+    public static void save_is_ambassador(SharedPreferences prefs, String value) {
+        SessionManager.savePreference(prefs, is_no_verified, value);
+    }
+
+    public static String get_is_ambassador(SharedPreferences prefs) {
+        return prefs.getString(is_no_verified, "");
+    }
+    public static void save_is_amb_email(SharedPreferences prefs, String value) {
+        SessionManager.savePreference(prefs, ambs_email, value);
+    }
+
+    public static String get_is_amb_email(SharedPreferences prefs) {
+        return prefs.getString(ambs_email, "");
+    }
+    public static void save_is_amb_name(SharedPreferences prefs, String value) {
+        SessionManager.savePreference(prefs, ambs_name, value);
+    }
+
+    public static String get_is_amb_name(SharedPreferences prefs) {
+        return prefs.getString(ambs_name, "");
+    }
+
+    public static void save_is_amb_fullname(SharedPreferences prefs, String value) {
+        SessionManager.savePreference(prefs, ambs_full_name, value);
+    }
+
+    public static String get_is_amb_fullname(SharedPreferences prefs) {
+        return prefs.getString(ambs_full_name, "");
+    }
+    public static void save_is_amb_phone(SharedPreferences prefs, String value) {
+        SessionManager.savePreference(prefs, ambs_phone_number, value);
+    }
+
+    public static String get_is_amb_phone(SharedPreferences prefs) {
+        return prefs.getString(ambs_phone_number, "");
+    }
+    public static void save_is_amb_college(SharedPreferences prefs, String value) {
+        SessionManager.savePreference(prefs, ambs_school_college_name, value);
+    }
+
+    public static String get_is_amb_college(SharedPreferences prefs) {
+        return prefs.getString(ambs_school_college_name, "");
+    }
+    public static void save_is_amb_highestQ(SharedPreferences prefs, String value) {
+        SessionManager.savePreference(prefs, ambs_height_qualification, value);
+    }
+
+    public static String get_is_amb_highestQ(SharedPreferences prefs) {
+        return prefs.getString(ambs_height_qualification, "");
+    }
+    public static void save_is_ambs_have_you_org_event_flag(SharedPreferences prefs, String value) {
+        SessionManager.savePreference(prefs, ambs_have_you_org_event_flag, value);
+    }
+
+    public static String get_is_ambs_have_you_org_event_flag(SharedPreferences prefs) {
+        return prefs.getString(ambs_have_you_org_event_flag, "");
+    }
+    public static void save_is_ambs_have_you_org_event_txt(SharedPreferences prefs, String value) {
+        SessionManager.savePreference(prefs, ambs_have_you_org_event_txt, value);
+    }
+
+    public static String get_is_ambs_have_you_org_event_txt(SharedPreferences prefs) {
+        return prefs.getString(ambs_have_you_org_event_txt, "");
+    }
+    public static void save_is_ambs_innovative_thing(SharedPreferences prefs, String value) {
+        SessionManager.savePreference(prefs, ambs_innovative_thing, value);
+    }
+
+    public static String get_is_ambs_innovative_thing(SharedPreferences prefs) {
+        return prefs.getString(ambs_innovative_thing, "");
+    }
+    public static void save_is_ambs_how_many_hrs_per_week(SharedPreferences prefs, String value) {
+        SessionManager.savePreference(prefs, ambs_how_many_hrs_per_week, value);
+    }
+
+    public static String get_is_ambs_how_many_hrs_per_week(SharedPreferences prefs) {
+        return prefs.getString(ambs_how_many_hrs_per_week, "");
+    }
+    public static void save_is_ambs_passionate_thing(SharedPreferences prefs, String value) {
+        SessionManager.savePreference(prefs, ambs_passionate_thing, value);
+    }
+
+    public static String get_is_ambs_passionate_thing(SharedPreferences prefs) {
+        return prefs.getString(ambs_passionate_thing, "");
+    }
+    public static void save_is_ambs_do_you_want_campus_ambassdor(SharedPreferences prefs, String value) {
+        SessionManager.savePreference(prefs, ambs_do_you_want_campus_ambassdor, value);
+    }
+
+    public static String get_is_ambs_do_you_want_campus_ambassdor(SharedPreferences prefs) {
+        return prefs.getString(ambs_do_you_want_campus_ambassdor, "");
+    }
+    public static void save_is_ambs_thing_you_are_know_criconet(SharedPreferences prefs, String value) {
+        SessionManager.savePreference(prefs, ambs_thing_you_are_know_criconet, value);
+    }
+
+    public static String get_is_ambs_thing_you_are_know_criconet(SharedPreferences prefs) {
+        return prefs.getString(ambs_thing_you_are_know_criconet, "");
     }
 
 }

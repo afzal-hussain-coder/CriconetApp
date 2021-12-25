@@ -532,7 +532,7 @@ public class BookingActivity extends AppCompatActivity implements BookingHistory
                 error.printStackTrace();
                 loaderView.hideLoader();
                 //Global.dismissDialog(progressDialog);
-                Global.msgDialog((Activity) mContext, "Error from server");
+                Global.msgDialog((Activity) mContext, getResources().getString(R.string.error_server));
             }
         }) {
             @Override
@@ -589,17 +589,17 @@ public class BookingActivity extends AppCompatActivity implements BookingHistory
             tvInfo.setText(Html.fromHtml(data.getDevice_message()));
         }
 
-        tvSessionDetails.setText("Booking ID: "+" "+data.getBookingId());
+        tvSessionDetails.setText(getResources().getString(R.string.bookingId)+" "+data.getBookingId());
         tvSessionDateTime.setText(Global.convertUTCDateToLocalDate(data.getBookingSlotDate())+" , "+data.getBookingSlotTxt());
         tvBookingDate.setText(data.getBooking_date());
         if(data.getPay_leter_str().isEmpty()){
-            tv_booking_paymnet_status.setText("Online e-Coaching session paid amount");
+            tv_booking_paymnet_status.setText(getResources().getString(R.string.online_paid_amount));
         }else{
             tv_booking_paymnet_status.setText(data.getPay_leter_str());
         }
 
         tvSessionAmount.setText("\u20B9"+data.getPayment_amount());
-        tvBookingStataus.setText("Your booking has been "+data.getBtn1().toLowerCase()+"!");
+        tvBookingStataus.setText(getResources().getString(R.string.Your_booking_has_been )+data.getBtn1().toLowerCase()+"!");
 
         if((data.getBtn1().equalsIgnoreCase("Confirmed") &&data.getBtn2().equalsIgnoreCase(""))){
 
@@ -696,7 +696,7 @@ public class BookingActivity extends AppCompatActivity implements BookingHistory
                 error.printStackTrace();
                 loaderView.hideLoader();
                 //Global.dismissDialog(progressDialog);
-                Global.msgDialog((Activity) mContext, "Error from server");
+                Global.msgDialog((Activity) mContext, getResources().getString(R.string.error_server));
             }
         }) {
             @Override
@@ -917,7 +917,7 @@ public class BookingActivity extends AppCompatActivity implements BookingHistory
         // ProgressBar will disappear once page is loaded
 
         public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
-            Toast.makeText(getApplicationContext(), "Failed loading app!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), getResources().getString(R.string.Failed_loading_app), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -1005,7 +1005,7 @@ public class BookingActivity extends AppCompatActivity implements BookingHistory
                                 } else if (jsonObject.optString("api_text").equalsIgnoreCase("failed")) {
                                     Global.msgDialog(mActivity, jsonObject.optJSONObject("errors").optString("error_text"));
                                 } else {
-                                    Global.msgDialog(mActivity, "Error in server");
+                                    Global.msgDialog(mActivity, getResources().getString(R.string.error_server));
                                 }
                             } catch (Exception e) {
                                 e.printStackTrace();
@@ -1079,7 +1079,7 @@ public class BookingActivity extends AppCompatActivity implements BookingHistory
                             Global.msgDialog(mActivity, result.getApi_status());
 //                        Global.msgDialog(getActivity(), jsonObject.optJSONObject("errors").optString("error_text"));
                         } else {
-                            Global.msgDialog(mActivity, "Error in server");
+                            Global.msgDialog(mActivity, getResources().getString(R.string.error_server));
                         }
                     } catch (Exception e) {
                         //progress.dismiss();

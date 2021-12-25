@@ -107,7 +107,7 @@ public class EditProfile extends BaseActivity {
         });
 
         TextView mTitle = (TextView) toolbar.findViewById(R.id.toolbartext);
-        mTitle.setText("Edit Profile");
+        mTitle.setText(getResources().getString(R.string.Edit_Profile));
 
         tabLayout=findViewById(R.id.tabLayout);
         viewPager=findViewById(R.id.viewPager);

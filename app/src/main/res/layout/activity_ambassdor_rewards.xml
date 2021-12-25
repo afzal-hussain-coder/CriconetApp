@@ -1,0 +1,413 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bckground"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/ambs_toolbar" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/toolbar"
+        tools:ignore="ScrollViewCount">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/iv_banner"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_70sdp"
+                android:scaleType="fitXY"
+                android:contentDescription="@string/app_name"
+                />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvRewards"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/iv_banner"
+        android:background="@color/bckground_light"
+        />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/rvRewards"
+        android:padding="@dimen/_10sdp"
+        android:paddingBottom="@dimen/_15sdp"
+        android:background="@color/bckground">
+
+        <RelativeLayout
+            android:id="@+id/rl_mid"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginEnd="@dimen/_10sdp">
+
+            <View
+                android:id="@+id/v"
+                android:layout_width="@dimen/_100sdp"
+                android:layout_height="@dimen/_1sdp"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:layout_toLeftOf="@+id/tv_refer_progress"
+                android:layout_marginEnd="@dimen/_2sdp"
+                android:background="@color/deep_blue" />
+
+            <TextView
+                android:id="@+id/tv_refer_progress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:fontFamily="@font/opensans_semibold"
+                android:text="@string/registration_referral_progress"
+                android:textAllCaps="true"
+                android:textColor="@color/deep_blue"
+                android:textSize="@dimen/_10sdp" />
+
+            <View
+                android:layout_width="@dimen/_100sdp"
+                android:layout_height="@dimen/_1sdp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/tv_refer_progress"
+                android:layout_marginStart="@dimen/_2sdp"
+                android:background="@color/deep_blue" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rlProgress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/rl_mid"
+            android:layout_marginTop="@dimen/_10sdp">
+
+            <TextView
+                android:id="@+id/tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:fontFamily="@font/opensans_semibold"
+                android:text="1"
+                android:layout_marginRight="-5dp"
+                android:layout_alignParentStart="true"
+                android:textColor="@color/deep_blue"
+                android:textSize="@dimen/_10sdp" />
+            <SeekBar
+                android:id="@+id/seekBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxHeight="@dimen/_25sdp"
+                android:min="1"
+                android:layout_toLeftOf="@+id/tv1"
+                android:layout_toRightOf="@+id/tv"
+                android:max="100"
+                android:progressDrawable="@drawable/amb_seekbar_progress"
+                android:splitTrack="false"
+                />
+            <TextView
+                android:id="@+id/tv1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="-5dp"
+                android:fontFamily="@font/opensans_semibold"
+                android:text="100"
+                android:textAllCaps="true"
+                android:layout_alignParentEnd="true"
+                android:textColor="@color/gray"
+                android:textSize="@dimen/_10sdp" />
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/li"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/_2sdp"
+            android:layout_below="@+id/rlProgress"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:fontFamily="@font/opensans_semibold"
+                android:text="@string/total_num_registration_with_referral"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_8sdp" />
+
+            <TextView
+                android:id="@+id/tv_referralNumber_registartion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:fontFamily="@font/opensans_semibold"
+                android:text="60"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:textColor="@color/deep_blue"
+                android:textSize="@dimen/_8sdp" />
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_booking_progress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_20sdp"
+            android:layout_below="@+id/li"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginEnd="@dimen/_10sdp">
+
+            <View
+                android:id="@+id/v_boking"
+                android:layout_width="@dimen/_100sdp"
+                android:layout_height="@dimen/_1sdp"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:layout_toLeftOf="@+id/tv_refer_progress_booking"
+                android:layout_marginEnd="@dimen/_2sdp"
+                android:background="@color/deep_blue" />
+
+            <TextView
+                android:id="@+id/tv_refer_progress_booking"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:fontFamily="@font/opensans_semibold"
+                android:text="@string/booking_with_referral_progress"
+                android:textAllCaps="true"
+                android:textColor="@color/deep_blue"
+                android:textSize="@dimen/_10sdp" />
+
+            <View
+                android:layout_width="@dimen/_100sdp"
+                android:layout_height="@dimen/_1sdp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/tv_refer_progress_booking"
+                android:layout_marginStart="@dimen/_2sdp"
+                android:background="@color/deep_blue" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rlProgress_booking"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/rl_booking_progress"
+            android:layout_marginTop="@dimen/_10sdp">
+
+            <TextView
+                android:id="@+id/tv3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:fontFamily="@font/opensans_semibold"
+                android:text="1"
+                android:layout_marginRight="-5dp"
+                android:layout_alignParentStart="true"
+                android:textColor="@color/deep_blue"
+                android:textSize="@dimen/_10sdp" />
+            <SeekBar
+                android:id="@+id/seekBar_booking"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxHeight="@dimen/_25sdp"
+                android:min="1"
+                android:layout_toLeftOf="@+id/tv2"
+                android:layout_toRightOf="@+id/tv3"
+                android:max="100"
+                android:progressDrawable="@drawable/amb_seekbar_progress"
+                android:splitTrack="false"
+                />
+            <TextView
+                android:id="@+id/tv2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="-5dp"
+                android:fontFamily="@font/opensans_semibold"
+                android:text="100"
+                android:textAllCaps="true"
+                android:layout_alignParentEnd="true"
+                android:textColor="@color/gray"
+                android:textSize="@dimen/_10sdp" />
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/li_booking"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/_2sdp"
+            android:layout_below="@+id/rlProgress_booking"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:fontFamily="@font/opensans_semibold"
+                android:text="@string/total_num_booking_progress"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_8sdp" />
+
+            <TextView
+                android:id="@+id/tv_referralNumber_booking"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:fontFamily="@font/opensans_semibold"
+                android:text="60"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:textColor="@color/deep_blue"
+                android:textSize="@dimen/_8sdp" />
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/li_copy"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/li_booking"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/_20sdp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_copy"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_alignParentStart="true"
+                android:layout_toLeftOf="@+id/li_copyy"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:fontFamily="@font/opensans_semibold"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_10sdp" />
+            <LinearLayout
+                android:id="@+id/li_copyy"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_copied"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Copied"
+                    android:visibility="gone"
+                    android:layout_marginBottom="@dimen/_5sdp"
+                    android:fontFamily="@font/opensans_semibold"
+                    android:textColor="@color/green"
+                    android:textSize="@dimen/_10sdp" />
+                <ImageView
+                    android:id="@+id/iv_copy"
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:src="@drawable/ic_content_copy_white_24dp" />
+            </LinearLayout>
+
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/li_copy">
+
+            <FrameLayout
+                android:id="@+id/fl_referFriend"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_35sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginBottom="@dimen/_5sdp"
+                android:background="@color/colorPrimary">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_1sdp"
+                    android:background="#ca9191"/>
+                <View
+                    android:layout_width="0.9dp"
+                    android:layout_height="match_parent"
+                    android:background="#ca9191"/>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_1sdp"
+                    android:layout_gravity="bottom"
+                    android:background="#592627"/>
+                <View
+                    android:layout_width="@dimen/_1sdp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="end"
+                    android:background="#592627"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:padding="@dimen/_5sdp"
+                    android:text="@string/refer_a_friend"
+                    app:fontFamily="@font/opensans_semibold"
+                    android:textColor="@color/light_text_color"
+                    android:textSize="@dimen/_10sdp"/>
+
+            </FrameLayout>
+            <FrameLayout
+                android:id="@+id/fl_view_ambs_prog"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_35sdp"
+                android:layout_below="@+id/fl_referFriend"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:visibility="gone"
+                android:layout_marginBottom="@dimen/_5sdp"
+                android:background="@color/colorPrimary">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_1sdp"
+                    android:background="#ca9191"/>
+                <View
+                    android:layout_width="0.9dp"
+                    android:layout_height="match_parent"
+                    android:background="#ca9191"/>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_1sdp"
+                    android:layout_gravity="bottom"
+                    android:background="#592627"/>
+                <View
+                    android:layout_width="@dimen/_1sdp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="end"
+                    android:background="#592627"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:padding="@dimen/_5sdp"
+                    android:text="@string/view_ambs_prog"
+                    app:fontFamily="@font/opensans_semibold"
+                    android:textColor="@color/light_text_color"
+                    android:textSize="@dimen/_10sdp"/>
+
+            </FrameLayout>
+
+        </RelativeLayout>
+
+
+    </RelativeLayout>
+        </RelativeLayout>
+    </ScrollView>
+
+</RelativeLayout>
+

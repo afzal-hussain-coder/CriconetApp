@@ -71,7 +71,7 @@ public class BookingHistoryAdapter extends RecyclerView.Adapter<BookingHistoryAd
                 .into(holder.ivProfileImage);
         holder.tvCoachName.setText(Global.capitalizeFirstLatterOfString(data.get(position).getName()));
         holder.tvTime.setText(Global.convertUTCDateToLocalDate(data.get(position).getBookingSlotDate())+" , "+data.get(position).getBookingSlotTxt());
-        holder.tvSlotDuration.setText(data.get(position).getSlotDuration()+" min");
+        holder.tvSlotDuration.setText(data.get(position).getSlotDuration()+context.getResources().getString(R.string.min));
         holder.tvBookingDateTime.setText(data.get(position).getBooking_date());
        // holder.tvBookingDateTime.setText(data.get(position).getBooking_date());
 
@@ -109,7 +109,7 @@ public class BookingHistoryAdapter extends RecyclerView.Adapter<BookingHistoryAd
                     holder.btn2.setVisibility(View.GONE);
                 }else{
                     holder.btn2.setVisibility(View.VISIBLE);
-                    holder.tv_join.setText(data.get(position).getBtn2()+" "+"Session");
+                    holder.tv_join.setText(data.get(position).getBtn2()+" "+context.getResources().getString(R.string.session));
                 }
             }catch(Exception e){
                 e.printStackTrace();

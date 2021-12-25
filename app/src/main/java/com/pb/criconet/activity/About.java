@@ -98,7 +98,7 @@ public class About extends AppCompatActivity {
                             } else if (jsonObject.optString("api_text").equalsIgnoreCase("failed")) {
                                 Global.msgDialog(About.this, jsonObject.optJSONObject("errors").optString("error_text"));
                             } else {
-                                Global.msgDialog(About.this, "Error in server");
+                                Global.msgDialog(About.this, getResources().getString(R.string.error_server));
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -110,7 +110,7 @@ public class About extends AppCompatActivity {
                     public void onErrorResponse(VolleyError error) {
                         error.printStackTrace();
                         progress.dismiss();
-                        Global.msgDialog(About.this, "Error from server");
+                        Global.msgDialog(About.this, getResources().getString(R.string.error_server));
 //                Global.msgDialog(EditProfile.this, "Internet connection is slow");
                     }
                 }

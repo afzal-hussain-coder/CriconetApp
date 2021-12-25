@@ -107,7 +107,7 @@
             android:layout_gravity="center"
             android:drawablePadding="@dimen/_2sdp"
             android:padding="@dimen/_5sdp"
-            android:text="Short"
+            android:text="@string/short_na"
             android:gravity="center"
             android:textColor="#E0FFFF"
             android:textSize="@dimen/_10sdp"

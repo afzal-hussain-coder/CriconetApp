@@ -17,7 +17,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:text="Time Slot"
+                android:text="@string/time_slote"
                 android:textAllCaps="true"
                 android:textColor="@color/bckground"
                 app:fontFamily="@font/opensans_semibold"
@@ -54,6 +54,6 @@
         android:visibility="gone"
         android:textColor="@color/white"
         android:background="@drawable/round_corner_pressed"
-        android:text="Done"/>
+        android:text="@string/Done"/>
 
 </LinearLayout>

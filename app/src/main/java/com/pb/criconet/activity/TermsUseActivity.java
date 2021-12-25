@@ -90,7 +90,7 @@ public class TermsUseActivity extends AppCompatActivity {
                             } else if (jsonObject.optString("api_text").equalsIgnoreCase("failed")) {
                                 Global.msgDialog(TermsUseActivity.this, jsonObject.optJSONObject("errors").optString("error_text"));
                             } else {
-                                Global.msgDialog(TermsUseActivity.this, "Error in server");
+                                Global.msgDialog(TermsUseActivity.this, getResources().getString(R.string.error_server));
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -102,7 +102,7 @@ public class TermsUseActivity extends AppCompatActivity {
                     public void onErrorResponse(VolleyError error) {
                         error.printStackTrace();
                         progress.dismiss();
-                        Global.msgDialog(TermsUseActivity.this, "Error from server");
+                        Global.msgDialog(TermsUseActivity.this, getResources().getString(R.string.error_server));
 //                Global.msgDialog(EditProfile.this, "Internet connection is slow");
                     }
                 }

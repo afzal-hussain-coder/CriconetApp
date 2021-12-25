@@ -100,13 +100,13 @@ public class CoachListAdapter extends RecyclerView.Adapter<CoachListAdapter.MyVi
         holder.tvCoachName.setText(Global.capitizeString(mdata.get(position).getName()));
         holder.tvCoacTitle.setText(mdata.get(position).getCat_title());
         holder.tvDiscription.setText(mdata.get(position).getAboutCoachProfile());
-        holder.tvPrice.setText("Price: "+"\u20B9" +mdata.get(position).getChargeAmount()+"/"+"Session");
+        holder.tvPrice.setText(context.getString(R.string.price)+"\u20B9" +mdata.get(position).getChargeAmount()+"/"+context.getString(R.string.session));
         if(mdata.get(position).getPrice().getOfferPercentage().equalsIgnoreCase("0")){
             holder.tvOfferP.setVisibility(View.GONE);
         }else{
             holder.tvOfferP.setVisibility(View.VISIBLE);
             holder.tvPrice.setPaintFlags(holder.tvPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-            holder.tvOfferP.setText("Offer Price: "+"\u20B9" +mdata.get(position).getPrice().getPaymentPrice() +"/"+"Session");
+            holder.tvOfferP.setText(context.getString(R.string.offer_price)+"\u20B9" +mdata.get(position).getPrice().getPaymentPrice() +"/"+context.getString(R.string.session));
         }
 
         if(mdata.get(position).getADAYS().equalsIgnoreCase("0")){
@@ -123,7 +123,7 @@ public class CoachListAdapter extends RecyclerView.Adapter<CoachListAdapter.MyVi
                     //holder.tvOfferl.setVisibility(View.GONE);
                 }else{
                     //holder.tvOfferl.setVisibility(View.VISIBLE);
-                    holder.tvoffer.setText(mdata.get(position).getPrice().getOfferPercentage() +"% "+"OFF");
+                    holder.tvoffer.setText(mdata.get(position).getPrice().getOfferPercentage() +"% "+context.getResources().getString(R.string.OFF));
                     holder.rl_offer.setVisibility(View.VISIBLE);
                 }
 

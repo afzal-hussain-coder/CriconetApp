@@ -164,9 +164,9 @@ public class CoachDetailsActivity extends BaseActivity {
         datePicker = findViewById(R.id.calendarView);
         btnCalender.setOnClickListener(view -> {
             if (dateGott.equalsIgnoreCase("")) {
-                Toaster.customToast("Select Slot Available Date");
+                Toaster.customToast(getResources().getString(R.string.Select_Slot_Available_Date));
             } else if (mslotId.equalsIgnoreCase("")) {
-                Toaster.customToast("Select Time Slot");
+                Toaster.customToast(getResources().getString(R.string.Select_Time_Slot));
             } else {
 
                 String is_contact_verify = SessionManager.get_mobile_verified(prefs);
@@ -329,7 +329,7 @@ public class CoachDetailsActivity extends BaseActivity {
                 error.printStackTrace();
                 loaderView.hideLoader();
                 //Global.dismissDialog(progressDialog);
-                Global.msgDialog(mActivity, "Error from server");
+                Global.msgDialog(mActivity, getResources().getString(R.string.error_server));
             }
         }) {
             @Override
@@ -362,7 +362,7 @@ public class CoachDetailsActivity extends BaseActivity {
                             .into(ivProfileImage);
                     tvCoachName.setText(Global.capitalizeFirstLatterOfString(modelArrayList.getData().getName()));
                     tvCoacTitle.setText(modelArrayList.getData().getProfileTitle());
-                    tvPrice.setText("\u20B9" + modelArrayList.getData().getChargeAmount() + "/" + "Session");
+                    tvPrice.setText("\u20B9" + modelArrayList.getData().getChargeAmount() + "/" + getResources().getString(R.string.session));
                     tvCoacExp.setText(modelArrayList.getData().getExps());
                     tvCoachSpecialization.setText(modelArrayList.getData().getCatTitle());
 
@@ -371,7 +371,7 @@ public class CoachDetailsActivity extends BaseActivity {
                     } else {
                         li_offer.setVisibility(View.VISIBLE);
                         tvPrice.setPaintFlags(tvPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                        tvOfferPrice.setText("\u20B9" + modelArrayList.getData().getPrice().getPaymentPrice() + "/" + "Session");
+                        tvOfferPrice.setText("\u20B9" + modelArrayList.getData().getPrice().getPaymentPrice() + "/" + getResources().getString(R.string.session));
 
                     }
 
@@ -409,7 +409,7 @@ public class CoachDetailsActivity extends BaseActivity {
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
                 loaderView.hideLoader();
-                Global.msgDialog(mActivity, "Error from server");
+                Global.msgDialog(mActivity, getResources().getString(R.string.error_server));
             }
         }) {
             @Override
@@ -476,7 +476,7 @@ public class CoachDetailsActivity extends BaseActivity {
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
                 //    Global.dismissDialog(progressDialog);
-                Global.msgDialog(mActivity, "Error from server");
+                Global.msgDialog(mActivity, getResources().getString(R.string.error_server));
             }
         }) {
             @Override
@@ -520,7 +520,7 @@ public class CoachDetailsActivity extends BaseActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
-                Global.msgDialog(mActivity, "Error from server");
+                Global.msgDialog(mActivity, getResources().getString(R.string.error_server));
             }
         }) {
             @Override
@@ -599,7 +599,7 @@ public class CoachDetailsActivity extends BaseActivity {
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
                 loaderView.hideLoader();
-                Global.msgDialog(mActivity, "Error from server");
+                Global.msgDialog(mActivity, getResources().getString(R.string.error_server));
             }
         }) {
 
@@ -675,7 +675,7 @@ public class CoachDetailsActivity extends BaseActivity {
 
         btn_send.setOnClickListener(v -> {
             if (edit_phone.getText().toString().trim().isEmpty()) {
-                Toaster.customToast("Please enter mobile no!");
+                Toaster.customToast(getResources().getString(R.string.Please_enter_mobile_no));
             } else {
                 /*String phoneCode = ccp.getSelectedCountryCode();*/
                 String phoneCode ="91";
@@ -937,7 +937,7 @@ public class CoachDetailsActivity extends BaseActivity {
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
                 loaderView.hideLoader();
-                Global.msgDialog(mActivity, "Error from server");
+                Global.msgDialog(mActivity, getResources().getString(R.string.error_server));
             }
         }) {
             @Override

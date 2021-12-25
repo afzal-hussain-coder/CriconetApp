@@ -65,7 +65,7 @@
         android:id="@+id/tvBookingDateLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Booking Date"
+        android:text="@string/booking_date"
         android:textSize="15sp"
         app:fontFamily="@font/opensans_semibold"
         android:textColor="@color/gray"
@@ -90,7 +90,7 @@
         android:layout_marginStart="@dimen/_5sdp"
         android:layout_marginEnd="@dimen/_5sdp"
         android:fontFamily="@font/opensans_regular"
-        android:text="Online e-Coaching session charges"
+        android:text="@string/online_e_Coaching_session_charges"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvBookingDate"/>
@@ -113,7 +113,7 @@
         android:layout_marginTop="@dimen/_5sdp"
         android:layout_marginStart="@dimen/_5sdp"
         android:layout_marginEnd="@dimen/_5sdp"
-        android:text="Status"
+        android:text="@string/status"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvAmount"/>
@@ -124,7 +124,7 @@
         android:layout_marginStart="@dimen/_5sdp"
         android:fontFamily="@font/opensans_regular"
         android:layout_marginEnd="@dimen/_5sdp"
-        android:text="Status : "
+        android:text="@string/status_colon"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="@+id/tvAmount"
         app:layout_constraintTop_toBottomOf="@+id/tvAmount"/>

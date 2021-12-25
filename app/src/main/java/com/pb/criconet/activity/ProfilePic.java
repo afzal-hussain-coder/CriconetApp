@@ -443,7 +443,7 @@ public class ProfilePic extends AppCompatActivity {
                     e.printStackTrace();
                 }
             } else {
-                Global.msgDialog(ProfilePic.this, "Server is not responding");
+                Global.msgDialog(ProfilePic.this, getResources().getString(R.string.error_server));
             }
         }
     }

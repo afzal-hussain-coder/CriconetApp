@@ -173,7 +173,7 @@ public class FragmentAvility extends Fragment implements TimeAdapter.timeSelect{
             @Override
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
-                Global.msgDialog(getActivity(), "Error from server");
+                Global.msgDialog(getActivity(), getResources().getString(R.string.error_server));
             }
         }) {
             @Override
@@ -218,7 +218,7 @@ public class FragmentAvility extends Fragment implements TimeAdapter.timeSelect{
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
                 progress.dismiss();
-                Global.msgDialog(getActivity(), "Error from server");
+                Global.msgDialog(getActivity(), getResources().getString(R.string.error_server));
             }
         }) {
             @Override
@@ -272,7 +272,7 @@ public class FragmentAvility extends Fragment implements TimeAdapter.timeSelect{
             @Override
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
-                Global.msgDialog(getActivity(), "Error from server");
+                Global.msgDialog(getActivity(), getResources().getString(R.string.error_server));
             }
         }) {
             @Override
@@ -296,10 +296,10 @@ public class FragmentAvility extends Fragment implements TimeAdapter.timeSelect{
     private boolean checkValidation(){
 
         if(multiDate.length()==0){
-           Toast.makeText(getActivity(),"Please select date first.",Toast.LENGTH_SHORT).show();
+           Toast.makeText(getActivity(),getResources().getString(R.string.Please_select_date_first),Toast.LENGTH_SHORT).show();
             return false;
         }else if(multiTime.length()==0){
-            Toast.makeText(getActivity(),"Please select time first.",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(),getResources().getString(R.string.Please_select_time_first),Toast.LENGTH_SHORT).show();
             return false;
         }
         return true;

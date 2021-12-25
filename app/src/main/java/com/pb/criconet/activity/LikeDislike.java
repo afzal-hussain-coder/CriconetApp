@@ -95,7 +95,7 @@ public class LikeDislike extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
             if(bundle.getString(Type).equalsIgnoreCase("Like")){
-                mTitle.setText("Liked");
+                mTitle.setText(getResources().getString(R.string.Liked));
             }else{
                 mTitle.setText(bundle.getString(Type));
             }
@@ -174,7 +174,7 @@ public class LikeDislike extends AppCompatActivity {
                             } else if (jsonObject.optString("api_text").equalsIgnoreCase("failed")) {
                                 Global.msgDialog(LikeDislike.this, jsonObject.optJSONObject("errors").optString("error_text"));
                             } else {
-                                Global.msgDialog(LikeDislike.this, "Error in server");
+                                Global.msgDialog(LikeDislike.this, getResources().getString(R.string.error_server));
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -186,7 +186,7 @@ public class LikeDislike extends AppCompatActivity {
                     public void onErrorResponse(VolleyError error) {
                         error.printStackTrace();
                         progress.dismiss();
-                        Global.msgDialog(LikeDislike.this, "Error from server");
+                        Global.msgDialog(LikeDislike.this, getResources().getString(R.string.error_server));
 //                Global.msgDialog(EditProfile.this, "Internet connection is slow");
                     }
                 }

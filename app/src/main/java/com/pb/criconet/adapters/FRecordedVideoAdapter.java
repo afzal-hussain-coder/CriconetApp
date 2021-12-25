@@ -47,7 +47,7 @@ public class FRecordedVideoAdapter extends RecyclerView.Adapter<FRecordedVideoAd
 
         Glide.with(context).load(arrayList_image.get(position).getPostVideo()).dontAnimate()
                 .into(holder.logo_imageview);
-        holder.tv_recoded_at.setText("Video recorded at "+arrayList_image.get(position).getCreated());
+        holder.tv_recoded_at.setText(context.getResources().getString(R.string.Video_recorded_at)+arrayList_image.get(position).getCreated());
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

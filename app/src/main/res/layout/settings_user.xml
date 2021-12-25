@@ -121,7 +121,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:text="Send Feedback"
+            android:text="@string/send_feedback"
             android:textColor="@color/white"
             android:textSize="@dimen/_12sdp" />
 
@@ -261,7 +261,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:fontFamily="@font/opensans_regular"
-            android:text="Rate This App"
+            android:text="@string/rate_this_app"
             android:textColor="@color/white"
             android:textSize="@dimen/_12sdp" />
 
@@ -337,7 +337,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:fontFamily="@font/opensans_regular"
-            android:text="About Criconet"
+            android:text="@string/about_criconet"
             android:textColor="@color/white"
             android:textSize="@dimen/_12sdp" />
 
@@ -371,7 +371,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:fontFamily="@font/opensans_regular"
-            android:text="User Agreement"
+            android:text="@string/user_agreement"
             android:textColor="@color/white"
             android:textSize="@dimen/_12sdp" />
 
@@ -405,7 +405,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:text="Privacy Policy"
+            android:text="@string/privacy_policy"
             android:fontFamily="@font/opensans_regular"
             android:textColor="@color/white"
             android:textSize="@dimen/_12sdp" />
@@ -441,7 +441,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:fontFamily="@font/opensans_regular"
-            android:text="Terms of Use"
+            android:text="@string/terms_of_use"
             android:textColor="@color/white"
             android:textSize="@dimen/_12sdp" />
 
@@ -472,7 +472,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:text="User Agreement"
+            android:text="@string/user_agreement"
             android:textColor="@color/white"
             android:textSize="@dimen/_12sdp" />
 
@@ -502,7 +502,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:text="Help"
+            android:text="@string/help"
             android:textColor="@color/white"
             android:textSize="@dimen/_12sdp" />
 

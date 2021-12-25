@@ -648,7 +648,7 @@ public class HomeFragment extends Fragment implements BSImagePicker.OnMultiImage
                             System.out.println("file.mblength() = " + mblength);
                             if (mblength > 51) {
                                 System.out.println("file.length() = " + mblength);
-                                Global.msgDialog(getActivity(), "File Size Too Large, \n Must be less than 50 MB");
+                                Global.msgDialog(getActivity(), getResources().getString(R.string.File_Size_Too_Large_Must_be_less_than_50_MB));
                                 //progress.dismiss();
                                 loaderView.hideLoader();
                             } else {
@@ -708,7 +708,7 @@ public class HomeFragment extends Fragment implements BSImagePicker.OnMultiImage
                         System.out.println("file.mblength() = " + mblength);
                         if (mblength > 51) {
                             System.out.println("file.length() = " + mblength);
-                            Global.msgDialog(getActivity(), "File Size Too Large,\n Must be less than 50 MB");
+                            Global.msgDialog(getActivity(), getResources().getString(R.string.File_Size_Too_Large_Must_be_less_than_50_MB));
                             //progress.dismiss();
                             loaderView.hideLoader();
                         } else {
@@ -765,7 +765,7 @@ public class HomeFragment extends Fragment implements BSImagePicker.OnMultiImage
                     } else if (jsonObject.optString("api_text").equalsIgnoreCase("failed")) {
                         Global.msgDialog(getActivity(), jsonObject.optJSONObject("errors").optString("error_text"));
                     } else {
-                        Global.msgDialog(getActivity(), "Error in server");
+                        Global.msgDialog(getActivity(), getResources().getString(R.string.error_server));
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -777,7 +777,7 @@ public class HomeFragment extends Fragment implements BSImagePicker.OnMultiImage
                 error.printStackTrace();
                 //progress.dismiss();
                 loaderView.hideLoader();
-                Global.msgDialog(getActivity(), "Error from server");
+                Global.msgDialog(getActivity(), getResources().getString(R.string.error_server));
 //                Global.msgDialog(Login.this, "Internet connection is slow");
             }
         }) {
@@ -846,7 +846,7 @@ public class HomeFragment extends Fragment implements BSImagePicker.OnMultiImage
                     } else if (jsonObject.optString("api_text").equalsIgnoreCase("failed")) {
                         Global.msgDialog(getActivity(), jsonObject.optJSONObject("errors").optString("error_text"));
                     } else {
-                        Global.msgDialog(getActivity(), "Error in server");
+                        Global.msgDialog(getActivity(), getResources().getString(R.string.error_server));
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -858,7 +858,7 @@ public class HomeFragment extends Fragment implements BSImagePicker.OnMultiImage
                 error.printStackTrace();
                 //progress.dismiss();
                 loaderView.hideLoader();
-                Global.msgDialog(getActivity(), "Error from server");
+                Global.msgDialog(getActivity(), getResources().getString(R.string.error_server));
 //                Global.msgDialog(Login.this, "Internet connection is slow");
             }
         }) {
@@ -899,7 +899,7 @@ public class HomeFragment extends Fragment implements BSImagePicker.OnMultiImage
                     } else if (jsonObject.optString("api_text").equalsIgnoreCase("failed")) {
                         Global.msgDialog(getActivity(), jsonObject.optJSONObject("errors").optString("error_text"));
                     } else {
-                        Global.msgDialog(getActivity(), "Error in server");
+                        Global.msgDialog(getActivity(), getResources().getString(R.string.error_server));
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -911,7 +911,7 @@ public class HomeFragment extends Fragment implements BSImagePicker.OnMultiImage
                 error.printStackTrace();
                 //progress.dismiss();
                 loaderView.hideLoader();
-                Global.msgDialog(getActivity(), "Error from server");
+                Global.msgDialog(getActivity(), getResources().getString(R.string.error_server));
 //                Global.msgDialog(Login.this, "Internet connection is slow");
             }
         }) {
@@ -952,7 +952,7 @@ public class HomeFragment extends Fragment implements BSImagePicker.OnMultiImage
                     } else if (jsonObject.optString("api_text").equalsIgnoreCase("failed")) {
                         Global.msgDialog(getActivity(), jsonObject.optJSONObject("errors").optString("error_text"));
                     } else {
-                        Global.msgDialog(getActivity(), "Error in server");
+                        Global.msgDialog(getActivity(), getResources().getString(R.string.error_server));
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -964,7 +964,7 @@ public class HomeFragment extends Fragment implements BSImagePicker.OnMultiImage
                 error.printStackTrace();
                 //progress.dismiss();
                 loaderView.hideLoader();
-                Global.msgDialog(getActivity(), "Error from server");
+                Global.msgDialog(getActivity(), getResources().getString(R.string.error_server));
 //                Global.msgDialog(Login.this, "Internet connection is slow");
             }
         }) {
@@ -1004,7 +1004,7 @@ public class HomeFragment extends Fragment implements BSImagePicker.OnMultiImage
                     } else if (jsonObject.optString("api_text").equalsIgnoreCase("failed")) {
                         Global.msgDialog(getActivity(), jsonObject.optJSONObject("errors").optString("error_text"));
                     } else {
-                        Global.msgDialog(getActivity(), "Error in server");
+                        Global.msgDialog(getActivity(), getResources().getString(R.string.error_server));
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -1016,7 +1016,7 @@ public class HomeFragment extends Fragment implements BSImagePicker.OnMultiImage
                 error.printStackTrace();
                 //progress.dismiss();
                 loaderView.hideLoader();
-                Global.msgDialog(getActivity(), "Error from server");
+                Global.msgDialog(getActivity(), getResources().getString(R.string.error_server));
 //                Global.msgDialog(Login.this, "Internet connection is slow");
             }
         }) {
@@ -1052,13 +1052,13 @@ public class HomeFragment extends Fragment implements BSImagePicker.OnMultiImage
                 try {
                     JSONObject jsonObject2, jsonObject = new JSONObject(response.toString());
                     if (jsonObject.optString("api_text").equalsIgnoreCase("Success")) {
-                        Global.msgDialog(getActivity(), "Post reported Successfully.");
+                        Global.msgDialog(getActivity(), getResources().getString(R.string.Post_reported_Successfully));
 //                        Toast.makeText(getActivity(), jsonObject.getString("msg"), Toast.LENGTH_SHORT).show();
 //                        ResetFeed();
                     } else if (jsonObject.optString("api_text").equalsIgnoreCase("failed")) {
                         Global.msgDialog(getActivity(), jsonObject.optJSONObject("errors").optString("error_text"));
                     } else {
-                        Global.msgDialog(getActivity(), "Error in server");
+                        Global.msgDialog(getActivity(), getResources().getString(R.string.error_server));
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -1070,7 +1070,7 @@ public class HomeFragment extends Fragment implements BSImagePicker.OnMultiImage
                 error.printStackTrace();
                 loaderView.hideLoader();
                 //progress.dismiss();
-                Global.msgDialog(getActivity(), "Error from server");
+                Global.msgDialog(getActivity(),getResources().getString(R.string.error_server));
             }
         }) {
             @Override
@@ -1132,7 +1132,7 @@ public class HomeFragment extends Fragment implements BSImagePicker.OnMultiImage
                 error.printStackTrace();
                 //progress.dismiss();
                 loaderView.hideLoader();
-                Global.msgDialog(getActivity(), "Error from server");
+                Global.msgDialog(getActivity(), getResources().getString(R.string.error_server));
 //                Global.msgDialog(Login.this, "Internet connection is slow");
             }
         }) {
@@ -1257,7 +1257,7 @@ public class HomeFragment extends Fragment implements BSImagePicker.OnMultiImage
                                 } else if (jsonObject.optString("api_text").equalsIgnoreCase("failed")) {
                                     Global.msgDialog(getActivity(), jsonObject.optJSONObject("errors").optString("error_text"));
                                 } else {
-                                    Global.msgDialog(getActivity(), "Error in server");
+                                    Global.msgDialog(getActivity(), getResources().getString(R.string.error_server));
                                 }
                             } catch (Exception e) {
                                 e.printStackTrace();
@@ -1336,7 +1336,7 @@ public class HomeFragment extends Fragment implements BSImagePicker.OnMultiImage
                             Global.msgDialog(getActivity(), result.getApi_status());
 //                        Global.msgDialog(getActivity(), jsonObject.optJSONObject("errors").optString("error_text"));
                         } else {
-                            Global.msgDialog(getActivity(), "Error in server");
+                            Global.msgDialog(getActivity(), getResources().getString(R.string.error_server));
                         }
                     } catch (Exception e) {
                         //progress.dismiss();

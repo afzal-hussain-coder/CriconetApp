@@ -1,8 +1,8 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@android:id/background"
-        android:drawable="@color/gray" />
+        android:drawable="@drawable/baat_gray" />
     <item android:id="@android:id/progress">
-        <clip android:drawable="@color/deep_blue" />
+        <clip android:drawable="@drawable/baat_green" />
     </item>
 </layer-list>

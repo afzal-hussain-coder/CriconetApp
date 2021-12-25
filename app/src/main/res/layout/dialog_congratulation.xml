@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:gravity="center_horizontal"
+    android:layout_gravity="center_vertical"
+    android:background="@android:color/transparent">
+
+    <LinearLayout
+        android:id="@+id/layout_enter_mobile_no"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        android:background="@drawable/canvas_theme"
+        android:padding="@dimen/_10sdp"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="@dimen/_45sdp"
+            android:layout_height="@dimen/_45sdp"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/ic_check_circle_black_24dp"
+            android:contentDescription="@string/app_name"
+            />
+
+
+        <TextView
+            android:id="@+id/tv_cancel_confirmed_msg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:gravity="center_horizontal"
+            android:padding="@dimen/_10sdp"
+            android:text="@string/welcome_to_criconet_family"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:textColor="@color/light_text_color"
+            app:fontFamily="@font/opensans_regular"
+            android:textSize="@dimen/_12sdp"/>
+
+
+
+
+            <FrameLayout
+                android:id="@+id/fl_done"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_35sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:background="@color/colorPrimary"
+                >
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_1sdp"
+                    android:background="@color/app_red"/>
+                <View
+                    android:layout_width="0.9dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/app_red"/>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_1sdp"
+                    android:layout_gravity="bottom"
+                    android:background="@color/app_redd"/>
+                <View
+                    android:layout_width="@dimen/_1sdp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="end"
+                    android:background="@color/app_redd"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:padding="@dimen/_5sdp"
+                    android:text="@string/ok"
+                    android:textAllCaps="true"
+                    app:fontFamily="@font/opensans_semibold"
+                    android:textColor="#E0FFFF"
+                    android:textSize="@dimen/_12sdp"/>
+
+            </FrameLayout>
+
+
+
+
+    </LinearLayout>
+
+</RelativeLayout>

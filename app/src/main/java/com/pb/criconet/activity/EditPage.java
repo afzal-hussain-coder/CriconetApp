@@ -188,7 +188,7 @@ public class EditPage extends AppCompatActivity {
             public void onClick(View v) {
                 AlertDialog.Builder alertDialog = new AlertDialog.Builder(EditPage.this);
                 alertDialog.setTitle("");
-                alertDialog.setMessage("Do you really want to Delete this Page?");
+                alertDialog.setMessage(getResources().getString(R.string.Do_you_really_want_to_Delete_this_Page));
                 alertDialog.setPositiveButton("Yes",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
@@ -236,13 +236,13 @@ public class EditPage extends AppCompatActivity {
         phone_string = edttxt_phone.getText().toString().trim();
 
         if (!Global.validateLength(name_String, 3)) {
-            Toast.makeText(EditPage.this, "Enter Page Name", Toast.LENGTH_SHORT).show();
+            Toast.makeText(EditPage.this, getResources().getString(R.string.Enter_Page_Name), Toast.LENGTH_SHORT).show();
         } else if (!Global.validateLength(email_String, 3)) {
-            Toast.makeText(EditPage.this, "Enter Page Description", Toast.LENGTH_SHORT).show();
+            Toast.makeText(EditPage.this, getResources().getString(R.string.Enter_Page_Description), Toast.LENGTH_SHORT).show();
         } else if (!Global.validateLength(company_string, 3)) {
-            Toast.makeText(EditPage.this, "Enter Page Company", Toast.LENGTH_SHORT).show();
+            Toast.makeText(EditPage.this, getResources().getString(R.string.Enter_Page_Company), Toast.LENGTH_SHORT).show();
         } else if (!Global.validateLength(address_String, 3)) {
-            Toast.makeText(EditPage.this, "Enter Page Address", Toast.LENGTH_SHORT).show();
+            Toast.makeText(EditPage.this, getResources().getString(R.string.Enter_Page_Address), Toast.LENGTH_SHORT).show();
 //        } else if (!Global.validateLength(phone_string, 9)) {
 //            Toast.makeText(EditPage.this, "Enter Page Phone", Toast.LENGTH_SHORT).show();
         } else {
@@ -403,7 +403,7 @@ public class EditPage extends AppCompatActivity {
                             } else if (jsonObject.optString("api_text").equalsIgnoreCase("failed")) {
                                 Global.msgDialog(EditPage.this, jsonObject.optJSONObject("errors").optString("error_text"));
                             } else {
-                                Global.msgDialog(EditPage.this, "Error in server");
+                                Global.msgDialog(EditPage.this, getResources().getString(R.string.error_server));
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -415,7 +415,7 @@ public class EditPage extends AppCompatActivity {
                     public void onErrorResponse(VolleyError error) {
                         error.printStackTrace();
                         progress.dismiss();
-                        Global.msgDialog(EditPage.this, "Error from server");
+                        Global.msgDialog(EditPage.this, getResources().getString(R.string.error_server));
 //                Global.msgDialog(EditProfile.this, "Internet connection is slow");
                     }
                 }
@@ -462,7 +462,7 @@ public class EditPage extends AppCompatActivity {
             case R.id.del:
                 AlertDialog.Builder alertDialog = new AlertDialog.Builder(EditPage.this);
                 alertDialog.setTitle("");
-                alertDialog.setMessage("Do you really want to Delete this Page?");
+                alertDialog.setMessage(getResources().getString(R.string.Do_you_really_want_to_Delete_this_Page));
                 alertDialog.setPositiveButton("Yes",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
@@ -497,7 +497,7 @@ public class EditPage extends AppCompatActivity {
                             } else if (jsonObject.optString("api_text").equalsIgnoreCase("failed")) {
                                 Global.msgDialog(EditPage.this, jsonObject.optJSONObject("errors").optString("error_text"));
                             } else {
-                                Global.msgDialog(EditPage.this, "Error in server");
+                                Global.msgDialog(EditPage.this, getResources().getString(R.string.error_server));
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -509,7 +509,7 @@ public class EditPage extends AppCompatActivity {
                     public void onErrorResponse(VolleyError error) {
                         error.printStackTrace();
                         progress.dismiss();
-                        Global.msgDialog(EditPage.this, "Error from server");
+                        Global.msgDialog(EditPage.this, getResources().getString(R.string.error_server));
 //                Global.msgDialog(EditProfile.this, "Internet connection is slow");
                     }
                 }
@@ -542,7 +542,7 @@ public class EditPage extends AppCompatActivity {
                         try {
                             JSONObject jsonObject = new JSONObject(response.toString());
                             if (jsonObject.optString("api_text").equalsIgnoreCase("Success")) {
-                                Global.msgDialog(EditPage.this, "Page Updated Successfully");
+                                Global.msgDialog(EditPage.this, getResources().getString(R.string.Page_Updated_Successfully));
                                 getPageDetails();
 //                                JSONObject object = jsonObject.getJSONObject("user_data");
 //
@@ -557,7 +557,7 @@ public class EditPage extends AppCompatActivity {
                             } else if (jsonObject.optString("api_text").equalsIgnoreCase("failed")) {
                                 Global.msgDialog(EditPage.this, jsonObject.optJSONObject("errors").optString("error_text"));
                             } else {
-                                Global.msgDialog(EditPage.this, "Error in server");
+                                Global.msgDialog(EditPage.this, getResources().getString(R.string.error_server));
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -569,7 +569,7 @@ public class EditPage extends AppCompatActivity {
                     public void onErrorResponse(VolleyError error) {
                         error.printStackTrace();
                         progress.dismiss();
-                        Global.msgDialog(EditPage.this, "Error from server");
+                        Global.msgDialog(EditPage.this, getResources().getString(R.string.error_server));
 //                Global.msgDialog(EditProfile.this, "Internet connection is slow");
                     }
                 }
@@ -655,7 +655,7 @@ public class EditPage extends AppCompatActivity {
                         } else if (jsonObject.optString("api_text").equalsIgnoreCase("failed")) {
                             Global.msgDialog(EditPage.this, jsonObject.optJSONObject("errors").optString("error_text"));
                         } else {
-                            Global.msgDialog(EditPage.this, "Error in server");
+                            Global.msgDialog(EditPage.this, getResources().getString(R.string.error_server));
                         }
                     } catch (Exception e) {
                         e.printStackTrace();

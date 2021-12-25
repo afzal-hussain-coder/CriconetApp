@@ -123,7 +123,7 @@ public class MainActivity extends BaseActivity {
             } else if (state.installStatus() == InstallStatus.INSTALLED) {
                 removeInstallStateUpdateListener();
             } else {
-                Toast.makeText(getApplicationContext(), "InstallStateUpdatedListener:state: " + state.installStatus(), Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), getResources().getString(R.string.InstallStateUpdatedListener_state) + state.installStatus(), Toast.LENGTH_LONG).show();
             }
         };
         appUpdateManager.registerListener(installStateUpdatedListener);
@@ -171,6 +171,10 @@ public class MainActivity extends BaseActivity {
 
         if (SessionManager.get_profiletype(prefs).equalsIgnoreCase("coach")) {
             //text.add(new Drawer(getString(R.string.avility), false, R.drawable.ic_page));
+        }
+        if(SessionManager.get_is_ambassador(prefs).equalsIgnoreCase("1")){
+        }else{
+            text.add(new Drawer(getString(R.string.campus_ambassdoar_progrrame),false,R.drawable.ambas));
         }
 
         // text.add(new Drawer(getString(R.string.Followers),false,R.drawable.ic_follower));
@@ -346,10 +350,10 @@ public class MainActivity extends BaseActivity {
         } else {
             AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
             alertDialog.setTitle("");
-            alertDialog.setMessage("Do you really want to Exit?");
-            alertDialog.setPositiveButton("Yes",
+            alertDialog.setMessage(getResources().getString(R.string.Do_you_really_want_to_Exit));
+            alertDialog.setPositiveButton(getResources().getString(R.string.Yes),
                     (dialog, which) -> finish());
-            alertDialog.setNegativeButton("No",
+            alertDialog.setNegativeButton(getResources().getString(R.string.No),
                     (dialog, which) -> {
                     });
             alertDialog.show();
@@ -396,6 +400,15 @@ public class MainActivity extends BaseActivity {
             navigationController.navigatoMenuFragment(true);
         } else if(text.get(position).getTitle().equalsIgnoreCase("Refer & Rewards")){
             startActivity(new Intent(mActivity,ReferralIntroActivity.class));
+            finish();
+
+        }else if(text.get(position).getTitle().equalsIgnoreCase(getResources().getString(R.string.campus_ambassdoar_progrrame))){
+            startActivity(new Intent(mActivity,AmbassadoarProgrrameActivity.class).putExtra("FROM","2"));
+            finish();
+
+        }
+        else if(text.get(position).getTitle().equalsIgnoreCase("Ambassador Account")){
+            startActivity(new Intent(mActivity,AmbassdorRewardsActivity.class));
             finish();
 
         }
@@ -495,8 +508,8 @@ public class MainActivity extends BaseActivity {
                 } else if (text.get(position).getTitle().equalsIgnoreCase("Logout")) {
                     AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
                     alertDialog.setTitle("");
-                    alertDialog.setMessage("Do you really want to logout?");
-                    alertDialog.setPositiveButton("Yes",
+                    alertDialog.setMessage(getResources().getString(R.string.Do_you_really_want_to_logout));
+                    alertDialog.setPositiveButton(getResources().getString(R.string.Yes),
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
                                     if (Global.isOnline(MainActivity.this)) {
@@ -512,7 +525,7 @@ public class MainActivity extends BaseActivity {
 //                                    finish();
                                 }
                             });
-                    alertDialog.setNegativeButton("No",
+                    alertDialog.setNegativeButton(getResources().getString(R.string.No),
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
                                 }
@@ -556,7 +569,7 @@ public class MainActivity extends BaseActivity {
                             } else if (jsonObject.getString("api_status").equals("400")) {
                                 Toaster.customToast(jsonObject.optJSONObject("errors").optString("error_text"));
                             } else {
-                                Global.msgDialog(mActivity, "Error in server");
+                                Global.msgDialog(mActivity, getResources().getString(R.string.error_server));
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -568,7 +581,7 @@ public class MainActivity extends BaseActivity {
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
                 loaderView.hideLoader();
-                Global.msgDialog(mActivity, "Internet connection is slow");
+                Global.msgDialog(mActivity, getResources().getString(R.string.error_server));
             }
         });
         int socketTimeout = 30000;
@@ -655,6 +668,15 @@ public class MainActivity extends BaseActivity {
                         //referral_code_status="0";
                         if(referral_code_status.equalsIgnoreCase("1")){
                             text.add(new Drawer(getString(R.string.referrar_rewards), false, R.drawable.referral_icon));
+                        }
+                        if(referral_code_status.equalsIgnoreCase("1")){
+                            if(SessionManager.get_is_ambassador(prefs).equalsIgnoreCase("1")){
+                                text.add(new Drawer(getString(R.string.referrar_rewards_ambasdor), false, R.drawable.ambas));
+                            }else{
+                                //text.add(new Drawer(getString(R.string.campus_ambassdoar_progrrame),false,R.drawable.ambas));
+                            }
+
+
                         }
                         try {
                             text.add(new Drawer(pageURL.getAboutECoaching().getString("title"), false, R.drawable.e_coaching));
@@ -761,11 +783,11 @@ public class MainActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == FLEXIBLE_APP_UPDATE_REQ_CODE) {
             if (resultCode == RESULT_CANCELED) {
-                Toast.makeText(getApplicationContext(), "Update cancelled by user" + resultCode, Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), getResources().getString(R.string.Update_cancelled_by_user) + resultCode, Toast.LENGTH_LONG).show();
             } else if (resultCode == RESULT_OK) {
-                Toast.makeText(getApplicationContext(),"Update Success" + resultCode, Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(),getResources().getString(R.string.Update_Success) + resultCode, Toast.LENGTH_LONG).show();
             } else {
-                Toast.makeText(getApplicationContext(), "Update Failed" + resultCode, Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), getResources().getString(R.string.Update_Failed) + resultCode, Toast.LENGTH_LONG).show();
                 checkUpdate();
             }
         }
@@ -773,9 +795,9 @@ public class MainActivity extends BaseActivity {
 
     private void popupSnackBarForCompleteUpdate() {
 
-        TSnackbar snackbar = TSnackbar.make(findViewById(android.R.id.content), "New app is ready!", TSnackbar.LENGTH_LONG);
+        TSnackbar snackbar = TSnackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.New_app_is_ready), TSnackbar.LENGTH_LONG);
         snackbar.setActionTextColor(Color.RED);
-        snackbar.setAction("Install", new View.OnClickListener() {
+        snackbar.setAction(getResources().getString(R.string.Install), new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (appUpdateManager != null) {

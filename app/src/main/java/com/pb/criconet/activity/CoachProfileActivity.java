@@ -190,7 +190,7 @@ public class CoachProfileActivity extends AppCompatActivity {
                 li_offer.setVisibility(View.GONE);
             } else {
                 tvPrice.setPaintFlags(tvPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                tvOfferPrice.setText("\u20B9" + extras.getString("OfferPrice") + "/" + "Session");
+                tvOfferPrice.setText("\u20B9" + extras.getString("OfferPrice") + "/" + getResources().getString(R.string.session));
                 li_offer.setVisibility(View.VISIBLE);
             }
 
@@ -237,7 +237,7 @@ public class CoachProfileActivity extends AppCompatActivity {
             }
 
 
-            tvPrice.setText("Price: "+"\u20B9" +extras.getString("price")+"/"+"Session");
+            tvPrice.setText(getResources().getString(R.string.price)+"\u20B9" +extras.getString("price")+"/"+getResources().getString(R.string.session));
 
             // and get whatever type user account id is
         }

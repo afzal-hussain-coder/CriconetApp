@@ -40,7 +40,10 @@
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning,HardcodedDebugMode"
         tools:targetApi="n">
-        <activity android:name=".activity.ReferralIntroActivity"></activity>
+        <activity android:name=".activity.JoinAmbassadorActivity"></activity>
+        <activity android:name=".activity.AmbassadoarProgrrameActivity" />
+        <activity android:name=".activity.AmbassdorRewardsActivity" />
+        <activity android:name=".activity.ReferralIntroActivity" />
         <activity
             android:name=".activity.PlayRecordedVideoActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"

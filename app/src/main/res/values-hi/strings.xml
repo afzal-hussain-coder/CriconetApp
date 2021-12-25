@@ -140,7 +140,6 @@
     <string name="incorrect_username_password">Incorrect Username Or Password</string>
     <string name="password_too_short">Password is too short</string>
     <string name="username">User Name</string>
-    <string name="terams_for_username">Username can be 3 to 32 Characters long and Space or Special Characters are not allowed, e.g. "yourname</string>
     <string name="select_sport">Select Gender</string>
     <string name="select_type">Select User Type</string>
     <string name="tearms_condition">By creating your account, you agree to our \n<b>Terms of Use</b></string>

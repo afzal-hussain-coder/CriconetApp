@@ -17,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="Create New Page"
+            android:text="@string/create_new_page"
             android:textColor="#000"
             android:textSize="18sp"
             android:textStyle="bold" />
@@ -26,7 +26,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="Enter Below details"
+            android:text="@string/enter_below_details"
             android:textColor="#000"
             android:textSize="16sp"
             android:visibility="gone" />
@@ -85,7 +85,7 @@
                 android:background="@drawable/btn_bg_red_round_border"
                 android:gravity="center"
                 android:padding="10dp"
-                android:text="Cancel"
+                android:text="@string/cancel"
                 android:textColor="@color/black"
                 android:textSize="16sp" />
 
@@ -99,7 +99,7 @@
                 android:background="@drawable/btn_bg_green_round_border"
                 android:gravity="center"
                 android:padding="10dp"
-                android:text="Create"
+                android:text="@string/create"
                 android:textColor="@color/black"
                 android:textSize="16sp" />
 

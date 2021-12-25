@@ -73,7 +73,7 @@
                            app:fontFamily="@font/opensans_semibold"
                            android:textSize="@dimen/_10sdp"
                            android:background="@null"
-                           android:hint="Type here..."
+                           android:hint="@string/type_here"
                            android:cursorVisible="true"
                            android:enabled="true"
                            android:focusable="true"

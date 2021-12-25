@@ -276,7 +276,7 @@ public class UserDetails extends AppCompatActivity implements PostListeners {
                             } else if (jsonObject.optString("api_text").equalsIgnoreCase("failed")) {
                                 Global.msgDialog(UserDetails.this, jsonObject.optJSONObject("errors").optString("error_text"));
                             } else {
-                                Global.msgDialog(UserDetails.this, "Error in server");
+                                Global.msgDialog(UserDetails.this, getResources().getString(R.string.error_server));
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -288,7 +288,7 @@ public class UserDetails extends AppCompatActivity implements PostListeners {
                     public void onErrorResponse(VolleyError error) {
                         error.printStackTrace();
                         progress.dismiss();
-                        Global.msgDialog(UserDetails.this, "Error from server");
+                        Global.msgDialog(UserDetails.this, getResources().getString(R.string.error_server));
 //                Global.msgDialog(EditProfile.this, "Internet connection is slow");
                     }
                 }
@@ -377,7 +377,7 @@ public class UserDetails extends AppCompatActivity implements PostListeners {
                     } else if (jsonObject.optString("api_text").equalsIgnoreCase("failed")) {
                         Global.msgDialog(UserDetails.this, jsonObject.optJSONObject("errors").optString("error_text"));
                     } else {
-                        Global.msgDialog(UserDetails.this, "Error in server");
+                        Global.msgDialog(UserDetails.this, getResources().getString(R.string.error_server));
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -388,7 +388,7 @@ public class UserDetails extends AppCompatActivity implements PostListeners {
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
                 progress.dismiss();
-                Global.msgDialog(UserDetails.this, "Error from server");
+                Global.msgDialog(UserDetails.this, getResources().getString(R.string.error_server));
             }
         }) {
             @Override
@@ -491,7 +491,7 @@ public class UserDetails extends AppCompatActivity implements PostListeners {
                             } else if (jsonObject.optString("api_text").equalsIgnoreCase("failed")) {
                                 Global.msgDialog(UserDetails.this, jsonObject.optJSONObject("errors").optString("error_text"));
                             } else {
-                                Global.msgDialog(UserDetails.this, "Error in server");
+                                Global.msgDialog(UserDetails.this, getResources().getString(R.string.error_server));
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -503,7 +503,7 @@ public class UserDetails extends AppCompatActivity implements PostListeners {
                     public void onErrorResponse(VolleyError error) {
                         error.printStackTrace();
                         progress.dismiss();
-                        Global.msgDialog(UserDetails.this, "Error from server");
+                        Global.msgDialog(UserDetails.this, getResources().getString(R.string.error_server));
                     }
                 }
         ) {
@@ -540,7 +540,7 @@ public class UserDetails extends AppCompatActivity implements PostListeners {
                             } else if (jsonObject.optString("api_text").equalsIgnoreCase("failed")) {
                                 Global.msgDialog(UserDetails.this, jsonObject.optJSONObject("errors").optString("error_text"));
                             } else {
-                                Global.msgDialog(UserDetails.this, "Error in server");
+                                Global.msgDialog(UserDetails.this, getResources().getString(R.string.error_server));
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -552,7 +552,7 @@ public class UserDetails extends AppCompatActivity implements PostListeners {
                     public void onErrorResponse(VolleyError error) {
                         error.printStackTrace();
                         progress.dismiss();
-                        Global.msgDialog(UserDetails.this, "Error from server");
+                        Global.msgDialog(UserDetails.this, getResources().getString(R.string.error_server));
 //                Global.msgDialog(EditProfile.this, "Internet connection is slow");
                     }
                 }
@@ -594,7 +594,7 @@ public class UserDetails extends AppCompatActivity implements PostListeners {
             @Override
             public void onClick(View view) {
                 if (!Global.validateLength(input.getText().toString(), 5)) {
-                    input.setError("Enter your reason to report this post?");
+                    input.setError(getResources().getString(R.string.Enter_your_reason_to_report_this_post));
                 } else {
                     input.setError(null);
                     ReportUser(input.getText().toString());
@@ -634,7 +634,7 @@ public class UserDetails extends AppCompatActivity implements PostListeners {
                             } else if (jsonObject.getString("status").equals("Fail")) {
                                 Global.msgDialog(UserDetails.this, jsonObject.getString("msg"));
                             } else {
-                                Global.msgDialog(UserDetails.this, "Error in server");
+                                Global.msgDialog(UserDetails.this, getResources().getString(R.string.error_server));
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -646,7 +646,7 @@ public class UserDetails extends AppCompatActivity implements PostListeners {
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
                 progress.dismiss();
-                Global.msgDialog(UserDetails.this, "Internet connection is slow");
+                Global.msgDialog(UserDetails.this, getResources().getString(R.string.error_server));
             }
         });
         int socketTimeout = 30000;
@@ -686,7 +686,7 @@ public class UserDetails extends AppCompatActivity implements PostListeners {
                             } else if (jsonObject.getString("status").equals("Fail")) {
                                 Global.msgDialog(UserDetails.this, jsonObject.getString("msg"));
                             } else {
-                                Global.msgDialog(UserDetails.this, "Error in server");
+                                Global.msgDialog(UserDetails.this, getResources().getString(R.string.error_server));
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -738,7 +738,7 @@ public class UserDetails extends AppCompatActivity implements PostListeners {
                             } else if (jsonObject.getString("status").equals("Fail")) {
                                 Global.msgDialog(UserDetails.this, jsonObject.getString("msg"));
                             } else {
-                                Global.msgDialog(UserDetails.this, "Error in server");
+                                Global.msgDialog(UserDetails.this, getResources().getString(R.string.error_server));
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -789,7 +789,7 @@ public class UserDetails extends AppCompatActivity implements PostListeners {
                             } else if (jsonObject.getString("status").equals("Fail")) {
                                 Global.msgDialog(UserDetails.this, jsonObject.getString("msg"));
                             } else {
-                                Global.msgDialog(UserDetails.this, "Error in server");
+                                Global.msgDialog(UserDetails.this, getResources().getString(R.string.error_server));
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -801,7 +801,7 @@ public class UserDetails extends AppCompatActivity implements PostListeners {
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
                 progress.dismiss();
-                Global.msgDialog(UserDetails.this, "Error from server");
+                Global.msgDialog(UserDetails.this, getResources().getString(R.string.error_server));
             }
         });
         int socketTimeout = 30000;
@@ -824,7 +824,7 @@ public class UserDetails extends AppCompatActivity implements PostListeners {
                     } else if (jsonObject.optString("api_text").equalsIgnoreCase("failed")) {
                         Global.msgDialog(UserDetails.this, jsonObject.optJSONObject("errors").optString("error_text"));
                     } else {
-                        Global.msgDialog(UserDetails.this, "Error in server");
+                        Global.msgDialog(UserDetails.this, getResources().getString(R.string.error_server));
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -835,7 +835,7 @@ public class UserDetails extends AppCompatActivity implements PostListeners {
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
                 progress.dismiss();
-                Global.msgDialog(UserDetails.this, "Error from server");
+                Global.msgDialog(UserDetails.this, getResources().getString(R.string.error_server));
             }
         }) {
             @Override
@@ -869,7 +869,7 @@ public class UserDetails extends AppCompatActivity implements PostListeners {
                     } else if (jsonObject.optString("api_text").equalsIgnoreCase("failed")) {
                         Global.msgDialog(UserDetails.this, jsonObject.optJSONObject("errors").optString("error_text"));
                     } else {
-                        Global.msgDialog(UserDetails.this, "Error in server");
+                        Global.msgDialog(UserDetails.this, getResources().getString(R.string.error_server));
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -880,7 +880,7 @@ public class UserDetails extends AppCompatActivity implements PostListeners {
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
                 progress.dismiss();
-                Global.msgDialog(UserDetails.this, "Error from server");
+                Global.msgDialog(UserDetails.this, getResources().getString(R.string.error_server));
             }
         }) {
             @Override
@@ -919,7 +919,7 @@ public class UserDetails extends AppCompatActivity implements PostListeners {
                     } else if (jsonObject.optString("api_text").equalsIgnoreCase("failed")) {
                         Global.msgDialog(UserDetails.this, jsonObject.optJSONObject("errors").optString("error_text"));
                     } else {
-                        Global.msgDialog(UserDetails.this, "Error in server");
+                        Global.msgDialog(UserDetails.this, getResources().getString(R.string.error_server));
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -930,7 +930,7 @@ public class UserDetails extends AppCompatActivity implements PostListeners {
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
                 progress.dismiss();
-                Global.msgDialog(UserDetails.this, "Error from server");
+                Global.msgDialog(UserDetails.this, getResources().getString(R.string.error_server));
             }
         }) {
             @Override
@@ -978,7 +978,7 @@ public class UserDetails extends AppCompatActivity implements PostListeners {
                     } else if (jsonObject.optString("api_text").equalsIgnoreCase("failed")) {
                         Global.msgDialog(UserDetails.this, jsonObject.optJSONObject("errors").optString("error_text"));
                     } else {
-                        Global.msgDialog(UserDetails.this, "Error in server");
+                        Global.msgDialog(UserDetails.this, getResources().getString(R.string.error_server));
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -989,7 +989,7 @@ public class UserDetails extends AppCompatActivity implements PostListeners {
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
                 progress.dismiss();
-                Global.msgDialog(UserDetails.this, "Error from server");
+                Global.msgDialog(UserDetails.this, getResources().getString(R.string.error_server));
             }
         }) {
             @Override
@@ -1018,13 +1018,13 @@ public class UserDetails extends AppCompatActivity implements PostListeners {
                 try {
                     JSONObject jsonObject2, jsonObject = new JSONObject(response.toString());
                     if (jsonObject.optString("api_text").equalsIgnoreCase("Success")) {
-                        Global.msgDialog(UserDetails.this, "Post reported Successfully.");
+                        Global.msgDialog(UserDetails.this, getResources().getString(R.string.Post_reported_Successfully));
 //                        Toast.makeText(getActivity(), jsonObject.getString("msg"), Toast.LENGTH_SHORT).show();
 //                        ResetFeed();
                     } else if (jsonObject.optString("api_text").equalsIgnoreCase("failed")) {
                         Global.msgDialog(UserDetails.this, jsonObject.optJSONObject("errors").optString("error_text"));
                     } else {
-                        Global.msgDialog(UserDetails.this, "Error in server");
+                        Global.msgDialog(UserDetails.this, getResources().getString(R.string.error_server));
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -1035,7 +1035,7 @@ public class UserDetails extends AppCompatActivity implements PostListeners {
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
                 progress.dismiss();
-                Global.msgDialog(UserDetails.this, "Error from server");
+                Global.msgDialog(UserDetails.this, getResources().getString(R.string.error_server));
             }
         }) {
             @Override

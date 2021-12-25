@@ -68,7 +68,7 @@ public class ProfileActivity extends BaseActivity {
             finish();
         });
         TextView mTitle = (TextView) toolbar.findViewById(R.id.toolbartext);
-        mTitle.setText("Profile");
+        mTitle.setText(getResources().getString(R.string.Profile));
         profile_pic=findViewById(R.id.profile_pic);
         cover_img=findViewById(R.id.cover_img);
         txt_nav_name=findViewById(R.id.txt_nav_name);
@@ -135,7 +135,7 @@ public class ProfileActivity extends BaseActivity {
                             } else if (jsonObject.optString("api_text").equalsIgnoreCase("failed")) {
                                 Global.msgDialog(ProfileActivity.this, jsonObject.optJSONObject("errors").optString("error_text"));
                             } else {
-                                Global.msgDialog(ProfileActivity.this, "Error in server");
+                                Global.msgDialog(ProfileActivity.this, getResources().getString(R.string.error_server));
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -147,7 +147,7 @@ public class ProfileActivity extends BaseActivity {
                     public void onErrorResponse(VolleyError error) {
                         error.printStackTrace();
                        // progress.dismiss();
-                        Global.msgDialog(ProfileActivity.this, "Error from server");
+                        Global.msgDialog(ProfileActivity.this, getResources().getString(R.string.error_server));
 //                Global.msgDialog(EditProfile.this, "Internet connection is slow");
                     }
                 }
