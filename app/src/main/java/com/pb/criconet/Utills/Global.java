@@ -63,18 +63,18 @@ public class Global {
 
     public static final String FILE_UPLOAD_URL = "https://criconetonline.com/app_api.php?type=new_post";
     /*for debug*/
-    public static final String URL = "https://stage.criconetonline.com/app_api.php?type=";
-    public static final String URL_CHAT = "https://stage.criconetonline.com";
-    public static String GameURL = "https://criconetonline.com/cricket_js/index.php?";
+    //public static final String URL = "https://stage.criconetonline.com/app_api.php?type=";
+    //public static final String URL_CHAT = "https://stage.criconetonline.com";
+    //public static String GameURL = "https://criconetonline.com/cricket_js/index.php?";
 
     public static String GET_CAMPUS_AMBASSADOAR = "https://www.criconet.com/campus-ambassador?rst=app";
 
 
 
     /*for live*/
-   // public static final String URL = "https://www.criconet.com/app_api.php?type=";
-    //public static final String URL_CHAT = "https://www.criconet.com";
-    //public static String GameURL ="https://www.criconet.com/cricket_js/index.php?";
+    public static final String URL = "https://www.criconet.com/app_api.php?type=";
+    public static final String URL_CHAT = "https://www.criconet.com";
+    public static String GameURL ="https://www.criconet.com/cricket_js/index.php?";
     
     // for video upload testing..
     //public static final String URL = "https://www.criconet.com/app_api.php?type=";

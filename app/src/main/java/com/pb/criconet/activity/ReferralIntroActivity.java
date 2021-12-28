@@ -365,17 +365,27 @@ public class ReferralIntroActivity extends AppCompatActivity {
                                     .into(iv_banner);
                         }
 
-                        if(jsonObject1.has("total_points")){
-                            if(jsonObject1.getString("total_points").equalsIgnoreCase("null")){
+                        if(jsonObject1.has("total_register_points")){
+                            if(jsonObject1.getString("total_register_points").equalsIgnoreCase("null")){
                                 total_points = 0;
                             }else{
-                                total_points = Integer.parseInt(jsonObject1.getString("total_points"));
+                                total_points = Integer.parseInt(jsonObject1.getString("total_register_points"));
                                 tv_referralNumber.setText(String.valueOf(total_points));
-                                seekBar.setThumb(getThumb(60));
-                                seekBar.setProgress(60);
+                                seekBar.setThumb(getThumb(total_points));
+                                seekBar.setProgress(total_points);
                             }
 
                         }
+                        if(jsonObject1.has("total_registration")){
+                            if(jsonObject1.getString("total_registration").equalsIgnoreCase("null")){
+                                total_points = 0;
+                            }else{
+                                total_points = Integer.parseInt(jsonObject1.getString("total_registration"));
+                                tv_referralNumber.setText(String.valueOf(total_points));
+                            }
+
+                        }
+
 
                         if(jsonObject1.has("user_rewards_points_table")){
                             JSONArray  jsonArray= jsonObject1.getJSONArray("user_rewards_points_table");

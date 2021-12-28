@@ -436,7 +436,7 @@
     <string name="first_name">FIRST NAME</string>
     <string name="last_name">LAST NAME</string>
     <string name="click_to_edit_profile">Click to Edit Profile</string>
-    <string name="time_slote">Time Slote</string>
+    <string name="time_slote">Time Slot</string>
     <string name="save_continue"><![CDATA[Save &amp; Continue]]></string>
     <string name="type_here_and_click_the_post_button">Type here and click the post button</string>
     <string name="match_not_found">Match Not Found</string>

@@ -159,7 +159,8 @@ public class AmbassdorRewardsActivity extends AppCompatActivity {
             fl_view_ambs_prog.setVisibility(View.GONE);
         }
         fl_view_ambs_prog.setOnClickListener(view -> {
-            startActivity(new Intent(mActivity,AmbassadoarProgrrameActivity.class).putExtra("FROM","1"));
+            startActivity(new Intent(mActivity,AmbassadoarProgrrameActivity.class).putExtra("From","1"));
+            finish();
         });
 
         iv_banner =findViewById(R.id.iv_banner);
@@ -382,17 +383,40 @@ public class AmbassdorRewardsActivity extends AppCompatActivity {
                                     .into(iv_banner);
                         }
 
-                        if(jsonObject1.has("total_points")){
-                            if(jsonObject1.getString("total_points").equalsIgnoreCase("null")){
+                        if(jsonObject1.has("total_register_points")){
+                            if(jsonObject1.getString("total_register_points").equalsIgnoreCase("null")){
                                 total_points = 0;
                             }else{
-                                total_points = Integer.parseInt(jsonObject1.getString("total_points"));
-                                tv_referralNumber_booking.setText("80");
-                                seekBar.setThumb(getThumb(60));
-                                seekBar.setProgress(60);
-                                seekBar_booking.setThumb(getThumb(80));
-                                seekBar_booking.setProgress(80);
+                                total_points = Integer.parseInt(jsonObject1.getString("total_register_points"));
+                                seekBar.setThumb(getThumb(total_points));
+                                seekBar.setProgress(total_points);
+                            }
+                        }
+                        if(jsonObject1.has("total_booking_points")){
+                            if(jsonObject1.getString("total_booking_points").equalsIgnoreCase("null")){
+                                total_points = 0;
+                            }else{
+                                total_points = Integer.parseInt(jsonObject1.getString("total_booking_points"));
+                                seekBar_booking.setThumb(getThumb(total_points));
+                                seekBar_booking.setProgress(total_points);
 
+                            }
+                        }
+                        if(jsonObject1.has("total_registration")){
+                            if(jsonObject1.getString("total_registration").equalsIgnoreCase("null")){
+                                total_points = 0;
+                            }else{
+                                total_points = Integer.parseInt(jsonObject1.getString("total_registration"));
+                                tv_referralNumber_registartion.setText(String.valueOf(total_points));
+                            }
+
+                        }
+                        if(jsonObject1.has("total_bookings")){
+                            if(jsonObject1.getString("total_bookings").equalsIgnoreCase("null")){
+                                total_points = 0;
+                            }else{
+                                total_points = Integer.parseInt(jsonObject1.getString("total_bookings"));
+                                tv_referralNumber_booking.setText(String.valueOf(total_points));
                             }
 
                         }

@@ -38,6 +38,7 @@ import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.google.android.material.card.MaterialCardView;
 import com.pb.criconet.Utills.CustomLoaderView;
+import com.pb.criconet.Utills.Toaster;
 import com.pb.criconet.activity.MainActivity;
 import com.pb.criconet.activity.Play_Live_Stream_Single;
 import com.pb.criconet.R;
@@ -93,7 +94,6 @@ public class LiveMatches extends Fragment {
         progress = new ProgressDialog(getActivity());
         progress.setMessage("Loading");
         progress.setCancelable(false);
-
         weeklist = rootView.findViewById(R.id.week_list);
         weeklist.setLayoutManager(new LinearLayoutManager(getContext()));
         notfound = (TextView) rootView.findViewById(R.id.notfound);

@@ -403,7 +403,7 @@ public class MainActivity extends BaseActivity {
             finish();
 
         }else if(text.get(position).getTitle().equalsIgnoreCase(getResources().getString(R.string.campus_ambassdoar_progrrame))){
-            startActivity(new Intent(mActivity,AmbassadoarProgrrameActivity.class).putExtra("FROM","2"));
+            startActivity(new Intent(mActivity,AmbassadoarProgrrameActivity.class).putExtra("From","2"));
             finish();
 
         }
@@ -480,14 +480,14 @@ public class MainActivity extends BaseActivity {
                         e.printStackTrace();
                     }
                 }
-                /*else if (text.get(position).getTitle().equalsIgnoreCase(pageURL.getCarrer().getString("title"))) {
+                else if (text.get(position).getTitle().equalsIgnoreCase(pageURL.getCarrer().getString("title"))) {
                     try {
                         startActivity(new Intent(mActivity, WebViewActivity.class).putExtra("URL", pageURL.getCarrer().getString("url")).putExtra("title", pageURL.getCarrer().getString("title")));
                         finish();
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                }*/
+                }
                 else if (text.get(position).getTitle().equalsIgnoreCase(pageURL.getContact_us().getString("title"))) {
                     startActivity(new Intent(mActivity, WebViewActivity.class).putExtra("URL", pageURL.getContact_us().getString("url")).putExtra("title", pageURL.getContact_us().getString("title")));
                     finish();
@@ -664,7 +664,8 @@ public class MainActivity extends BaseActivity {
                         text.add(new Drawer(getString(R.string.booking_history), false, R.drawable.ic_booking_history));
                         if (gameSettingsStataus.equalsIgnoreCase("1")) {
                             text.add(new Drawer(getString(R.string.game), false, R.drawable.super_six));
-                        }//text.add(new Drawer(getString(R.string.game), false, R.drawable.super_six));
+                        }
+                        //text.add(new Drawer(getString(R.string.game), false, R.drawable.super_six));
                         //referral_code_status="0";
                         if(referral_code_status.equalsIgnoreCase("1")){
                             text.add(new Drawer(getString(R.string.referrar_rewards), false, R.drawable.referral_icon));

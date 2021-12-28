@@ -61,6 +61,7 @@ public class SessionManager {
     private static String languagecode = "LANGUAGECODE";
     private static String languagekey = "LANGUAGEKEY";
     private static String is_no_verified = "is_mobile_verified";
+    private static String is_ambs= "is_ambs";
 
     private static String ambs_email = "email";
     private static String ambs_phone_number = "phone_number";
@@ -497,14 +498,14 @@ public class SessionManager {
     }
 
     public static String get_mobile_verified(SharedPreferences prefs) {
-        return prefs.getString(is_no_verified, "home");
+        return prefs.getString(is_no_verified, "");
     }
     public static void save_is_ambassador(SharedPreferences prefs, String value) {
-        SessionManager.savePreference(prefs, is_no_verified, value);
+        SessionManager.savePreference(prefs, is_ambs, value);
     }
 
     public static String get_is_ambassador(SharedPreferences prefs) {
-        return prefs.getString(is_no_verified, "");
+        return prefs.getString(is_ambs, "");
     }
     public static void save_is_amb_email(SharedPreferences prefs, String value) {
         SessionManager.savePreference(prefs, ambs_email, value);

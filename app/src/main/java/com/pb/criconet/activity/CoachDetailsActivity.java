@@ -170,6 +170,7 @@ public class CoachDetailsActivity extends BaseActivity {
             } else {
 
                 String is_contact_verify = SessionManager.get_mobile_verified(prefs);
+                //Toaster.customToast(SessionManager.get_mobile_verified(prefs));
                 //is_contact_verify="0";
 
                 if (is_contact_verify.equalsIgnoreCase("0")) {
@@ -841,6 +842,17 @@ public class CoachDetailsActivity extends BaseActivity {
                             if (jsonObject.optString("api_text").equalsIgnoreCase("success")) {
                                 lin_mobile.setVisibility(View.GONE);
                                 lin_opt.setVisibility(View.VISIBLE);
+                                if (jsonObject.has("data")) {
+                                    JSONObject jsonObjectData = jsonObject.getJSONObject("data");
+                                    //phoneNumber = jsonObjectData.getString("temp_mobile_no");
+                                    SessionManager.save_name(prefs, jsonObjectData.getString("username"));
+                                    SessionManager.save_emailid(prefs, jsonObjectData.getString("email"));
+                                    SessionManager.savePhone(prefs, jsonObjectData.getString("phone_number"));
+                                    SessionManager.savePhoneCode(prefs, jsonObjectData.getString("phone_code"));
+                                    SessionManager.save_mobile_verified(prefs, jsonObjectData.getString("is_mobile_verified"));
+                                    //congratsDialog();
+
+                                }
                             } else if (jsonObject.optString("api_text").equalsIgnoreCase("failed")) {
                                 lin_mobile.setVisibility(View.VISIBLE);
                                 lin_opt.setVisibility(View.GONE);

@@ -1,8 +1,5 @@
 package com.pb.criconet.activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
@@ -11,14 +8,12 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -26,8 +21,10 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
@@ -45,8 +42,6 @@ import com.pb.criconet.Utills.DropDownView;
 import com.pb.criconet.Utills.Global;
 import com.pb.criconet.Utills.SessionManager;
 import com.pb.criconet.Utills.Toaster;
-import com.pb.criconet.models.CoachDetails;
-import com.pb.criconet.models.OrderCreate;
 import com.rilixtech.widget.countrycodepicker.CountryCodePicker;
 
 import org.json.JSONObject;
@@ -240,7 +235,7 @@ public class JoinAmbassadorActivity extends AppCompatActivity {
             if(From.equalsIgnoreCase("1")){
                 edit_email_red_bg.setText(SessionManager.get_is_amb_email(prefs));
                 edit_username_red_bg.setText(SessionManager.get_is_amb_name(prefs));
-                edit_username_phone.setText(SessionManager.get_is_amb_phone(prefs));
+                edit_username_phone.setText(SessionManager.get_mobile(prefs));
                 edit_school_red_bg.setText(SessionManager.get_is_amb_college(prefs));
                 edit_higestQualification_red_bg.setText(SessionManager.get_is_amb_highestQ(prefs));
                 edit_whywantbecomeambassodoar_red_bg.setText(SessionManager.get_is_ambs_do_you_want_campus_ambassdor(prefs));
@@ -282,18 +277,14 @@ public class JoinAmbassadorActivity extends AppCompatActivity {
                     startActivity(intent);
                     finish();
                 }else{
-
                     Intent intent = new Intent(JoinAmbassadorActivity.this, AmbassadoarProgrrameActivity.class);
+                    intent.putExtra("From","2");
                     startActivity(intent);
                     finish();
                 }
 
             }
         });
-
-
-
-
 
         lin_submit = findViewById(R.id.lin_submit);
         lin_submit.setOnClickListener(new View.OnClickListener() {
@@ -398,11 +389,11 @@ public class JoinAmbassadorActivity extends AppCompatActivity {
                                     JSONObject ambassadorProfile = jsonObjectData.getJSONObject("ambassadorProfile");
                                     if(ambassadorProfile.length()>0){
                                         SessionManager.save_is_ambassador(prefs,"1");
-                                    }
+
                                     SessionManager.save_is_amb_name(prefs,ambassadorProfile.getString("name"));
                                     SessionManager.save_is_amb_fullname(prefs,ambassadorProfile.getString("full_name"));
                                     SessionManager.save_is_amb_email(prefs,ambassadorProfile.getString("email"));
-                                    SessionManager.save_is_amb_phone(prefs,ambassadorProfile.getString("phone_number"));
+                                    SessionManager.save_mobile(prefs,ambassadorProfile.getString("phone_number"));
                                     SessionManager.save_is_amb_college(prefs,ambassadorProfile.getString("school_college_name"));
                                     SessionManager.save_is_amb_highestQ(prefs,ambassadorProfile.getString("height_qualification"));
                                     SessionManager.save_is_ambs_have_you_org_event_flag(prefs,ambassadorProfile.getString("have_you_org_event_flag"));
@@ -415,8 +406,11 @@ public class JoinAmbassadorActivity extends AppCompatActivity {
                                     is_contact_verify = jsonObjectData.getString("is_mobile_verified");
                                     if (is_contact_verify.equalsIgnoreCase("0")) {
                                         EmailOtpDialog(phoneNumber);
-                                    }else{
+                                    }else {
                                         congratsDialog();
+                                    }
+                                    }else{
+                                        SessionManager.save_is_ambassador(prefs,"0");
                                     }
                                 }
                                 //is_contact_verify="0";
@@ -496,6 +490,11 @@ public class JoinAmbassadorActivity extends AppCompatActivity {
                 param.put("do_you_want_campus_ambassdor", becomeAmbs);
                 param.put("thing_you_are_know_criconet", topThreeThings);
                 param.put("have_you_org_event_flag", organized_status);
+                if(From.equalsIgnoreCase("1")){
+                    param.put("edit_profile", "1");
+                }else{
+                    param.put("edit_profile ", "0");
+                }
                 System.out.println("data   " + param);
                 return param;
             }
@@ -609,8 +608,39 @@ public class JoinAmbassadorActivity extends AppCompatActivity {
                             JSONObject jsonObject = new JSONObject(response.toString());
                             if (jsonObject.optString("api_text").equalsIgnoreCase("success")) {
                                 dialog.dismiss();
+                                if (jsonObject.has("data")) {
+                                    JSONObject jsonObjectData = jsonObject.getJSONObject("data");
+                                    phoneNumber = jsonObjectData.getString("temp_mobile_no");
+                                    SessionManager.save_name(prefs, jsonObjectData.getString("username"));
+                                    SessionManager.save_emailid(prefs, jsonObjectData.getString("email"));
+                                    SessionManager.save_mobile(prefs, jsonObjectData.getString("phone_number"));
+                                    SessionManager.savePhoneCode(prefs, jsonObjectData.getString("phone_code"));
+                                    SessionManager.save_mobile_verified(prefs, jsonObjectData.getString("is_mobile_verified"));
+                                    JSONObject ambassadorProfile = jsonObjectData.getJSONObject("ambassadorProfile");
 
-                                congratsDialog();
+                                    if(ambassadorProfile.length()>0){
+                                        SessionManager.save_is_ambassador(prefs,"1");
+                                        SessionManager.save_is_amb_name(prefs,ambassadorProfile.getString("name"));
+                                        SessionManager.save_is_amb_fullname(prefs,ambassadorProfile.getString("full_name"));
+                                        SessionManager.save_is_amb_email(prefs,ambassadorProfile.getString("email"));
+                                        SessionManager.save_mobile(prefs,ambassadorProfile.getString("phone_number"));
+                                        SessionManager.save_is_amb_college(prefs,ambassadorProfile.getString("school_college_name"));
+                                        SessionManager.save_is_amb_highestQ(prefs,ambassadorProfile.getString("height_qualification"));
+                                        SessionManager.save_is_ambs_have_you_org_event_flag(prefs,ambassadorProfile.getString("have_you_org_event_flag"));
+                                        SessionManager.save_is_ambs_have_you_org_event_txt(prefs,ambassadorProfile.getString("have_you_org_event_txt"));
+                                        SessionManager.save_is_ambs_innovative_thing(prefs,ambassadorProfile.getString("innovative_thing"));
+                                        SessionManager.save_is_ambs_how_many_hrs_per_week(prefs,ambassadorProfile.getString("how_many_hrs_per_week"));
+                                        SessionManager.save_is_ambs_passionate_thing(prefs,ambassadorProfile.getString("passionate_thing"));
+                                        SessionManager.save_is_ambs_do_you_want_campus_ambassdor(prefs,ambassadorProfile.getString("do_you_want_campus_ambassdor"));
+                                        SessionManager.save_is_ambs_thing_you_are_know_criconet(prefs,ambassadorProfile.getString("thing_you_are_know_criconet"));
+                                    }else{
+                                        SessionManager.save_is_ambassador(prefs,"0");
+                                    }
+                                    congratsDialog();
+
+                                }
+
+
 
                             } else if (jsonObject.optString("api_text").equalsIgnoreCase("failed")) {
                                 Toaster.customToast(jsonObject.optJSONObject("errors").optString("error_text"));
@@ -688,20 +718,16 @@ public class JoinAmbassadorActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        if(From.equalsIgnoreCase("1")){
+        if (From.equalsIgnoreCase("1")) {
             Intent intent = new Intent(JoinAmbassadorActivity.this, AmbassdorRewardsActivity.class);
             startActivity(intent);
             finish();
-        }else{
-            toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    Intent intent = new Intent(JoinAmbassadorActivity.this, AmbassadoarProgrrameActivity.class);
-                    startActivity(intent);
-                    finish();
-                }
-            });
+        } else {
+            Intent intent = new Intent(JoinAmbassadorActivity.this, AmbassadoarProgrrameActivity.class);
+            intent.putExtra("From","2");
+            startActivity(intent);
+            finish();
         }
+
     }
 }

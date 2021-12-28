@@ -21,9 +21,7 @@
             android:layout_height="@dimen/_45sdp"
             android:layout_gravity="center_horizontal"
             android:src="@drawable/ic_check_circle_black_24dp"
-            android:contentDescription="@string/app_name"
-            />
-
+            android:contentDescription="@string/app_name" />
 
         <TextView
             android:id="@+id/tv_cancel_confirmed_msg"
@@ -39,9 +37,6 @@
             android:textColor="@color/light_text_color"
             app:fontFamily="@font/opensans_regular"
             android:textSize="@dimen/_12sdp"/>
-
-
-
 
             <FrameLayout
                 android:id="@+id/fl_done"
@@ -82,9 +77,6 @@
                     android:textSize="@dimen/_12sdp"/>
 
             </FrameLayout>
-
-
-
 
     </LinearLayout>
 

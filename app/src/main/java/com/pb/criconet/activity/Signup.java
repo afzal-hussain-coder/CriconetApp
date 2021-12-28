@@ -728,7 +728,7 @@ public class Signup extends AppCompatActivity {
                                     SessionManager.save_sex(prefs, jsonObjectData.getString("gender"));
                                     SessionManager.save_image(prefs, jsonObjectData.getString("avatar"));
                                     SessionManager.save_cover(prefs, jsonObjectData.getString("cover"));
-                                    SessionManager.save_mobile_verified(prefs, jsonObjectData.getString("is_mobile_verified"));
+                                    //SessionManager.save_mobile_verified(prefs, jsonObjectData.getString("is_mobile_verified"));
 
 
                                     if (jsonObjectData.getString("profile_type") == null) {
@@ -990,8 +990,40 @@ public class Signup extends AppCompatActivity {
                             JSONObject jsonObject = new JSONObject(response.toString());
                             if (jsonObject.optString("api_text").equalsIgnoreCase("success")) {
                                 dialog.dismiss();
+                                if (jsonObject.has("data")) {
+                                    JSONObject jsonObjectData = jsonObject.getJSONObject("data");
+                                    phoneNumber = jsonObjectData.getString("temp_mobile_no");
+                                    SessionManager.save_name(prefs, jsonObjectData.getString("username"));
+                                    SessionManager.save_emailid(prefs, jsonObjectData.getString("email"));
+                                    SessionManager.save_mobile(prefs, jsonObjectData.getString("phone_number"));
+                                    SessionManager.savePhoneCode(prefs, jsonObjectData.getString("phone_code"));
 
-                                congratsDialog();
+                                   // Toaster.customToast(jsonObjectData.getString("is_mobile_verified"));
+                                    SessionManager.save_mobile_verified(prefs, jsonObjectData.getString("is_mobile_verified"));
+                                    JSONObject ambassadorProfile = jsonObjectData.getJSONObject("ambassadorProfile");
+
+                                    if(ambassadorProfile.length()>0){
+                                        SessionManager.save_is_ambassador(prefs,"1");
+                                        SessionManager.save_is_amb_name(prefs,ambassadorProfile.getString("name"));
+                                        SessionManager.save_is_amb_fullname(prefs,ambassadorProfile.getString("full_name"));
+                                        SessionManager.save_is_amb_email(prefs,ambassadorProfile.getString("email"));
+                                        SessionManager.save_mobile(prefs,ambassadorProfile.getString("phone_number"));
+                                        SessionManager.save_is_amb_college(prefs,ambassadorProfile.getString("school_college_name"));
+                                        SessionManager.save_is_amb_highestQ(prefs,ambassadorProfile.getString("height_qualification"));
+                                        SessionManager.save_is_ambs_have_you_org_event_flag(prefs,ambassadorProfile.getString("have_you_org_event_flag"));
+                                        SessionManager.save_is_ambs_have_you_org_event_txt(prefs,ambassadorProfile.getString("have_you_org_event_txt"));
+                                        SessionManager.save_is_ambs_innovative_thing(prefs,ambassadorProfile.getString("innovative_thing"));
+                                        SessionManager.save_is_ambs_how_many_hrs_per_week(prefs,ambassadorProfile.getString("how_many_hrs_per_week"));
+                                        SessionManager.save_is_ambs_passionate_thing(prefs,ambassadorProfile.getString("passionate_thing"));
+                                        SessionManager.save_is_ambs_do_you_want_campus_ambassdor(prefs,ambassadorProfile.getString("do_you_want_campus_ambassdor"));
+                                        SessionManager.save_is_ambs_thing_you_are_know_criconet(prefs,ambassadorProfile.getString("thing_you_are_know_criconet"));
+                                    }else{
+                                        SessionManager.save_is_ambassador(prefs,"0");
+                                    }
+
+                                    congratsDialog();
+
+                                }
 
                             } else if (jsonObject.optString("api_text").equalsIgnoreCase("failed")) {
                                 Toaster.customToast(jsonObject.optJSONObject("errors").optString("error_text"));

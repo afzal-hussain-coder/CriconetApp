@@ -740,6 +740,7 @@ public class Login extends AppCompatActivity {
                                 SessionManager.save_lname(prefs, userData.getLast_name());
                                 SessionManager.save_profiletype(prefs, userData.getProfile_type());
                                 SessionManager.save_mobile_verified(prefs, userData.getIs_mobile_verified());
+                                //Toaster.customToast(SessionManager.get_mobile_verified(prefs));
                                 if(jsonData.has("ambassadorProfile")){
                                    JSONObject ambassadorProfile = jsonData.getJSONObject("ambassadorProfile");
 
@@ -748,7 +749,7 @@ public class Login extends AppCompatActivity {
                                       SessionManager.save_is_amb_name(prefs,ambassadorProfile.getString("name"));
                                       SessionManager.save_is_amb_fullname(prefs,ambassadorProfile.getString("full_name"));
                                       SessionManager.save_is_amb_email(prefs,ambassadorProfile.getString("email"));
-                                      SessionManager.save_is_amb_phone(prefs,ambassadorProfile.getString("phone_number"));
+                                      SessionManager.save_mobile(prefs,ambassadorProfile.getString("phone_number"));
                                       SessionManager.save_is_amb_college(prefs,ambassadorProfile.getString("school_college_name"));
                                       SessionManager.save_is_amb_highestQ(prefs,ambassadorProfile.getString("height_qualification"));
                                       SessionManager.save_is_ambs_have_you_org_event_flag(prefs,ambassadorProfile.getString("have_you_org_event_flag"));
@@ -758,6 +759,8 @@ public class Login extends AppCompatActivity {
                                       SessionManager.save_is_ambs_passionate_thing(prefs,ambassadorProfile.getString("passionate_thing"));
                                       SessionManager.save_is_ambs_do_you_want_campus_ambassdor(prefs,ambassadorProfile.getString("do_you_want_campus_ambassdor"));
                                       SessionManager.save_is_ambs_thing_you_are_know_criconet(prefs,ambassadorProfile.getString("thing_you_are_know_criconet"));
+                                  }else{
+                                      SessionManager.save_is_ambassador(prefs,"0");
                                   }
                                    //Toaster.customToast(ambassadorProfile.length()+"");
                                 }

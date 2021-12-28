@@ -41,13 +41,16 @@ public class AmbassadoarProgrrameActivity extends AppCompatActivity {
 
         Intent intent= getIntent();
         if(intent!=null){
-            FROM = intent.getExtras().getString("FROM");
+            FROM = intent.getExtras().getString("From");
         }
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 if(FROM.equalsIgnoreCase("1")){
+                    Intent intent = new Intent(AmbassadoarProgrrameActivity.this, AmbassdorRewardsActivity.class);
+                    intent.putExtra("From","1");
+                    startActivity(intent);
                     finish();
                 }else{
 
@@ -76,7 +79,7 @@ public class AmbassadoarProgrrameActivity extends AppCompatActivity {
         extendedFAB.setOnClickListener(view -> {
             Intent intentt = new Intent(AmbassadoarProgrrameActivity.this, JoinAmbassadorActivity.class);
             intentt.putExtra("From","2");
-            startActivity(intent);
+            startActivity(intentt);
         });
 
     }
@@ -84,6 +87,9 @@ public class AmbassadoarProgrrameActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         if(FROM.equalsIgnoreCase("1")){
+            Intent intent = new Intent(AmbassadoarProgrrameActivity.this, AmbassdorRewardsActivity.class);
+            intent.putExtra("From","1");
+            startActivity(intent);
             finish();
         }else{
             Intent intent = new Intent(AmbassadoarProgrrameActivity.this, MainActivity.class);
