@@ -1,21 +1,31 @@
 package com.pb.criconet.fragments;
 
 import android.app.ProgressDialog;
+import android.content.ContentValues;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.MediaStore;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.Spinner;
-import android.widget.Toast;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -29,49 +39,94 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
+import com.mancj.slideup.SlideUp;
+import com.mancj.slideup.SlideUpBuilder;
 import com.pb.criconet.R;
-import com.pb.criconet.Utills.CCResource;
+import com.pb.criconet.Utills.CustomLoaderView;
+import com.pb.criconet.Utills.FilterCoachSelectionDropDownView;
 import com.pb.criconet.Utills.Global;
+import com.pb.criconet.Utills.MultipartRequest;
 import com.pb.criconet.Utills.SessionManager;
+import com.pb.criconet.Utills.Toaster;
+import com.pb.criconet.activity.CancelletionWebView;
+import com.pb.criconet.activity.CoachRegisterPrivacyWebView;
+import com.pb.criconet.activity.WebViewCoachRegisterTermsActivity;
+import com.pb.criconet.activity.WebViewSignUpTermsActivity;
 import com.pb.criconet.adapters.ButtonAdapter;
-import com.pb.criconet.models.BookCoach;
-import com.pb.criconet.models.City;
+import com.pb.criconet.models.Country;
 import com.pb.criconet.models.DataModel;
 
+import org.apache.http.entity.mime.MultipartEntity;
+import org.apache.http.entity.mime.content.FileBody;
+import org.apache.http.entity.mime.content.StringBody;
+import org.json.JSONObject;
+
+import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import timber.log.Timber;
 
-public class FragmentExperienceSetting extends Fragment implements ButtonAdapter.ItemListener, AdapterView.OnItemSelectedListener{
+public class FragmentExperienceSetting extends Fragment implements ButtonAdapter.ItemListener {
     private View rootView;
     private RequestQueue queue;
     private ProgressDialog progress;
     private SharedPreferences prefs;
     private RecyclerView recyclerView;
     private DataModel modelArrayList;
-    private Spinner spinerYear;
-    private Spinner spinerMonth;
-    private Spinner spinerCurency;
-    private String mcuurency="";
-    private String expMonth="";
-    private String expYear="";
+    private FilterCoachSelectionDropDownView spinerYear;
+    private FilterCoachSelectionDropDownView spinerMonth;
+    private FilterCoachSelectionDropDownView spinerCurency;
+    private String mcuurency = "";
+    private String expMonth = "";
+    private String expYear = "";
     private EditText etAnyOtherInformation;
     private EditText etProfileTitle;
+    private EditText etAchievement;
+    private EditText etwhat_you_teach;
+    private EditText etSkills_Student_Learns;
+    private EditText etcertificate_title;
+    private ImageView iv_upload_certificate;
+    private FrameLayout fl_click_to_upload_certificate;
+    private LinearLayout li_by_signingup;
+    private TextView cv_tearms;
+    private TextView tvTearms;
+    private TextView tvPrivacy;
     private EditText etAmount;
-    private Button btnSave;
+    private Button btn_save_continioue;
     private List<DataModel.Datum> mValue;
     private StringBuilder categoryId;
 
-    private String []curency={"₹ INR", "$ USD","€ EUR"};
-    private String [] year={"Select Year", "0 year","1 year","2 year","3 year","4 year","5 year","6 year","7 year","8 year","9 year",
-    "10 year","11 year","12 year","13 year","14 year","15 year","16 year","17 year","18 year","19 year","20 year","21 year","22 year",
-    "23 year","24 year","25 year","26 year","27 year","28 year","29 year"};
-    private String [] month={"Select Month", "0 month","1 month","2 month","3 month","4 month","5 month","6 month","7 month","8 month",
-    "9 month","10 month","11 month"};
+
+    private String profileTitle = "", achievement = "", whatYouTeach = "", skillsStudentLearns = "", otherInformation = "", certificateTitle = "", amount = "";
+    private ArrayList<com.pb.criconet.Utills.DataModel> option = new ArrayList<>();
+    private ArrayList<com.pb.criconet.Utills.DataModel> option_month = new ArrayList<>();
+    private ArrayList<com.pb.criconet.Utills.DataModel> option_currency = new ArrayList<>();
+    String selectedYear = "", selectedMonth = "", selectedCurency;
+    Typeface typeface;
+    CustomLoaderView loaderView;
+    private static final int CAMERA_REQUESTid = 2015;
+    private static final int PICK_IMAGEid = 100;
+    private Cursor cursor;
+    private int columnindex, i;
+    private Uri URIid = null;
+    private Uri selectedImageid, mCapturedImageURIid;
+    private String file_pathid = "";
+    private String imagepath = "";
+    private String img_type = "";
+    private SlideUp slideUp;
+    private View dim, rootViewPost;
+    private View slideView;
+    private TextView tv_camera;
+    private TextView tvGallery;
+    private TextView tvCancel;
+    private TextView tv_choose;
+    private ArrayList<String> catIdList;
+    private String isTeramsChecked="";
+    private TextView tv_click_uploadCertificate;
+
     public static FragmentExperienceSetting newInstance() {
         return new FragmentExperienceSetting();
     }
@@ -80,54 +135,211 @@ public class FragmentExperienceSetting extends Fragment implements ButtonAdapter
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_experience_setting, container, false);
-
-
-
         return rootView;
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        typeface = ResourcesCompat.getFont(getActivity(), R.font.opensans_semibold);
         prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        loaderView = CustomLoaderView.initialize(getActivity());
         queue = Volley.newRequestQueue(getActivity());
-        progress = new ProgressDialog(getActivity());
-        progress.setMessage(getString(R.string.loading));
-        progress.setCancelable(false);
 
-        btnSave=rootView.findViewById(R.id.btnSave);
-        etAmount=rootView.findViewById(R.id.etAmount);
-        etProfileTitle=rootView.findViewById(R.id.etProfileTitle);
-        etAnyOtherInformation=rootView.findViewById(R.id.etAnyOtherInformation);
+        btn_save_continioue = rootView.findViewById(R.id.btn_save_continioue);
+        etAmount = rootView.findViewById(R.id.etAmount);
+        etProfileTitle = rootView.findViewById(R.id.etProfileTitle);
+        etAchievement = rootView.findViewById(R.id.etAchievement);
+        etwhat_you_teach = rootView.findViewById(R.id.etwhat_you_teach);
+        etSkills_Student_Learns = rootView.findViewById(R.id.etSkills_Student_Learns);
+        etAnyOtherInformation = rootView.findViewById(R.id.etAnyOtherInformation);
+        etcertificate_title = rootView.findViewById(R.id.etcertificate_title);
+        iv_upload_certificate = rootView.findViewById(R.id.iv_upload_certificate);
+        fl_click_to_upload_certificate = rootView.findViewById(R.id.fl_click_to_upload_certificate);
+        tv_click_uploadCertificate = rootView.findViewById(R.id.tv_click_uploadCertificate);
+        li_by_signingup = rootView.findViewById(R.id.li_by_signingup);
+        cv_tearms = rootView.findViewById(R.id.cv_tearms);
+        cv_tearms.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(((CompoundButton) view).isChecked()){
+                    isTeramsChecked="1";
+                } else {
+                    isTeramsChecked="";
+                }
+            }
+        });
+        tvTearms = rootView.findViewById(R.id.tvTearms);
+        tvTearms.setOnClickListener(view -> {
+            String url = "https:\\/\\/www.criconet.com\\/terms\\/terms?rst=app";
+            startActivity(new Intent(getActivity(), WebViewCoachRegisterTermsActivity.class).putExtra("URL", url).putExtra("title", "Terms of Use"));
+            //finish();
+        });
+        tvPrivacy = rootView.findViewById(R.id.tvPrivacy);
+        tvPrivacy.setOnClickListener(view -> {
+            String url ="https:\\/\\/www.criconet.com\\/terms\\/privacy-policy?rst=app";
+            startActivity(new Intent(getActivity(), CoachRegisterPrivacyWebView.class).putExtra("URL", url).putExtra("title", "Privacy Policy"));
+            //finish();
+        });
 
-        recyclerView=rootView.findViewById(R.id.recylerButton);
+
+        recyclerView = rootView.findViewById(R.id.recylerButton);
         GridLayoutManager manager = new GridLayoutManager(getActivity(), 3, GridLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(manager);
 
-        spinerCurency=rootView.findViewById(R.id.spinerCurency);
-        spinerMonth=rootView.findViewById(R.id.spinerMonth);
-        spinerYear=rootView.findViewById(R.id.spinerYear);
+        spinerCurency = rootView.findViewById(R.id.spinerCurency);
+        option_currency.add(new com.pb.criconet.Utills.DataModel("₹ INR"));
+        //option_currency.add(new com.pb.criconet.Utills.DataModel("$ USD"));
+        //option_currency.add(new com.pb.criconet.Utills.DataModel("€ EUR"));
+        spinerCurency.setOptionList(option_currency);
+        selectedCurency = option_currency.get(0).getName();
+        spinerCurency.setText(selectedCurency);
+        spinerCurency.setTypeface(typeface);
+        spinerCurency.setClickListener(new FilterCoachSelectionDropDownView.onClickInterface() {
+            @Override
+            public void onClickAction() {
+            }
 
-        spinerCurency.setOnItemSelectedListener(this);
-        spinerMonth.setOnItemSelectedListener(this);
-        spinerYear.setOnItemSelectedListener(this);
+            @Override
+            public void onClickDone(String name) {
+                selectedCurency = name;
+            }
 
 
-        ArrayAdapter aa = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_item, curency);
-        aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinerCurency.setAdapter(aa);
+            @Override
+            public void onDismiss() {
+            }
+        });
 
-        ArrayAdapter bb = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_item, year);
-        aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinerYear.setAdapter(bb);
+        spinerMonth = rootView.findViewById(R.id.spinerMonth);
+        option_month.add(new com.pb.criconet.Utills.DataModel("Select Month"));
+        option_month.add(new com.pb.criconet.Utills.DataModel("0 month"));
+        option_month.add(new com.pb.criconet.Utills.DataModel("1 month"));
+        option_month.add(new com.pb.criconet.Utills.DataModel("2 month"));
+        option_month.add(new com.pb.criconet.Utills.DataModel("3 month"));
+        option_month.add(new com.pb.criconet.Utills.DataModel("4 month"));
+        option_month.add(new com.pb.criconet.Utills.DataModel("5 month"));
+        option_month.add(new com.pb.criconet.Utills.DataModel("6 month"));
+        option_month.add(new com.pb.criconet.Utills.DataModel("7 month"));
+        option_month.add(new com.pb.criconet.Utills.DataModel("8 month"));
+        option_month.add(new com.pb.criconet.Utills.DataModel("9 month"));
+        option_month.add(new com.pb.criconet.Utills.DataModel("10 month"));
+        option_month.add(new com.pb.criconet.Utills.DataModel("11 month"));
+        spinerMonth.setOptionList(option_month);
+        selectedMonth = option_month.get(0).getName();
+        spinerMonth.setText(selectedMonth);
+        spinerMonth.setTypeface(typeface);
+        spinerMonth.setClickListener(new FilterCoachSelectionDropDownView.onClickInterface() {
+            @Override
+            public void onClickAction() {
+            }
 
-        ArrayAdapter cc = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_item, month);
-        aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinerMonth.setAdapter(cc);
+            @Override
+            public void onClickDone(String name) {
+                selectedMonth = name;
+            }
 
-        btnSave.setOnClickListener(view -> {
-            if(checkValidation()) {
-                updateCoachExp();
+            @Override
+            public void onDismiss() {
+            }
+        });
+
+
+        spinerYear = rootView.findViewById(R.id.spinerYear);
+        option.add(new com.pb.criconet.Utills.DataModel("Select Year"));
+        option.add(new com.pb.criconet.Utills.DataModel("0 year"));
+        option.add(new com.pb.criconet.Utills.DataModel("1 year"));
+        option.add(new com.pb.criconet.Utills.DataModel("2 year"));
+        option.add(new com.pb.criconet.Utills.DataModel("3 year"));
+        option.add(new com.pb.criconet.Utills.DataModel("4 year"));
+        option.add(new com.pb.criconet.Utills.DataModel("5 year"));
+        option.add(new com.pb.criconet.Utills.DataModel("6 year"));
+        option.add(new com.pb.criconet.Utills.DataModel("7 year"));
+        option.add(new com.pb.criconet.Utills.DataModel("8 year"));
+        option.add(new com.pb.criconet.Utills.DataModel("9 year"));
+        option.add(new com.pb.criconet.Utills.DataModel("10 year"));
+        option.add(new com.pb.criconet.Utills.DataModel("11 year"));
+        option.add(new com.pb.criconet.Utills.DataModel("12 year"));
+        option.add(new com.pb.criconet.Utills.DataModel("13 year"));
+        option.add(new com.pb.criconet.Utills.DataModel("14 year"));
+        option.add(new com.pb.criconet.Utills.DataModel("15 year"));
+        option.add(new com.pb.criconet.Utills.DataModel("16 year"));
+        option.add(new com.pb.criconet.Utills.DataModel("17 year"));
+        option.add(new com.pb.criconet.Utills.DataModel("18 year"));
+        option.add(new com.pb.criconet.Utills.DataModel("19 year"));
+        option.add(new com.pb.criconet.Utills.DataModel("20 year"));
+        option.add(new com.pb.criconet.Utills.DataModel("21 year"));
+        option.add(new com.pb.criconet.Utills.DataModel("22 year"));
+        option.add(new com.pb.criconet.Utills.DataModel("23 year"));
+        option.add(new com.pb.criconet.Utills.DataModel("24 year"));
+        option.add(new com.pb.criconet.Utills.DataModel("25 year"));
+        option.add(new com.pb.criconet.Utills.DataModel("26 year"));
+        option.add(new com.pb.criconet.Utills.DataModel("27 year"));
+        option.add(new com.pb.criconet.Utills.DataModel("28 year"));
+        option.add(new com.pb.criconet.Utills.DataModel("29 year"));
+        spinerYear.setOptionList(option);
+        selectedYear = option.get(0).getName();
+        spinerYear.setText(selectedYear);
+        spinerYear.setTypeface(typeface);
+
+        spinerYear.setClickListener(new FilterCoachSelectionDropDownView.onClickInterface() {
+            @Override
+            public void onClickAction() {
+            }
+
+            @Override
+            public void onClickDone(String name) {
+                selectedYear = name;
+            }
+
+
+            @Override
+            public void onDismiss() {
+            }
+        });
+
+        rootViewPost = rootView.findViewById(R.id.root_vieww);
+        slideView = rootView.findViewById(R.id.slideView);
+        dim = rootView.findViewById(R.id.dim);
+        tv_camera = rootView.findViewById(R.id.tv_camera);
+        tvGallery = rootView.findViewById(R.id.tvGallery);
+        tvCancel = rootView.findViewById(R.id.tvCancel);
+        tv_choose = rootView.findViewById(R.id.tv_choose);
+        slideUp = new SlideUpBuilder(slideView)
+                .withListeners(new SlideUp.Listener.Events() {
+                    @Override
+                    public void onSlide(float percent) {
+                        dim.setAlpha(1 - (percent / 100));
+                        if (percent < 100) {
+                            // slideUp started showing
+
+                        }
+                    }
+
+                    @Override
+                    public void onVisibilityChanged(int visibility) {
+                        if (visibility == View.GONE) {
+                        }
+                    }
+                })
+                .withStartGravity(Gravity.BOTTOM)
+                .withLoggingEnabled(true)
+                .withStartState(SlideUp.State.HIDDEN)
+                .withSlideFromOtherView(slideView)
+                .build();
+        tvCancel.setOnClickListener(v -> {
+            slideUp.hide();
+        });
+        fl_click_to_upload_certificate.setOnClickListener(v -> {
+            if(tv_click_uploadCertificate.getText().toString().trim().equalsIgnoreCase(getActivity().getResources().getString(R.string.remove_certificate))){
+                if (Global.isOnline(getActivity())) {
+                    removeCertificate();
+                } else {
+                    Global.showDialog(getActivity());
+                }
+            }else{
+                selectImage();
             }
 
         });
@@ -137,39 +349,164 @@ public class FragmentExperienceSetting extends Fragment implements ButtonAdapter
         } else {
             Global.showDialog(getActivity());
         }
+
+        btn_save_continioue.setOnClickListener(view -> {
+            if (checkValidation()) {
+                if (Global.isOnline(getActivity())) {
+                    updateCoachExp(imagepath);
+                } else {
+                    Global.showDialog(getActivity());
+                }
+            }
+
+        });
+
     }
-    private boolean checkValidation(){
+
+    private void selectImage() {
+        slideUp.show();
+        tv_choose.setText(R.string.add_photo);
+        tv_camera.setOnClickListener(v -> {
+            slideUp.hide();
+            openCameraid();
+        });
+        tvGallery.setOnClickListener(v -> {
+            slideUp.hide();
+            openGalleryid();
+        });
+        tvCancel.setOnClickListener(v -> {
+            slideUp.hide();
+        });
+    }
+
+    private void openCameraid() {
+
+        try {
+            String fileName = "profile.jpg";
+            ContentValues values = new ContentValues();
+            values.put(MediaStore.Images.Media.TITLE, fileName);
+            mCapturedImageURIid = getActivity().getContentResolver().insert(
+                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, mCapturedImageURIid);
+            startActivityForResult(intent, CAMERA_REQUESTid);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void openGalleryid() {
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGEid);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == PICK_IMAGEid) {
+            try {
+                selectedImageid = data.getData();
+                String[] filePathColumn = {MediaStore.Images.Media.DATA};
+
+                cursor = getActivity().getContentResolver().query(selectedImageid, filePathColumn, null, null, null);
+                cursor.moveToFirst();
+                columnindex = cursor.getColumnIndex(filePathColumn[0]);
+                file_pathid = cursor.getString(columnindex);
+                // Log.e("Attachment Path:", attachmentFile);
+                URIid = Uri.parse("file://" + file_pathid);
+                imagepath = file_pathid;
+
+                cursor.close();
+
+                if (resultCode == 0) {
+//                    dialog_camera.dismiss();
+                } else {
+//                    dialog_camera.dismiss();
+                    System.out.println("cccccccc   " + imagepath);
+                    iv_upload_certificate.setImageURI(Uri.parse(imagepath));
+                    //updateImageTask(imagepath);
+
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        } else if (requestCode == CAMERA_REQUESTid) {
+            try {
+                String[] projection = {MediaStore.Images.Media.DATA};
+                @SuppressWarnings("deprecation")
+                Cursor cursor = getActivity().managedQuery(mCapturedImageURIid, projection, null, null, null);
+                int column_index_data = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+                cursor.moveToFirst();
+                String capturedImageFilePath = cursor.getString(column_index_data);
+                imagepath = capturedImageFilePath;
+
+                if (resultCode == 0) {
+//                    dialog_camera.dismiss();
+                } else {
+                    System.out.println("cccccccc   " + imagepath);
+                    iv_upload_certificate.setImageURI(Uri.parse(imagepath));
+
+                }
+
+            } catch (Exception e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    public String getRealPathFromURI(Uri uri) {
+        Cursor cursor = getActivity().getContentResolver().query(uri, null, null, null, null);
+        cursor.moveToFirst();
+        int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+        return cursor.getString(idx);
+    }
+
+    private boolean checkValidation() {
+        profileTitle = etProfileTitle.getText().toString().trim();
+        achievement = etAchievement.getText().toString().trim();
+        whatYouTeach = etwhat_you_teach.getText().toString().trim();
+        skillsStudentLearns = etSkills_Student_Learns.getText().toString().trim();
+        otherInformation = etAnyOtherInformation.getText().toString().trim();
+        certificateTitle = etcertificate_title.getText().toString().trim();
+        amount = etAmount.getText().toString().trim();
+
+        //Log.d("CtId",categoryId+"");
 
         if (categoryId == null) {
-            Toast.makeText(getActivity(),"Please choose specialities",Toast.LENGTH_SHORT).show();
+            Toaster.customToast(getActivity().getResources().getString(R.string.Please_choose_your_specialities));
             return false;
-        }else if(etProfileTitle.getText().toString().equalsIgnoreCase("")){
-            Toast.makeText(getActivity(),"Please enter profile title",Toast.LENGTH_SHORT).show();
+        } else if (etProfileTitle.getText().toString().equalsIgnoreCase("")) {
+            Toaster.customToast(getActivity().getResources().getString(R.string.Fill_your_profile_title));
             return false;
-        }else if(expYear.equalsIgnoreCase("")){
-            Toast.makeText(getActivity(),"Please select year",Toast.LENGTH_SHORT).show();
+        } else if (selectedYear.equalsIgnoreCase("Select Year") || selectedMonth.equalsIgnoreCase("Select Month")) {
+            Toaster.customToast(getActivity().getResources().getString(R.string.Select_year_and_month));
             return false;
-        }else if(expMonth.equalsIgnoreCase("")){
-            Toast.makeText(getActivity(),"Please select month",Toast.LENGTH_SHORT).show();
+        }
+//        else if(mcuurency.equalsIgnoreCase("")){
+//            Toast.makeText(getActivity(),"Please select currency",Toast.LENGTH_SHORT).show();
+//            return  false;
+//        }
+        else if (etAmount.getText().toString().trim().equalsIgnoreCase("")) {
+            Toaster.customToast(getActivity().getResources().getString(R.string.Enter_Amount_session));
             return false;
-        }else if(mcuurency.equalsIgnoreCase("")){
-            Toast.makeText(getActivity(),"Please select currency",Toast.LENGTH_SHORT).show();
-            return  false;
-        }else if(etAmount.getText().toString().trim().equalsIgnoreCase("")){
-            Toast.makeText(getActivity(),"Please enter amount",Toast.LENGTH_SHORT).show();
+        }else if(isTeramsChecked.equalsIgnoreCase("")){
+            Toaster.customToast(getActivity().getResources().getString(R.string.Please_check_tearms));
             return false;
         }
 
         return true;
     }
     private void getSpecialities() {
-        StringRequest postRequest = new StringRequest(Request.Method.GET, Global.URL + "get_specialities_cat", new Response.Listener<String>() {
+        StringRequest postRequest = new StringRequest(Request.Method.GET, Global.URL + Global.GET_SPECIALITIES_CATEGORY, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 Gson gson = new Gson();
                 modelArrayList = gson.fromJson(response, DataModel.class);
-                if(modelArrayList.getApiStatus().equalsIgnoreCase("200")) {
-                    recyclerView.setAdapter(new ButtonAdapter(getActivity(),modelArrayList.getData(),FragmentExperienceSetting.this));
+                if (modelArrayList.getApiStatus().equalsIgnoreCase("200")) {
+                    recyclerView.setAdapter(new ButtonAdapter(getActivity(), modelArrayList.getData(), FragmentExperienceSetting.this));
                 }
 
             }
@@ -179,17 +516,85 @@ public class FragmentExperienceSetting extends Fragment implements ButtonAdapter
                 error.printStackTrace();
                 Global.msgDialog(getActivity(), "Error from server");
             }
-        }) ;
+        });
         int socketTimeout = 30000;
         RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
         postRequest.setRetryPolicy(policy);
         queue.add(postRequest);
     }
 
+    public void updateCoachExp(String path) {
+        loaderView.showLoader();
+        try {
+            MultipartEntity entity = new MultipartEntity();
+            entity.addPart("user_id", new StringBody(SessionManager.get_user_id(prefs)));
+            entity.addPart("s", new StringBody(SessionManager.get_session_id(prefs)));
+            entity.addPart("profile_title", new StringBody(profileTitle));
+            entity.addPart("coach_category_id", new StringBody(String.valueOf(categoryId)));
+            entity.addPart("exp_years", new StringBody(selectedYear));
+            entity.addPart("exp_months", new StringBody(selectedMonth));
+            entity.addPart("about_coach_profile", new StringBody(otherInformation));
+            entity.addPart("cuurency_code", new StringBody("INR"));
+            entity.addPart("charge_amount", new StringBody(amount));
+            entity.addPart("certificate_title", new StringBody(certificateTitle));
+            entity.addPart("what_you_teach", new StringBody(whatYouTeach));
+            entity.addPart("skills_you_learn", new StringBody(skillsStudentLearns));
+            entity.addPart("achievement", new StringBody(achievement));
+            entity.addPart("is_agree", new StringBody(isTeramsChecked));
+            if (!(path.equals("") || path == null)) {
+                File file = new File(path);
+                FileBody fileBody = new FileBody(file);
+                entity.addPart("certificate_path", fileBody);
+            }
+            MultipartRequest req = new MultipartRequest(Global.URL + Global.ADD_COACH_QUALIFICATION, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    try {
+                        Timber.d(response);
+                        loaderView.hideLoader();
+                        JSONObject jsonObject = new JSONObject(response.toString());
+                        if (jsonObject.optString("api_text").equalsIgnoreCase("Success")) {
+
+                            Toaster.customToast(jsonObject.optString("msg"));
+                            tv_click_uploadCertificate.setText(getActivity().getResources().getString(R.string.remove_certificate));
+
+                            //getUsersDetails(SessionManager.get_user_id(prefs));
+
+                        } else if (jsonObject.optString("api_text").equalsIgnoreCase("failed")) {
+                            Global.msgDialog(getActivity(), jsonObject.optJSONObject("errors").optString("error_text"));
+                        } else {
+                            Global.msgDialog(getActivity(), getResources().getString(R.string.error_server));
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    loaderView.hideLoader();
+                    error.printStackTrace();
+                }
+            }, entity);
+            Log.d("request",entity.toString());
+
+            int socketTimeout = 30000;
+            RetryPolicy policy = new DefaultRetryPolicy(socketTimeout,
+                    DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                    DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+            req.setRetryPolicy(policy);
+
+            queue.add(req);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
     @Override
     public void onItemClick(List<DataModel.Datum> items) {
-     //mValue=item;
-
         categoryId = new StringBuilder();
         String prefix = "";
         for (DataModel.Datum item : modelArrayList.getData()) {
@@ -197,32 +602,42 @@ public class FragmentExperienceSetting extends Fragment implements ButtonAdapter
                 categoryId.append(prefix);
                 prefix = ",";
                 categoryId.append(item.getId());
-
             }
         }
     }
 
-    private void updateCoachExp() {
-
-        progress.show();
-        StringRequest postRequest = new StringRequest(Request.Method.POST, Global.URL + "update_coach_data", new Response.Listener<String>() {
+    private void removeCertificate() {
+        StringRequest postRequest = new StringRequest(Request.Method.POST, Global.URL + Global.REMOVE_CERTIFICATE, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                progress.dismiss();
-                Gson gson = new Gson();
-                BookCoach modelArrayList = gson.fromJson(response, BookCoach.class);
-                if (modelArrayList.getApiStatus().equalsIgnoreCase("200")) {
-                    Toast.makeText(getActivity(), "Success", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(getActivity(), modelArrayList.getErrors().getErrorText(), Toast.LENGTH_SHORT).show();
+                Log.d("ResponseCountry",response);
+                try {
+                    Timber.d(response);
+                    loaderView.hideLoader();
+                    JSONObject jsonObject = new JSONObject(response.toString());
+                    if (jsonObject.optString("api_text").equalsIgnoreCase("Success")) {
+
+                        Toaster.customToast(jsonObject.optString("msg"));
+                        tv_click_uploadCertificate.setText(getActivity().getResources().getString(R.string.upload_certificate));
+                         iv_upload_certificate.setImageURI(null);
+                        //getUsersDetails(SessionManager.get_user_id(prefs));
+
+                    } else if (jsonObject.optString("api_text").equalsIgnoreCase("failed")) {
+                        Global.msgDialog(getActivity(), jsonObject.optJSONObject("errors").optString("error_text"));
+                    } else {
+                        Global.msgDialog(getActivity(), getResources().getString(R.string.error_server));
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
+
+
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
-                progress.dismiss();
-                Global.msgDialog(getActivity(), "Error from server");
+                Global.msgDialog(getActivity(), getResources().getString(R.string.error_server));
             }
         }) {
             @Override
@@ -230,14 +645,6 @@ public class FragmentExperienceSetting extends Fragment implements ButtonAdapter
                 Map<String, String> param = new HashMap<String, String>();
                 param.put("user_id", SessionManager.get_user_id(prefs));
                 param.put("s", SessionManager.get_session_id(prefs));
-                param.put("profile_title", etProfileTitle.getText().toString().trim());
-                param.put("exp_years", expYear);
-                param.put("exp_months", expMonth);
-                param.put("about_coach_profile", etAnyOtherInformation.getText().toString().trim());
-                param.put("cuurency_code", mcuurency);
-                param.put("charge_amount", etAmount.getText().toString().trim());
-                param.put("coach_category_id", etAmount.getText().toString().trim());
-                Timber.e(param.toString());
                 return param;
             }
         };
@@ -248,20 +655,4 @@ public class FragmentExperienceSetting extends Fragment implements ButtonAdapter
     }
 
 
-    @Override
-    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-
-        if(adapterView==spinerCurency && i!=0) {
-            mcuurency=adapterView.getSelectedItem().toString();
-        }else if(adapterView==spinerYear && i!=0){
-            expYear=adapterView.getSelectedItem().toString();
-        }else if(adapterView==spinerMonth && i!=0){
-            expMonth=adapterView.getSelectedItem().toString();
-        }
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> adapterView) {
-
-    }
 }

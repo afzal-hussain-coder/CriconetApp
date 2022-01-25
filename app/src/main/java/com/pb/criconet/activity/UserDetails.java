@@ -44,22 +44,36 @@ import com.bumptech.glide.Glide;
 import com.github.chrisbanes.photoview.PhotoView;
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.pb.criconet.R;
+import com.pb.criconet.Utills.CustomLoaderView;
 import com.pb.criconet.Utills.Global;
+import com.pb.criconet.Utills.MultipartRequest;
 import com.pb.criconet.Utills.SessionManager;
 import com.pb.criconet.Utills.Toaster;
 import com.pb.criconet.adapters.HomeAdapter;
 import com.pb.criconet.models.NewPostModel;
 import com.pb.criconet.models.UserData;
 
+import org.apache.http.entity.mime.HttpMultipartMode;
+import org.apache.http.entity.mime.MultipartEntity;
+import org.apache.http.entity.mime.content.FileBody;
+import org.apache.http.entity.mime.content.StringBody;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import timber.log.Timber;
+
+import static com.pb.criconet.Utills.Global.POST_TYPE_IMAGE;
+import static com.pb.criconet.Utills.Global.POST_TYPE_LINK;
+import static com.pb.criconet.Utills.Global.POST_TYPE_MULTI_IMAGE;
+import static com.pb.criconet.Utills.Global.POST_TYPE_TEXT;
+import static com.pb.criconet.Utills.Global.POST_TYPE_VIDEO;
+import static com.pb.criconet.Utills.Global.POST_TYPE_YOUTUBE;
 
 
 public class UserDetails extends AppCompatActivity implements PostListeners {
@@ -88,6 +102,10 @@ public class UserDetails extends AppCompatActivity implements PostListeners {
     private TextView notfound, tvNumFollowers, tvNumFollowing;
     String from_where = "", feed_id = "";
     Context mContext;
+    Activity mActivity;
+    private String postType = "",postFile;
+    CustomLoaderView loaderView;
+    private String url_link, url_title, url_content, url_image;
 
 
     @Override
@@ -95,6 +113,8 @@ public class UserDetails extends AppCompatActivity implements PostListeners {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.user_details);
         mContext = this;
+        mActivity = this;
+        loaderView = CustomLoaderView.initialize(mContext);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -1095,9 +1115,240 @@ public class UserDetails extends AppCompatActivity implements PostListeners {
         DeleteFeed(id);
     }
 
+
+    @Override
+    public void onEditFeedListener(String id,String text) {
+        //editPostDialog(id,text);
+    }
+
+    public void editPostDialog(String id,String text) {
+
+        Dialog dialog = new Dialog(mActivity);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.edit_post_dialog);
+        final EditText input = (EditText) dialog.findViewById(R.id.editxt);
+        input.setText(text);
+        TextView cancel = dialog.findViewById(R.id.cancel);
+        TextView update = dialog.findViewById(R.id.update);
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+        update.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!Global.validateLength(input.getText().toString(), 5)) {
+                    input.setError(mActivity.getResources().getString(R.string.page_descriptionn));
+                } else {
+                    input.setError(null);
+                    if (!postType.equalsIgnoreCase(POST_TYPE_IMAGE) &&
+                            !postType.equalsIgnoreCase(POST_TYPE_MULTI_IMAGE) &&
+                            !postType.equalsIgnoreCase(POST_TYPE_VIDEO)) {
+                        if (text.startsWith("https://") || text.startsWith("http://")) {
+                            if (text.contains("youtube") || text.contains("youtu.be")) {
+                                postType = POST_TYPE_YOUTUBE;
+                            } else {
+                                postType = POST_TYPE_LINK;
+                                //getURLDetails(text);
+                            }
+                        } else {
+                            postType = POST_TYPE_TEXT;
+                        }
+                    }
+                    if (Global.isOnline(mActivity)) {
+                        PostFeedFinall(id,input.getText().toString().trim());
+                    } else {
+                        Toaster.customToast(getResources().getString(R.string.no_internet));
+                    }
+
+                    dialog.dismiss();
+                }
+            }
+        });
+        dialog.show();
+    }
+    private void getURLDetails(final String url) {
+        progress.show();
+        StringRequest postRequest = new StringRequest(Request.Method.POST, Global.URL + "fetch_url", new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                progress.dismiss();
+                try {
+                    JSONObject jsonObject = new JSONObject(response.toString());
+//                    if (jsonObject.optString("api_text").equalsIgnoreCase("Success")) {
+
+                    postType = POST_TYPE_LINK;
+                    url_title = jsonObject.getString("title");
+                    url_link = jsonObject.getString("url");
+                    url_content = jsonObject.getString("content");
+                    url_image = jsonObject.getJSONArray("images").getString(0);
+
+//                    link_layout.setVisibility(View.VISIBLE);
+//                    link_title.setText(url_title);
+//                    link_content.setText(url_content);
+//                    Glide.with(PagesDetails.this).load(url_image).into(link_image);
+
+//                    } else if (jsonObject.optString("api_text").equalsIgnoreCase("failed")) {
+//                        Global.msgDialog(getActivity(), jsonObject.optJSONObject("errors").optString("error_text"));
+//                    } else {
+//                        Global.msgDialog(getActivity(), "Error in server");
+//                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                progress.dismiss();
+                Global.msgDialog(mActivity, getResources().getString(R.string.error_server));
+//                Global.msgDialog(Login.this, "Internet connection is slow");
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> param = new HashMap<String, String>();
+                param.put("user_id", SessionManager.get_user_id(prefs));
+                param.put("url", url);
+//                param.put("s", "1");
+                param.put("s", SessionManager.get_session_id(prefs));
+                return param;
+            }
+        };
+        int socketTimeout = 30000;
+        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        postRequest.setRetryPolicy(policy);
+        queue.add(postRequest);
+    }
+    public void PostFeedFinall(String postid,String postText) {
+        try {
+            //checkPrivacy();
+            //progress.show();
+            loaderView.showLoader();
+
+            MultipartEntity entity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
+            Timber.e("Chuncked %b", entity.isChunked());
+//            entity.addPart("s", new StringBody("1"));
+            entity.addPart("user_id", new StringBody(SessionManager.get_user_id(prefs)));
+            entity.addPart("s", new StringBody(SessionManager.get_session_id(prefs)));
+            entity.addPart("post_id", new StringBody(postid));
+            entity.addPart("postPrivacy", new StringBody(String.valueOf("postPrivacy"))); //{0: public, 3 : only me}
+
+            switch (postType) {
+                case POST_TYPE_IMAGE:
+                    entity.addPart("postText", new StringBody(postText));
+                    if (!postFile.isEmpty()) {
+                        File file = new File(postFile);
+                        FileBody fileBody = new FileBody(file);
+                        entity.addPart("postFile", fileBody);
+                    }
+                    break;
+                case POST_TYPE_VIDEO:
+                    entity.addPart("postText", new StringBody(postText));
+                    if (!postFile.isEmpty()) {
+                        File file = new File(postFile);
+                        FileBody fileBody = new FileBody(file);
+                        entity.addPart("postVideo", fileBody);
+                        //                        iStream = getActivity().getContentResolver().openInputStream(Uri.parse(postFile));
+//                        InputStream iStream = getActivity().getContentResolver().openInputStream(file.toURI());
+//                        byte[] body = getBytes(iStream);
+//                        entity.addPart("postVideo", new ByteArrayBody(body, "postVideo"));
+                    }
+                    break;
+                case POST_TYPE_MULTI_IMAGE:
+                    entity.addPart("postText", new StringBody(postText));
+                    for (int j = 0; j < images.size(); j++) {
+                        File file = new File(images.get(j));
+                        FileBody fileBody = new FileBody(file);
+                        entity.addPart("postPhotos[" + (j) + "]", fileBody);
+                    }
+                    break;
+                case POST_TYPE_YOUTUBE:
+                    entity.addPart("postText", new StringBody(postText));
+                    break;
+                case POST_TYPE_LINK:
+                    entity.addPart("url_link", new StringBody(url_link));
+                    entity.addPart("url_title", new StringBody(url_title));
+                    entity.addPart("url_content", new StringBody(url_content));
+                    entity.addPart("postText", new StringBody(postText));
+                    entity.addPart("url_image", new StringBody(url_image));
+//                    if (!(url_image.equals(""))) {
+//                        File file = new File(url_image);
+//                        FileBody fileBody = new FileBody(file);
+//                        entity.addPart("url_image", fileBody);
+//                    }
+                    break;
+                case POST_TYPE_TEXT:
+                    // POST_TYPE_TEXT
+                    /*if (!postFile.isEmpty()) {
+                        File file = new File(postFile);
+                        FileBody fileBody = new FileBody(file);
+                        entity.addPart("postFile", fileBody);
+                    }*/
+                    entity.addPart("postText", new StringBody(postText));
+                    break;
+                default:
+                    throw new IllegalStateException("Unexpected value: " + postType);
+            }
+
+            MultipartRequest req = new MultipartRequest(Global.URL + "new_post",
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            try {
+                                //progress.dismiss();
+                                loaderView.hideLoader();
+
+                                Timber.e(response);
+                                JSONObject jsonObject2, jsonObject = new JSONObject(response.toString());
+                                if (jsonObject.optString("api_text").equalsIgnoreCase("success")) {
+//                            JSONArray array = jsonObject.getJSONArray("posts");
+                                    ResetFeed();
+//                            Global.msgDialog(getActivity(), jsonObject.optString("msg"));
+                                } else if (jsonObject.optString("api_text").equalsIgnoreCase("failed")) {
+                                    Global.msgDialog(mActivity, jsonObject.optJSONObject("errors").optString("error_text"));
+                                } else {
+                                    Global.msgDialog(mActivity, getResources().getString(R.string.error_server));
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            //progress.dismiss();
+                            loaderView.hideLoader();
+                            error.printStackTrace();
+                        }
+                    },
+                    entity);
+
+            Log.d("PostEntity",entity.toString());
+
+
+            int socketTimeout = 50000;
+            RetryPolicy policy = new DefaultRetryPolicy(socketTimeout,
+                    DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                    DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+            req.setRetryPolicy(policy);
+            queue.add(req);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
     @Override
     public void onProfileClickListener(NewPostModel post) {
     }
+
 
     @Override
     public void onBackPressed() {

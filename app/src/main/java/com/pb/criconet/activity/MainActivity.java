@@ -170,7 +170,9 @@ public class MainActivity extends BaseActivity {
 
 
         if (SessionManager.get_profiletype(prefs).equalsIgnoreCase("coach")) {
-            //text.add(new Drawer(getString(R.string.avility), false, R.drawable.ic_page));
+
+        }else{
+            text.add(new Drawer(getString(R.string.join_as_coach),false, R.drawable.ic_sports_handball_black_24dp));
         }
         if(SessionManager.get_is_ambassador(prefs).equalsIgnoreCase("1")){
         }else{
@@ -396,9 +398,15 @@ public class MainActivity extends BaseActivity {
         }
         if (text.get(position).getTitle().equalsIgnoreCase("Pavilion")) {
             navigationController.navigateToHomeFragment();
-        } else if (text.get(position).getTitle().equalsIgnoreCase("Slot")) {
+        }else if (text.get(position).getTitle().equalsIgnoreCase("Register as an e-Coach")) {
+           startActivity(new Intent(mActivity,CoachRegistrationActivity.class).putExtra("FROM","3"));
+            finish();
+        }
+
+        else if (text.get(position).getTitle().equalsIgnoreCase("Slot")) {
             navigationController.navigatoMenuFragment(true);
-        } else if(text.get(position).getTitle().equalsIgnoreCase("Refer & Rewards")){
+        }
+        else if(text.get(position).getTitle().equalsIgnoreCase("Refer & Rewards")){
             startActivity(new Intent(mActivity,ReferralIntroActivity.class));
             finish();
 
@@ -480,14 +488,14 @@ public class MainActivity extends BaseActivity {
                         e.printStackTrace();
                     }
                 }
-                else if (text.get(position).getTitle().equalsIgnoreCase(pageURL.getCarrer().getString("title"))) {
-                    try {
-                        startActivity(new Intent(mActivity, WebViewActivity.class).putExtra("URL", pageURL.getCarrer().getString("url")).putExtra("title", pageURL.getCarrer().getString("title")));
-                        finish();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
+//                else if (text.get(position).getTitle().equalsIgnoreCase(pageURL.getCarrer().getString("title"))) {
+//                    try {
+//                        startActivity(new Intent(mActivity, WebViewActivity.class).putExtra("URL", pageURL.getCarrer().getString("url")).putExtra("title", pageURL.getCarrer().getString("title")));
+//                        finish();
+//                    } catch (JSONException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
                 else if (text.get(position).getTitle().equalsIgnoreCase(pageURL.getContact_us().getString("title"))) {
                     startActivity(new Intent(mActivity, WebViewActivity.class).putExtra("URL", pageURL.getContact_us().getString("url")).putExtra("title", pageURL.getContact_us().getString("title")));
                     finish();

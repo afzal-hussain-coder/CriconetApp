@@ -211,33 +211,6 @@ public class FragmentEditProfile extends Fragment implements AdapterView.OnItemS
             }
         });
 
-
-
-//        galary.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Fragment fragment = new PhotosVideos();
-//                Bundle bundle = new Bundle();
-//                bundle.putString("type", "photoo.jpg.jpg");
-//                bundle.putString("user_id", SessionManager.get_user_id(prefs));
-//                fragment.setArguments(bundle);
-//                getFragmentManager().beginTransaction().replace(R.id.frame_container, fragment).addToBackStack(null).commit();
-//            }
-//        });
-//
-//        imageView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//                Fragment fragment = new PhotosVideos();
-//                Bundle bundle = new Bundle();
-//                bundle.putString("type", "video");
-//                bundle.putString("user_id", SessionManager.get_user_id(prefs));
-//                fragment.setArguments(bundle);
-//                getFragmentManager().beginTransaction().replace(R.id.frame_container, fragment).addToBackStack(null).commit();
-//            }
-//        });
-
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

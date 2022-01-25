@@ -70,7 +70,7 @@
     <string name="change_password">Change Password</string>
     <string name="setting">Settings</string>
     <string name="dob">D.O.B</string>
-    <string name="phone_no">Enter Phone No.</string>
+    <string name="phone_no">Enter Phone No*</string>
     <string name="phone">Phone Number</string>
     <string name="privacy_setting">Privacy Setting</string>
     <string name="deactivate_account">Deactivate Account</string>
@@ -97,16 +97,22 @@
         <item>Female</item>
         <item>Other</item>
     </string-array>
+    <string-array name="select_language" translatable="false">
+        <item>Select Language You Speak*</item>
+        <item>Male</item>
+        <item>Female</item>
+        <item>Other</item>
+    </string-array>
 
     <string-array name="country" translatable="false">
-        <item>Country</item>
+        <item>Country*</item>
     </string-array>
     <string-array name="state" translatable="false">
-        <item>State</item>
+        <item>State*</item>
     </string-array>
 
     <string-array name="city" translatable="false">
-        <item>City</item>
+        <item>City*</item>
     </string-array>
 
     <string-array name="privacy2" translatable="false">
@@ -130,9 +136,9 @@
     <string name="frame_rate_value_with_unit" translatable="false">%d fps</string>
 
     <string name="coach_profile_title">Coach Profile Title*</string>
-    <string name="total_experience">Total Experience</string>
-    <string name="any_other_information">Any Other Information</string>
-    <string name="amount_session_30_mins_of_online_e_coaching">Amount/Session * (30 mins of online e-coaching)</string>
+    <string name="total_experience">Total Experience*</string>
+    <string name="any_other_information">Other Information</string>
+    <string name="amount_session_30_mins_of_online_e_coaching">Amount/Session * (45 minutes of online e-coaching)</string>
     <string name="save_amp_continue"><![CDATA[Save & Continue]]></string>
     <string name="choose_your_specialities">Choose your specialities*</string>
 
@@ -241,8 +247,8 @@
     <string name="sorting_by_price">Shorting By Price:</string>
     <string name="cancelled">Cancelled</string>
     <string name="View_profile">View Profile</string>
-    <string name="change_profile_pic">Changed his profile picture</string>
-    <string name="change_profile_picc">Changed her profile picture</string>
+    <string name="change_profile_pic">Changed their profile picture</string>
+    <string name="change_profile_picc">Changed their profile picture</string>
     <string name="language">Language</string>
     <string name="certificate">Certificate</string>
     <string name="enter_coupon_code">Enter coupon code</string>
@@ -258,7 +264,7 @@
     <string name="enter_your_full_address">Enter your address</string>
     <string name="address">Address</string>
     <string name="addresss">Address*</string>
-    <string name="pin_code">Pin Code</string>
+    <string name="pin_code">Pin Code*</string>
     <string name="submit_details">Submit Details</string>
     <string name="enter_your_pin">Enter pin code</string>
     <string name="enter_alterenate_mobile_no">Enter alternate mobile no.</string>
@@ -279,6 +285,7 @@
     <string name="record_video">Record Video</string>
     <string name="upload_video">Upload Video</string>
     <string name="recorded_video">Recorded Video</string>
+    <string name="join_as_coach">Register as an e-Coach</string>
 
     <!--//new.-->
     <string name="double_click">Double tap for full screen</string>
@@ -292,7 +299,7 @@
     <string name="enter_full_name">Please Enter Full Name</string>
     <string name="enter_address">Please Enter Address</string>
     <string name="limit_character">Address must have min 5 character</string>
-    <string name="enter_pincode">Please Enter Pin Code</string>
+    <string name="enter_pincode">Enter Pin Code</string>
     <string name="enter_valid_pin_code">Please Enter Valid Pin Code</string>
     <string name="enter_alternate_number">Please enter alternate number</string>
     <string name="enter_valid_alternate_number">Please enter valid alternate number</string>
@@ -397,6 +404,7 @@
     <string name="Please_select_date_first">Please select date first.</string>
     <string name="Please_select_time_first">Please select time first.</string>
     <string name="Enter_Name">Enter Name</string>
+    <string name="Enter_Middle_Name_at_least_3_character">Enter Middle Name (at least 3 character)</string>
     <string name="Enter_First_Name_at_least_3_character">Enter First Name (at least 3 character)</string>
     <string name="Enter_Last_Name_at_least_3_character">Enter Last Name (at least 3 character)</string>
     <string name="Enter_EmailId">Enter EmailId</string>
@@ -431,13 +439,16 @@
     <string name="report">Report</string>
     <string name="page_title">Page Title*</string>
     <string name="page_description">Page Description*</string>
+    <string name="page_descriptionn">Enter Post Description*</string>
     <string name="company_name">Company Name*</string>
     <string name="user_name">USER NAME</string>
-    <string name="first_name">FIRST NAME</string>
+    <string name="first_name">FIRST NAME*</string>
     <string name="last_name">LAST NAME</string>
+    <string name="first_namee">First Name*</string>
+    <string name="last_namee">Last Name*</string>
     <string name="click_to_edit_profile">Click to Edit Profile</string>
     <string name="time_slote">Time Slot</string>
-    <string name="save_continue"><![CDATA[Save &amp; Continue]]></string>
+    <string name="save_continue">Save &amp; Continue</string>
     <string name="type_here_and_click_the_post_button">Type here and click the post button</string>
     <string name="match_not_found">Match Not Found</string>
     <string name="send_feedback">Send Feedback</string>
@@ -492,6 +503,41 @@
     <string name="welcome_to_criconet_family">Welcome to Criconet Family</string>
     <string name="view_form">View Form</string>
     <string name="view_ambs_prog">View Ambassador Program</string>
+    <string name="Delete">Delete</string>
+    <string name="editpost">EditPost</string>
+    <string name="update">Update</string>
+    <string name="middle_name">Middle Name</string>
+    <string name="enter_land_mark">Enter A Landmark</string>
+    <string name="select_language">Select Language</string>
+    <string name="enter_landmark">Enter Landmark</string>
+    <string name="Select_Language_You_Speak">Select Language You Speak*</string>
+    <string name="Enter_middle_name">Enter Middle Name</string>
+    <string name="Enter_Last_Name">Enter Last name (should be 3 characters to 30 characters)</string>
+    <string name="select_state">Select State</string>
+    <string name="select_city">Select City</string>
+    <string name="what_you_teach">What You Teach</string>
+    <string name="Skills_Student_Learns">Skills Student Learns</string>
+    <string name="Upload_any_Certification">Upload any Certification</string>
+    <string name="upload_certificate">Click to Upload Certificate</string>
+    <string name="by_signing_of">By signing up,you agree to our</string>
+    <string name="tearms_of_use">Terms of Use</string>
+    <string name="privacy_policy_data">Privacy Policy,Data Policy and Cookies Policy</string>
+    <string name="certificate_title">Certificate Title</string>
+    <string name="Please_choose_your_specialities">Please choose your specialities</string>
+    <string name="Fill_your_profile_title">Fill your profile title</string>
+    <string name="Select_year_and_month">Select year and month</string>
+    <string name="Enter_Amount_session">Enter Amount/Session</string>
+    <string name="Please_check_tearms">Please check our Terms/Policy if you want to proceed</string>
+    <string name="remove_certificate">Remove Certificate</string>
+    <string name="add_profile_picture">Add Profile Picture</string>
+    <string name="Enter_First_Name">Enter First Name (should be 3 characters to 30 characters)</string>
+    <string name="Select_Country">Select Country</string>
+    <string name="Enter_your_address">Enter your address (should be 3 characters to 30 characters)</string>
+    <string name="Enter_your_phone_number">Enter your phone number</string>
+    <string name="Upload_profile_picture">Upload profile picture</string>
+    <string name="Select_City">Select City</string>
+    <string name="Select_State">Select State</string>
+    <string name="you_can_only_select_five_item">You can only select 5 best languages</string>
 
 
 </resources>

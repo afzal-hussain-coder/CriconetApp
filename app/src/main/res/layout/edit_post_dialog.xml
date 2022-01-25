@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="10dp">
+
+    <LinearLayout
+        android:id="@+id/ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:minLines="1"
+            android:visibility="visible"
+            android:text="@string/editpost"
+            android:textColor="@color/bckground"
+            android:fontFamily="@font/opensans_bold"
+            android:textSize="@dimen/_9sdp"
+            app:drawableLeftCompat="@drawable/ic_edit_black_24dp" />
+
+        <EditText
+            android:id="@+id/editxt"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_70sdp"
+            android:hint="@string/editpost"
+            android:inputType="textMultiLine"
+            android:scrollbars="vertical"
+            android:cursorVisible="true"
+            android:gravity="top"
+            android:background="@drawable/edit_text_bg"
+            android:padding="@dimen/_5sdp"
+            android:fontFamily="@font/opensans_semibold"
+            android:textColor="@color/edit_text_color_hint"
+            android:textColorHint="@color/edit_text_color_hint"
+            android:textSize="@dimen/_10sdp" />
+    </LinearLayout>
+
+<!--    <TextView-->
+<!--        android:id="@+id/cen"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+
+<!--        android:layout_centerHorizontal="true"-->
+<!--        android:layout_marginLeft="10dp"-->
+<!--        android:layout_marginRight="10dp"-->
+<!--        android:gravity="center"-->
+<!--        android:visibility="invisible"-->
+<!--        android:text=""-->
+<!--        android:textColor="#000"-->
+<!--        android:textSize="18sp"-->
+<!--        android:textStyle="bold" />-->
+
+    <TextView
+        android:id="@+id/update"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ll"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="@dimen/_15sdp"
+        android:layout_marginEnd="@dimen/_10sdp"
+        app:drawableLeftCompat="@drawable/ic_edit_black_24dp"
+        android:drawableTint="@color/white"
+        android:background="@color/colorPrimary"
+        android:gravity="center"
+        android:padding="@dimen/_5sdp"
+        android:text="@string/update"
+        android:textAllCaps="true"
+        android:fontFamily="@font/opensans_semibold"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_10sdp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ll"
+        android:layout_marginTop="@dimen/_15sdp"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_alignParentStart="true"
+        android:gravity="center"
+        android:background="@color/grey"
+        android:padding="@dimen/_5sdp"
+        android:text="cancel"
+        android:textAllCaps="true"
+        android:fontFamily="@font/opensans_semibold"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_10sdp"
+        />
+
+
+</RelativeLayout>

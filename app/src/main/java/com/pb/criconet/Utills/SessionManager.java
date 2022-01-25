@@ -43,6 +43,7 @@ public class SessionManager {
     private static String address = "address";
     private static String pinCode = "pinCode";
     private static String country = "country";
+    private static String language = "language";
     private static String states = "states";
     private static String city = "city";
     private static String stateid = "state_id";
@@ -370,6 +371,13 @@ public class SessionManager {
 
     public static String getCity(SharedPreferences prefs) {
         return prefs.getString(city, "");
+    }
+    public static void saveLanguage(SharedPreferences prefs, String value) {
+        SessionManager.savePreference(prefs, language, value);
+    }
+
+    public static String getLanguage(SharedPreferences prefs) {
+        return prefs.getString(language, "");
     }
 
     public static void saveStateId(SharedPreferences prefs, String value) {

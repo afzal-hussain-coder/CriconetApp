@@ -124,7 +124,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="-5dp"
                 android:fontFamily="@font/opensans_semibold"
-                android:text="200"
+                android:text="5000"
                 android:textAllCaps="true"
                 android:layout_alignParentEnd="true"
                 android:textColor="@color/gray"

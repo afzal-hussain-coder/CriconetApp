@@ -1120,6 +1120,9 @@ public class HomeAdapter extends AAH_VideosAdapter {
                     case R.id.menu_delete:
                         listeners.onDeleteFeedListener(feed.getId());
                         return true;
+                    /*case R.id.menu_edit:
+                        listeners.onEditFeedListener(feed.getId(),feed.getPostText());
+                        return true;*/
                     default:
                         return false;
                 }

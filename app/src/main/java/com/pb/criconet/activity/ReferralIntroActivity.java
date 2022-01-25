@@ -10,6 +10,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -181,7 +182,7 @@ public class ReferralIntroActivity extends AppCompatActivity {
                     loaderView.hideLoader();
                     sendCode(msg,imageUri);
                 }
-            },10000);
+            },20000);
 
         });
 
@@ -231,8 +232,8 @@ public class ReferralIntroActivity extends AppCompatActivity {
                             Uri shortLink = Objects.requireNonNull(task.getResult()).getShortLink();
                             Uri flowchartLink = task.getResult().getPreviewLink();
 
-                            Log.e("DynamicLink", "shortLink: " + shortLink + System.lineSeparator());
-                            Log.e("DynamicLink", "flowChartLink: " + flowchartLink + System.lineSeparator());
+                           // Log.e("DynamicLink", "shortLink: " + shortLink + System.lineSeparator());
+                            //Log.e("DynamicLink", "flowChartLink: " + flowchartLink + System.lineSeparator());
 
                             try{
                                 String msg = shortLink + "?code=" + code;
@@ -254,7 +255,6 @@ public class ReferralIntroActivity extends AppCompatActivity {
                 });
     }
     private void sendCode(String message, Uri bitmap){
-
         Intent share = new Intent(Intent.ACTION_SEND);
         share.setType("image/*");
         Intent shareIntent = new Intent();
@@ -265,6 +265,16 @@ public class ReferralIntroActivity extends AppCompatActivity {
         shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         startActivity(Intent.createChooser(shareIntent, "send"));
 
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                ContentResolver contentResolver = getContentResolver ();
+                if (imageUri != null) {
+                    contentResolver.delete (imageUri,null ,null );
+                }
+
+            }
+        },30000);
     }
 
     public Drawable getThumb(int progress) {
@@ -320,7 +330,6 @@ public class ReferralIntroActivity extends AppCompatActivity {
 
                 shareDeepLink(dynamicLinkUri.toString(),result);
                 // Notify user that an error occurred while downloading image
-
             }
         }
     }

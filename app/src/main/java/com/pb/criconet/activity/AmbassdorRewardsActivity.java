@@ -10,6 +10,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -181,6 +182,7 @@ public class AmbassdorRewardsActivity extends AppCompatActivity {
 
 
         fl_referFriend = findViewById(R.id.fl_referFriend);
+
         fl_referFriend.setOnClickListener(view -> {
             loaderView.showLoader();
             generate_new_ref="1";
@@ -190,12 +192,11 @@ public class AmbassdorRewardsActivity extends AppCompatActivity {
                     loaderView.hideLoader();
                     sendCode(msg,imageUri);
                 }
-            },10000);
+            },20000);
 
         });
 
     }
-
 
     private void shareDeepLink(String deepLink,Bitmap bitmap) {
 
@@ -241,12 +242,10 @@ public class AmbassdorRewardsActivity extends AppCompatActivity {
                             Uri shortLink = Objects.requireNonNull(task.getResult()).getShortLink();
                             Uri flowchartLink = task.getResult().getPreviewLink();
 
-                            Log.e("DynamicLink", "shortLink: " + shortLink + System.lineSeparator());
-                            Log.e("DynamicLink", "flowChartLink: " + flowchartLink + System.lineSeparator());
+                            //Log.e("DynamicLink", "shortLink: " + shortLink + System.lineSeparator());
+                            //Log.e("DynamicLink", "flowChartLink: " + flowchartLink + System.lineSeparator());
 
                             try{
-
-
                                 String msg = shortLink + "?code=" + code;
                                 tv_copy.setText(msg);
                                 iv_copy.setOnClickListener(view -> {
@@ -256,8 +255,6 @@ public class AmbassdorRewardsActivity extends AppCompatActivity {
                                         copyToClipBoard();
                                     }
                                 });
-
-
 
                             }catch (Exception e){
                                 e.printStackTrace();
@@ -349,6 +346,17 @@ public class AmbassdorRewardsActivity extends AppCompatActivity {
             shareIntent.setType("image/*");
             shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             startActivity(Intent.createChooser(shareIntent, "send"));
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                ContentResolver contentResolver = getContentResolver ();
+                if (imageUri != null) {
+                    contentResolver.delete (imageUri,null ,null );
+                }
+
+            }
+        },30000);
 
     }
 

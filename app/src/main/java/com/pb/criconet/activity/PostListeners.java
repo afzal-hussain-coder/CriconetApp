@@ -17,4 +17,5 @@ public interface PostListeners {
     void onReportFeedListener(String id,String message);
 
     void onDeleteFeedListener(String id);
+    void onEditFeedListener(String id,String text);
 }

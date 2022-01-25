@@ -54,7 +54,7 @@ public class FragmentAvility extends Fragment implements TimeAdapter.timeSelect{
     private CalendarView datePicker;
     private String year;
     private String month;
-    private TextView btnCalender;
+    private TextView btn_login;
     private String dateGot="";
     private StringBuilder multiDate;
     private StringBuilder multiTime;
@@ -77,7 +77,7 @@ public class FragmentAvility extends Fragment implements TimeAdapter.timeSelect{
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        btnCalender =  rootView.findViewById(R.id.btnCalender);
+        btn_login =  rootView.findViewById(R.id.btn_login);
         datePicker =  rootView.findViewById(R.id.calendarView);
         recyclerView = rootView.findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));
@@ -130,7 +130,7 @@ public class FragmentAvility extends Fragment implements TimeAdapter.timeSelect{
             getDateSlote(dateGot);
         });
 
-        btnCalender.setOnClickListener(view -> {
+        btn_login.setOnClickListener(view -> {
             multiDate=new StringBuilder();
             multiTime=new StringBuilder();
 
@@ -166,7 +166,7 @@ public class FragmentAvility extends Fragment implements TimeAdapter.timeSelect{
                 if (modelArrayList.getApiStatus().equalsIgnoreCase("200")) {
                     recyclerView.setAdapter(new TimeAdapter(getActivity(), modelArrayList.getData(), FragmentAvility.this::getSlotId));
                 } else {
-                    Toast.makeText(getActivity(), modelArrayList.getErrors().getErrorText(), Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getActivity(), modelArrayList.getErrors().getErrorText(), Toast.LENGTH_SHORT).show();
                 }
             }
         }, new Response.ErrorListener() {
@@ -208,9 +208,9 @@ public class FragmentAvility extends Fragment implements TimeAdapter.timeSelect{
                 Gson gson = new Gson();
                 BookCoach modelArrayList = gson.fromJson(response, BookCoach.class);
                 if (modelArrayList.getApiStatus().equalsIgnoreCase("200")) {
-                    Toast.makeText(getActivity(), "Success", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getActivity(), "Success", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(getActivity(), modelArrayList.getErrors().getErrorText(), Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getActivity(), modelArrayList.getErrors().getErrorText(), Toast.LENGTH_SHORT).show();
                 }
             }
         }, new Response.ErrorListener() {
@@ -263,7 +263,7 @@ public class FragmentAvility extends Fragment implements TimeAdapter.timeSelect{
                             }
                         }
                     } else {
-                        Toast.makeText(getActivity(), modelArrayList.getErrors().getErrorText(), Toast.LENGTH_SHORT).show();
+                       // Toast.makeText(getActivity(), modelArrayList.getErrors().getErrorText(), Toast.LENGTH_SHORT).show();
                     }
                 }
 

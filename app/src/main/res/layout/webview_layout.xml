@@ -9,14 +9,14 @@
         android:id="@+id/progressBar"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="fill_parent"
-        android:layout_height="5dp" />
+        android:layout_height="@dimen/_5sdp" />
 
     <WebView
         android:id="@+id/webView1"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_below="@+id/progressBar"
-        android:paddingTop="5dp" />
+        android:paddingTop="@dimen/_5sdp" />
 
     <TextView
         android:id="@+id/notfound"
@@ -26,7 +26,7 @@
         android:gravity="center"
         android:text="@string/sorry_no_network_found"
         android:textColor="@color/black"
-        android:textSize="18sp"
+        android:textSize="@dimen/_14sdp"
         android:visibility="gone" />
 
 </RelativeLayout>

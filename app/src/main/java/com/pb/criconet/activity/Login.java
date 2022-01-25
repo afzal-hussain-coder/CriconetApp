@@ -848,9 +848,33 @@ public class Login extends AppCompatActivity {
                                 SessionManager.save_profiletype(prefs, userData.getProfile_type());
                                 SessionManager.save_mobile_verified(prefs, userData.getIs_mobile_verified());
 
+                                if(jsonData.has("ambassadorProfile")) {
+                                    JSONObject ambassadorProfile = jsonData.optJSONObject("ambassadorProfile");
+
+                                    if (ambassadorProfile.length() > 0) {
+                                        SessionManager.save_is_ambassador(prefs, "1");
+                                        SessionManager.save_is_amb_name(prefs, ambassadorProfile.optString("name"));
+                                        SessionManager.save_is_amb_fullname(prefs, ambassadorProfile.optString("full_name"));
+                                        SessionManager.save_is_amb_email(prefs, ambassadorProfile.optString("email"));
+                                        SessionManager.save_mobile(prefs, ambassadorProfile.optString("phone_number"));
+                                        SessionManager.save_is_amb_college(prefs, ambassadorProfile.optString("school_college_name"));
+                                        SessionManager.save_is_amb_highestQ(prefs, ambassadorProfile.optString("height_qualification"));
+                                        SessionManager.save_is_ambs_have_you_org_event_flag(prefs, ambassadorProfile.optString("have_you_org_event_flag"));
+                                        SessionManager.save_is_ambs_have_you_org_event_txt(prefs, ambassadorProfile.optString("have_you_org_event_txt"));
+                                        SessionManager.save_is_ambs_innovative_thing(prefs, ambassadorProfile.optString("innovative_thing"));
+                                        SessionManager.save_is_ambs_how_many_hrs_per_week(prefs, ambassadorProfile.optString("how_many_hrs_per_week"));
+                                        SessionManager.save_is_ambs_passionate_thing(prefs, ambassadorProfile.optString("passionate_thing"));
+                                        SessionManager.save_is_ambs_do_you_want_campus_ambassdor(prefs, ambassadorProfile.optString("do_you_want_campus_ambassdor"));
+                                        SessionManager.save_is_ambs_thing_you_are_know_criconet(prefs, ambassadorProfile.optString("thing_you_are_know_criconet"));
+                                    } else {
+                                        SessionManager.save_is_ambassador(prefs, "0");
+                                    }
+
+                                }
+
                                 if(userData.getProfile_type().equalsIgnoreCase("coach")){
-                                    JSONObject  jsonObject1= jsonData.getJSONObject("coachProfile");
-                                    SessionManager.save_coach_id(prefs, jsonObject1.getString("coach_id"));
+                                    JSONObject  jsonObject1= jsonData.optJSONObject("coachProfile");
+                                    SessionManager.save_coach_id(prefs, jsonObject1.optString("coach_id"));
                                 }else{
                                     SessionManager.save_coach_id(prefs,"");
                                 }

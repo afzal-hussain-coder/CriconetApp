@@ -63,18 +63,18 @@ public class Global {
 
     public static final String FILE_UPLOAD_URL = "https://criconetonline.com/app_api.php?type=new_post";
     /*for debug*/
-    //public static final String URL = "https://stage.criconetonline.com/app_api.php?type=";
-    //public static final String URL_CHAT = "https://stage.criconetonline.com";
-    //public static String GameURL = "https://criconetonline.com/cricket_js/index.php?";
+    public static final String URL = "https://stage.criconetonline.com/app_api.php?type=";
+    public static final String URL_CHAT = "https://stage.criconetonline.com";
+    public static String GameURL = "https://criconetonline.com/cricket_js/index.php?";
 
     public static String GET_CAMPUS_AMBASSADOAR = "https://www.criconet.com/campus-ambassador?rst=app";
 
 
 
     /*for live*/
-    public static final String URL = "https://www.criconet.com/app_api.php?type=";
-    public static final String URL_CHAT = "https://www.criconet.com";
-    public static String GameURL ="https://www.criconet.com/cricket_js/index.php?";
+   // public static final String URL = "https://www.criconet.com/app_api.php?type=";
+   // public static final String URL_CHAT = "https://www.criconet.com";
+   // public static String GameURL ="https://www.criconet.com/cricket_js/index.php?";
     
     // for video upload testing..
     //public static final String URL = "https://www.criconet.com/app_api.php?type=";
@@ -110,6 +110,13 @@ public class Global {
     public static final String GET_BOOKING_DETAILS = "get_booking_details";
     public static final String GET_REFERRAL_CODE = "generate_referal_code";
     public static final String GET_CAMPUS_AMBASSADOR = "reg_campus_ambassador";
+    public static final String GET_LANGUAGE = "get_languages";
+    public static final String UPDATE_COACH_PERSONAL_INFO = "update_personal_info";
+    public static final String GET_SPECIALITIES_CATEGORY = "get_specialities_cat";
+    public static final String ADD_COACH_QUALIFICATION = "update_coach_spec_exp";
+    public static final String REMOVE_CERTIFICATE = "remove_certificate";
+
+
 
     public static final int TYPE_VIDEO = 0,
             TYPE_IMAGE = 1, TYPE_MULTI_IMAGE = 2,
@@ -143,6 +150,13 @@ public class Global {
 
     public static boolean validateLength(String name, int len) {
         return name.length() >= len;
+    }
+    public static boolean validateLengthofCoachRegister(String name) {
+        if (name.length() < 3 || name.length()>30) {
+            name.length();
+            return false;
+        }
+        return true;
     }
 
     public static boolean password(String firstrname) {
@@ -185,6 +199,21 @@ public class Global {
     }
 
     public static void msgDialog(Activity ac, String msg) {
+        try {
+            AlertDialog.Builder alertbox = new AlertDialog.Builder(ac);
+            alertbox.setTitle(ac.getResources().getString(R.string.app_name));
+            alertbox.setMessage(Html.fromHtml(msg));
+            alertbox.setPositiveButton(ac.getResources().getString(R.string.ok),
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface arg0, int arg1) {
+
+                        }
+                    });
+            alertbox.show();
+        } catch (Exception e) {
+        }
+    }
+    public static void msgDialogg(Context ac, String msg) {
         try {
             AlertDialog.Builder alertbox = new AlertDialog.Builder(ac);
             alertbox.setTitle(ac.getResources().getString(R.string.app_name));
@@ -758,5 +787,4 @@ public class Global {
         String currentDateandTime = sdf.format(new Date());
         return currentDateandTime;
     }
-
 }

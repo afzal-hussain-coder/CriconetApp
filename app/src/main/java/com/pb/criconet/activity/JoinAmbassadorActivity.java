@@ -413,42 +413,6 @@ public class JoinAmbassadorActivity extends AppCompatActivity {
                                         SessionManager.save_is_ambassador(prefs,"0");
                                     }
                                 }
-                                //is_contact_verify="0";
-
-
-
-//                                SessionManager.save_user_id(prefs, jsonObject.getString("user_id"));
-//                                SessionManager.save_session_id(prefs, jsonObject.getString("session_id"));
-//
-                             //  if (jsonObject.has("data")) {
-//                                    JSONObject jsonObjectData = jsonObject.getJSONObject("data");
-//                                    is_contact_verify = jsonObjectData.getString("is_mobile_verified");
-//                                    SessionManager.save_name(prefs, jsonObjectData.getString("username"));
-//                                    SessionManager.save_emailid(prefs, jsonObjectData.getString("email"));
-//                                    SessionManager.savePhone(prefs, jsonObjectData.getString("phone_number"));
-//                                    SessionManager.savePhoneCode(prefs, jsonObjectData.getString("phone_code"));
-//                                    SessionManager.save_sex(prefs, jsonObjectData.getString("gender"));
-//                                    SessionManager.save_image(prefs, jsonObjectData.getString("avatar"));
-//                                    SessionManager.save_cover(prefs, jsonObjectData.getString("cover"));
-//                                    SessionManager.save_mobile_verified(prefs, jsonObjectData.getString("is_mobile_verified"));
-//
-//
-//                                    if (jsonObjectData.getString("profile_type") == null) {
-//
-//                                        SessionManager.save_profiletype(prefs, jsonObjectData.getString("profile_type"));
-//                                    } else {
-//                                        SessionManager.save_profiletype(prefs, jsonObjectData.getString("profile_type"));
-//                                    }
-//
-//                                    SessionManager.save_check_login(prefs, true);
-//
-//                                    edit_username_red_bg.setText("");
-//                                    edit_email_red_bg.setText("");
-//                                    edit_password_red_bg.setText("");
-//                                    edit_username_phone.setText("");
-//                                    EmailOtpDialog(phoneNumber);
-//                                }
-
 
                             } else if (jsonObject.optString("api_text").equalsIgnoreCase("failed")) {
                                 Toaster.customToast(jsonObject.optJSONObject("errors").optString("error_text"));
@@ -466,7 +430,6 @@ public class JoinAmbassadorActivity extends AppCompatActivity {
                         error.printStackTrace();
                         loaderView.hideLoader();
                         Toaster.customToast(getResources().getString(R.string.socket_timeout));
-//                Global.msgDialog(Signup.this, "Internet connection is slow");
                     }
                 }
         ) {
@@ -493,7 +456,7 @@ public class JoinAmbassadorActivity extends AppCompatActivity {
                 if(From.equalsIgnoreCase("1")){
                     param.put("edit_profile", "1");
                 }else{
-                    param.put("edit_profile ", "0");
+                    param.put("edit_profile", "0");
                 }
                 System.out.println("data   " + param);
                 return param;

@@ -16,8 +16,8 @@ android {
         applicationId "com.pb.criconet"
         minSdkVersion 21
         targetSdkVersion 31
-        versionCode 30
-        versionName "1.1.7"
+        versionCode 33
+        versionName "1.1.9"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -177,11 +177,6 @@ dependencies {
     implementation project(':libagorartc')
     implementation 'com.github.marcinmoskala:VideoPlayView:0.0.2'
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.4'
-
-
-
-
-
 
 
 }

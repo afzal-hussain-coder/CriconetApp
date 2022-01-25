@@ -110,6 +110,7 @@ public class ServerNotificationService extends FirebaseMessagingService {
 
             PendingIntent contentIntent = PendingIntent.getActivity(this, (int) (Math.random() * 100), intent, 0);
 
+
             int currentapiVersion = Build.VERSION.SDK_INT;
             if (currentapiVersion >= Build.VERSION_CODES.LOLLIPOP){
                 currentapiVersion = R.drawable.app_logo2;

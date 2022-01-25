@@ -7,6 +7,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class UserData implements Parcelable {
 
@@ -226,9 +227,9 @@ public class UserData implements Parcelable {
             b.count_followers = jsonObject.optString("count_followers");
             b.count_follow_request = jsonObject.optString("count_follow_request");
             b.count_following = jsonObject.optString("count_following");
-//            b.newUserModel = NewUserModel.fromJson(jsonObject.optJSONArray("followers_users"));
-//            b.following_users = NewUserModel.fromJson(jsonObject.optJSONArray("following_users"));
-//            b.follow_request_users = NewUserModel.fromJson(jsonObject.optJSONArray("follow_request_users"));
+           b.newUserModel = NewUserModel.fromJson(Objects.requireNonNull(jsonObject.optJSONArray("followers_users")));
+           b.following_users = NewUserModel.fromJson(Objects.requireNonNull(jsonObject.optJSONArray("following_users")));
+           b.follow_request_users = NewUserModel.fromJson(Objects.requireNonNull(jsonObject.optJSONArray("follow_request_users")));
 
 
         } catch (Exception e) {
@@ -259,6 +260,7 @@ public class UserData implements Parcelable {
 
         return modeles;
     }
+
 
     public final static Parcelable.Creator<UserData> CREATOR = new Creator<UserData>() {
         @SuppressWarnings({"unchecked"})

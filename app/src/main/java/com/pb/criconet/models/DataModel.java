@@ -16,7 +16,7 @@ public class DataModel {
         @Expose
         private String title;
 
-        private boolean isCheck;
+        private boolean isCheck=false;
 
         public String getId() {
             return id;

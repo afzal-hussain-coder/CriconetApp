@@ -33,9 +33,7 @@ public class ButtonAdapter extends RecyclerView.Adapter<ButtonAdapter.ViewHolder
         DataModel.Datum items;
 
         public ViewHolder(View v) {
-
             super(v);
-
             v.setOnClickListener(this);
             tvButton = (TextView) v.findViewById(R.id.tvButton);
         }
@@ -44,9 +42,11 @@ public class ButtonAdapter extends RecyclerView.Adapter<ButtonAdapter.ViewHolder
             this.items = item;
             tvButton.setText(items.getTitle());
             if(item.isCheck()){
-                tvButton.setBackground(mContext.getResources().getDrawable(R.drawable.round_corner_red));
+                tvButton.setBackground(mContext.getResources().getDrawable(R.drawable.rounded_bg_red));
+                tvButton.setTextColor(mContext.getResources().getColor(R.color.white));
             }else {
                 tvButton.setBackground(mContext.getResources().getDrawable(R.drawable.rounded_bg));
+                tvButton.setTextColor(mContext.getResources().getColor(R.color.dim_grey));
             }
         }
 
@@ -54,14 +54,17 @@ public class ButtonAdapter extends RecyclerView.Adapter<ButtonAdapter.ViewHolder
         @Override
         public void onClick(View view) {
             if (mListener != null) {
-                mListener.onItemClick(mValues);
-                if(mValues.get(getAdapterPosition()).isCheck()) {
-                    mValues.get(getAdapterPosition()).setCheck(false);
+
+                if(mValues.get(getAbsoluteAdapterPosition()).isCheck()) {
+                    mValues.get(getAbsoluteAdapterPosition()).setCheck(false);
+
                     notifyDataSetChanged();
                 }else {
-                    mValues.get(getAdapterPosition()).setCheck(true);
+                    mValues.get(getAbsoluteAdapterPosition()).setCheck(true);
+                    //mListener.onItemClick(mValues);
                     notifyDataSetChanged();
                 }
+                mListener.onItemClick(mValues);
             }
         }
     }
@@ -76,7 +79,7 @@ public class ButtonAdapter extends RecyclerView.Adapter<ButtonAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(ViewHolder Vholder, int position) {
-        Vholder.setData(mValues.get(position));
+       Vholder.setData(mValues.get(position));
 
     }
 

@@ -104,8 +104,15 @@ public class Settings extends AppCompatActivity {
         rl_blockuser.setOnClickListener(v -> {startActivity(new Intent(mActivity, BlockedUsers.class));});
         rl_edit_profile = findViewById(R.id.rl_edit_profile);
         rl_edit_profile.setOnClickListener(v -> {
-            startActivity(new Intent(mActivity, EditProfile.class).putExtra("FROM","2"));
-            finish();
+
+           if (SessionManager.get_profiletype(prefs).equalsIgnoreCase("coach")) {
+                startActivity(new Intent(mActivity,CoachRegistrationActivity.class).putExtra("FROM","2"));
+               finish();
+           }else{
+                startActivity(new Intent(mActivity,EditProfile.class).putExtra("FROM","2"));
+                finish();
+            }
+
         });
         rl_chnage_password = findViewById(R.id.rl_chnage_password);
         rl_chnage_password.setOnClickListener(v -> {
