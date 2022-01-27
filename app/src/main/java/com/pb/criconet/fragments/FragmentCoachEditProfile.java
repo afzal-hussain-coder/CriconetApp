@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
@@ -12,8 +13,11 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -21,12 +25,14 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -47,17 +53,20 @@ import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.mancj.slideup.SlideUp;
 import com.mancj.slideup.SlideUpBuilder;
+import com.mukesh.OtpView;
 import com.pb.criconet.R;
 import com.pb.criconet.Utills.CustomLoaderView;
 import com.pb.criconet.Utills.Global;
 import com.pb.criconet.Utills.MultipartRequest;
 import com.pb.criconet.Utills.SessionManager;
 import com.pb.criconet.Utills.Toaster;
+import com.pb.criconet.activity.Signup;
 import com.pb.criconet.models.City;
 import com.pb.criconet.models.Country;
 import com.pb.criconet.models.Language;
 import com.pb.criconet.models.States;
 import com.pb.criconet.models.UserData;
+import com.rilixtech.widget.countrycodepicker.CountryCodePicker;
 
 import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.http.entity.mime.content.FileBody;
@@ -73,6 +82,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import timber.log.Timber;
 
@@ -95,7 +105,7 @@ public class FragmentCoachEditProfile extends Fragment implements AdapterView.On
     private int columnindex, i;
     private Uri URIid = null;
     private Uri selectedImageid, mCapturedImageURIid;
-    private String file_pathid = "", image_pathid = "";
+    private String file_pathid = "", image_pathid = "",phoneNumber;
     private String imagepath = "";
     private String img_type = "";
 
@@ -121,12 +131,21 @@ public class FragmentCoachEditProfile extends Fragment implements AdapterView.On
     ArrayList<Integer> langList = new ArrayList<>();
     ArrayList<String> language=null;
     String[] langArray = null;
+    private OtpView otpView;
+    private navigateListener listener;
+
             //{"Java", "C++", "Kotlin", "C", "Python", "Javascript","aa","jaja","jsk","shaH","JSKS","JSKA","JSA","JSKAS","HS"};
 
     public static FragmentCoachEditProfile newInstance() {
         return new FragmentCoachEditProfile();
     }
 
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        listener = (navigateListener) context;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -285,7 +304,7 @@ public class FragmentCoachEditProfile extends Fragment implements AdapterView.On
                                 // When j value  not equal
                                 // to lang list size - 1
                                 // add comma
-                                stringBuilder.append(" ,  ");
+                                stringBuilder.append(",");
                             }
                         }
                         // set text on textView
@@ -942,8 +961,28 @@ public class FragmentCoachEditProfile extends Fragment implements AdapterView.On
                         try {
                             JSONObject jsonObject = new JSONObject(response.toString());
                             if (jsonObject.optString("api_text").equalsIgnoreCase("Success")) {
-                                Global.msgDialog(getActivity(), "Profile saved successfully!");
-                            } else if (jsonObject.optString("api_text").equalsIgnoreCase("failed")) {
+                               // Global.msgDialog(getActivity(), "Profile saved successfully!");
+
+                                if (jsonObject.has("data")) {
+                                    JSONObject jsonObjectData = jsonObject.getJSONObject("data");
+                                    phoneNumber = jsonObjectData.getString("temp_mobile_no");
+                                    SessionManager.save_name(prefs, jsonObjectData.getString("username"));
+                                    SessionManager.save_emailid(prefs, jsonObjectData.getString("email"));
+                                    SessionManager.savePhone(prefs, jsonObjectData.getString("phone_number"));
+                                    SessionManager.savePhoneCode(prefs, jsonObjectData.getString("phone_code"));
+                                    SessionManager.save_sex(prefs, jsonObjectData.getString("gender"));
+                                    SessionManager.save_image(prefs, jsonObjectData.getString("avatar"));
+                                    SessionManager.save_cover(prefs, jsonObjectData.getString("cover"));
+                                    //SessionManager.save_mobile_verified(prefs, jsonObjectData.getString("is_mobile_verified"));
+                                    SessionManager.save_profiletype(prefs, jsonObjectData.getString("profile_type"));
+
+                                    EmailOtpDialog(phoneNumber);
+
+                                }
+
+
+
+                                } else if (jsonObject.optString("api_text").equalsIgnoreCase("failed")) {
                                 Global.msgDialog(getActivity(), jsonObject.optString("errors"));
                             } else {
                                 Global.msgDialog(getActivity(), getResources().getString(R.string.error_server));
@@ -978,6 +1017,8 @@ public class FragmentCoachEditProfile extends Fragment implements AdapterView.On
                 param.put("phone_number", mobile);
                 param.put("user_id", SessionManager.get_user_id(prefs));
                 param.put("s", SessionManager.get_session_id(prefs));
+                param.put("language_id", textView_language.getText().toString().trim());
+
                 System.out.println("data   :" + param);
                 return param;
             }
@@ -988,4 +1029,203 @@ public class FragmentCoachEditProfile extends Fragment implements AdapterView.On
         queue.add(postRequest);
 
     }
+
+
+    private void EmailOtpDialog(String mobile) {
+        Dialog dialog = new Dialog(getActivity());
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.setContentView(R.layout.dialog_email_verification);
+        dialog.setCancelable(false);
+
+
+        TextView tvOTPTime = dialog.findViewById(R.id.tv_otp_time);
+        TextView btResend = dialog.findViewById(R.id.btn_resend);
+        Button btContinue = dialog.findViewById(R.id.btn_continue);
+        ImageView img_close = dialog.findViewById(R.id.img_close);
+        LinearLayout lay_otp_expire = dialog.findViewById(R.id.lay_otp_expire);
+        CountryCodePicker ccp = dialog.findViewById(R.id.ccp);
+        EditText edit_phone = dialog.findViewById(R.id.edit_phone);
+
+        startTimer(tvOTPTime, btResend, lay_otp_expire);
+
+        btResend.setOnClickListener(view -> {
+            resendOTP(mobile);
+            lay_otp_expire.setVisibility(View.VISIBLE);
+            startTimer(tvOTPTime, btResend, lay_otp_expire);
+        });
+        otpView = dialog.findViewById(R.id.otp_view);
+        btContinue.setOnClickListener(v -> {
+            lay_otp_expire.setVisibility(View.VISIBLE);
+            if (Objects.requireNonNull(otpView.getText()).toString().isEmpty()) {
+                Toaster.customToast(getString(R.string.code_msg));
+            } else if (otpView.getText().toString().length() != 4) {
+                Toaster.customToast(getString(R.string.code_invalid));
+            } else {
+                sendVerifyOtp(otpView.getText().toString().trim(), dialog);
+            }
+        });
+
+        img_close.setOnClickListener(v -> {
+            dialog.dismiss();
+        });
+        dialog.show();
+
+    }
+
+    private void resendOTP(String mobile) {
+        loaderView.showLoader();
+        StringRequest postRequest = new StringRequest(Request.Method.POST, Global.URL + Global.RESEND_OTP,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Timber.tag("login response").e("%s", response);
+                        loaderView.hideLoader();
+                        try {
+                            JSONObject jsonObject = new JSONObject(response.toString());
+                            if (jsonObject.optString("api_text").equalsIgnoreCase("success")) {
+
+                            } else if (jsonObject.optString("api_text").equalsIgnoreCase("failed")) {
+                                Toaster.customToast(jsonObject.optJSONObject("errors").optString("error_text"));
+                            } else {
+                                Toaster.customToast(getResources().getString(R.string.socket_timeout));
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
+                        loaderView.hideLoader();
+                        Toaster.customToast(getResources().getString(R.string.socket_timeout));
+//                Global.msgDialog(Signup.this, "Internet connection is slow");
+                    }
+                }
+        ) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> param = new HashMap<String, String>();
+                param.put("phone_number", mobile);
+                param.put("user_id", SessionManager.get_user_id(prefs));
+                param.put("s", SessionManager.get_session_id(prefs));
+                System.out.println("data   " + param);
+                return param;
+            }
+        };
+        int socketTimeout = 30000;
+        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        postRequest.setRetryPolicy(policy);
+        queue.add(postRequest);
+    }
+
+    private void sendVerifyOtp(String otp, Dialog dialog) {
+        loaderView.showLoader();
+        StringRequest postRequest = new StringRequest(Request.Method.POST, Global.URL + Global.OTP_VERIFY,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Timber.tag("login response").e("%s", response);
+                        loaderView.hideLoader();
+                        try {
+                            JSONObject jsonObject = new JSONObject(response.toString());
+                            if (jsonObject.optString("api_text").equalsIgnoreCase("success")) {
+                                dialog.dismiss();
+                                if (jsonObject.has("data")) {
+                                    JSONObject jsonObjectData = jsonObject.getJSONObject("data");
+                                    phoneNumber = jsonObjectData.getString("temp_mobile_no");
+                                    listener.callbackMetod("5");
+                                    SessionManager.save_name(prefs, jsonObjectData.getString("username"));
+                                    SessionManager.save_emailid(prefs, jsonObjectData.getString("email"));
+                                    SessionManager.save_mobile(prefs, jsonObjectData.getString("phone_number"));
+                                    SessionManager.savePhoneCode(prefs, jsonObjectData.getString("phone_code"));
+
+                                    // Toaster.customToast(jsonObjectData.getString("is_mobile_verified"));
+                                    SessionManager.save_mobile_verified(prefs, jsonObjectData.getString("is_mobile_verified"));
+                                    JSONObject ambassadorProfile = jsonObjectData.getJSONObject("ambassadorProfile");
+
+                                    if(ambassadorProfile.length()>0){
+                                        SessionManager.save_is_ambassador(prefs,"1");
+                                        SessionManager.save_is_amb_name(prefs,ambassadorProfile.getString("name"));
+                                        SessionManager.save_is_amb_fullname(prefs,ambassadorProfile.getString("full_name"));
+                                        SessionManager.save_is_amb_email(prefs,ambassadorProfile.getString("email"));
+                                        SessionManager.save_mobile(prefs,ambassadorProfile.getString("phone_number"));
+                                        SessionManager.save_is_amb_college(prefs,ambassadorProfile.getString("school_college_name"));
+                                        SessionManager.save_is_amb_highestQ(prefs,ambassadorProfile.getString("height_qualification"));
+                                        SessionManager.save_is_ambs_have_you_org_event_flag(prefs,ambassadorProfile.getString("have_you_org_event_flag"));
+                                        SessionManager.save_is_ambs_have_you_org_event_txt(prefs,ambassadorProfile.getString("have_you_org_event_txt"));
+                                        SessionManager.save_is_ambs_innovative_thing(prefs,ambassadorProfile.getString("innovative_thing"));
+                                        SessionManager.save_is_ambs_how_many_hrs_per_week(prefs,ambassadorProfile.getString("how_many_hrs_per_week"));
+                                        SessionManager.save_is_ambs_passionate_thing(prefs,ambassadorProfile.getString("passionate_thing"));
+                                        SessionManager.save_is_ambs_do_you_want_campus_ambassdor(prefs,ambassadorProfile.getString("do_you_want_campus_ambassdor"));
+                                        SessionManager.save_is_ambs_thing_you_are_know_criconet(prefs,ambassadorProfile.getString("thing_you_are_know_criconet"));
+                                    }else{
+                                        SessionManager.save_is_ambassador(prefs,"0");
+                                    }
+
+                                    //congratsDialog();
+
+                                }
+
+                            } else if (jsonObject.optString("api_text").equalsIgnoreCase("failed")) {
+                                Toaster.customToast(jsonObject.optJSONObject("errors").optString("error_text"));
+                            } else {
+                                Toaster.customToast(getResources().getString(R.string.socket_timeout));
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
+                        loaderView.hideLoader();
+                        Toaster.customToast(getResources().getString(R.string.socket_timeout));
+//                Global.msgDialog(Signup.this, "Internet connection is slow");
+                    }
+                }
+        ) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> param = new HashMap<String, String>();
+                param.put("otp", otp);
+                param.put("user_id", SessionManager.get_user_id(prefs));
+                param.put("s", SessionManager.get_session_id(prefs));
+                System.out.println("data   " + param);
+                return param;
+            }
+        };
+        int socketTimeout = 30000;
+        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        postRequest.setRetryPolicy(policy);
+        queue.add(postRequest);
+    }
+
+    private void startTimer(TextView tvOTPTime, TextView btResend, LinearLayout lay_otp_expire) {
+        new CountDownTimer(180000, 1000) {
+
+            public void onTick(long millisUntilFinished) {
+                tvOTPTime.setText("00 : " + millisUntilFinished / 1000);
+                //here you can have your logic to set text to edittext
+            }
+
+            public void onFinish() {
+                lay_otp_expire.setVisibility(View.GONE);
+                btResend.setVisibility(View.VISIBLE);
+            }
+
+        }.start();
+    }
+    public void setMyCustomListener(navigateListener listener) {
+        this.listener = listener;
+    }
+
+    public interface navigateListener {
+        void callbackMetod(String type);
+    }
+
 }

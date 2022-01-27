@@ -71,7 +71,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class CoachRegistrationActivity extends AppCompatActivity {
+public class CoachRegistrationActivity extends AppCompatActivity implements FragmentCoachEditProfile.navigateListener {
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private ViewPagerAdapter adapter;
@@ -80,6 +80,7 @@ public class CoachRegistrationActivity extends AppCompatActivity {
     private AppCompatActivity mActivity;
     private String from_where="";
     private View view;
+
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -126,6 +127,14 @@ public class CoachRegistrationActivity extends AppCompatActivity {
         prefs = PreferenceManager.getDefaultSharedPreferences(mActivity);
         adapter = new ViewPagerAdapter(getSupportFragmentManager(),mActivity); //here used child fragment manager
 
+
+//        adapter.addFragment(new FragmentCoachEditProfile(), "Personal Information");
+//        adapter.addFragment(new FragmentExperienceSetting(), "Professional Qualifications");
+//        adapter.addFragment(new FragmentAvility(), "Available Date & Session");
+//
+//        tabLayout.setVisibility(View.VISIBLE);
+//        tabLayout.setupWithViewPager(viewPager);
+
         if(SessionManager.getProfileType(prefs).equalsIgnoreCase("coach")){
 
             adapter.addFragment(new FragmentCoachEditProfile(), "Personal Information");
@@ -151,8 +160,8 @@ public class CoachRegistrationActivity extends AppCompatActivity {
 
         if(from_where.equalsIgnoreCase("4")){
             viewPager.setCurrentItem(1);
-        }else{
-
+        }else if(from_where.equalsIgnoreCase("5")){
+            viewPager.setCurrentItem(2);
         }
 
     }
@@ -177,5 +186,13 @@ public class CoachRegistrationActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         }
+    }
+
+    @Override
+    public void callbackMetod(String type) {
+        Toaster.customToast(type);
+        from_where = type;
+        adapter.addFragment(new FragmentExperienceSetting(), "Professional Qualifications");
+
     }
 }

@@ -35,6 +35,7 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
         }else{
             return 1;
         }
+        //return 3;
 
     }
     public void addFragment(Fragment fragment, String title) {

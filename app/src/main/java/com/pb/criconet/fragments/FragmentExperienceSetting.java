@@ -237,7 +237,9 @@ public class FragmentExperienceSetting extends Fragment implements ButtonAdapter
 
             @Override
             public void onClickDone(String name) {
-                selectedMonth = name;
+                if(name.contains("month")){
+                    selectedMonth = name.replace("month","").trim();
+                }
             }
 
             @Override
@@ -290,7 +292,9 @@ public class FragmentExperienceSetting extends Fragment implements ButtonAdapter
 
             @Override
             public void onClickDone(String name) {
-                selectedYear = name;
+                if(name.contains("year")){
+                    selectedYear = name.replace("year","").trim();
+                }
             }
 
 
@@ -531,8 +535,8 @@ public class FragmentExperienceSetting extends Fragment implements ButtonAdapter
             entity.addPart("s", new StringBody(SessionManager.get_session_id(prefs)));
             entity.addPart("profile_title", new StringBody(profileTitle));
             entity.addPart("coach_category_id", new StringBody(String.valueOf(categoryId)));
-            entity.addPart("exp_years", new StringBody(selectedYear));
-            entity.addPart("exp_months", new StringBody(selectedMonth));
+            entity.addPart("exp_years", new StringBody(selectedYear.trim()));
+            entity.addPart("exp_months", new StringBody(selectedMonth.trim()));
             entity.addPart("about_coach_profile", new StringBody(otherInformation));
             entity.addPart("cuurency_code", new StringBody("INR"));
             entity.addPart("charge_amount", new StringBody(amount));
