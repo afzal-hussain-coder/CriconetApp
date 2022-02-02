@@ -190,8 +190,8 @@ public class FragmentExperienceSetting extends Fragment implements ButtonAdapter
 
         spinerCurency = rootView.findViewById(R.id.spinerCurency);
         option_currency.add(new com.pb.criconet.Utills.DataModel("₹ INR"));
-        //option_currency.add(new com.pb.criconet.Utills.DataModel("$ USD"));
-        //option_currency.add(new com.pb.criconet.Utills.DataModel("€ EUR"));
+        option_currency.add(new com.pb.criconet.Utills.DataModel("$ USD"));
+        option_currency.add(new com.pb.criconet.Utills.DataModel("€ EUR"));
         spinerCurency.setOptionList(option_currency);
         selectedCurency = option_currency.get(0).getName();
         spinerCurency.setText(selectedCurency);
@@ -538,7 +538,7 @@ public class FragmentExperienceSetting extends Fragment implements ButtonAdapter
             entity.addPart("exp_years", new StringBody(selectedYear.trim()));
             entity.addPart("exp_months", new StringBody(selectedMonth.trim()));
             entity.addPart("about_coach_profile", new StringBody(otherInformation));
-            entity.addPart("cuurency_code", new StringBody("INR"));
+            entity.addPart("cuurency_code", new StringBody(selectedCurency));
             entity.addPart("charge_amount", new StringBody(amount));
             entity.addPart("certificate_title", new StringBody(certificateTitle));
             entity.addPart("what_you_teach", new StringBody(whatYouTeach));

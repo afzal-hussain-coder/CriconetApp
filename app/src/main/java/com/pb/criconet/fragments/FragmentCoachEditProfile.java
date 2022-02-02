@@ -71,6 +71,7 @@ import com.rilixtech.widget.countrycodepicker.CountryCodePicker;
 import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.entity.mime.content.StringBody;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
@@ -132,20 +133,14 @@ public class FragmentCoachEditProfile extends Fragment implements AdapterView.On
     ArrayList<String> language=null;
     String[] langArray = null;
     private OtpView otpView;
-    private navigateListener listener;
-
-            //{"Java", "C++", "Kotlin", "C", "Python", "Javascript","aa","jaja","jsk","shaH","JSKS","JSKA","JSA","JSKAS","HS"};
+    String countryId="";
 
     public static FragmentCoachEditProfile newInstance() {
         return new FragmentCoachEditProfile();
     }
 
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        listener = (navigateListener) context;
-    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -223,10 +218,10 @@ public class FragmentCoachEditProfile extends Fragment implements AdapterView.On
         if (Global.isOnline(getActivity())) {
             getCountry();
             getLanguage();
+            getUsersDetails();
         } else {
             Global.showDialog(getActivity());
         }
-        // getUsersDetails(SessionManager.get_user_id(prefs));
 
         middle.setOnClickListener(v -> {
             img_type = "profile";
@@ -249,9 +244,6 @@ public class FragmentCoachEditProfile extends Fragment implements AdapterView.On
                 checkMethod();
             }
         });
-
-
-
 
         textView_language.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -511,56 +503,56 @@ public class FragmentCoachEditProfile extends Fragment implements AdapterView.On
         return cursor.getString(idx);
     }
 
-    private void setData() {
-        edttxt_fname.setText(Global.capitizeString(SessionManager.get_name(prefs)));
-        edttxt_fname.setText(SessionManager.get_fname(prefs));
-        edttxt_lname.setText(SessionManager.get_lname(prefs));
-        etAddress.setText(SessionManager.get_address(prefs));
-        edttxt_phone.setText(SessionManager.get_mobile(prefs));
+    private void setData(JSONObject  data) {
 
-        if(userData.getPincode().equalsIgnoreCase("null")){
-            etPincode.setText("");
-        }else{
-            etPincode.setText(SessionManager.getpinCode(prefs));
+        if(data.has("first_name")){
+            edttxt_fname.setText(data.optString("first_name"));
+        }
+        if(data.has("last_name")){
+            edttxt_lname.setText(data.optString("last_name"));
+        }
+        if(data.has("mid_name")){
+            try {
+                edttxt_Mname.setText(data.getString("mid_name"));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        if(data.has("avatar")){
+            imagepath=data.optString("avatar");
+            Glide.with(getActivity()).load(data.optString("avatar")).into(profile_image);
+        }
+        if(data.has("country_name")){
+            countryID= data.optString("country_id");
+            getState(countryID);
+            spinnerCountry.setSelection(Global.getIndex(spinnerCountry, data.optString("country_name")));
+        }
+        if(data.has("state_name")){
+            Log.d("sateNAme",data.optString("state_name"));
+            spinnerState.setSelection(Global.getIndex(spinnerState, data.optString("state_name")));
+        }
+        if(data.has("city_name")){
+            spinnerCity.setSelection(Global.getIndex(spinnerCity, data.optString("city_name")));
+        }
+        if(data.has("pincode")){
+            etPincode.setText(data.optString("pincode"));
+        }
+        if(data.has("phone_number")){
+            edttxt_phone.setText(data.optString("phone_number"));
+        }
+        if(data.has("address")){
+            etAddress.setText(data.optString("address"));
+        }
+        if(data.has("address2")){
+            etAddress2.setText(data.optString("address2"));
+        }
+        if(data.has("languages")){
+            //edttxt_Mname.setText(data.optString("languages"));
+            //spn_language.setSelection(Global.getIndex(spn_language, SessionManager.get_sex(prefs)));
         }
 
-        spn_language.setSelection(Global.getIndex(spn_language, SessionManager.get_sex(prefs)));
-
-        Glide.with(getActivity()).load(SessionManager.get_image(prefs)).into(profile_image);
-        Glide.with(getActivity()).load(SessionManager.get_cover(prefs)).into(cover_img);
     }
 
-    private void setEnable() {
-        edttxt_fname.setEnabled(false);
-        edttxt_fname.setEnabled(true);
-        edttxt_lname.setEnabled(true);
-        etAddress.setEnabled(true);
-        edttxt_birthday.setEnabled(true);
-        edttxt_phone.setEnabled(true);
-        etPincode.setEnabled(true);
-        spn_language.setEnabled(true);
-        spinnerCountry.setEnabled(true);
-        spinnerState.setEnabled(true);
-        spinnerCity.setEnabled(true);
-        spinnerCity.setEnabled(true);
-        spinnerState.setEnabled(true);
-        btn_login.setText("Click to Update Profile");
-
-    }
-    private void setDisable() {
-        edttxt_fname.setEnabled(false);
-        edttxt_fname.setEnabled(false);
-        edttxt_lname.setEnabled(false);
-        etAddress.setEnabled(false);
-        edttxt_birthday.setEnabled(false);
-        edttxt_phone.setEnabled(false);
-        etPincode.setEnabled(false);
-        spn_language.setEnabled(false);
-        spinnerCountry.setEnabled(false);
-        spinnerCity.setEnabled(false);
-        spinnerState.setEnabled(false);
-        btn_login.setText(getResources().getString(R.string.Click_to_Edit_Profile));
-    }
 
     private void editprofile_task() {
         loaderView.showLoader();
@@ -651,7 +643,7 @@ public class FragmentCoachEditProfile extends Fragment implements AdapterView.On
                         loaderView.hideLoader();
                         JSONObject jsonObject = new JSONObject(response.toString());
                         if (jsonObject.optString("api_text").equalsIgnoreCase("Success")) {
-                            //getUsersDetails(SessionManager.get_user_id(prefs));
+                            //getUsersDetails();
 
                         } else if (jsonObject.optString("api_text").equalsIgnoreCase("failed")) {
                             Global.msgDialog(getActivity(), jsonObject.optJSONObject("errors").optString("error_text"));
@@ -683,6 +675,7 @@ public class FragmentCoachEditProfile extends Fragment implements AdapterView.On
 
 
     }
+
     private void getCountry() {
         StringRequest postRequest = new StringRequest(Request.Method.POST, Global.URL + "get_countries", new Response.Listener<String>() {
             @Override
@@ -770,6 +763,7 @@ public class FragmentCoachEditProfile extends Fragment implements AdapterView.On
         int socketTimeout = 30000;
         RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
         postRequest.setRetryPolicy(policy);
+        Log.e("Request",postRequest.toString());
         queue.add(postRequest);
     }
 
@@ -873,7 +867,7 @@ public class FragmentCoachEditProfile extends Fragment implements AdapterView.On
 
     }
 
-    /*public void getUsersDetails(final String user_id) {
+    public void getUsersDetails() {
         loaderView.showLoader();
         StringRequest postRequest = new StringRequest(Request.Method.POST, Global.URL + "get_user_data",
                 new Response.Listener<String>() {
@@ -884,33 +878,12 @@ public class FragmentCoachEditProfile extends Fragment implements AdapterView.On
                         try {
                             JSONObject jsonObject = new JSONObject(response.toString());
                             if (jsonObject.optString("api_text").equalsIgnoreCase("Success")) {
-                                JSONObject object = jsonObject.getJSONObject("user_data");
+                                JSONObject object = jsonObject.getJSONObject("coach_data");
 
-                                userData = UserData.fromJson(object);
-
-                                SessionManager.save_user_id(prefs, userData.getUser_id());
-                                SessionManager.save_name(prefs, userData.getUsername());
-                                SessionManager.save_fname(prefs, userData.getFirst_name());
-                                SessionManager.save_lname(prefs, userData.getLast_name());
-                                SessionManager.save_emailid(prefs, userData.getEmail());
-                                SessionManager.save_sex(prefs, userData.getGender());
-                                SessionManager.save_address(prefs, userData.getAddress());
-                                SessionManager.save_image(prefs, userData.getAvatar());
-                                SessionManager.save_cover(prefs, userData.getCover());
-                                SessionManager.save_dob(prefs, userData.getBirthday());
-                                SessionManager.save_mobile(prefs, userData.getPhone_number());
-
-                                SessionManager.savepinCode(prefs, userData.getPincode());
-                                SessionManager.saveCountry(prefs, userData.getCountry_name());
-                                SessionManager.saveStates(prefs, userData.getState_name());
-                                SessionManager.saveCity(prefs, userData.getCity_name());
-                                SessionManager.saveCityId(prefs, userData.getCity_id());
-                                SessionManager.saveStateId(prefs, userData.getState_id());
-
-                                //setData();
-                                //setDisable();
-
-
+                                if(object.has("personal_info")){
+                                    JSONObject jsonObject_personal_info= object.getJSONObject("personal_info");
+                                    setData(jsonObject_personal_info);
+                                }
                             } else if (jsonObject.optString("api_text").equalsIgnoreCase("failed")) {
                                 Global.msgDialog(getActivity(), jsonObject.optJSONObject("errors").optString("error_text"));
                             } else {
@@ -934,9 +907,8 @@ public class FragmentCoachEditProfile extends Fragment implements AdapterView.On
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> param = new HashMap<String, String>();
-                param.put("user_id", user_id);
-                param.put("user_profile_id", user_id);
-//                param.put("s", "1");
+                param.put("user_id", SessionManager.get_user_id(prefs));
+                param.put("user_profile_id", SessionManager.get_user_id(prefs));
                 param.put("s", SessionManager.get_session_id(prefs));
                 System.out.println("data   :" + param);
                 return param;
@@ -947,7 +919,7 @@ public class FragmentCoachEditProfile extends Fragment implements AdapterView.On
         postRequest.setRetryPolicy(policy);
         queue.add(postRequest);
 
-    }*/
+    }
 
     public void submitCoachPersonalInfo() {
         loaderView.showLoader();
@@ -976,7 +948,8 @@ public class FragmentCoachEditProfile extends Fragment implements AdapterView.On
                                     //SessionManager.save_mobile_verified(prefs, jsonObjectData.getString("is_mobile_verified"));
                                     SessionManager.save_profiletype(prefs, jsonObjectData.getString("profile_type"));
 
-                                    EmailOtpDialog(phoneNumber);
+                                    //EmailOtpDialog(phoneNumber);
+
 
                                 }
 
@@ -1136,7 +1109,6 @@ public class FragmentCoachEditProfile extends Fragment implements AdapterView.On
                                 if (jsonObject.has("data")) {
                                     JSONObject jsonObjectData = jsonObject.getJSONObject("data");
                                     phoneNumber = jsonObjectData.getString("temp_mobile_no");
-                                    listener.callbackMetod("5");
                                     SessionManager.save_name(prefs, jsonObjectData.getString("username"));
                                     SessionManager.save_emailid(prefs, jsonObjectData.getString("email"));
                                     SessionManager.save_mobile(prefs, jsonObjectData.getString("phone_number"));
@@ -1219,13 +1191,6 @@ public class FragmentCoachEditProfile extends Fragment implements AdapterView.On
             }
 
         }.start();
-    }
-    public void setMyCustomListener(navigateListener listener) {
-        this.listener = listener;
-    }
-
-    public interface navigateListener {
-        void callbackMetod(String type);
     }
 
 }

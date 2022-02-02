@@ -30,17 +30,22 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
     }
     @Override
     public int getCount() {
-        if(SessionManager.getProfileType(prefs).equalsIgnoreCase("coach")){
-            return 3;
-        }else{
-            return 1;
-        }
-        //return 3;
+//        if(SessionManager.getProfileType(prefs).equalsIgnoreCase("coach")){
+//            return 3;
+//        }else{
+//            return 1;
+//        }
+        return 3;
 
     }
     public void addFragment(Fragment fragment, String title) {
         mList.add(fragment);
         mTitleList.add(title);
+    }
+    public void removeCurrentItem(Fragment fragment, String title) {
+        mList.remove(fragment);
+        mTitleList.remove(title);
+        //notifyDataSetChanged();
     }
     @Override
     public CharSequence getPageTitle(int position) {

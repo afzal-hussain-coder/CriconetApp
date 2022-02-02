@@ -170,7 +170,7 @@ public class MainActivity extends BaseActivity {
 
 
         if (SessionManager.get_profiletype(prefs).equalsIgnoreCase("coach")) {
-
+            //text.add(new Drawer(getString(R.string.join_as_coach),false, R.drawable.ic_sports_handball_black_24dp));
         }else{
             text.add(new Drawer(getString(R.string.join_as_coach),false, R.drawable.ic_sports_handball_black_24dp));
         }
@@ -399,7 +399,8 @@ public class MainActivity extends BaseActivity {
         if (text.get(position).getTitle().equalsIgnoreCase("Pavilion")) {
             navigationController.navigateToHomeFragment();
         }else if (text.get(position).getTitle().equalsIgnoreCase("Register as an e-Coach")) {
-           startActivity(new Intent(mActivity,CoachRegistrationActivity.class).putExtra("FROM","3"));
+           //startActivity(new Intent(mActivity,CoachSloatAvailabilityActivity.class));
+            startActivity(new Intent(mActivity,CoachPersonalInfoActivity.class).putExtra("FROM","3"));
             finish();
         }
 

@@ -20,6 +20,7 @@ import com.pb.criconet.fragments.HomeFragment;
 import com.pb.criconet.fragments.LiveMatches;
 import com.pb.criconet.fragments.RecMatches;
 import com.pb.criconet.fragments.TimePreode;
+import com.pb.criconet.fragments.TimePreodee;
 import com.pb.criconet.fragments.WebViewGameFragment;
 import com.pb.criconet.models.TimeSlot;
 
@@ -167,5 +168,11 @@ public class NavigationController {
         TimePreode fragment = new TimePreode(mmodelArrayList);
         fragment.setCancelable(true);
         fragment.show(fragmentManager, TimePreode.class.getName());
+    }
+
+    public void showTimePreodee(TimeSlot mmodelArrayList) {
+        TimePreodee fragment = new TimePreodee(mmodelArrayList);
+        fragment.setCancelable(true);
+        fragment.show(fragmentManager, TimePreodee.class.getName());
     }
 }

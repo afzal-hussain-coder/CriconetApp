@@ -540,6 +540,20 @@ public class Global {
         return realdate;
     }
 
+    public static String getDateGotCoach(String dateTime) {
+        Date date = null;
+        String realdate = null;
+        SimpleDateFormat formatter = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzzz yyyy");
+        try {
+            date = formatter.parse(dateTime);
+            realdate = new SimpleDateFormat("dd-MM-yyyy").format(date);
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return realdate;
+    }
+
     public static String getDateGott(String dateTime) {
         Date date = null;
         String realdate = null;
@@ -581,6 +595,22 @@ public class Global {
         }
         return realdate;
     }
+
+    public static String getDay(String dateTime) {
+        Date date = null;
+        String realdate = null;
+        SimpleDateFormat formatter = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzzz yyyy");
+        try {
+            date = formatter.parse(dateTime);
+            realdate = new SimpleDateFormat("dd").format(date);
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return realdate;
+    }
+
+
 
     public static Drawable getThreeDots(Context context) {
         Drawable drawable = ContextCompat.getDrawable(context, R.drawable.sample_three_icons);

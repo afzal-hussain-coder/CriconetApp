@@ -40,11 +40,20 @@
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning,HardcodedDebugMode"
         tools:targetApi="n">
+        <activity android:name=".activity.CoachSloatAvailabilityActivity">
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
+
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
+        </activity>
+        <activity android:name=".activity.CoachProfessionalInfoActivity" />
+        <activity android:name=".activity.CoachPersonalInfoActivity" />
         <activity android:name=".activity.CoachRegistrationActivity" />
         <activity android:name=".activity.WebViewCoachRegisterTermsActivity" />
         <activity android:name=".activity.CoachRegisterPrivacyWebView" />
         <activity android:name=".activity.JoinAmbassadorActivity" />
-        <activity android:name=".activity.AmbassadoarProgrrameActivity"/>
+        <activity android:name=".activity.AmbassadoarProgrrameActivity" />
         <activity android:name=".activity.AmbassdorRewardsActivity" />
         <activity android:name=".activity.ReferralIntroActivity" />
         <activity
@@ -56,9 +65,7 @@
             android:name=".activity.GameActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activity.PayLaterFormActivity" />
-        <activity android:name=".activity.EndSessionFeedbackFormActivity">
-
-        </activity>
+        <activity android:name=".activity.EndSessionFeedbackFormActivity" />
         <activity android:name=".activity.JoinSessionActivity" />
         <activity android:name=".activity.CancelletionWebView" />
         <activity android:name=".activity.TermsUseActivity" />
@@ -71,9 +78,7 @@
             tools:ignore="LockedOrientationActivity" /> <!-- <activity android:name=".activity.IntroSliderActivity"></activity> -->
         <activity
             android:name=".activity.CancellationFeedbackFormActivity"
-            android:windowSoftInputMode="adjustResize">
-
-        </activity>
+            android:windowSoftInputMode="adjustResize" />
         <activity android:name=".activity.BookingDetailsActivity" />
         <activity
             android:name=".activity.BookingActivity"
@@ -83,29 +88,30 @@
             android:name=".activity.CoachProfileActivity"
             tools:ignore="LockedOrientationActivity" />
         <activity android:name=".activity.TermsCondition" />
-        <activity android:name=".activity.IntroSliderActivity">
-        </activity>
+        <activity android:name=".activity.IntroSliderActivity" />
         <activity
             android:name=".activity.Splash"
+            android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Transparent"
-            android:exported="true"
             tools:ignore="LockedOrientationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.VIEW" />-->
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.VIEW" /> -->
 
-<!--                <category android:name="android.intent.category.DEFAULT" />-->
-<!--                <category android:name="android.intent.category.BROWSABLE" />-->
 
-<!--                <data-->
-<!--                    android:host="criconet.com"-->
-<!--                    android:scheme="https" />-->
-<!--            </intent-filter>-->
+            <!-- <category android:name="android.intent.category.DEFAULT" /> -->
+            <!-- <category android:name="android.intent.category.BROWSABLE" /> -->
+
+
+            <!-- <data -->
+            <!-- android:host="criconet.com" -->
+            <!-- android:scheme="https" /> -->
+            <!-- </intent-filter> -->
         </activity>
         <activity
             android:name=".activity.MainActivity"
@@ -238,7 +244,9 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
         </provider>
-        <service android:name=".firebase.ServerNotificationService"
+
+        <service
+            android:name=".firebase.ServerNotificationService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
@@ -277,8 +285,8 @@
         <activity
             android:name="com.razorpay.CheckoutActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
-            android:theme="@style/CheckoutTheme"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/CheckoutTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -288,14 +296,14 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name="com.razorpay.RzpTokenReceiver"
+        <receiver
+            android:name="com.razorpay.RzpTokenReceiver"
             android:exported="true"
             android:permission="android.permission.INTERNET">
             <intent-filter>
                 <action android:name="rzp.device_token.share" />
             </intent-filter>
         </receiver>
-
     </application>
 
 </manifest>

@@ -71,7 +71,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class CoachRegistrationActivity extends AppCompatActivity implements FragmentCoachEditProfile.navigateListener {
+public class CoachRegistrationActivity extends AppCompatActivity {
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private ViewPagerAdapter adapter;
@@ -128,41 +128,41 @@ public class CoachRegistrationActivity extends AppCompatActivity implements Frag
         adapter = new ViewPagerAdapter(getSupportFragmentManager(),mActivity); //here used child fragment manager
 
 
-//        adapter.addFragment(new FragmentCoachEditProfile(), "Personal Information");
-//        adapter.addFragment(new FragmentExperienceSetting(), "Professional Qualifications");
-//        adapter.addFragment(new FragmentAvility(), "Available Date & Session");
+        adapter.addFragment(new FragmentCoachEditProfile(), "Personal Information");
+        adapter.addFragment(new FragmentExperienceSetting(), "Professional Qualifications");
+        adapter.addFragment(new FragmentAvility(), "Available Date & Session");
+
+        tabLayout.setVisibility(View.VISIBLE);
+        tabLayout.setupWithViewPager(viewPager);
+
+//        if(SessionManager.getProfileType(prefs).equalsIgnoreCase("coach")){
 //
-//        tabLayout.setVisibility(View.VISIBLE);
-//        tabLayout.setupWithViewPager(viewPager);
-
-        if(SessionManager.getProfileType(prefs).equalsIgnoreCase("coach")){
-
-            adapter.addFragment(new FragmentCoachEditProfile(), "Personal Information");
-            adapter.addFragment(new FragmentExperienceSetting(), "Professional Qualifications");
-            adapter.addFragment(new FragmentAvility(), "Available Date & Session");
-
-            tabLayout.setVisibility(View.VISIBLE);
-            tabLayout.setupWithViewPager(viewPager);
-        }else{
-
-            adapter.addFragment(new FragmentCoachEditProfile(), "Personal Information");
-            //adapter.addFragment(new FragmentExperienceSetting(), "Professional Qualifications");
-            //adapter.addFragment(new FragmentAvility(), "Available Date & Session");
-
-            tabLayout.setVisibility(View.VISIBLE);
-            tabLayout.setupWithViewPager(viewPager);
-        }
-
-
+//            adapter.addFragment(new FragmentCoachEditProfile(), "Personal Information");
+//            adapter.addFragment(new FragmentExperienceSetting(), "Professional Qualifications");
+//            adapter.addFragment(new FragmentAvility(), "Available Date & Session");
+//
+//            tabLayout.setVisibility(View.VISIBLE);
+//            tabLayout.setupWithViewPager(viewPager);
+//        }else{
+//
+//            adapter.addFragment(new FragmentCoachEditProfile(), "Personal Information");
+//            //adapter.addFragment(new FragmentExperienceSetting(), "Professional Qualifications");
+//            //adapter.addFragment(new FragmentAvility(), "Available Date & Session");
+//
+//            tabLayout.setVisibility(View.VISIBLE);
+//            tabLayout.setupWithViewPager(viewPager);
+//        }
+//
+//
 
         //view.setVisibility(View.VISIBLE);
         viewPager.setAdapter(adapter);
 
-        if(from_where.equalsIgnoreCase("4")){
-            viewPager.setCurrentItem(1);
-        }else if(from_where.equalsIgnoreCase("5")){
-            viewPager.setCurrentItem(2);
-        }
+//        if(from_where.equalsIgnoreCase("4")){
+//            viewPager.setCurrentItem(1);
+//        }else if(from_where.equalsIgnoreCase("5")){
+//            viewPager.setCurrentItem(2);
+//        }
 
     }
 
@@ -188,11 +188,4 @@ public class CoachRegistrationActivity extends AppCompatActivity implements Frag
         }
     }
 
-    @Override
-    public void callbackMetod(String type) {
-        Toaster.customToast(type);
-        from_where = type;
-        adapter.addFragment(new FragmentExperienceSetting(), "Professional Qualifications");
-
-    }
 }
