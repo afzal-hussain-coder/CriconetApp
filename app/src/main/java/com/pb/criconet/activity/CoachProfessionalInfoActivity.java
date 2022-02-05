@@ -493,7 +493,7 @@ public class CoachProfessionalInfoActivity extends AppCompatActivity implements 
 //            Toast.makeText(mContext,"Please select currency",Toast.LENGTH_SHORT).show();
 //            return  false;
 //        }
-        else if (etAmount.getText().toString().trim().equalsIgnoreCase("")) {
+        else if (etAmount.getText().toString().trim().equalsIgnoreCase("0.00")) {
             Toaster.customToast(mContext.getResources().getString(R.string.Enter_Amount_session));
             return false;
         }else if(isTeramsChecked.equalsIgnoreCase("")){

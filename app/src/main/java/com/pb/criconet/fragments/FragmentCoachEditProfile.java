@@ -612,7 +612,7 @@ public class FragmentCoachEditProfile extends Fragment implements AdapterView.On
     }
 
     private void editprofile_task() {
-        loaderView.showLoader();
+        //loaderView.showLoader();
         StringRequest postRequest = new StringRequest(Request.Method.POST, Global.URL + "update_user_data",
                 new Response.Listener<String>() {
                     @Override
@@ -930,13 +930,13 @@ public class FragmentCoachEditProfile extends Fragment implements AdapterView.On
     }
 
     public void getUsersDetails() {
-        loaderView.showLoader();
+        //loaderView.showLoader();
         StringRequest postRequest = new StringRequest(Request.Method.POST, Global.URL + "get_user_data",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         Log.d("getUserDetails",response);
-                        loaderView.hideLoader();
+                        //loaderView.hideLoader();
                         try {
                             JSONObject jsonObject = new JSONObject(response.toString());
                             if (jsonObject.optString("api_text").equalsIgnoreCase("Success")) {
@@ -960,7 +960,7 @@ public class FragmentCoachEditProfile extends Fragment implements AdapterView.On
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         error.printStackTrace();
-                        loaderView.hideLoader();
+                        //loaderView.hideLoader();
                         Global.msgDialog(getActivity(), getResources().getString(R.string.error_server));
 //                Global.msgDialog(EditProfile.this, "Internet connection is slow");
                     }

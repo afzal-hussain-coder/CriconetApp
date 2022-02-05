@@ -247,6 +247,7 @@ public class CoachSloatAvailabilityActivity extends BaseActivity implements Time
         StringRequest postRequest = new StringRequest(Request.Method.POST, Global.URL + "get_time_slot_data", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+                Log.d("slotResponse",response);
                 Gson gson = new Gson();
                 modelArrayList = gson.fromJson(response, TimeSlot.class);
                 if (modelArrayList.getApiStatus().equalsIgnoreCase("200")) {

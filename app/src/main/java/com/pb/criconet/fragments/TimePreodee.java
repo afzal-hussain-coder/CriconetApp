@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -50,6 +51,13 @@ public class TimePreodee extends BottomSheetDialogFragment implements TimeAdapte
         selectedSlot = (selectedSlot)context ;
 
     }
+
+//    @Override
+//    public void onAttachFragment(@NonNull @NotNull Fragment childFragment) {
+//        super.onAttachFragment(childFragment);
+//        selectedSlot = (selectedSlot)childFragment ;
+//
+//    }
 
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,

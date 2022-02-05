@@ -219,22 +219,22 @@ public class FragmentExperienceSetting extends Fragment implements CoachButtonAd
         });
 
         spinerMonth = rootView.findViewById(R.id.spinerMonth);
-        option_month.add(new com.pb.criconet.Utills.DataModel("Select Month"));
+        //option_month.add(new com.pb.criconet.Utills.DataModel("Select Month"));
         option_month.add(new com.pb.criconet.Utills.DataModel("0 month"));
         option_month.add(new com.pb.criconet.Utills.DataModel("1 month"));
-        option_month.add(new com.pb.criconet.Utills.DataModel("2 month"));
-        option_month.add(new com.pb.criconet.Utills.DataModel("3 month"));
-        option_month.add(new com.pb.criconet.Utills.DataModel("4 month"));
-        option_month.add(new com.pb.criconet.Utills.DataModel("5 month"));
-        option_month.add(new com.pb.criconet.Utills.DataModel("6 month"));
-        option_month.add(new com.pb.criconet.Utills.DataModel("7 month"));
-        option_month.add(new com.pb.criconet.Utills.DataModel("8 month"));
-        option_month.add(new com.pb.criconet.Utills.DataModel("9 month"));
-        option_month.add(new com.pb.criconet.Utills.DataModel("10 month"));
-        option_month.add(new com.pb.criconet.Utills.DataModel("11 month"));
+        option_month.add(new com.pb.criconet.Utills.DataModel("2 months"));
+        option_month.add(new com.pb.criconet.Utills.DataModel("3 months"));
+        option_month.add(new com.pb.criconet.Utills.DataModel("4 months"));
+        option_month.add(new com.pb.criconet.Utills.DataModel("5 months"));
+        option_month.add(new com.pb.criconet.Utills.DataModel("6 months"));
+        option_month.add(new com.pb.criconet.Utills.DataModel("7 months"));
+        option_month.add(new com.pb.criconet.Utills.DataModel("8 months"));
+        option_month.add(new com.pb.criconet.Utills.DataModel("9 months"));
+        option_month.add(new com.pb.criconet.Utills.DataModel("10 months"));
+        option_month.add(new com.pb.criconet.Utills.DataModel("11 months"));
         spinerMonth.setOptionList(option_month);
-        selectedMonth = option_month.get(0).getName();
-        spinerMonth.setText(selectedMonth);
+        //selectedMonth = option_month.get(0).getName();
+        //spinerMonth.setText(selectedMonth);
         spinerMonth.setTypeface(typeface);
         spinerMonth.setClickListener(new FilterCoachSelectionDropDownView.onClickInterface() {
             @Override
@@ -245,6 +245,8 @@ public class FragmentExperienceSetting extends Fragment implements CoachButtonAd
             public void onClickDone(String name) {
                 if(name.contains("month")){
                     selectedMonth = name.replace("month","").trim();
+                }else if(name.contains("months")){
+                    selectedMonth = name.replace("months","").trim();
                 }
             }
 
@@ -255,40 +257,40 @@ public class FragmentExperienceSetting extends Fragment implements CoachButtonAd
 
 
         spinerYear = rootView.findViewById(R.id.spinerYear);
-        option.add(new com.pb.criconet.Utills.DataModel("Select Year"));
+        //option.add(new com.pb.criconet.Utills.DataModel("Select Year"));
         option.add(new com.pb.criconet.Utills.DataModel("0 year"));
         option.add(new com.pb.criconet.Utills.DataModel("1 year"));
-        option.add(new com.pb.criconet.Utills.DataModel("2 year"));
-        option.add(new com.pb.criconet.Utills.DataModel("3 year"));
-        option.add(new com.pb.criconet.Utills.DataModel("4 year"));
-        option.add(new com.pb.criconet.Utills.DataModel("5 year"));
-        option.add(new com.pb.criconet.Utills.DataModel("6 year"));
-        option.add(new com.pb.criconet.Utills.DataModel("7 year"));
-        option.add(new com.pb.criconet.Utills.DataModel("8 year"));
-        option.add(new com.pb.criconet.Utills.DataModel("9 year"));
-        option.add(new com.pb.criconet.Utills.DataModel("10 year"));
-        option.add(new com.pb.criconet.Utills.DataModel("11 year"));
-        option.add(new com.pb.criconet.Utills.DataModel("12 year"));
-        option.add(new com.pb.criconet.Utills.DataModel("13 year"));
-        option.add(new com.pb.criconet.Utills.DataModel("14 year"));
-        option.add(new com.pb.criconet.Utills.DataModel("15 year"));
-        option.add(new com.pb.criconet.Utills.DataModel("16 year"));
-        option.add(new com.pb.criconet.Utills.DataModel("17 year"));
-        option.add(new com.pb.criconet.Utills.DataModel("18 year"));
-        option.add(new com.pb.criconet.Utills.DataModel("19 year"));
-        option.add(new com.pb.criconet.Utills.DataModel("20 year"));
-        option.add(new com.pb.criconet.Utills.DataModel("21 year"));
-        option.add(new com.pb.criconet.Utills.DataModel("22 year"));
-        option.add(new com.pb.criconet.Utills.DataModel("23 year"));
-        option.add(new com.pb.criconet.Utills.DataModel("24 year"));
-        option.add(new com.pb.criconet.Utills.DataModel("25 year"));
-        option.add(new com.pb.criconet.Utills.DataModel("26 year"));
-        option.add(new com.pb.criconet.Utills.DataModel("27 year"));
-        option.add(new com.pb.criconet.Utills.DataModel("28 year"));
-        option.add(new com.pb.criconet.Utills.DataModel("29 year"));
+        option.add(new com.pb.criconet.Utills.DataModel("2 years"));
+        option.add(new com.pb.criconet.Utills.DataModel("3 years"));
+        option.add(new com.pb.criconet.Utills.DataModel("4 years"));
+        option.add(new com.pb.criconet.Utills.DataModel("5 years"));
+        option.add(new com.pb.criconet.Utills.DataModel("6 years"));
+        option.add(new com.pb.criconet.Utills.DataModel("7 years"));
+        option.add(new com.pb.criconet.Utills.DataModel("8 years"));
+        option.add(new com.pb.criconet.Utills.DataModel("9 years"));
+        option.add(new com.pb.criconet.Utills.DataModel("10 years"));
+        option.add(new com.pb.criconet.Utills.DataModel("11 years"));
+        option.add(new com.pb.criconet.Utills.DataModel("12 years"));
+        option.add(new com.pb.criconet.Utills.DataModel("13 years"));
+        option.add(new com.pb.criconet.Utills.DataModel("14 years"));
+        option.add(new com.pb.criconet.Utills.DataModel("15 years"));
+        option.add(new com.pb.criconet.Utills.DataModel("16 years"));
+        option.add(new com.pb.criconet.Utills.DataModel("17 years"));
+        option.add(new com.pb.criconet.Utills.DataModel("18 years"));
+        option.add(new com.pb.criconet.Utills.DataModel("19 years"));
+        option.add(new com.pb.criconet.Utills.DataModel("20 years"));
+        option.add(new com.pb.criconet.Utills.DataModel("21 years"));
+        option.add(new com.pb.criconet.Utills.DataModel("22 years"));
+        option.add(new com.pb.criconet.Utills.DataModel("23 years"));
+        option.add(new com.pb.criconet.Utills.DataModel("24 years"));
+        option.add(new com.pb.criconet.Utills.DataModel("25 years"));
+        option.add(new com.pb.criconet.Utills.DataModel("26 years"));
+        option.add(new com.pb.criconet.Utills.DataModel("27 years"));
+        option.add(new com.pb.criconet.Utills.DataModel("28 years"));
+        option.add(new com.pb.criconet.Utills.DataModel("29 years"));
         spinerYear.setOptionList(option);
-        selectedYear = option.get(0).getName();
-        spinerYear.setText(selectedYear);
+        //selectedYear = option.get(0).getName();
+        //spinerYear.setText(selectedYear);
         spinerYear.setTypeface(typeface);
 
         spinerYear.setClickListener(new FilterCoachSelectionDropDownView.onClickInterface() {
@@ -300,6 +302,8 @@ public class FragmentExperienceSetting extends Fragment implements CoachButtonAd
             public void onClickDone(String name) {
                 if(name.contains("year")){
                     selectedYear = name.replace("year","").trim();
+                }else if(name.contains("years")){
+                    selectedYear = name.replace("years","").trim();
                 }
             }
 
@@ -500,7 +504,7 @@ public class FragmentExperienceSetting extends Fragment implements CoachButtonAd
 //            Toast.makeText(getActivity(),"Please select currency",Toast.LENGTH_SHORT).show();
 //            return  false;
 //        }
-        else if (etAmount.getText().toString().trim().equalsIgnoreCase("")) {
+        else if (etAmount.getText().toString().trim().equalsIgnoreCase("0.00")) {
             Toaster.customToast(getActivity().getResources().getString(R.string.Enter_Amount_session));
             return false;
         }
@@ -699,24 +703,45 @@ public class FragmentExperienceSetting extends Fragment implements CoachButtonAd
             }
         }
         if (data.has("exp_years")) {
-            String yearName = data.optString("exp_years") + " " + "years";
-            selectedYear = yearName;
-            selectedYear = selectedYear.replace("years","").trim();
+
+            String yearName="";
+            if(data.optString("exp_years").equalsIgnoreCase("0") || data.optString("exp_years").equalsIgnoreCase("1")){
+                yearName = data.optString("exp_years") + " " + "year";
+            }else{
+                yearName = data.optString("exp_years") + " " + "years";
+            }
+
+            selectedMonth = yearName;
+            if(yearName.contains("year")){
+                selectedYear = yearName.replace("year","").trim();
+            }else if(yearName.contains("years")){
+                selectedYear = yearName.replace("years","").trim();
+            }
+
             spinerYear.setText(yearName);
 
         }
         if (data.has("exp_months")) {
-            String monthName = data.optString("exp_months") + " " + "months";
+            String monthName="";
+            if(data.optString("exp_months").equalsIgnoreCase("0") || data.optString("exp_months").equalsIgnoreCase("1")){
+                monthName = data.optString("exp_months") + " " + "month";
+            }else{
+                monthName = data.optString("exp_months") + " " + "months";
+            }
+
+
             selectedMonth = monthName;
-            selectedMonth = selectedMonth.replace("months","").trim();
+            if(monthName.contains("month")){
+                selectedMonth = monthName.replace("month","").trim();
+            }else if(monthName.contains("months")){
+                selectedMonth = monthName.replace("months","").trim();
+            }
             spinerMonth.setText(monthName);
         }
         if (data.has("cuurency_code")) {
             String currencyName = data.optString("cuurency_code");
             selectedCurency = currencyName.replace("?","").trim();
-            Toaster.customToast(selectedCurency);
             spinerCurency.setText(selectedCurency);
-
         }
 
         if (data.has("charge_amount")) {
@@ -744,8 +769,6 @@ public class FragmentExperienceSetting extends Fragment implements CoachButtonAd
         }
 
     }
-
-
 
     public void getUsersDetails() {
         //loaderView.showLoader();

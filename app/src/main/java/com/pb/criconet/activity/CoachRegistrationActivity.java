@@ -119,7 +119,7 @@ public class CoachRegistrationActivity extends AppCompatActivity {
         });
 
         TextView mTitle = (TextView) toolbar.findViewById(R.id.toolbartext);
-        mTitle.setText(getResources().getString(R.string.join_as_coach));
+        mTitle.setText(getResources().getString(R.string.update_profile));
 
         tabLayout=findViewById(R.id.tabLayout);
         viewPager=findViewById(R.id.viewPager);

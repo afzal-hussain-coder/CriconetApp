@@ -543,6 +543,7 @@
     <string name="Available_Date_Session">Available Date &amp; Session</string>
     <string name="Information_saved_successfully_Please_proceed_to_continue_your_registration">Information saved successfully. Please proceed to continue your registration</string>
     <string name="Booking_Session_Close_Time">Booking Session Close Time</string>
+    <string name="update_profile">Update Profile</string>
 
 
 </resources>
