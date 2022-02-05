@@ -1,13 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:id="@+id/text_filter"
-    android:gravity="start"
-    android:layout_marginStart="@dimen/_10sdp"
-    android:padding="@dimen/_9sdp"
-    android:fontFamily="@font/opensans_semibold"
-    android:textColor="@color/light_text_color"
-    android:textSize="@dimen/_8sdp" />
+    android:paddingTop="@dimen/_2sdp"
+    android:paddingBottom="@dimen/_2sdp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/bckground"
+        android:orientation="horizontal">
+
+        <CheckBox
+            android:id="@+id/radio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:buttonTint="@color/light_text_color" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_5sdp"
+            android:text="nlksanflksa"
+            app:fontFamily="@font/opensans_regular"
+            android:textSize="@dimen/_10sdp"
+            android:textColor="@color/white"
+            />
+    </LinearLayout>
+
+</RelativeLayout>

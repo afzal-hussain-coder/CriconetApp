@@ -168,8 +168,8 @@ public class FilterCoachSelectionDropDownView extends OSLTextView implements Vie
             if (convertView == null) {
                 viewHolder = new FilterCoachSelectionDropDownView.CustomAdapter.ViewHolder();
                 LayoutInflater inflater = LayoutInflater.from(getContext());
-                convertView = inflater.inflate(R.layout.filter_coach_spinner_item, parent, false);
-                viewHolder.txtName = convertView.findViewById(R.id.text_filter);
+                convertView = inflater.inflate(R.layout.filter_spinner_item, parent, false);
+                viewHolder.txtName = convertView.findViewById(R.id.text);
 
                 convertView.setTag(viewHolder);
             } else {

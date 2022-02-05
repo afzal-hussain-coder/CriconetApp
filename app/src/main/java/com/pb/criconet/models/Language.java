@@ -59,6 +59,15 @@ public class Language {
         @SerializedName("lang_name")
         @Expose
         private String lang_name;
+        public boolean isSelected() {
+            return isSelected;
+        }
+
+        public void setSelected(boolean selected) {
+            isSelected = selected;
+        }
+
+        private boolean isSelected;
 
         public String getId() {
             return id;

@@ -26,9 +26,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -40,6 +43,8 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
@@ -50,6 +55,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
+import com.google.android.material.card.MaterialCardView;
 import com.google.gson.Gson;
 import com.mancj.slideup.SlideUp;
 import com.mancj.slideup.SlideUpBuilder;
@@ -60,10 +66,15 @@ import com.pb.criconet.Utills.Global;
 import com.pb.criconet.Utills.MultipartRequest;
 import com.pb.criconet.Utills.SessionManager;
 import com.pb.criconet.Utills.Toaster;
+import com.pb.criconet.activity.PlayRecordedVideoActivity;
 import com.pb.criconet.activity.Signup;
+import com.pb.criconet.adapters.FRecordedVideoAdapter;
 import com.pb.criconet.models.City;
+import com.pb.criconet.models.CoachLanguage;
 import com.pb.criconet.models.Country;
+import com.pb.criconet.models.DataModel;
 import com.pb.criconet.models.Language;
+import com.pb.criconet.models.RecodedVideo;
 import com.pb.criconet.models.States;
 import com.pb.criconet.models.UserData;
 import com.rilixtech.widget.countrycodepicker.CountryCodePicker;
@@ -71,6 +82,7 @@ import com.rilixtech.widget.countrycodepicker.CountryCodePicker;
 import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.entity.mime.content.StringBody;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -130,10 +142,18 @@ public class FragmentCoachEditProfile extends Fragment implements AdapterView.On
     TextView textView_language;
     boolean[] selectedLanguage;
     ArrayList<Integer> langList = new ArrayList<>();
-    ArrayList<String> language=null;
+    ArrayList<Language.Datum> language=null;
+    ArrayList<CoachLanguage> editlanguage=null;
     String[] langArray = null;
     private OtpView otpView;
     String countryId="";
+    String state_Name="";
+    String city_Name="";
+    ArrayList<String>coachLanguages = new ArrayList<>();
+    ArrayList<String> languageArray_new = new ArrayList<>();
+    Dialog dialog;
+    private StringBuilder langStringBuilder;
+
 
     public static FragmentCoachEditProfile newInstance() {
         return new FragmentCoachEditProfile();
@@ -157,6 +177,12 @@ public class FragmentCoachEditProfile extends Fragment implements AdapterView.On
         prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         loaderView = CustomLoaderView.initialize(getActivity());
         queue = Volley.newRequestQueue(getActivity());
+
+        dialog = new Dialog(getActivity());
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.setContentView(R.layout.dialog_select_language);
+        dialog.setCancelable(false);
 
 
         edttxt_fname = rootView.findViewById(R.id.edttxt_fname);
@@ -232,7 +258,6 @@ public class FragmentCoachEditProfile extends Fragment implements AdapterView.On
             selectImage();
         });
 
-
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -249,85 +274,88 @@ public class FragmentCoachEditProfile extends Fragment implements AdapterView.On
             @Override
             public void onClick(View view) {
 
+                dialog.show();
+
                 // Initialize alert dialog
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                // set title
-                builder.setTitle(getActivity().getResources().getString(R.string.Select_Language_You_Speak));
-
-                // set dialog non cancelable
-                builder.setCancelable(false);
-
-                builder.setMultiChoiceItems(langArray, selectedLanguage, new DialogInterface.OnMultiChoiceClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i, boolean b) {
-                        // check condition
-                        if (b) {
-                            // when checkbox selected
-                            // Add position  in lang list
-                            Log.d("Index",i+"");
-                            langList.add(i);
-                            // Sort array list
-                            //Collections.sort(langList);
-                        } else {
-
-                            if (langList.contains(i)) {
-                                langList.remove((Integer) i);
-                            }
-
-                            //langList.remove(langArray);
-                            // when checkbox unselected
-                            // Remove position from langList
-
-                        }
-                    }
-                });
-
-                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        // Initialize string builder
-                        StringBuilder stringBuilder = new StringBuilder();
-                        // use for loop
-                        for (int j = 0; j < langList.size(); j++) {
-                            // concat array value
-                            stringBuilder.append(langArray[langList.get(j)]);
-                            // check condition
-                            if (j != langList.size() - 1) {
-                                // When j value  not equal
-                                // to lang list size - 1
-                                // add comma
-                                stringBuilder.append(",");
-                            }
-                        }
-                        // set text on textView
-                        textView_language.setText(stringBuilder.toString());
-
-                    }
-                });
-
-                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        // dismiss dialog
-                        dialogInterface.dismiss();
-                    }
-                });
-                builder.setNeutralButton("Clear All", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        // use for loop
-                        for (int j = 0; j < selectedLanguage.length; j++) {
-                            // remove all selection
-                            selectedLanguage[j] = false;
-                            // clear language list
-                            langList.clear();
-                            // clear text view value
-                            textView_language.setText("");
-                        }
-                    }
-                });
-                // show dialog
-                builder.show();
+//                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+//                // set title
+//                builder.setTitle(getActivity().getResources().getString(R.string.Select_Language_You_Speak));
+//
+//                // set dialog non cancelable
+//                builder.setCancelable(false);
+//
+//
+//                builder.setMultiChoiceItems(langArray, selectedLanguage, new DialogInterface.OnMultiChoiceClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialogInterface, int i, boolean b) {
+//                        // check condition
+//                        if (b) {
+//                            // when checkbox selected
+//                            // Add position  in lang list
+//                            Log.d("Index",i+"");
+//                            langList.add(i);
+//                            // Sort array list
+//                            //Collections.sort(langList);
+//                        } else {
+//
+//                            if (langList.contains(i)) {
+//                                langList.remove((Integer) i);
+//                            }
+//
+//                            //langList.remove(langArray);
+//                            // when checkbox unselected
+//                            // Remove position from langList
+//
+//                        }
+//                    }
+//                });
+//
+//                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialogInterface, int i) {
+//                        // Initialize string builder
+//                        StringBuilder stringBuilder = new StringBuilder();
+//                        // use for loop
+//                        for (int j = 0; j < langList.size(); j++) {
+//                            // concat array value
+//                            stringBuilder.append(langArray[langList.get(j)]);
+//                            // check condition
+//                            if (j != langList.size() - 1) {
+//                                // When j value  not equal
+//                                // to lang list size - 1
+//                                // add comma
+//                                stringBuilder.append(",");
+//                            }
+//                        }
+//                        // set text on textView
+//                        textView_language.setText(stringBuilder.toString());
+//
+//                    }
+//                });
+//
+//                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialogInterface, int i) {
+//                        // dismiss dialog
+//                        dialogInterface.dismiss();
+//                    }
+//                });
+//                builder.setNeutralButton("Clear All", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialogInterface, int i) {
+//                        // use for loop
+//                        for (int j = 0; j < selectedLanguage.length; j++) {
+//                            // remove all selection
+//                            selectedLanguage[j] = false;
+//                            // clear language list
+//                            langList.clear();
+//                            // clear text view value
+//                            textView_language.setText("");
+//                        }
+//                    }
+//                });
+//                // show dialog
+//                builder.show();
             }
         });
 
@@ -367,9 +395,9 @@ public class FragmentCoachEditProfile extends Fragment implements AdapterView.On
         else if (!Global.validateLengthofCoachRegister(lname_String)) {
             Toaster.customToast(getResources().getString(R.string.Enter_Last_Name));
         }
-        else if (langList.size()==0) {
+        else if (textView_language.getText().equals("")) {
             Toaster.customToast(getResources().getString(R.string.select_language));
-        }else if (langList.size() >5) {
+        }else if (languageArray_new.size() >5) {
             Toaster.customToast(getResources().getString(R.string.you_can_only_select_five_item));
         }
         else if(countryID.equalsIgnoreCase("")){
@@ -528,11 +556,12 @@ public class FragmentCoachEditProfile extends Fragment implements AdapterView.On
             spinnerCountry.setSelection(Global.getIndex(spinnerCountry, data.optString("country_name")));
         }
         if(data.has("state_name")){
-            Log.d("sateNAme",data.optString("state_name"));
-            spinnerState.setSelection(Global.getIndex(spinnerState, data.optString("state_name")));
+            state_Name = data.optString("state_name");
+            stateID = data.optString("state_id");
+            getCity(stateID);
         }
         if(data.has("city_name")){
-            spinnerCity.setSelection(Global.getIndex(spinnerCity, data.optString("city_name")));
+            city_Name = data.optString("city_name");
         }
         if(data.has("pincode")){
             etPincode.setText(data.optString("pincode"));
@@ -546,13 +575,41 @@ public class FragmentCoachEditProfile extends Fragment implements AdapterView.On
         if(data.has("address2")){
             etAddress2.setText(data.optString("address2"));
         }
+
         if(data.has("languages")){
-            //edttxt_Mname.setText(data.optString("languages"));
-            //spn_language.setSelection(Global.getIndex(spn_language, SessionManager.get_sex(prefs)));
+
+            try {
+                JSONArray jsonArray = data.getJSONArray("languages");
+                JSONObject jsonObject=null;
+                CoachLanguage coachLanguage=null;
+                for(int i= 0;i<jsonArray.length();i++){
+                    jsonObject = jsonArray.getJSONObject(i);
+                    coachLanguage= new CoachLanguage(jsonObject);
+                    coachLanguages.add(coachLanguage.getName_eng());
+                }
+
+                langStringBuilder = new StringBuilder();
+                String prefix = "";
+                for (String item : coachLanguages) {
+                    langStringBuilder.append(prefix);
+                    prefix = ",";
+                    langStringBuilder.append(item);
+                }
+                //Log.d("size",langStringBuilder.toString());
+
+                textView_language.setText(langStringBuilder.toString());
+
+                //Log.d("size",coachLanguages.size()+"");
+
+                languageSelectionDialog(language,coachLanguages);
+
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
 
     }
-
 
     private void editprofile_task() {
         loaderView.showLoader();
@@ -728,13 +785,13 @@ public class FragmentCoachEditProfile extends Fragment implements AdapterView.On
     }
 
     private void getState(String countryId) {
-        loaderView.showLoader();
+        //loaderView.showLoader();
         StringRequest postRequest = new StringRequest(Request.Method.GET, Global.URL + "get_states"+"&country_id="+countryId, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 Log.d("ResponseSatate",response);
                 if(!response.isEmpty()) {
-                    loaderView.hideLoader();
+                    //loaderView.hideLoader();
                     Gson gson = new Gson();
                     statemodelArrayList = gson.fromJson(response, States.class);
                     if(statemodelArrayList.getApiStatus().equalsIgnoreCase("200")) {
@@ -743,10 +800,14 @@ public class FragmentCoachEditProfile extends Fragment implements AdapterView.On
                         for (States.Datum data : statemodelArrayList.getData()) {
                             state.add(data.getName());
                         }
+
+
+
                         ArrayAdapter aa = new ArrayAdapter(getActivity(), R.layout.custom_spinner, state);
                         aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                         spinnerState.setAdapter(aa);
-                        //spinnerState.setSelection(Global.getIndex(spinnerState, SessionManager.getStates(prefs)));
+
+                        spinnerState.setSelection(Global.getIndex(spinnerState, state_Name));
                     }
                 }
 
@@ -755,7 +816,7 @@ public class FragmentCoachEditProfile extends Fragment implements AdapterView.On
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                loaderView.hideLoader();
+                //loaderView.hideLoader();
                 error.printStackTrace();
                 Global.msgDialog(getActivity(), getResources().getString(R.string.error_server));
             }
@@ -768,12 +829,12 @@ public class FragmentCoachEditProfile extends Fragment implements AdapterView.On
     }
 
     private void getCity(String stateId) {
-        loaderView.showLoader();
+        //loaderView.showLoader();
         StringRequest postRequest = new StringRequest(Request.Method.GET, Global.URL + "get_cities"+"&state_id="+stateId, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 Log.d("ResponseCity",response);
-                loaderView.hideLoader();
+                //loaderView.hideLoader();
                 Gson gson = new Gson();
                 citymodelArrayList = gson.fromJson(response, City.class);
                 if(citymodelArrayList.getApiStatus().equalsIgnoreCase("200")) {
@@ -785,14 +846,14 @@ public class FragmentCoachEditProfile extends Fragment implements AdapterView.On
                     ArrayAdapter aa = new ArrayAdapter(getActivity(), R.layout.custom_spinner, city);
                     aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     spinnerCity.setAdapter(aa);
-                    //spinnerCity.setSelection(Global.getIndex(spinnerCity, SessionManager.getCity(prefs)));
+                    spinnerCity.setSelection(Global.getIndex(spinnerCity, city_Name));
                 }
 
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                loaderView.hideLoader();
+                //loaderView.hideLoader();
                 error.printStackTrace();
                 Global.msgDialog(getActivity(), getResources().getString(R.string.error_server));
             }
@@ -812,17 +873,19 @@ public class FragmentCoachEditProfile extends Fragment implements AdapterView.On
                 languageModelArrayList = gson.fromJson(response, Language.class);
                 if(languageModelArrayList.getApiStatus().equalsIgnoreCase("200")) {
                     language = new ArrayList<>();
-                    language.add("Language");
+                    //language.add("Language");
                     for (Language.Datum datum : languageModelArrayList.getData()) {
-                        language.add(datum.getName_eng());
+                        language.add(datum);
                     }
-                    language.remove(0);
-                    langArray= language.toArray(new String[language.size()]);
-                    selectedLanguage = new boolean[langArray.length];
-                    ArrayAdapter aa = new ArrayAdapter(getActivity(), R.layout.custom_spinner, language);
-                    aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    spn_language.setAdapter(aa);
-                    spn_language.setSelection(Global.getIndex(spn_language, SessionManager.getLanguage(prefs)));
+                    //language.remove(0);
+                    languageSelectionDialog(language,new ArrayList<>());
+
+//                    langArray= language.toArray(new String[language.size()]);
+//                    selectedLanguage = new boolean[langArray.length];
+//                    ArrayAdapter aa = new ArrayAdapter(getActivity(), R.layout.custom_spinner, language);
+//                    aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//                    spn_language.setAdapter(aa);
+//                    spn_language.setSelection(Global.getIndex(spn_language, SessionManager.getLanguage(prefs)));
                 }
             }
         }, new Response.ErrorListener() {
@@ -845,7 +908,6 @@ public class FragmentCoachEditProfile extends Fragment implements AdapterView.On
         postRequest.setRetryPolicy(policy);
         queue.add(postRequest);
     }
-
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -1002,7 +1064,6 @@ public class FragmentCoachEditProfile extends Fragment implements AdapterView.On
         queue.add(postRequest);
 
     }
-
 
     private void EmailOtpDialog(String mobile) {
         Dialog dialog = new Dialog(getActivity());
@@ -1191,6 +1252,131 @@ public class FragmentCoachEditProfile extends Fragment implements AdapterView.On
             }
 
         }.start();
+    }
+
+    private void languageSelectionDialog(ArrayList<Language.Datum> languageArray,ArrayList<String> coachLanguages) {
+        TextView btnOk = dialog.findViewById(R.id.btnOk);
+        RecyclerView rv_language= dialog.findViewById(R.id.rv_language);
+        rv_language.setHasFixedSize(true);
+        rv_language.setLayoutManager(new LinearLayoutManager(getActivity()));
+        selectCoachLanguageAdapter selectCoachLanguageAdapter = new selectCoachLanguageAdapter(languageArray,coachLanguages, getActivity(), new selectCoachLanguageAdapter.languageSelectionListner() {
+            @Override
+            public void itemChcked(ArrayList<String> languageArrayy) {
+          // Log.d("SizeSelected",languageArrayy.size()+"");
+           languageArray_new = languageArrayy;
+            }
+        });
+        rv_language.setAdapter(selectCoachLanguageAdapter);
+        //TextView btnCancel = dialog.findViewById(R.id.btnCancel);
+//        btnCancel.setOnClickListener(view -> {
+//            dialog.dismiss();
+//        });
+        btnOk.setOnClickListener(view -> {
+
+
+            langStringBuilder = new StringBuilder();
+            String prefix = "";
+
+            for(int i = 0;i<languageArray_new.size();i++){
+                langStringBuilder.append(prefix);
+                prefix = ",";
+                langStringBuilder.append(languageArray_new.get(i));
+            }
+
+            //Log.d("size",langStringBuilder.toString());
+
+        textView_language.setText(langStringBuilder.toString());
+        dialog.dismiss();
+        });
+
+        //dialog.show();
+
+    }
+
+    public static class selectCoachLanguageAdapter extends RecyclerView.Adapter<selectCoachLanguageAdapter.MyViewHolder> {
+        Context context;
+        ArrayList<Language.Datum> languageArray;
+        ArrayList<String>checkedArray;
+        ArrayList<String> coachLanguages;
+        languageSelectionListner languageSelectionListner;
+        public selectCoachLanguageAdapter(ArrayList<Language.Datum> languageArray,ArrayList<String> coachLanguages, Context context,languageSelectionListner languageSelectionListner) {
+            this.context = context;
+            this.languageArray=languageArray;
+            this.languageSelectionListner = languageSelectionListner;
+            this.coachLanguages = coachLanguages;
+            checkedArray = new ArrayList<>();
+        }
+
+        @Override
+        public selectCoachLanguageAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            // inflate the item Layout
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.filter_coach_spinner_item, parent, false);
+            MyViewHolder vh = new MyViewHolder(v);
+            return vh;
+        }
+
+        @Override
+        public void onBindViewHolder(selectCoachLanguageAdapter.MyViewHolder holder, final int position) {
+            Language.Datum coachLanguage= languageArray.get(position);
+
+            holder.textView.setText(coachLanguage.getName_eng());
+            holder.checkBox.setChecked(coachLanguage.isSelected());
+
+           // Log.d("coachSize",coachLanguages.size()+"");
+
+                for(int j= 0; j<coachLanguages.size();j++){
+                    if(coachLanguages.get(j).equalsIgnoreCase(coachLanguage.getName_eng())){
+                        holder.checkBox.setChecked(true);
+                        checkedArray.add(coachLanguages.get(j));
+                        languageSelectionListner.itemChcked(checkedArray);
+                        break;
+                    }
+
+
+            }
+
+
+            holder.checkBox.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    CheckBox myCheckBox= (CheckBox) view;
+                    Language.Datum coachLanguage=languageArray.get(position);
+
+                    if(myCheckBox.isChecked()) {
+                        coachLanguage.setSelected(true);
+                        checkedArray.add(coachLanguage.getName_eng());
+                    }
+                    else if(!myCheckBox.isChecked()) {
+                        coachLanguage.setSelected(false);
+                        checkedArray.remove(coachLanguage.getName_eng());
+                    }
+                    languageSelectionListner.itemChcked(checkedArray);
+                }
+            });
+
+
+        }
+
+        @Override
+        public int getItemCount() {
+            return languageArray.size();
+        }
+
+        class MyViewHolder extends RecyclerView.ViewHolder {
+            CheckBox checkBox;
+            TextView textView;
+
+            MyViewHolder(View itemView) {
+                super(itemView);
+                checkBox = itemView.findViewById(R.id.radio);
+                textView =  itemView.findViewById(R.id.textView);
+
+            }
+        }
+
+        interface languageSelectionListner{
+            void itemChcked(ArrayList<String> languageArray);
+        }
     }
 
 }

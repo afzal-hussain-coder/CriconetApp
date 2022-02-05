@@ -38,6 +38,7 @@ import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.mancj.slideup.SlideUp;
 import com.mancj.slideup.SlideUpBuilder;
@@ -53,12 +54,17 @@ import com.pb.criconet.activity.CoachRegisterPrivacyWebView;
 import com.pb.criconet.activity.WebViewCoachRegisterTermsActivity;
 import com.pb.criconet.activity.WebViewSignUpTermsActivity;
 import com.pb.criconet.adapters.ButtonAdapter;
+import com.pb.criconet.adapters.CoachButtonAdapter;
+import com.pb.criconet.models.CoachLanguage;
 import com.pb.criconet.models.Country;
 import com.pb.criconet.models.DataModel;
+import com.pb.criconet.models.Datum;
 
 import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.entity.mime.content.StringBody;
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -69,13 +75,14 @@ import java.util.Map;
 
 import timber.log.Timber;
 
-public class FragmentExperienceSetting extends Fragment implements ButtonAdapter.ItemListener {
+public class FragmentExperienceSetting extends Fragment implements CoachButtonAdapter.ItemListenerr {
     private View rootView;
     private RequestQueue queue;
     private ProgressDialog progress;
     private SharedPreferences prefs;
     private RecyclerView recyclerView;
     private DataModel modelArrayList;
+    private ArrayList<Datum>editList_speclization=new ArrayList<>();
     private FilterCoachSelectionDropDownView spinerYear;
     private FilterCoachSelectionDropDownView spinerMonth;
     private FilterCoachSelectionDropDownView spinerCurency;
@@ -183,15 +190,14 @@ public class FragmentExperienceSetting extends Fragment implements ButtonAdapter
             //finish();
         });
 
-
         recyclerView = rootView.findViewById(R.id.recylerButton);
         GridLayoutManager manager = new GridLayoutManager(getActivity(), 3, GridLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(manager);
 
         spinerCurency = rootView.findViewById(R.id.spinerCurency);
         option_currency.add(new com.pb.criconet.Utills.DataModel("₹ INR"));
-        option_currency.add(new com.pb.criconet.Utills.DataModel("$ USD"));
-        option_currency.add(new com.pb.criconet.Utills.DataModel("€ EUR"));
+//        option_currency.add(new com.pb.criconet.Utills.DataModel("$ USD"));
+//        option_currency.add(new com.pb.criconet.Utills.DataModel("€ EUR"));
         spinerCurency.setOptionList(option_currency);
         selectedCurency = option_currency.get(0).getName();
         spinerCurency.setText(selectedCurency);
@@ -350,6 +356,7 @@ public class FragmentExperienceSetting extends Fragment implements ButtonAdapter
 
         if (Global.isOnline(getActivity())) {
             getSpecialities();
+            getUsersDetails();
         } else {
             Global.showDialog(getActivity());
         }
@@ -496,10 +503,11 @@ public class FragmentExperienceSetting extends Fragment implements ButtonAdapter
         else if (etAmount.getText().toString().trim().equalsIgnoreCase("")) {
             Toaster.customToast(getActivity().getResources().getString(R.string.Enter_Amount_session));
             return false;
-        }else if(isTeramsChecked.equalsIgnoreCase("")){
-            Toaster.customToast(getActivity().getResources().getString(R.string.Please_check_tearms));
-            return false;
         }
+//        else if(isTeramsChecked.equalsIgnoreCase("")){
+//            Toaster.customToast(getActivity().getResources().getString(R.string.Please_check_tearms));
+//            return false;
+//        }
 
         return true;
     }
@@ -510,7 +518,7 @@ public class FragmentExperienceSetting extends Fragment implements ButtonAdapter
                 Gson gson = new Gson();
                 modelArrayList = gson.fromJson(response, DataModel.class);
                 if (modelArrayList.getApiStatus().equalsIgnoreCase("200")) {
-                    recyclerView.setAdapter(new ButtonAdapter(getActivity(), modelArrayList.getData(), FragmentExperienceSetting.this));
+                    recyclerView.setAdapter(new CoachButtonAdapter(getActivity(),new ArrayList<>(), modelArrayList.getData(), FragmentExperienceSetting.this));
                 }
 
             }
@@ -598,16 +606,17 @@ public class FragmentExperienceSetting extends Fragment implements ButtonAdapter
     }
 
     @Override
-    public void onItemClick(List<DataModel.Datum> items) {
+    public void onItemClick(List<String> items) {
         categoryId = new StringBuilder();
         String prefix = "";
-        for (DataModel.Datum item : modelArrayList.getData()) {
-            if (item.isCheck()) {
-                categoryId.append(prefix);
-                prefix = ",";
-                categoryId.append(item.getId());
-            }
+
+        for (String item : items) {
+            categoryId.append(prefix);
+            prefix = ",";
+            categoryId.append(item);
         }
+
+        Log.d("CategoryId",categoryId+"");
     }
 
     private void removeCertificate() {
@@ -623,7 +632,7 @@ public class FragmentExperienceSetting extends Fragment implements ButtonAdapter
 
                         Toaster.customToast(jsonObject.optString("msg"));
                         tv_click_uploadCertificate.setText(getActivity().getResources().getString(R.string.upload_certificate));
-                         iv_upload_certificate.setImageURI(null);
+                        // iv_upload_certificate.setImageURI(null);
                         //getUsersDetails(SessionManager.get_user_id(prefs));
 
                     } else if (jsonObject.optString("api_text").equalsIgnoreCase("failed")) {
@@ -656,6 +665,140 @@ public class FragmentExperienceSetting extends Fragment implements ButtonAdapter
         RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
         postRequest.setRetryPolicy(policy);
         queue.add(postRequest);
+    }
+
+    private void setData(JSONObject  data) {
+
+        if (data.has("profile_title")) {
+            etProfileTitle.setText(data.optString("profile_title"));
+        }
+        if (data.has("achievement")) {
+            etAchievement.setText(data.optString("achievement"));
+        }
+        if (data.has("skills_you_learn")) {
+            try {
+                etSkills_Student_Learns.setText(data.getString("skills_you_learn"));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        if (data.has("what_you_teach")) {
+            etwhat_you_teach.setText(data.optString("what_you_teach"));
+        }
+        if (data.has("about_coach_profile")) {
+            etAnyOtherInformation.setText(data.optString("about_coach_profile"));
+        }
+        if (data.has("certificate_title")) {
+            etcertificate_title.setText(data.optString("certificate_title"));
+        }
+        if (data.has("certificate")) {
+            try {
+                Glide.with(getActivity()).load(Uri.parse(data.optString("certificate"))).into(iv_upload_certificate);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        if (data.has("exp_years")) {
+            String yearName = data.optString("exp_years") + " " + "years";
+            selectedYear = yearName;
+            selectedYear = selectedYear.replace("years","").trim();
+            spinerYear.setText(yearName);
+
+        }
+        if (data.has("exp_months")) {
+            String monthName = data.optString("exp_months") + " " + "months";
+            selectedMonth = monthName;
+            selectedMonth = selectedMonth.replace("months","").trim();
+            spinerMonth.setText(monthName);
+        }
+        if (data.has("cuurency_code")) {
+            String currencyName = data.optString("cuurency_code");
+            selectedCurency = currencyName.replace("?","").trim();
+            Toaster.customToast(selectedCurency);
+            spinerCurency.setText(selectedCurency);
+
+        }
+
+        if (data.has("charge_amount")) {
+            etAmount.setText(data.optString("charge_amount"));
+        }
+
+
+        if (data.has("Specialization_category")) {
+            try {
+                JSONArray jsonArray = data.getJSONArray("Specialization_category");
+                JSONObject jsonObject = null;
+                Datum coachLanguage = null;
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    jsonObject = jsonArray.getJSONObject(i);
+                    coachLanguage = new Datum(jsonObject);
+                    Log.d("speclization", jsonObject.getString("title") + "/" + jsonObject.getString("id"));
+                    // coachLanguage= new DataModel(jsonObject);
+                    editList_speclization.add(coachLanguage);
+                }
+                recyclerView.setAdapter(new CoachButtonAdapter(getActivity(), editList_speclization, modelArrayList.getData(), FragmentExperienceSetting.this));
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
+
+
+
+    public void getUsersDetails() {
+        //loaderView.showLoader();
+        StringRequest postRequest = new StringRequest(Request.Method.POST, Global.URL + "get_user_data",
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d("getUserDetails",response);
+                        //loaderView.hideLoader();
+                        try {
+                            JSONObject jsonObject = new JSONObject(response.toString());
+                            if (jsonObject.optString("api_text").equalsIgnoreCase("Success")) {
+                                JSONObject object = jsonObject.getJSONObject("coach_data");
+
+                                if(object.has("coach_info")){
+                                    JSONObject jsonObject_personal_info= object.getJSONObject("coach_info");
+                                    setData(jsonObject_personal_info);
+                                }
+                            } else if (jsonObject.optString("api_text").equalsIgnoreCase("failed")) {
+                                Global.msgDialog(getActivity(), jsonObject.optJSONObject("errors").optString("error_text"));
+                            } else {
+                                Global.msgDialog(getActivity(), getResources().getString(R.string.error_server));
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
+                       // loaderView.hideLoader();
+                        Global.msgDialog(getActivity(), getResources().getString(R.string.error_server));
+//                Global.msgDialog(EditProfile.this, "Internet connection is slow");
+                    }
+                }
+        ) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> param = new HashMap<String, String>();
+                param.put("user_id", SessionManager.get_user_id(prefs));
+                param.put("user_profile_id", SessionManager.get_user_id(prefs));
+                param.put("s", SessionManager.get_session_id(prefs));
+                System.out.println("data   :" + param);
+                return param;
+            }
+        };
+        int socketTimeout = 30000;
+        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        postRequest.setRetryPolicy(policy);
+        queue.add(postRequest);
+
     }
 
 

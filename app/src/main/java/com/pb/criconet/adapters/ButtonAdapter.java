@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.pb.criconet.R;
 import com.pb.criconet.models.DataModel;
+import com.pb.criconet.models.Datum;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +22,6 @@ public class ButtonAdapter extends RecyclerView.Adapter<ButtonAdapter.ViewHolder
     protected ItemListener mListener;
 
     public ButtonAdapter(Context context, List<DataModel.Datum> values, ItemListener itemListener) {
-
         mValues = values;
         mContext = context;
         mListener=itemListener;
