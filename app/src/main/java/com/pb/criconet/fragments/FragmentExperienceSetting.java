@@ -437,9 +437,9 @@ public class FragmentExperienceSetting extends Fragment implements CoachButtonAd
                 } else {
 //                    dialog_camera.dismiss();
                     System.out.println("cccccccc   " + imagepath);
-                    iv_upload_certificate.setImageURI(Uri.parse(imagepath));
+                    //iv_upload_certificate.setImageURI(Uri.parse(imagepath));
+                    Glide.with(getActivity()).load(imagepath).into(iv_upload_certificate);
                     //updateImageTask(imagepath);
-
                 }
 
             } catch (Exception e) {
@@ -823,6 +823,5 @@ public class FragmentExperienceSetting extends Fragment implements CoachButtonAd
         queue.add(postRequest);
 
     }
-
 
 }

@@ -554,6 +554,20 @@ public class Global {
         return realdate;
     }
 
+    public static String getDateGotCoachh(String dateTime) {
+        Date date = null;
+        String realdate = null;
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            date = formatter.parse(dateTime);
+            realdate = new SimpleDateFormat("dd-MM-yyyy").format(date);
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return realdate;
+    }
+
     public static String getDateGott(String dateTime) {
         Date date = null;
         String realdate = null;
@@ -614,6 +628,11 @@ public class Global {
 
     public static Drawable getThreeDots(Context context) {
         Drawable drawable = ContextCompat.getDrawable(context, R.drawable.sample_three_icons);
+        //Add padding to too large icon
+        return new InsetDrawable(drawable, 100, 0, 100, 0);
+    }
+    public static Drawable getThreeDotss(Context context) {
+        Drawable drawable = ContextCompat.getDrawable(context, R.drawable.sample_three_iconss);
         //Add padding to too large icon
         return new InsetDrawable(drawable, 100, 0, 100, 0);
     }

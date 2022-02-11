@@ -97,5 +97,16 @@
 
         </LinearLayout>
     </ScrollView>
+    <FrameLayout
+        android:id="@+id/dim"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:alpha="0"
+        android:visibility="visible"
+        android:background="@color/black_semi_transparent"
+        android:fitsSystemWindows="false" />
+
+    <include layout="@layout/dialog_slot_list"
+        android:visibility="visible"/>
 
 </RelativeLayout>

@@ -3,7 +3,7 @@
     <item>
         <bitmap
             android:gravity="top|left"
-            android:src="@drawable/a_img"/>
+            android:src="@drawable/a_img" />
     </item>
 
 </layer-list>

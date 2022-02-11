@@ -26,6 +26,7 @@ public class TimeAdaptercoach extends RecyclerView.Adapter<TimeAdaptercoach.MyVi
     private List<TimeSlot.Datum> data;
     private timeSelectt callback;
     ArrayList<String> arrayListUser;
+    ArrayList<String>updatedSlotList;
 
     public TimeAdaptercoach(Context context, List<TimeSlot.Datum> data, timeSelectt callback) {
         this.context = context;

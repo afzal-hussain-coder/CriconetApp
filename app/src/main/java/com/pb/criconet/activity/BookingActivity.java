@@ -151,7 +151,6 @@ public class BookingActivity extends AppCompatActivity implements BookingHistory
     private String from_date="";
     private String to_date="";
 
-
     //WebView web_chat;
     private SlideUp slideUp_chat;
     private View dim_chat, rootView_chat;
@@ -168,7 +167,6 @@ public class BookingActivity extends AppCompatActivity implements BookingHistory
     WebSettings webSettings;
     String notification_count="";
 
-
     /*Record Video*/
     private static final int CAPTURE_VIDEO = 3015;
     private String postFile = "";
@@ -176,7 +174,6 @@ public class BookingActivity extends AppCompatActivity implements BookingHistory
     private byte[] byteArray;
     FloatingTextButton fabCreate;
     /*End Record Video*/
-
 
 
     @Override
