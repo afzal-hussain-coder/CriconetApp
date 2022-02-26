@@ -33,8 +33,8 @@ public class WebViewCoachRegisterTermsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                Intent intent = new Intent(WebViewCoachRegisterTermsActivity.this, CoachRegistrationActivity.class);
-                intent.putExtra("FROM", "4");
+                Intent intent = new Intent(WebViewCoachRegisterTermsActivity.this, CoachProfessionalInfoActivity.class);
+                //intent.putExtra("FROM", "4");
                 startActivity(intent);
                 finish();
             }
@@ -56,8 +56,9 @@ public class WebViewCoachRegisterTermsActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Intent intent = new Intent(WebViewCoachRegisterTermsActivity.this, CoachRegistrationActivity.class);
-        intent.putExtra("FROM", "4");
+
+        Intent intent = new Intent(WebViewCoachRegisterTermsActivity.this, CoachProfessionalInfoActivity.class);
+        //intent.putExtra("FROM", "4");
         startActivity(intent);
         finish();
     }

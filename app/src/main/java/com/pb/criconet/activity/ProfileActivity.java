@@ -83,14 +83,17 @@ public class ProfileActivity extends BaseActivity {
         prefs = PreferenceManager.getDefaultSharedPreferences(mActivity);
 
         ivEditProfile.setOnClickListener(view -> {
-            if (SessionManager.get_profiletype(prefs).equalsIgnoreCase("coach")) {
-                startActivity(new Intent(mActivity,CoachRegistrationActivity.class).putExtra("FROM","1"));
-                finish();
-            }else{
+            startActivity(new Intent(mActivity,EditProfile.class).putExtra("FROM","1"));
+            finish();
 
-                startActivity(new Intent(mActivity,EditProfile.class).putExtra("FROM","1"));
-                finish();
-            }
+//            if (SessionManager.get_profiletype(prefs).equalsIgnoreCase("coach")) {
+//                startActivity(new Intent(mActivity,CoachRegistrationActivity.class).putExtra("FROM","1"));
+//                finish();
+//            }else{
+//
+//                startActivity(new Intent(mActivity,EditProfile.class).putExtra("FROM","1"));
+//                finish();
+//            }
 
 
         });

@@ -55,6 +55,7 @@ import com.pb.criconet.models.DataModel;
 import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.entity.mime.content.StringBody;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -136,8 +137,24 @@ public class CoachProfessionalInfoActivity extends AppCompatActivity implements 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-        toolbar.setOnClickListener(view -> {
+        toolbar.setNavigationOnClickListener(v -> {
             finish();
+//            if(from_where.equalsIgnoreCase("2")){
+//
+//                Intent intent = new Intent(mActivity, Settings.class);
+//                startActivity(intent);
+//                finish();
+//            }else if(from_where.equalsIgnoreCase("3")){
+//                Intent intent = new Intent(mActivity, MainActivity.class);
+//                startActivity(intent);
+//
+//            }
+//            else{
+//
+//                Intent intent = new Intent(mActivity, ProfileActivity.class);
+//                startActivity(intent);
+//                finish();
+//            }
         });
         TextView mTitle = (TextView) toolbar.findViewById(R.id.toolbartext);
         mTitle.setText(getResources().getString(R.string.Professional_Qualifications));
@@ -183,15 +200,14 @@ public class CoachProfessionalInfoActivity extends AppCompatActivity implements 
             //finish();
         });
 
-
         recyclerView = findViewById(R.id.recylerButton);
         GridLayoutManager manager = new GridLayoutManager(mContext, 3, GridLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(manager);
 
         spinerCurency = findViewById(R.id.spinerCurency);
         option_currency.add(new com.pb.criconet.Utills.DataModel("₹ INR"));
-        option_currency.add(new com.pb.criconet.Utills.DataModel("$ USD"));
-        option_currency.add(new com.pb.criconet.Utills.DataModel("€ EUR"));
+//        option_currency.add(new com.pb.criconet.Utills.DataModel("$ USD"));
+//        option_currency.add(new com.pb.criconet.Utills.DataModel("€ EUR"));
         spinerCurency.setOptionList(option_currency);
         selectedCurency = option_currency.get(0).getName();
         spinerCurency.setText(selectedCurency);
@@ -216,16 +232,16 @@ public class CoachProfessionalInfoActivity extends AppCompatActivity implements 
         option_month.add(new com.pb.criconet.Utills.DataModel("Select Month"));
         option_month.add(new com.pb.criconet.Utills.DataModel("0 month"));
         option_month.add(new com.pb.criconet.Utills.DataModel("1 month"));
-        option_month.add(new com.pb.criconet.Utills.DataModel("2 month"));
-        option_month.add(new com.pb.criconet.Utills.DataModel("3 month"));
-        option_month.add(new com.pb.criconet.Utills.DataModel("4 month"));
-        option_month.add(new com.pb.criconet.Utills.DataModel("5 month"));
-        option_month.add(new com.pb.criconet.Utills.DataModel("6 month"));
-        option_month.add(new com.pb.criconet.Utills.DataModel("7 month"));
-        option_month.add(new com.pb.criconet.Utills.DataModel("8 month"));
-        option_month.add(new com.pb.criconet.Utills.DataModel("9 month"));
-        option_month.add(new com.pb.criconet.Utills.DataModel("10 month"));
-        option_month.add(new com.pb.criconet.Utills.DataModel("11 month"));
+        option_month.add(new com.pb.criconet.Utills.DataModel("2 months"));
+        option_month.add(new com.pb.criconet.Utills.DataModel("3 months"));
+        option_month.add(new com.pb.criconet.Utills.DataModel("4 months"));
+        option_month.add(new com.pb.criconet.Utills.DataModel("5 months"));
+        option_month.add(new com.pb.criconet.Utills.DataModel("6 months"));
+        option_month.add(new com.pb.criconet.Utills.DataModel("7 months"));
+        option_month.add(new com.pb.criconet.Utills.DataModel("8 months"));
+        option_month.add(new com.pb.criconet.Utills.DataModel("9 months"));
+        option_month.add(new com.pb.criconet.Utills.DataModel("10 months"));
+        option_month.add(new com.pb.criconet.Utills.DataModel("11 months"));
         spinerMonth.setOptionList(option_month);
         selectedMonth = option_month.get(0).getName();
         spinerMonth.setText(selectedMonth);
@@ -239,6 +255,8 @@ public class CoachProfessionalInfoActivity extends AppCompatActivity implements 
             public void onClickDone(String name) {
                 if(name.contains("month")){
                     selectedMonth = name.replace("month","").trim();
+                }else if(name.contains("months")){
+                    selectedMonth = name.replace("months","").trim();
                 }
             }
 
@@ -247,39 +265,38 @@ public class CoachProfessionalInfoActivity extends AppCompatActivity implements 
             }
         });
 
-
         spinerYear = findViewById(R.id.spinerYear);
         option.add(new com.pb.criconet.Utills.DataModel("Select Year"));
         option.add(new com.pb.criconet.Utills.DataModel("0 year"));
         option.add(new com.pb.criconet.Utills.DataModel("1 year"));
-        option.add(new com.pb.criconet.Utills.DataModel("2 year"));
-        option.add(new com.pb.criconet.Utills.DataModel("3 year"));
-        option.add(new com.pb.criconet.Utills.DataModel("4 year"));
-        option.add(new com.pb.criconet.Utills.DataModel("5 year"));
-        option.add(new com.pb.criconet.Utills.DataModel("6 year"));
-        option.add(new com.pb.criconet.Utills.DataModel("7 year"));
-        option.add(new com.pb.criconet.Utills.DataModel("8 year"));
-        option.add(new com.pb.criconet.Utills.DataModel("9 year"));
-        option.add(new com.pb.criconet.Utills.DataModel("10 year"));
-        option.add(new com.pb.criconet.Utills.DataModel("11 year"));
-        option.add(new com.pb.criconet.Utills.DataModel("12 year"));
-        option.add(new com.pb.criconet.Utills.DataModel("13 year"));
-        option.add(new com.pb.criconet.Utills.DataModel("14 year"));
-        option.add(new com.pb.criconet.Utills.DataModel("15 year"));
-        option.add(new com.pb.criconet.Utills.DataModel("16 year"));
-        option.add(new com.pb.criconet.Utills.DataModel("17 year"));
-        option.add(new com.pb.criconet.Utills.DataModel("18 year"));
-        option.add(new com.pb.criconet.Utills.DataModel("19 year"));
-        option.add(new com.pb.criconet.Utills.DataModel("20 year"));
-        option.add(new com.pb.criconet.Utills.DataModel("21 year"));
-        option.add(new com.pb.criconet.Utills.DataModel("22 year"));
-        option.add(new com.pb.criconet.Utills.DataModel("23 year"));
-        option.add(new com.pb.criconet.Utills.DataModel("24 year"));
-        option.add(new com.pb.criconet.Utills.DataModel("25 year"));
-        option.add(new com.pb.criconet.Utills.DataModel("26 year"));
-        option.add(new com.pb.criconet.Utills.DataModel("27 year"));
-        option.add(new com.pb.criconet.Utills.DataModel("28 year"));
-        option.add(new com.pb.criconet.Utills.DataModel("29 year"));
+        option.add(new com.pb.criconet.Utills.DataModel("2 years"));
+        option.add(new com.pb.criconet.Utills.DataModel("3 years"));
+        option.add(new com.pb.criconet.Utills.DataModel("4 years"));
+        option.add(new com.pb.criconet.Utills.DataModel("5 years"));
+        option.add(new com.pb.criconet.Utills.DataModel("6 years"));
+        option.add(new com.pb.criconet.Utills.DataModel("7 years"));
+        option.add(new com.pb.criconet.Utills.DataModel("8 years"));
+        option.add(new com.pb.criconet.Utills.DataModel("9 years"));
+        option.add(new com.pb.criconet.Utills.DataModel("10 years"));
+        option.add(new com.pb.criconet.Utills.DataModel("11 years"));
+        option.add(new com.pb.criconet.Utills.DataModel("12 years"));
+        option.add(new com.pb.criconet.Utills.DataModel("13 years"));
+        option.add(new com.pb.criconet.Utills.DataModel("14 years"));
+        option.add(new com.pb.criconet.Utills.DataModel("15 years"));
+        option.add(new com.pb.criconet.Utills.DataModel("16 years"));
+        option.add(new com.pb.criconet.Utills.DataModel("17 years"));
+        option.add(new com.pb.criconet.Utills.DataModel("18 years"));
+        option.add(new com.pb.criconet.Utills.DataModel("19 years"));
+        option.add(new com.pb.criconet.Utills.DataModel("20 years"));
+        option.add(new com.pb.criconet.Utills.DataModel("21 years"));
+        option.add(new com.pb.criconet.Utills.DataModel("22 years"));
+        option.add(new com.pb.criconet.Utills.DataModel("23 years"));
+        option.add(new com.pb.criconet.Utills.DataModel("24 years"));
+        option.add(new com.pb.criconet.Utills.DataModel("25 years"));
+        option.add(new com.pb.criconet.Utills.DataModel("26 years"));
+        option.add(new com.pb.criconet.Utills.DataModel("27 years"));
+        option.add(new com.pb.criconet.Utills.DataModel("28 years"));
+        option.add(new com.pb.criconet.Utills.DataModel("29 years"));
         spinerYear.setOptionList(option);
         selectedYear = option.get(0).getName();
         spinerYear.setText(selectedYear);
@@ -294,6 +311,8 @@ public class CoachProfessionalInfoActivity extends AppCompatActivity implements 
             public void onClickDone(String name) {
                 if(name.contains("year")){
                     selectedYear = name.replace("year","").trim();
+                }else if(name.contains("years")){
+                    selectedYear = name.replace("years","").trim();
                 }
             }
 
@@ -366,6 +385,8 @@ public class CoachProfessionalInfoActivity extends AppCompatActivity implements 
         });
 
     }
+
+
 
     private void selectImage() {
         slideUp.show();
@@ -493,10 +514,15 @@ public class CoachProfessionalInfoActivity extends AppCompatActivity implements 
 //            Toast.makeText(mContext,"Please select currency",Toast.LENGTH_SHORT).show();
 //            return  false;
 //        }
-        else if (etAmount.getText().toString().trim().equalsIgnoreCase("0.00")) {
+        else if(amount.isEmpty()){
             Toaster.customToast(mContext.getResources().getString(R.string.Enter_Amount_session));
             return false;
-        }else if(isTeramsChecked.equalsIgnoreCase("")){
+        }
+        else if (amount.equalsIgnoreCase("0") || Float.parseFloat(amount)<1.0000) {
+            Toaster.customToast(mContext.getResources().getString(R.string.Enter_Amount_sessionn));
+            return false;
+        }
+        else if(isTeramsChecked.equalsIgnoreCase("")){
             Toaster.customToast(mContext.getResources().getString(R.string.Please_check_tearms));
             return false;
         }
@@ -558,10 +584,11 @@ public class CoachProfessionalInfoActivity extends AppCompatActivity implements 
                         loaderView.hideLoader();
                         JSONObject jsonObject = new JSONObject(response.toString());
                         if (jsonObject.optString("api_text").equalsIgnoreCase("Success")) {
-
+                           //SessionManager.save_profileType(prefs,"coach");
+                           SessionManager.save_profiletype(prefs,"coach");
                             Toaster.customToast(jsonObject.optString("msg"));
 
-                            if(imagepath==null){
+                            if(imagepath.isEmpty()){
                                 tv_click_uploadCertificate.setText(mContext.getResources().getString(R.string.upload_certificate));
                             }else{
                                 tv_click_uploadCertificate.setText(mContext.getResources().getString(R.string.remove_certificate));

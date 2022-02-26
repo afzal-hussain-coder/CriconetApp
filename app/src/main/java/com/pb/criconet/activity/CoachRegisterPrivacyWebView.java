@@ -31,8 +31,8 @@ public class CoachRegisterPrivacyWebView extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(CoachRegisterPrivacyWebView.this, CoachRegistrationActivity.class);
-                intent.putExtra("FROM", "4");
+                Intent intent = new Intent(CoachRegisterPrivacyWebView.this, CoachProfessionalInfoActivity.class);
+                //intent.putExtra("FROM", "4");
                 startActivity(intent);
                 finish();
             }
@@ -53,7 +53,7 @@ public class CoachRegisterPrivacyWebView extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Intent intent = new Intent(CoachRegisterPrivacyWebView.this, CoachRegistrationActivity.class);
+        Intent intent = new Intent(CoachRegisterPrivacyWebView.this, CoachProfessionalInfoActivity.class);
         intent.putExtra("FROM", "4");
         startActivity(intent);
         finish();

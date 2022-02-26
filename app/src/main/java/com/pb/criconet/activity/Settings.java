@@ -106,8 +106,8 @@ public class Settings extends AppCompatActivity {
         rl_edit_profile.setOnClickListener(v -> {
 
            if (SessionManager.get_profiletype(prefs).equalsIgnoreCase("coach")) {
-                startActivity(new Intent(mActivity,CoachRegistrationActivity.class).putExtra("FROM","2"));
-               finish();
+                startActivity(new Intent(mActivity,CoachProfileActivity.class));
+               //finish();
            }else{
                 startActivity(new Intent(mActivity,EditProfile.class).putExtra("FROM","2"));
                 finish();

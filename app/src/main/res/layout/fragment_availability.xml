@@ -40,7 +40,7 @@
                     app:headerLabelColor="@color/white"
                     app:pagesColor="@color/bckground"
                     app:previousButtonSrc="@drawable/ic_arrow_left"
-                    app:selectionColor="@color/app_green"
+                    app:selectionColor="@color/colorPrimary"
                     app:todayLabelColor="@color/colorPrimary"
                     app:type="one_day_picker" />
 
@@ -68,6 +68,7 @@
                 android:fontFamily="@font/opensans_semibold"
                 android:layout_marginStart="@dimen/_10sdp"
                 android:layout_marginEnd="@dimen/_10sdp"
+                android:hint="Select booking session close time"
                 android:layout_marginTop="@dimen/_4sdp"
                 android:background="@drawable/editboxx"
                 android:drawableEnd="@drawable/ic_keyboard_arrow_down_black_24dp"

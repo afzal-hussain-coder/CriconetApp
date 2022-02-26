@@ -30,12 +30,7 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
     }
     @Override
     public int getCount() {
-//        if(SessionManager.getProfileType(prefs).equalsIgnoreCase("coach")){
-//            return 3;
-//        }else{
-//            return 1;
-//        }
-        return 3;
+        return mList.size();
 
     }
     public void addFragment(Fragment fragment, String title) {

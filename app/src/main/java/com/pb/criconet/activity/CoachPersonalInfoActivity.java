@@ -2,6 +2,8 @@ package com.pb.criconet.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -24,11 +26,14 @@ import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -58,6 +63,7 @@ import com.pb.criconet.Utills.SessionManager;
 import com.pb.criconet.Utills.Toaster;
 import com.pb.criconet.fragments.FragmentCoachEditProfile;
 import com.pb.criconet.models.City;
+import com.pb.criconet.models.CoachLanguage;
 import com.pb.criconet.models.Country;
 import com.pb.criconet.models.Language;
 import com.pb.criconet.models.States;
@@ -67,6 +73,8 @@ import com.rilixtech.widget.countrycodepicker.CountryCodePicker;
 import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.entity.mime.content.StringBody;
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -121,10 +129,18 @@ public class CoachPersonalInfoActivity extends AppCompatActivity implements Adap
     TextView textView_language;
     boolean[] selectedLanguage;
     ArrayList<Integer> langList = new ArrayList<>();
-    ArrayList<String> language=null;
+    //ArrayList<String> language=null;
     String[] langArray = null;
     private OtpView otpView;
     private String from_where="";
+    String state_Name="";
+    String city_Name="";
+    String countryName="";
+    ArrayList<String>coachLanguages = new ArrayList<>();
+    ArrayList<String> languageArray_new = new ArrayList<>();
+    Dialog dialog;
+    private StringBuilder langStringBuilder;
+    ArrayList<Language.Datum> language=null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,6 +154,13 @@ public class CoachPersonalInfoActivity extends AppCompatActivity implements Adap
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
+
+        dialog = new Dialog(mActivity);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.setContentView(R.layout.dialog_select_language);
+        dialog.setCancelable(false);
+
         TextView mTitle = (TextView) toolbar.findViewById(R.id.toolbartext);
         mTitle.setText(getResources().getString(R.string.Personal_Information));
 
@@ -145,25 +168,24 @@ public class CoachPersonalInfoActivity extends AppCompatActivity implements Adap
         loaderView = CustomLoaderView.initialize(mActivity);
         queue = Volley.newRequestQueue(mActivity);
         toolbar.setNavigationOnClickListener(v -> {
-
-            if(from_where.equalsIgnoreCase("2")){
-
-                Intent intent = new Intent(mActivity, Settings.class);
-                startActivity(intent);
-                finish();
-            }else if(from_where.equalsIgnoreCase("3")){
-                Intent intent = new Intent(mActivity, MainActivity.class);
-                startActivity(intent);
-                finish();
-            }
-            else{
-
-                Intent intent = new Intent(mActivity, ProfileActivity.class);
-                startActivity(intent);
-                finish();
-            }
+            finish();
+//            if(from_where.equalsIgnoreCase("2")){
+//
+//                Intent intent = new Intent(mActivity, Settings.class);
+//                startActivity(intent);
+//                finish();
+//            }else if(from_where.equalsIgnoreCase("3")){
+//                Intent intent = new Intent(mActivity, MainActivity.class);
+//                startActivity(intent);
+//
+//            }
+//            else{
+//
+//                Intent intent = new Intent(mActivity, ProfileActivity.class);
+//                startActivity(intent);
+//                finish();
+//            }
         });
-
 
         edttxt_fname = findViewById(R.id.edttxt_fname);
         edttxt_Mname =findViewById(R.id.edttxt_Mname);
@@ -224,10 +246,11 @@ public class CoachPersonalInfoActivity extends AppCompatActivity implements Adap
         if (Global.isOnline(mActivity)) {
             getCountry();
             getLanguage();
+            getUsersDetails();
         } else {
             Global.showDialog(mActivity);
         }
-        // getUsersDetails(SessionManager.get_user_id(prefs));
+
 
         middle.setOnClickListener(v -> {
             img_type = "profile";
@@ -252,91 +275,92 @@ public class CoachPersonalInfoActivity extends AppCompatActivity implements Adap
         });
 
 
-
-
         textView_language.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
+                dialog.show();
+
                 // Initialize alert dialog
-                AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
-                // set title
-                builder.setTitle(mActivity.getResources().getString(R.string.Select_Language_You_Speak));
-
-                // set dialog non cancelable
-                builder.setCancelable(false);
-
-                builder.setMultiChoiceItems(langArray, selectedLanguage, new DialogInterface.OnMultiChoiceClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i, boolean b) {
-                        // check condition
-                        if (b) {
-                            // when checkbox selected
-                            // Add position  in lang list
-                            Log.d("Index",i+"");
-                            langList.add(i);
-                            // Sort array list
-                            //Collections.sort(langList);
-                        } else {
-
-                            if (langList.contains(i)) {
-                                langList.remove((Integer) i);
-                            }
-
-                            //langList.remove(langArray);
-                            // when checkbox unselected
-                            // Remove position from langList
-
-                        }
-                    }
-                });
-
-                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        // Initialize string builder
-                        StringBuilder stringBuilder = new StringBuilder();
-                        // use for loop
-                        for (int j = 0; j < langList.size(); j++) {
-                            // concat array value
-                            stringBuilder.append(langArray[langList.get(j)]);
-                            // check condition
-                            if (j != langList.size() - 1) {
-                                // When j value  not equal
-                                // to lang list size - 1
-                                // add comma
-                                stringBuilder.append(",");
-                            }
-                        }
-                        // set text on textView
-                        textView_language.setText(stringBuilder.toString());
-
-                    }
-                });
-
-                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        // dismiss dialog
-                        dialogInterface.dismiss();
-                    }
-                });
-                builder.setNeutralButton("Clear All", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        // use for loop
-                        for (int j = 0; j < selectedLanguage.length; j++) {
-                            // remove all selection
-                            selectedLanguage[j] = false;
-                            // clear language list
-                            langList.clear();
-                            // clear text view value
-                            textView_language.setText("");
-                        }
-                    }
-                });
-                // show dialog
-                builder.show();
+//                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+//                // set title
+//                builder.setTitle(getActivity().getResources().getString(R.string.Select_Language_You_Speak));
+//
+//                // set dialog non cancelable
+//                builder.setCancelable(false);
+//
+//
+//                builder.setMultiChoiceItems(langArray, selectedLanguage, new DialogInterface.OnMultiChoiceClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialogInterface, int i, boolean b) {
+//                        // check condition
+//                        if (b) {
+//                            // when checkbox selected
+//                            // Add position  in lang list
+//                            Log.d("Index",i+"");
+//                            langList.add(i);
+//                            // Sort array list
+//                            //Collections.sort(langList);
+//                        } else {
+//
+//                            if (langList.contains(i)) {
+//                                langList.remove((Integer) i);
+//                            }
+//
+//                            //langList.remove(langArray);
+//                            // when checkbox unselected
+//                            // Remove position from langList
+//
+//                        }
+//                    }
+//                });
+//
+//                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialogInterface, int i) {
+//                        // Initialize string builder
+//                        StringBuilder stringBuilder = new StringBuilder();
+//                        // use for loop
+//                        for (int j = 0; j < langList.size(); j++) {
+//                            // concat array value
+//                            stringBuilder.append(langArray[langList.get(j)]);
+//                            // check condition
+//                            if (j != langList.size() - 1) {
+//                                // When j value  not equal
+//                                // to lang list size - 1
+//                                // add comma
+//                                stringBuilder.append(",");
+//                            }
+//                        }
+//                        // set text on textView
+//                        textView_language.setText(stringBuilder.toString());
+//
+//                    }
+//                });
+//
+//                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialogInterface, int i) {
+//                        // dismiss dialog
+//                        dialogInterface.dismiss();
+//                    }
+//                });
+//                builder.setNeutralButton("Clear All", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialogInterface, int i) {
+//                        // use for loop
+//                        for (int j = 0; j < selectedLanguage.length; j++) {
+//                            // remove all selection
+//                            selectedLanguage[j] = false;
+//                            // clear language list
+//                            langList.clear();
+//                            // clear text view value
+//                            textView_language.setText("");
+//                        }
+//                    }
+//                });
+//                // show dialog
+//                builder.show();
             }
         });
     }
@@ -376,12 +400,12 @@ public class CoachPersonalInfoActivity extends AppCompatActivity implements Adap
         else if (!Global.validateLengthofCoachRegister(lname_String)) {
             Toaster.customToast(getResources().getString(R.string.Enter_Last_Name));
         }
-        else if (langList.size()==0) {
+        else if (textView_language.getText().equals("")) {
             Toaster.customToast(getResources().getString(R.string.select_language));
-        }else if (langList.size() >5) {
+        }else if (languageArray_new.size() >5) {
             Toaster.customToast(getResources().getString(R.string.you_can_only_select_five_item));
         }
-        else if(countryID.equalsIgnoreCase("")){
+        else if(countryID.equalsIgnoreCase("") || spinnerCountry.getSelectedItem().equals("Country")){
             Toaster.customToast(getResources().getString(R.string.Select_Country));
         }
 //        else if(stateID.equalsIgnoreCase("")){
@@ -389,17 +413,27 @@ public class CoachPersonalInfoActivity extends AppCompatActivity implements Adap
 //        }else if(cityID.equalsIgnoreCase("")){
         // Toaster.customToast(getResources().getString(R.string.Select_State));
 //        }
-        else if(!Global.validateLengthofCoachRegister(address1)){
+        else if(address1.isEmpty()){
             Toaster.customToast(getResources().getString(R.string.Enter_your_address));
+        }
+        else if(!Global.validateLengthofCoachRegisterr(address1)){
+            Toaster.customToast(getResources().getString(R.string.Enter_your_addresss));
         }
 //        else if(!Global.validateLength(address2, 3)){
 //            Toaster.customToast(getResources().getString(R.string.enter_landmark));
 //        }
-        else if(!Global.isValidPincode(pincode)){
+        else if(pincode.isEmpty()){
             Toaster.customToast(getResources().getString(R.string.enter_pincode));
-        }else if(!Global.isValidPhoneNumber(mobile)){
+        }else if(!Global.isValidPincode(pincode)){
+            Toaster.customToast(getResources().getString(R.string.enter_pincodee));
+        }
+        else if(mobile.isEmpty()){
             Toaster.customToast(getResources().getString(R.string.Enter_your_phone_number));
-        } else if(imagepath.equalsIgnoreCase("")){
+        }
+        else if(!Global.isValidPhoneNumber(mobile)){
+            Toaster.customToast(getResources().getString(R.string.Enter_your_phone_numberr));
+        }
+        else if(imagepath.equalsIgnoreCase("")){
             Toaster.customToast(getResources().getString(R.string.Upload_profile_picture));
         }
         else {
@@ -512,121 +546,6 @@ public class CoachPersonalInfoActivity extends AppCompatActivity implements Adap
         return cursor.getString(idx);
     }
 
-    private void setData() {
-        edttxt_fname.setText(Global.capitizeString(SessionManager.get_name(prefs)));
-        edttxt_fname.setText(SessionManager.get_fname(prefs));
-        edttxt_lname.setText(SessionManager.get_lname(prefs));
-        etAddress.setText(SessionManager.get_address(prefs));
-        edttxt_phone.setText(SessionManager.get_mobile(prefs));
-
-        if(userData.getPincode().equalsIgnoreCase("null")){
-            etPincode.setText("");
-        }else{
-            etPincode.setText(SessionManager.getpinCode(prefs));
-        }
-
-        spn_language.setSelection(Global.getIndex(spn_language, SessionManager.get_sex(prefs)));
-
-        Glide.with(mActivity).load(SessionManager.get_image(prefs)).into(profile_image);
-        Glide.with(mActivity).load(SessionManager.get_cover(prefs)).into(cover_img);
-    }
-
-    private void setEnable() {
-        edttxt_fname.setEnabled(false);
-        edttxt_fname.setEnabled(true);
-        edttxt_lname.setEnabled(true);
-        etAddress.setEnabled(true);
-        edttxt_birthday.setEnabled(true);
-        edttxt_phone.setEnabled(true);
-        etPincode.setEnabled(true);
-        spn_language.setEnabled(true);
-        spinnerCountry.setEnabled(true);
-        spinnerState.setEnabled(true);
-        spinnerCity.setEnabled(true);
-        spinnerCity.setEnabled(true);
-        spinnerState.setEnabled(true);
-        btn_login.setText("Click to Update Profile");
-
-    }
-    private void setDisable() {
-        edttxt_fname.setEnabled(false);
-        edttxt_fname.setEnabled(false);
-        edttxt_lname.setEnabled(false);
-        etAddress.setEnabled(false);
-        edttxt_birthday.setEnabled(false);
-        edttxt_phone.setEnabled(false);
-        etPincode.setEnabled(false);
-        spn_language.setEnabled(false);
-        spinnerCountry.setEnabled(false);
-        spinnerCity.setEnabled(false);
-        spinnerState.setEnabled(false);
-        btn_login.setText(getResources().getString(R.string.Click_to_Edit_Profile));
-    }
-
-    private void editprofile_task() {
-        loaderView.showLoader();
-        StringRequest postRequest = new StringRequest(Request.Method.POST, Global.URL + "update_user_data",
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        Log.d("UpdateResponse",response);
-                        loaderView.hideLoader();
-                        try {
-                            JSONObject jsonObject = new JSONObject(response.toString());
-                            if (jsonObject.optString("api_text").equalsIgnoreCase("Success")) {
-                                Global.msgDialog(mActivity, "Profile Saved Successfully");
-                                // getUsersDetails(SessionManager.get_user_id(prefs));
-
-                            } else if (jsonObject.optString("api_text").equalsIgnoreCase("failed")) {
-                                Global.msgDialog(mActivity, jsonObject.optString("errors"));
-                            } else {
-                                Global.msgDialog(mActivity, getResources().getString(R.string.error_server));
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        error.printStackTrace();
-                        loaderView.hideLoader();
-                        Global.msgDialog(mActivity, getResources().getString(R.string.error_server));
-                    }
-                }
-        ) {
-            @Override
-            protected Map<String, String> getParams() {
-                Map<String, String> param = new HashMap<String, String>();
-                param.put("type", "profile_update");
-                param.put("user_id", SessionManager.get_user_id(prefs));
-                param.put("s", SessionManager.get_session_id(prefs));
-                param.put("username", edttxt_fname.getText().toString());
-                param.put("gender", gender_String);
-                param.put("first_name", edttxt_fname.getText().toString());
-                param.put("last_name", edttxt_lname.getText().toString());
-                //param.put("mid_name", "");
-                param.put("country_id", countryID);
-                param.put("state_id", stateID);
-                param.put("city_id", cityID);
-                param.put("address", etAddress.getText().toString().trim());
-                //param.put("address2", "");
-                param.put("pincode", etPincode.getText().toString().trim());
-                //param.put("phone_code", "");
-                param.put("phone_number", edttxt_phone.getText().toString());
-                param.put("birthday", edttxt_birthday.getText().toString());
-                System.out.println("data   :" + param);
-
-                return param;
-            }
-        };
-        int socketTimeout = 30000;
-        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-        postRequest.setRetryPolicy(policy);
-        queue.add(postRequest);
-
-    }
 
     public void updateImageTask(String path) {
         loaderView.showLoader();
@@ -700,6 +619,7 @@ public class CoachPersonalInfoActivity extends AppCompatActivity implements Adap
                     ArrayAdapter aa = new ArrayAdapter(mActivity, R.layout.custom_spinner, country);
                     aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     spinnerCountry.setAdapter(aa);
+                    countryID="";
 
                     for(int i=0;i<country.size();i++){
                         if(country.get(i).equalsIgnoreCase("India")){
@@ -754,6 +674,7 @@ public class CoachPersonalInfoActivity extends AppCompatActivity implements Adap
                         ArrayAdapter aa = new ArrayAdapter(mActivity, R.layout.custom_spinner, state);
                         aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                         spinnerState.setAdapter(aa);
+                        spinnerState.setSelection(Global.getIndex(spinnerState, state_Name));
                         //spinnerState.setSelection(Global.getIndex(spinnerState, SessionManager.getStates(prefs)));
                     }
                 }
@@ -792,6 +713,7 @@ public class CoachPersonalInfoActivity extends AppCompatActivity implements Adap
                     ArrayAdapter aa = new ArrayAdapter(mActivity, R.layout.custom_spinner, city);
                     aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     spinnerCity.setAdapter(aa);
+                    spinnerCity.setSelection(Global.getIndex(spinnerCity, city_Name));
                     //spinnerCity.setSelection(Global.getIndex(spinnerCity, SessionManager.getCity(prefs)));
                 }
 
@@ -819,17 +741,19 @@ public class CoachPersonalInfoActivity extends AppCompatActivity implements Adap
                 languageModelArrayList = gson.fromJson(response, Language.class);
                 if(languageModelArrayList.getApiStatus().equalsIgnoreCase("200")) {
                     language = new ArrayList<>();
-                    language.add("Language");
+                    //language.add("Language");
                     for (Language.Datum datum : languageModelArrayList.getData()) {
-                        language.add(datum.getName_eng());
+                        language.add(datum);
                     }
-                    language.remove(0);
-                    langArray= language.toArray(new String[language.size()]);
-                    selectedLanguage = new boolean[langArray.length];
-                    ArrayAdapter aa = new ArrayAdapter(mActivity, R.layout.custom_spinner, language);
-                    aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    spn_language.setAdapter(aa);
-                    spn_language.setSelection(Global.getIndex(spn_language, SessionManager.getLanguage(prefs)));
+                    //language.remove(0);
+                    languageSelectionDialog(language,new ArrayList<>());
+
+//                    langArray= language.toArray(new String[language.size()]);
+//                    selectedLanguage = new boolean[langArray.length];
+//                    ArrayAdapter aa = new ArrayAdapter(getActivity(), R.layout.custom_spinner, language);
+//                    aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//                    spn_language.setAdapter(aa);
+//                    spn_language.setSelection(Global.getIndex(spn_language, SessionManager.getLanguage(prefs)));
                 }
             }
         }, new Response.ErrorListener() {
@@ -858,8 +782,10 @@ public class CoachPersonalInfoActivity extends AppCompatActivity implements Adap
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
 
         if(adapterView==spinnerCountry && i!=0) {
+            countryID="";
             getState(modelArrayList.getData().get(i-1).getId());
             countryID=modelArrayList.getData().get(i-1).getId();
+
         }else if(adapterView==spinnerState && i!=0){
             getCity(statemodelArrayList.getData().get(i-1).getId());
             stateID=statemodelArrayList.getData().get(i-1).getId();
@@ -874,44 +800,23 @@ public class CoachPersonalInfoActivity extends AppCompatActivity implements Adap
 
     }
 
-    /*public void getUsersDetails(final String user_id) {
-        loaderView.showLoader();
+    public void getUsersDetails() {
+        //loaderView.showLoader();
         StringRequest postRequest = new StringRequest(Request.Method.POST, Global.URL + "get_user_data",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         Log.d("getUserDetails",response);
-                        loaderView.hideLoader();
+                        //loaderView.hideLoader();
                         try {
                             JSONObject jsonObject = new JSONObject(response.toString());
                             if (jsonObject.optString("api_text").equalsIgnoreCase("Success")) {
-                                JSONObject object = jsonObject.getJSONObject("user_data");
+                                JSONObject object = jsonObject.getJSONObject("coach_data");
 
-                                userData = UserData.fromJson(object);
-
-                                SessionManager.save_user_id(prefs, userData.getUser_id());
-                                SessionManager.save_name(prefs, userData.getUsername());
-                                SessionManager.save_fname(prefs, userData.getFirst_name());
-                                SessionManager.save_lname(prefs, userData.getLast_name());
-                                SessionManager.save_emailid(prefs, userData.getEmail());
-                                SessionManager.save_sex(prefs, userData.getGender());
-                                SessionManager.save_address(prefs, userData.getAddress());
-                                SessionManager.save_image(prefs, userData.getAvatar());
-                                SessionManager.save_cover(prefs, userData.getCover());
-                                SessionManager.save_dob(prefs, userData.getBirthday());
-                                SessionManager.save_mobile(prefs, userData.getPhone_number());
-
-                                SessionManager.savepinCode(prefs, userData.getPincode());
-                                SessionManager.saveCountry(prefs, userData.getCountry_name());
-                                SessionManager.saveStates(prefs, userData.getState_name());
-                                SessionManager.saveCity(prefs, userData.getCity_name());
-                                SessionManager.saveCityId(prefs, userData.getCity_id());
-                                SessionManager.saveStateId(prefs, userData.getState_id());
-
-                                //setData();
-                                //setDisable();
-
-
+                                if(object.has("personal_info")){
+                                    JSONObject jsonObject_personal_info= object.getJSONObject("personal_info");
+                                    setData(jsonObject_personal_info);
+                                }
                             } else if (jsonObject.optString("api_text").equalsIgnoreCase("failed")) {
                                 Global.msgDialog(mActivity, jsonObject.optJSONObject("errors").optString("error_text"));
                             } else {
@@ -926,7 +831,7 @@ public class CoachPersonalInfoActivity extends AppCompatActivity implements Adap
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         error.printStackTrace();
-                        loaderView.hideLoader();
+                        //loaderView.hideLoader();
                         Global.msgDialog(mActivity, getResources().getString(R.string.error_server));
 //                Global.msgDialog(EditProfile.this, "Internet connection is slow");
                     }
@@ -935,9 +840,8 @@ public class CoachPersonalInfoActivity extends AppCompatActivity implements Adap
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> param = new HashMap<String, String>();
-                param.put("user_id", user_id);
-                param.put("user_profile_id", user_id);
-//                param.put("s", "1");
+                param.put("user_id", SessionManager.get_user_id(prefs));
+                param.put("user_profile_id", SessionManager.get_user_id(prefs));
                 param.put("s", SessionManager.get_session_id(prefs));
                 System.out.println("data   :" + param);
                 return param;
@@ -948,7 +852,89 @@ public class CoachPersonalInfoActivity extends AppCompatActivity implements Adap
         postRequest.setRetryPolicy(policy);
         queue.add(postRequest);
 
-    }*/
+    }
+    private void setData(JSONObject  data) {
+
+        if(data.has("first_name")){
+            edttxt_fname.setText(data.optString("first_name"));
+        }
+        if(data.has("last_name")){
+            edttxt_lname.setText(data.optString("last_name"));
+        }
+        if(data.has("mid_name")){
+            try {
+                edttxt_Mname.setText(data.getString("mid_name"));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        if(data.has("avatar")){
+            imagepath=data.optString("avatar");
+            Glide.with(mActivity).load(data.optString("avatar")).into(profile_image);
+        }
+        if(data.has("country_name")){
+            countryName = data.optString("country_name");
+            countryID= data.optString("country_id");
+            getState(countryID);
+            spinnerCountry.setSelection(Global.getIndex(spinnerCountry,countryName));
+        }
+        if(data.has("state_name")){
+            state_Name = data.optString("state_name");
+            stateID = data.optString("state_id");
+            getCity(stateID);
+            //spinnerState.setSelection(Global.getIndex(spinnerState, state_Name));
+        }
+        if(data.has("city_name")){
+            city_Name = data.optString("city_name");
+
+        }
+        if(data.has("pincode")){
+            etPincode.setText(data.optString("pincode"));
+        }
+        if(data.has("phone_number")){
+            edttxt_phone.setText(data.optString("phone_number"));
+        }
+        if(data.has("address")){
+            etAddress.setText(data.optString("address"));
+        }
+        if(data.has("address2")){
+            etAddress2.setText(data.optString("address2"));
+        }
+
+        if(data.has("languages")){
+
+            try {
+                JSONArray jsonArray = data.getJSONArray("languages");
+                JSONObject jsonObject=null;
+                CoachLanguage coachLanguage=null;
+                for(int i= 0;i<jsonArray.length();i++){
+                    jsonObject = jsonArray.getJSONObject(i);
+                    coachLanguage= new CoachLanguage(jsonObject);
+                    coachLanguages.add(coachLanguage.getName_eng());
+                }
+
+                langStringBuilder = new StringBuilder();
+                String prefix = "";
+                for (String item : coachLanguages) {
+                    langStringBuilder.append(prefix);
+                    prefix = ",";
+                    langStringBuilder.append(item);
+                }
+                //Log.d("size",langStringBuilder.toString());
+
+                textView_language.setText(langStringBuilder.toString());
+
+                Log.d("size",coachLanguages.size()+"");
+
+                languageSelectionDialog(language,coachLanguages);
+
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
 
     public void submitCoachPersonalInfo() {
         loaderView.showLoader();
@@ -977,7 +963,7 @@ public class CoachPersonalInfoActivity extends AppCompatActivity implements Adap
                                     SessionManager.save_mobile_verified(prefs, jsonObjectData.getString("is_mobile_verified"));
                                     SessionManager.save_profiletype(prefs, jsonObjectData.getString("profile_type"));
 
-                                    String is_contact_verify = SessionManager.get_mobile_verified(prefs);
+                                    String is_contact_verify = jsonObjectData.getString("is_mobile_verified");
                                     if(is_contact_verify.equalsIgnoreCase("0")){
                                         EmailOtpDialog(phoneNumber);
                                     }else{
@@ -1032,7 +1018,6 @@ public class CoachPersonalInfoActivity extends AppCompatActivity implements Adap
         queue.add(postRequest);
 
     }
-
 
     private void EmailOtpDialog(String mobile) {
         Dialog dialog = new Dialog(mActivity);
@@ -1143,7 +1128,10 @@ public class CoachPersonalInfoActivity extends AppCompatActivity implements Adap
                                     SessionManager.save_emailid(prefs, jsonObjectData.getString("email"));
                                     SessionManager.save_mobile(prefs, jsonObjectData.getString("phone_number"));
                                     SessionManager.savePhoneCode(prefs, jsonObjectData.getString("phone_code"));
-
+                                    SessionManager.save_sex(prefs, jsonObjectData.getString("gender"));
+                                    SessionManager.save_image(prefs, jsonObjectData.getString("avatar"));
+                                    SessionManager.save_cover(prefs, jsonObjectData.getString("cover"));
+                                    SessionManager.save_profiletype(prefs, jsonObjectData.getString("profile_type"));
                                     // Toaster.customToast(jsonObjectData.getString("is_mobile_verified"));
                                     SessionManager.save_mobile_verified(prefs, jsonObjectData.getString("is_mobile_verified"));
 //                                    JSONObject ambassadorProfile = jsonObjectData.getJSONObject("ambassadorProfile");
@@ -1223,7 +1211,6 @@ public class CoachPersonalInfoActivity extends AppCompatActivity implements Adap
         }.start();
     }
 
-
     private void congratsDialog() {
 
         final Dialog dialog = new Dialog(mContext);
@@ -1244,5 +1231,138 @@ public class CoachPersonalInfoActivity extends AppCompatActivity implements Adap
 
         dialog.show();
     }
-    
+
+    private void languageSelectionDialog(ArrayList<Language.Datum> languageArray,ArrayList<String> coachLanguages) {
+        TextView btnOk = dialog.findViewById(R.id.btnOk);
+        RecyclerView rv_language= dialog.findViewById(R.id.rv_language);
+        rv_language.setHasFixedSize(true);
+        rv_language.setLayoutManager(new LinearLayoutManager(mActivity));
+        Log.d("ReSize",coachLanguages.size()+"");
+        selectCoachLanguageAdapter selectCoachLanguageAdapter = new selectCoachLanguageAdapter(languageArray,coachLanguages, mActivity, new selectCoachLanguageAdapter.languageSelectionListner() {
+            @Override
+            public void itemChcked(ArrayList<String> languageArrayy) {
+                // Log.d("SizeSelected",languageArrayy.size()+"");
+                languageArray_new = languageArrayy;
+            }
+        });
+        rv_language.setAdapter(selectCoachLanguageAdapter);
+        //TextView btnCancel = dialog.findViewById(R.id.btnCancel);
+//        btnCancel.setOnClickListener(view -> {
+//            dialog.dismiss();
+//        });
+        btnOk.setOnClickListener(view -> {
+
+
+            langStringBuilder = new StringBuilder();
+            String prefix = "";
+
+            for(int i = 0;i<languageArray_new.size();i++){
+                langStringBuilder.append(prefix);
+                prefix = ",";
+                langStringBuilder.append(languageArray_new.get(i));
+            }
+
+            //Log.d("size",langStringBuilder.toString());
+
+            textView_language.setText(langStringBuilder.toString());
+            dialog.dismiss();
+        });
+
+        //dialog.show();
+
+    }
+
+    public static class selectCoachLanguageAdapter extends RecyclerView.Adapter<selectCoachLanguageAdapter.MyViewHolder> {
+        Context context;
+        ArrayList<Language.Datum> languageArray;
+        ArrayList<String>checkedArray;
+        ArrayList<String> coachLanguages;
+        selectCoachLanguageAdapter.languageSelectionListner languageSelectionListner;
+        public selectCoachLanguageAdapter(ArrayList<Language.Datum> languageArray, ArrayList<String> coachLanguages, Context context, selectCoachLanguageAdapter.languageSelectionListner languageSelectionListner) {
+            this.context = context;
+            this.languageArray=languageArray;
+            this.languageSelectionListner = languageSelectionListner;
+            this.coachLanguages = coachLanguages;
+            checkedArray = new ArrayList<>();
+        }
+
+        @Override
+        public selectCoachLanguageAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            // inflate the item Layout
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.filter_coach_spinner_item, parent, false);
+            selectCoachLanguageAdapter.MyViewHolder vh = new selectCoachLanguageAdapter.MyViewHolder(v);
+            return vh;
+        }
+
+        @Override
+        public void onBindViewHolder(selectCoachLanguageAdapter.MyViewHolder holder, final int position) {
+            Language.Datum coachLanguage= languageArray.get(position);
+
+            holder.textView.setText(coachLanguage.getName_eng());
+            holder.checkBox.setChecked(coachLanguage.isSelected());
+
+            Log.d("coachSize",coachLanguages.size()+"");
+
+            for(int j= 0; j<coachLanguages.size();j++){
+                if(coachLanguages.get(j).equalsIgnoreCase(coachLanguage.getName_eng())){
+                    holder.checkBox.setChecked(true);
+                    checkedArray.add(coachLanguages.get(j));
+                    languageSelectionListner.itemChcked(checkedArray);
+                    break;
+                }
+
+
+            }
+
+
+            holder.checkBox.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    CheckBox myCheckBox= (CheckBox) view;
+                    Language.Datum coachLanguage=languageArray.get(position);
+
+                    if(myCheckBox.isChecked()) {
+                        coachLanguage.setSelected(true);
+                        checkedArray.add(coachLanguage.getName_eng());
+                    }
+                    else if(!myCheckBox.isChecked()) {
+                        coachLanguage.setSelected(false);
+                        checkedArray.remove(coachLanguage.getName_eng());
+                    }
+                    languageSelectionListner.itemChcked(checkedArray);
+                }
+            });
+
+
+        }
+
+        @Override
+        public int getItemCount() {
+            return languageArray.size();
+        }
+
+        class MyViewHolder extends RecyclerView.ViewHolder {
+            CheckBox checkBox;
+            TextView textView;
+
+            MyViewHolder(View itemView) {
+                super(itemView);
+                checkBox = itemView.findViewById(R.id.radio);
+                textView =  itemView.findViewById(R.id.textView);
+
+            }
+        }
+
+        interface languageSelectionListner{
+            void itemChcked(ArrayList<String> languageArray);
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
+
+
 }

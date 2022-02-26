@@ -9,9 +9,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Button;
@@ -52,9 +54,12 @@ import org.json.JSONObject;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.net.ssl.SNIHostName;
 
 import timber.log.Timber;
 
@@ -84,6 +89,7 @@ public class CoachSloatAvailabilityActivity extends BaseActivity implements Time
     Typeface typeface;
     CustomLoaderView loaderView;
     String booking_close_time="";
+    Date previousDate;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,8 +104,24 @@ public class CoachSloatAvailabilityActivity extends BaseActivity implements Time
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-        toolbar.setOnClickListener(view -> {
+        toolbar.setNavigationOnClickListener(v -> {
             finish();
+//            if(from_where.equalsIgnoreCase("2")){
+//
+//                Intent intent = new Intent(mActivity, Settings.class);
+//                startActivity(intent);
+//                finish();
+//            }else if(from_where.equalsIgnoreCase("3")){
+//                Intent intent = new Intent(mActivity, MainActivity.class);
+//                startActivity(intent);
+//
+//            }
+//            else{
+//
+//                Intent intent = new Intent(mActivity, ProfileActivity.class);
+//                startActivity(intent);
+//                finish();
+//            }
         });
 
         TextView mTitle = (TextView) toolbar.findViewById(R.id.toolbartext);
@@ -110,12 +132,13 @@ public class CoachSloatAvailabilityActivity extends BaseActivity implements Time
         prefs = PreferenceManager.getDefaultSharedPreferences(mActivity);
         queue = Volley.newRequestQueue(mActivity);
         spinerCurency = findViewById(R.id.spinerCurency);
+        option_currency.add(new com.pb.criconet.Utills.DataModel("Select booking session close time"));
         option_currency.add(new com.pb.criconet.Utills.DataModel("Booking session should be closed before 4 hours"));
         option_currency.add(new com.pb.criconet.Utills.DataModel("Booking session should be closed before 6 hours"));
         option_currency.add(new com.pb.criconet.Utills.DataModel("Booking session should be closed before 8 hours"));
         spinerCurency.setOptionList(option_currency);
-        selectedCloseLimit = option_currency.get(0).getName();
-        spinerCurency.setText(selectedCloseLimit);
+//    selectedCloseLimit = option_currency.get(0).getName();
+        spinerCurency.setText(option_currency.get(0).getName());
         spinerCurency.setTypeface(typeface);
         spinerCurency.setClickListener(new FilterCoachCloseTimeDropDownView.onClickInterface() {
             @Override
@@ -151,6 +174,7 @@ public class CoachSloatAvailabilityActivity extends BaseActivity implements Time
         printDatesInMonth(Integer.parseInt(year),Integer.parseInt(month));
         // disable dates before today
         Calendar min = Calendar.getInstance();
+        previousDate = min.getTime();
         min.add(Calendar.DAY_OF_MONTH, -1);
         datePicker.setMinimumDate(min);
         //int daysInMonth = min.getActualMaximum(Calendar.DAY_OF_MONTH);
@@ -158,11 +182,19 @@ public class CoachSloatAvailabilityActivity extends BaseActivity implements Time
 
         datePicker.setOnDayClickListener(eventDay -> {
             dateGot=Global.getDateGotCoach(eventDay.getCalendar().getTime().toString());
-            if (Global.isOnline(mActivity)) {
-                getDateSlote(dateGot);
-            } else {
-                Global.showDialog(mActivity);
+
+            if(Global.getDateGot(eventDay.getCalendar().getTime().toString()).equals(Global.getDateGot(previousDate.toString()))||eventDay.getCalendar().getTime().compareTo(previousDate)>0){
+                if (Global.isOnline(mActivity)) {
+                    getDateSlote(dateGot);
+                } else {
+                    Global.showDialog(mActivity);
+                }
             }
+            else{
+                Toaster.customToast("Select enabled date");
+            }
+
+
         });
         //dateGot=Global.getDateGot(datePicker.getCurrentPageDate().getTime().toString());
 
@@ -295,6 +327,15 @@ public class CoachSloatAvailabilityActivity extends BaseActivity implements Time
                     if (jsonObject.getString("api_status").equalsIgnoreCase("200")) {
                         data=jsonObject.getJSONObject("data");
                         Toaster.customToast(data.getString("message"));
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                Intent intent = new Intent(mActivity, CoachProfileActivity.class);
+                                startActivity(intent);
+                                finish();
+                            }
+                        },2000);
+
                     } else {
                         Toaster.customToast(data.getString("error"));
                     }
@@ -393,10 +434,10 @@ public class CoachSloatAvailabilityActivity extends BaseActivity implements Time
     private boolean checkValidation(){
 
         if(dateGot.equalsIgnoreCase("")){
-            Toast.makeText(mActivity,getResources().getString(R.string.Please_select_date_first),Toast.LENGTH_SHORT).show();
+            Toaster.customToast(getResources().getString(R.string.Please_select_date_first));
             return false;
-        }else if(selectedTimeSlot.equalsIgnoreCase("")){
-            Toast.makeText(mActivity,getResources().getString(R.string.Please_select_time_first),Toast.LENGTH_SHORT).show();
+        }else if(selectedCloseLimit.equalsIgnoreCase("")){
+            Toaster.customToast(getResources().getString(R.string.Booking_Session_Close_Timee));
             return false;
         }
         return true;

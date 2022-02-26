@@ -2,6 +2,7 @@ package com.pb.criconet.fragments;
 
 import android.app.ProgressDialog;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -56,6 +57,7 @@ import com.pb.criconet.activity.WebViewSignUpTermsActivity;
 import com.pb.criconet.adapters.ButtonAdapter;
 import com.pb.criconet.adapters.CoachButtonAdapter;
 import com.pb.criconet.models.CoachLanguage;
+import com.pb.criconet.models.CoachList;
 import com.pb.criconet.models.Country;
 import com.pb.criconet.models.DataModel;
 import com.pb.criconet.models.Datum;
@@ -133,6 +135,8 @@ public class FragmentExperienceSetting extends Fragment implements CoachButtonAd
     private ArrayList<String> catIdList;
     private String isTeramsChecked="";
     private TextView tv_click_uploadCertificate;
+    ArrayList<CoachList.certificate> object;
+    Context mContext;
 
     public static FragmentExperienceSetting newInstance() {
         return new FragmentExperienceSetting();
@@ -148,7 +152,7 @@ public class FragmentExperienceSetting extends Fragment implements CoachButtonAd
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
+        mContext = getActivity();
         typeface = ResourcesCompat.getFont(getActivity(), R.font.opensans_semibold);
         prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         loaderView = CustomLoaderView.initialize(getActivity());
@@ -504,8 +508,12 @@ public class FragmentExperienceSetting extends Fragment implements CoachButtonAd
 //            Toast.makeText(getActivity(),"Please select currency",Toast.LENGTH_SHORT).show();
 //            return  false;
 //        }
-        else if (etAmount.getText().toString().trim().equalsIgnoreCase("0.00")) {
+        else if(amount.isEmpty()){
             Toaster.customToast(getActivity().getResources().getString(R.string.Enter_Amount_session));
+            return false;
+        }
+        else if (amount.equalsIgnoreCase("0") || Float.parseFloat(amount)<1.0000) {
+            Toaster.customToast(getActivity().getResources().getString(R.string.Enter_Amount_sessionn));
             return false;
         }
 //        else if(isTeramsChecked.equalsIgnoreCase("")){
@@ -572,7 +580,11 @@ public class FragmentExperienceSetting extends Fragment implements CoachButtonAd
                         if (jsonObject.optString("api_text").equalsIgnoreCase("Success")) {
 
                             Toaster.customToast(jsonObject.optString("msg"));
-                            tv_click_uploadCertificate.setText(getActivity().getResources().getString(R.string.remove_certificate));
+                            if(imagepath.isEmpty()){
+                                tv_click_uploadCertificate.setText(mContext.getResources().getString(R.string.upload_certificate));
+                            }else{
+                                tv_click_uploadCertificate.setText(mContext.getResources().getString(R.string.remove_certificate));
+                            }
 
                             //getUsersDetails(SessionManager.get_user_id(prefs));
 
@@ -636,8 +648,9 @@ public class FragmentExperienceSetting extends Fragment implements CoachButtonAd
 
                         Toaster.customToast(jsonObject.optString("msg"));
                         tv_click_uploadCertificate.setText(getActivity().getResources().getString(R.string.upload_certificate));
-                        // iv_upload_certificate.setImageURI(null);
-                        //getUsersDetails(SessionManager.get_user_id(prefs));
+                        imagepath="";
+                        Glide.with(getActivity()).load(imagepath).into(iv_upload_certificate);
+                        //getUsersDetails();
 
                     } else if (jsonObject.optString("api_text").equalsIgnoreCase("failed")) {
                         Global.msgDialog(getActivity(), jsonObject.optJSONObject("errors").optString("error_text"));
@@ -671,6 +684,61 @@ public class FragmentExperienceSetting extends Fragment implements CoachButtonAd
         queue.add(postRequest);
     }
 
+
+    public void getUsersDetails() {
+        //loaderView.showLoader();
+        StringRequest postRequest = new StringRequest(Request.Method.POST, Global.URL + "get_user_data",
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d("getUserDetails",response);
+                        //loaderView.hideLoader();
+                        try {
+                            JSONObject jsonObject = new JSONObject(response.toString());
+                            if (jsonObject.optString("api_text").equalsIgnoreCase("Success")) {
+                                JSONObject object = jsonObject.getJSONObject("coach_data");
+
+                                if(object.has("coach_info")){
+                                    JSONObject jsonObject_personal_info= object.getJSONObject("coach_info");
+                                    setData(jsonObject_personal_info);
+                                }
+                            } else if (jsonObject.optString("api_text").equalsIgnoreCase("failed")) {
+                                Global.msgDialog(getActivity(), jsonObject.optJSONObject("errors").optString("error_text"));
+                            } else {
+                                Global.msgDialog(getActivity(), getResources().getString(R.string.error_server));
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
+                       // loaderView.hideLoader();
+                        Global.msgDialog(getActivity(), getResources().getString(R.string.error_server));
+//                Global.msgDialog(EditProfile.this, "Internet connection is slow");
+                    }
+                }
+        ) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> param = new HashMap<String, String>();
+                param.put("user_id", SessionManager.get_user_id(prefs));
+                param.put("user_profile_id", SessionManager.get_user_id(prefs));
+                param.put("s", SessionManager.get_session_id(prefs));
+                System.out.println("data   :" + param);
+                return param;
+            }
+        };
+        int socketTimeout = 30000;
+        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        postRequest.setRetryPolicy(policy);
+        queue.add(postRequest);
+
+    }
+
     private void setData(JSONObject  data) {
 
         if (data.has("profile_title")) {
@@ -692,16 +760,79 @@ public class FragmentExperienceSetting extends Fragment implements CoachButtonAd
         if (data.has("about_coach_profile")) {
             etAnyOtherInformation.setText(data.optString("about_coach_profile"));
         }
-        if (data.has("certificate_title")) {
+//        if (data.has("certificate_title")) {
+//            etcertificate_title.setText(data.optString("certificate_title"));
+//        }
+
+        if(data.has("certificate_url")){
+
             etcertificate_title.setText(data.optString("certificate_title"));
+            imagepath=data.optString("certificate_url");
+            Glide.with(getActivity()).load(data.optString("certificate_url"))
+                    .into(iv_upload_certificate);
+            if(data.optString("certificate_url").isEmpty()){
+                tv_click_uploadCertificate.setText(getActivity().getResources().getString(R.string.upload_certificate));
+            }else{
+                tv_click_uploadCertificate.setText(getActivity().getResources().getString(R.string.remove_certificate));
+            }
+
+
+
+//            if((data.optString("certificate_url").isEmpty())){
+//                rl_certificate.setVisibility(View.GONE);
+//            }else{
+//                rl_certificate.setVisibility(View.VISIBLE);
+//                tvCertificate.setText("Certificate: "+data.optString("certificate_title") );
+//                Glide.with(mContext).load(data.optString("certificate_url"))
+//                        .into(img_certificate);
+//                img_certificate.setOnClickListener(v -> {
+//                    imageViewDialog(data.optString("certificate_url"));
+//                });
+//
+//            }
+                /*JSONArray jsonArray=jsonObject_professional_info.getJSONArray("certificate");
+                JSONObject modelJson;
+                object = new ArrayList<>();
+                // Process each result in json array, decode and convert to CardModel object
+                for (int i = 0; i < jsonArray.length(); i++) {
+
+                        modelJson = jsonArray.getJSONObject(i);
+
+                    CoachList.certificate model = new CoachList.certificate(modelJson);
+                    if (model != null) {
+                        object.add(model);
+                    }
+                }
+                Log.d("link",object.size()+"");*/
+
         }
-        if (data.has("certificate")) {
+        /*if(data.has("certificate")){
             try {
-                Glide.with(getActivity()).load(Uri.parse(data.optString("certificate"))).into(iv_upload_certificate);
-            } catch (Exception e) {
+                JSONArray jsonArray=data.getJSONArray("certificate");
+                JSONObject modelJson;
+                object = new ArrayList<>();
+                // Process each result in json array, decode and convert to CardModel object
+                for (int i = 0; i < jsonArray.length(); i++) {
+
+                    modelJson = jsonArray.getJSONObject(i);
+
+                    CoachList.certificate model = new CoachList.certificate(modelJson);
+                    if (model != null) {
+                        object.add(model);
+                    }
+                }
+                etcertificate_title.setText(object.get(0).getTitle());
+                imagepath=object.get(0).getCertificate_url();
+                Glide.with(getActivity()).load(object.get(0).getCertificate_url())
+                        .into(iv_upload_certificate);
+                tv_click_uploadCertificate.setText(getActivity().getResources().getString(R.string.remove_certificate));
+                Log.d("linkpro",object.size()+"/"+object.get(0).getCertificate_url());
+
+            } catch (JSONException e) {
                 e.printStackTrace();
             }
-        }
+        }*/
+
         if (data.has("exp_years")) {
 
             String yearName="";
@@ -711,7 +842,7 @@ public class FragmentExperienceSetting extends Fragment implements CoachButtonAd
                 yearName = data.optString("exp_years") + " " + "years";
             }
 
-            selectedMonth = yearName;
+            selectedYear = yearName;
             if(yearName.contains("year")){
                 selectedYear = yearName.replace("year","").trim();
             }else if(yearName.contains("years")){
@@ -767,60 +898,6 @@ public class FragmentExperienceSetting extends Fragment implements CoachButtonAd
                 e.printStackTrace();
             }
         }
-
-    }
-
-    public void getUsersDetails() {
-        //loaderView.showLoader();
-        StringRequest postRequest = new StringRequest(Request.Method.POST, Global.URL + "get_user_data",
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        Log.d("getUserDetails",response);
-                        //loaderView.hideLoader();
-                        try {
-                            JSONObject jsonObject = new JSONObject(response.toString());
-                            if (jsonObject.optString("api_text").equalsIgnoreCase("Success")) {
-                                JSONObject object = jsonObject.getJSONObject("coach_data");
-
-                                if(object.has("coach_info")){
-                                    JSONObject jsonObject_personal_info= object.getJSONObject("coach_info");
-                                    setData(jsonObject_personal_info);
-                                }
-                            } else if (jsonObject.optString("api_text").equalsIgnoreCase("failed")) {
-                                Global.msgDialog(getActivity(), jsonObject.optJSONObject("errors").optString("error_text"));
-                            } else {
-                                Global.msgDialog(getActivity(), getResources().getString(R.string.error_server));
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        error.printStackTrace();
-                       // loaderView.hideLoader();
-                        Global.msgDialog(getActivity(), getResources().getString(R.string.error_server));
-//                Global.msgDialog(EditProfile.this, "Internet connection is slow");
-                    }
-                }
-        ) {
-            @Override
-            protected Map<String, String> getParams() {
-                Map<String, String> param = new HashMap<String, String>();
-                param.put("user_id", SessionManager.get_user_id(prefs));
-                param.put("user_profile_id", SessionManager.get_user_id(prefs));
-                param.put("s", SessionManager.get_session_id(prefs));
-                System.out.println("data   :" + param);
-                return param;
-            }
-        };
-        int socketTimeout = 30000;
-        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-        postRequest.setRetryPolicy(policy);
-        queue.add(postRequest);
 
     }
 

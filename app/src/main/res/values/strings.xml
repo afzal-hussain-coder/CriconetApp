@@ -300,6 +300,7 @@
     <string name="enter_address">Please Enter Address</string>
     <string name="limit_character">Address must have min 5 character</string>
     <string name="enter_pincode">Enter Pin Code</string>
+    <string name="enter_pincodee">Enter correct Pin Code</string>
     <string name="enter_valid_pin_code">Please Enter Valid Pin Code</string>
     <string name="enter_alternate_number">Please enter alternate number</string>
     <string name="enter_valid_alternate_number">Please enter valid alternate number</string>
@@ -401,8 +402,8 @@
     <string name="VIEW_YOUR_PROFILE">VIEW YOUR PROFILE</string>
     <string name="BOOK_YOUR_COACH">BOOK YOUR COACH</string>
     <string name="Experience">"Experience : "</string>
-    <string name="Please_select_date_first">Please select date first.</string>
-    <string name="Please_select_time_first">Please select time first.</string>
+    <string name="Please_select_date_first">Select date</string>
+    <string name="Please_select_time_first">Select session</string>
     <string name="Enter_Name">Enter Name</string>
     <string name="Enter_Middle_Name_at_least_3_character">Enter Middle Name (at least 3 character)</string>
     <string name="Enter_First_Name_at_least_3_character">Enter First Name (at least 3 character)</string>
@@ -447,7 +448,7 @@
     <string name="first_namee">First Name*</string>
     <string name="last_namee">Last Name*</string>
     <string name="click_to_edit_profile">Click to Edit Profile</string>
-    <string name="time_slote">Time Slot</string>
+    <string name="time_slote">Session Time</string>
     <string name="save_continue">Save &amp; Continue</string>
     <string name="type_here_and_click_the_post_button">Type here and click the post button</string>
     <string name="match_not_found">Match Not Found</string>
@@ -508,7 +509,7 @@
     <string name="update">Update</string>
     <string name="middle_name">Middle Name</string>
     <string name="enter_land_mark">Enter A Landmark</string>
-    <string name="select_language">Select Language</string>
+    <string name="select_language">Select Language you speak</string>
     <string name="enter_landmark">Enter Landmark</string>
     <string name="Select_Language_You_Speak">Select Language You Speak*</string>
     <string name="Enter_middle_name">Enter Middle Name</string>
@@ -527,13 +528,16 @@
     <string name="Fill_your_profile_title">Fill your profile title</string>
     <string name="Select_year_and_month">Select year and month</string>
     <string name="Enter_Amount_session">Enter Amount/Session</string>
+    <string name="Enter_Amount_sessionn">Enter Amount/Session should be greater than zero(0) </string>
     <string name="Please_check_tearms">Please check our Terms/Policy if you want to proceed</string>
     <string name="remove_certificate">Remove Certificate</string>
     <string name="add_profile_picture">Add Profile Picture</string>
     <string name="Enter_First_Name">Enter First Name (should be 3 characters to 30 characters)</string>
     <string name="Select_Country">Select Country</string>
-    <string name="Enter_your_address">Enter your address (should be 3 characters to 30 characters)</string>
+    <string name="Enter_your_address">Enter your address</string>
+    <string name="Enter_your_addresss">Complete your address</string>
     <string name="Enter_your_phone_number">Enter your phone number</string>
+    <string name="Enter_your_phone_numberr">Enter complete phone number</string>
     <string name="Upload_profile_picture">Upload profile picture</string>
     <string name="Select_City">Select City</string>
     <string name="Select_State">Select State</string>
@@ -542,8 +546,11 @@
     <string name="Professional_Qualifications">Professional Qualifications</string>
     <string name="Available_Date_Session">Available Date &amp; Session</string>
     <string name="Information_saved_successfully_Please_proceed_to_continue_your_registration">Information saved successfully. Please proceed to continue your registration</string>
+    <string name="Information_update_successfully">Information updated successfully.</string>
     <string name="Booking_Session_Close_Time">Booking Session Close Time</string>
+    <string name="Booking_Session_Close_Timee">Select Booking Session Close Time</string>
     <string name="update_profile">Update Profile</string>
+    <string name="visit_profile"><u>Visit Profile</u></string>
 
 
 </resources>

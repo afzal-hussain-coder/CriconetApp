@@ -48,6 +48,7 @@
 <!--            </intent-filter>-->
         </activity>
         <activity android:name=".activity.CoachProfessionalInfoActivity" />
+        <activity android:name=".activity.visitCoachProfileActivity" />
         <activity android:name=".activity.CoachPersonalInfoActivity" />
         <activity android:name=".activity.CoachRegistrationActivity" />
         <activity android:name=".activity.WebViewCoachRegisterTermsActivity" />

@@ -74,12 +74,8 @@ import java.util.Map;
 public class CoachRegistrationActivity extends AppCompatActivity {
     private TabLayout tabLayout;
     private ViewPager viewPager;
-    private ViewPagerAdapter adapter;
-    public static boolean isMenu;
-    private SharedPreferences prefs;
     private AppCompatActivity mActivity;
     private String from_where="";
-    private View view;
 
 
     @SuppressLint("ClickableViewAccessibility")
@@ -112,7 +108,7 @@ public class CoachRegistrationActivity extends AppCompatActivity {
             }
             else{
 
-                Intent intent = new Intent(mActivity, ProfileActivity.class);
+                Intent intent = new Intent(mActivity, CoachProfileActivity.class);
                 startActivity(intent);
                 finish();
             }
@@ -123,21 +119,17 @@ public class CoachRegistrationActivity extends AppCompatActivity {
 
         tabLayout=findViewById(R.id.tabLayout);
         viewPager=findViewById(R.id.viewPager);
-        view = findViewById(R.id.view);
-        prefs = PreferenceManager.getDefaultSharedPreferences(mActivity);
-        adapter = new ViewPagerAdapter(getSupportFragmentManager(),mActivity); //here used child fragment manager
-
-
-        adapter.addFragment(new FragmentCoachEditProfile(), "Personal Information");
-        adapter.addFragment(new FragmentExperienceSetting(), "Professional Qualifications");
-        adapter.addFragment(new FragmentAvility(), "Available Date & Session");
-
+        addTabs(viewPager);
         tabLayout.setVisibility(View.VISIBLE);
         tabLayout.setupWithViewPager(viewPager);
 
-
+    }
+    private void addTabs(ViewPager viewPager) {
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager(),mActivity);
+        adapter.addFragment(new FragmentCoachEditProfile(), "Personal Information");
+        adapter.addFragment(new FragmentExperienceSetting(), "Professional Qualifications");
+        adapter.addFragment(new FragmentAvility(), "Available Date & Session");
         viewPager.setAdapter(adapter);
-
     }
 
 
@@ -156,7 +148,7 @@ public class CoachRegistrationActivity extends AppCompatActivity {
         }
         else{
 
-            Intent intent = new Intent(mActivity, ProfileActivity.class);
+            Intent intent = new Intent(mActivity, CoachProfileActivity.class);
             startActivity(intent);
             finish();
         }

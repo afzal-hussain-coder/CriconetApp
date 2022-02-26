@@ -3,6 +3,7 @@ package com.pb.criconet.activity;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -11,6 +12,7 @@ import android.graphics.Paint;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.FrameLayout;
@@ -20,6 +22,14 @@ import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.RetryPolicy;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.github.chrisbanes.photoview.PhotoView;
 import com.makeramen.roundedimageview.RoundedImageView;
@@ -27,9 +37,17 @@ import com.pb.criconet.R;
 import com.pb.criconet.Utills.Global;
 import com.pb.criconet.Utills.SessionManager;
 import com.pb.criconet.Utills.Toaster;
+import com.pb.criconet.models.CoachLanguage;
 import com.pb.criconet.models.CoachList;
+import com.pb.criconet.models.Drawer;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -40,6 +58,7 @@ public class CoachProfileActivity extends AppCompatActivity {
     private TextView tvCoachName;
     private TextView tvCoachTitle;
     private TextView tvCoachExp;
+    private TextView tvCertificate;
     private TextView tvCoachSpecialization;
     private TextView tvPrice;
     private FrameLayout tvBookNow;
@@ -58,6 +77,12 @@ public class CoachProfileActivity extends AppCompatActivity {
     private RoundedImageView img_banner,img_certificate;
     RelativeLayout lay_specilization,rl_session_available_or_not,rel_language,rl_certificate;
     String ADAYS="",ADAYS_msg="";
+    ImageView img_edit;
+    private RequestQueue queue;
+    String firtsName="",lastName="",middleName="",exp_years="",exp_month="";
+    ArrayList<String>coachLanguages = new ArrayList<>();
+    private StringBuilder langStringBuilder;
+    ArrayList<CoachList.certificate> object;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +90,7 @@ public class CoachProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_coatch_profile);
         mContext =this;
         prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
+        queue = Volley.newRequestQueue(mContext);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -80,8 +106,28 @@ public class CoachProfileActivity extends AppCompatActivity {
         TextView mTitle = (TextView) toolbar.findViewById(R.id.toolbartext);
         mTitle.setText(R.string.coach_profile);
 
+
+
+        img_edit = toolbar.findViewById(R.id.img_edit);
+        if (SessionManager.get_profiletype(prefs).equalsIgnoreCase("coach")) {
+            img_edit.setVisibility(View.VISIBLE);
+            img_edit.setOnClickListener(view -> {
+                startActivity(new Intent(mContext,CoachRegistrationActivity.class).putExtra("FROM","1"));
+                finish();
+            });
+
+            //text.add(new Drawer(getString(R.string.join_as_coach),false, R.drawable.ic_sports_handball_black_24dp));
+        }else{
+            img_edit.setVisibility(View.GONE);
+        }
+
         initializeView();
-        getIntentValue();
+        if (Global.isOnline(mContext)) {
+            getUsersDetails();
+        } else {
+            Global.showDialog((Activity) mContext);
+        }
+
     }
 
     private void initializeView() {
@@ -90,6 +136,7 @@ public class CoachProfileActivity extends AppCompatActivity {
         tvCoachName = findViewById(R.id.tvCoachName);
         tvCoachTitle = findViewById(R.id.tvCoachTitle);
         tvCoachExp = findViewById(R.id.tvCoachExp);
+        tvCertificate = findViewById(R.id.tvCertificate);
         tv_booked_session = findViewById(R.id.tv_booked_session);
         lay_specilization = findViewById(R.id.lay_specilization);
         tvCoachSpecialization= findViewById(R.id.tvCoachSpecialization);
@@ -98,6 +145,7 @@ public class CoachProfileActivity extends AppCompatActivity {
         tvPrice=findViewById(R.id.tvPrice);
 
         li_offer = findViewById(R.id.li_offer);
+        li_offer.setVisibility(View.GONE);
         rl_session_available_or_not = findViewById(R.id.rl_session_available_or_not);
         tvBookNow=findViewById(R.id.tvBookNow);
         tvAchievement_details=findViewById(R.id.tvAchievement_details);
@@ -107,6 +155,7 @@ public class CoachProfileActivity extends AppCompatActivity {
         rl_certificate = findViewById(R.id.rl_certificate);
         tvBio_details=findViewById(R.id.tvBio_details);
         rl_offer = findViewById(R.id.rl_offer);
+        //rl_offer.setVisibility(View.GONE);
         tvoffer = findViewById(R.id.tvoffer);
         tvOfferPrice = findViewById(R.id.tvOfferPrice);
         img_banner = findViewById(R.id.img_banner);
@@ -125,122 +174,216 @@ public class CoachProfileActivity extends AppCompatActivity {
 
     }
 
-    private void getIntentValue(){
-        Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            coachId=extras.getString("coachId");
-            rating=extras.getInt("rating");
-            if (!extras.getString("image").isEmpty()) {
-                Glide.with(mContext).load(extras.getString("image"))
+    public void getUsersDetails() {
+        //loaderView.showLoader();
+        StringRequest postRequest = new StringRequest(Request.Method.POST, Global.URL + "get_user_data",
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d("getUserDetails",response);
+                        //loaderView.hideLoader();
+                        try {
+                            JSONObject jsonObject = new JSONObject(response.toString());
+                            if (jsonObject.optString("api_text").equalsIgnoreCase("Success")) {
+                                JSONObject object = jsonObject.getJSONObject("coach_data");
+                                JSONObject jsonObject_personal_info=null;
+                                JSONObject jsonObject_professional_info=null;
+                                if(object.has("personal_info")){
+                                    jsonObject_personal_info= object.getJSONObject("personal_info");
+                                }
+                                if(object.has("coach_info")){
+                                    jsonObject_professional_info= object.getJSONObject("coach_info");
+                                }
+                                setData(jsonObject_personal_info,jsonObject_professional_info);
+                            } else if (jsonObject.optString("api_text").equalsIgnoreCase("failed")) {
+                                Global.msgDialog((Activity) mContext, jsonObject.optJSONObject("errors").optString("error_text"));
+                            } else {
+                                Global.msgDialog((Activity) mContext, getResources().getString(R.string.error_server));
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
+                        //loaderView.hideLoader();
+                        Global.msgDialog((Activity) mContext, getResources().getString(R.string.error_server));
+//                Global.msgDialog(EditProfile.this, "Internet connection is slow");
+                    }
+                }
+        ) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> param = new HashMap<String, String>();
+                param.put("user_id", SessionManager.get_user_id(prefs));
+                param.put("user_profile_id", SessionManager.get_user_id(prefs));
+                param.put("s", SessionManager.get_session_id(prefs));
+                System.out.println("data   :" + param);
+                return param;
+            }
+        };
+        int socketTimeout = 30000;
+        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        postRequest.setRetryPolicy(policy);
+        queue.add(postRequest);
+
+    }
+    private void setData(JSONObject  data,JSONObject jsonObject_professional_info) {
+
+        if(data.has("first_name")){
+            firtsName = data.optString("first_name");
+        }
+        if(data.has("last_name")){
+            lastName= data.optString("last_name");
+        }
+        if(data.has("mid_name")){
+            middleName = data.optString("mid_name");
+        }
+
+        if(lastName.equalsIgnoreCase("")){
+            tvCoachName.setText(firtsName+" "+middleName);
+        }else if(middleName.equalsIgnoreCase("")){
+            tvCoachName.setText(firtsName+" "+lastName);
+        }else{
+            tvCoachName.setText(firtsName+" "+middleName+" "+lastName);
+        }
+
+
+        if(data.has("avatar")){
+
+            if (!data.optString("avatar").isEmpty()) {
+                Glide.with(mContext).load(data.optString("avatar"))
                         .into(image_profile);
             } else {
                 Glide.with(mContext).load(R.drawable.placeholder_user)
                         .into(image_profile);
             }
+        }
 
-            if((getIntent().getBundleExtra("Certificate") ==null)){
+        if (!data.optString("Cover").isEmpty()) {
+            Glide.with(mContext).load(data.optString("Cover"))
+                    .into(img_banner);
+        } else {
+            Glide.with(mContext).load(R.drawable.bg_coach)
+                    .into(img_banner);
+        }
+
+        if (jsonObject_professional_info.has("profile_title")) {
+            tvCoachTitle.setText(jsonObject_professional_info.optString("profile_title"));
+        }
+//        if (!jsonObject_professional_info.optString("achievementDetails").isEmpty()){
+//            rel_achievement.setVisibility(View.VISIBLE);
+//            tvAchievement_details.setText(jsonObject_professional_info.optString("achievementDetails"));
+//        }else{
+//            rel_achievement.setVisibility(View.GONE);
+//        }
+        if (!jsonObject_professional_info.optString("achievement").isEmpty()){
+            rel_achievement.setVisibility(View.VISIBLE);
+            tvAchievement_details.setText(jsonObject_professional_info.optString("achievement"));
+        }else{
+            rel_achievement.setVisibility(View.GONE);
+        }
+
+        if (!jsonObject_professional_info.optString("about_coach_profile").isEmpty()){
+            rl_bio.setVisibility(View.VISIBLE);
+            tvBio_details.setText(jsonObject_professional_info.optString("about_coach_profile"));
+        }else{
+            rl_bio.setVisibility(View.GONE);
+        }
+//        if (extras.getInt("rating")==0){
+//            rating_bar_review.setVisibility(View.GONE);
+//        }else{
+//            rating_bar_review.setVisibility(View.VISIBLE);
+//            rating_bar_review.setRating(Float.parseFloat(String.valueOf(extras.getInt("rating"))));
+//        }
+        rating_bar_review.setVisibility(View.GONE);
+        tvPrice.setText(getResources().getString(R.string.price)+"\u20B9" +jsonObject_professional_info.optString("charge_amount")+"/"+getResources().getString(R.string.session));
+
+
+
+        if(jsonObject_professional_info.optString("cat_title").isEmpty()){
+            lay_specilization.setVisibility(View.GONE);
+        }else{
+            lay_specilization.setVisibility(View.VISIBLE);
+            tvCoachSpecialization.setText(jsonObject_professional_info.optString("cat_title"));
+        }
+
+        if(data.has("languages")){
+
+            try {
+                JSONArray jsonArray = data.getJSONArray("languages");
+                JSONObject jsonObject=null;
+                CoachLanguage coachLanguage=null;
+                for(int i= 0;i<jsonArray.length();i++){
+                    jsonObject = jsonArray.getJSONObject(i);
+                    coachLanguage= new CoachLanguage(jsonObject);
+                    coachLanguages.add(coachLanguage.getName_eng());
+                }
+
+                langStringBuilder = new StringBuilder();
+                String prefix = "";
+                for (String item : coachLanguages) {
+                    langStringBuilder.append(prefix);
+                    prefix = ",";
+                    langStringBuilder.append(item);
+                }
+                //Log.d("size",langStringBuilder.toString());
+
+                tvLanguage_details.setText(langStringBuilder.toString());
+
+                Log.d("size",coachLanguages.size()+"");
+
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if (jsonObject_professional_info.has("exp_years")) {
+            exp_years=jsonObject_professional_info.optString("exp_years");
+
+        }
+        if (jsonObject_professional_info.has("exp_months")) {
+            exp_month=jsonObject_professional_info.optString("exp_months");
+        }
+        tvCoachExp.setText(exp_years+"."+exp_month+" "+"Years Experience");
+
+        if(jsonObject_professional_info.has("certificate_url")){
+            if((jsonObject_professional_info.optString("certificate_url").isEmpty())){
                 rl_certificate.setVisibility(View.GONE);
             }else{
-                Bundle args = getIntent().getBundleExtra("Certificate");
-                ArrayList<CoachList.certificate> object = (ArrayList<CoachList.certificate>) args.getSerializable("ARRAYLIST");
-                    rl_certificate.setVisibility(View.VISIBLE);
-                    Glide.with(mContext).load(object.get(0).getCertificate_url())
-                            .into(img_certificate);
-                    img_certificate.setOnClickListener(v -> {
-                        imageViewDialog(object.get(0).getCertificate_url());
-                    });
+                rl_certificate.setVisibility(View.VISIBLE);
+                tvCertificate.setText("Certificate: "+jsonObject_professional_info.optString("certificate_title") );
+                Glide.with(mContext).load(jsonObject_professional_info.optString("certificate_url"))
+                        .into(img_certificate);
+                img_certificate.setOnClickListener(v -> {
+                    imageViewDialog(jsonObject_professional_info.optString("certificate_url"));
+                });
 
             }
-            if (!extras.getString("Cover").isEmpty()) {
-                Glide.with(mContext).load(extras.getString("Cover"))
-                        .into(img_banner);
-            } else {
-                Glide.with(mContext).load(R.drawable.bg_coach)
-                        .into(img_banner);
-            }
+                /*JSONArray jsonArray=jsonObject_professional_info.getJSONArray("certificate");
+                JSONObject modelJson;
+                object = new ArrayList<>();
+                // Process each result in json array, decode and convert to CardModel object
+                for (int i = 0; i < jsonArray.length(); i++) {
 
+                        modelJson = jsonArray.getJSONObject(i);
 
-            if(extras.getString("exp").equals("0")){
-                tvCoachExp.setVisibility(View.GONE);
-            }else{
-                tvCoachExp.setVisibility(View.VISIBLE);
-                tvCoachExp.setText(extras.getString("exp"));
-            }
-            offerpersantage = extras.getString("Offer");
-            ADAYS = extras.getString("ADAYS");
-            ADAYS_msg = extras.getString("ADAYS_msg");
-
-            if(ADAYS.equalsIgnoreCase("0")){
-                rl_session_available_or_not.setVisibility(View.VISIBLE);
-                tv_booked_session.setText(ADAYS_msg);
-                rl_offer.setVisibility(View.GONE);
-            }else{
-                rl_session_available_or_not.setVisibility(View.GONE);
-                if(offerpersantage.equalsIgnoreCase("0")){
-                    rl_offer.setVisibility(View.GONE);
-                }else{
-                    tvoffer.setText(offerpersantage+"% "+"OFF");
-                    rl_offer.setVisibility(View.VISIBLE);
-
+                    CoachList.certificate model = new CoachList.certificate(modelJson);
+                    if (model != null) {
+                        object.add(model);
+                    }
                 }
-            }
+                Log.d("link",object.size()+"");*/
 
-
-            if (extras.getString("OfferID").equalsIgnoreCase("0")) {
-                li_offer.setVisibility(View.GONE);
-            } else {
-                tvPrice.setPaintFlags(tvPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                tvOfferPrice.setText("\u20B9" + extras.getString("OfferPrice") + "/" + getResources().getString(R.string.session));
-                li_offer.setVisibility(View.VISIBLE);
-            }
-
-            if (extras.getString("Language")==null) {
-                rel_language.setVisibility(View.GONE);
-
-            } else {
-                tvLanguage_details.setText(extras.getString("Language"));
-                rel_language.setVisibility(View.VISIBLE);
-            }
-
-
-            if (extras.getInt("rating")==0){
-                rating_bar_review.setVisibility(View.GONE);
-            }else{
-                rating_bar_review.setVisibility(View.VISIBLE);
-                rating_bar_review.setRating(Float.parseFloat(String.valueOf(extras.getInt("rating"))));
-            }
-
-            tvCoachName.setText(Global.capitizeString(extras.getString("name")));
-            tvCoachTitle.setText(extras.getString("coachTitle"));
-
-            if(extras.getString("specialization")==null||extras.getString("specialization").equalsIgnoreCase("")){
-                lay_specilization.setVisibility(View.GONE);
-            }else{
-                lay_specilization.setVisibility(View.VISIBLE);
-                tvCoachSpecialization.setText(extras.getString("specialization"));
-            }
-
-
-
-            if (!extras.getString("achievementDetails").isEmpty()){
-                rel_achievement.setVisibility(View.VISIBLE);
-                tvAchievement_details.setText(extras.getString("achievementDetails"));
-            }else{
-                rel_achievement.setVisibility(View.GONE);
-            }
-
-            if (!extras.getString("des").isEmpty()){
-                rl_bio.setVisibility(View.VISIBLE);
-                tvBio_details.setText(extras.getString("des"));
-            }else{
-                rl_bio.setVisibility(View.GONE);
-            }
-
-
-            tvPrice.setText(getResources().getString(R.string.price)+"\u20B9" +extras.getString("price")+"/"+getResources().getString(R.string.session));
-
-            // and get whatever type user account id is
         }
+
+
+
+
     }
 
     void imageViewDialog(String url) {

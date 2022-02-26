@@ -93,6 +93,7 @@ public class MainActivity extends BaseActivity {
     private SharedPreferences prefs;
     private ProgressDialog progress;
     private CircleImageView profile_pic;
+    private TextView txt_visit_profile;
     private ImageView cover;
     private ArrayList<Drawer> text;
     private AppCompatActivity mActivity;
@@ -147,6 +148,7 @@ public class MainActivity extends BaseActivity {
         prefs = PreferenceManager.getDefaultSharedPreferences(mActivity);
 
         profile_pic = findViewById(R.id.profile_pic);
+        txt_visit_profile = findViewById(R.id.txt_visit_profile);
         cover = findViewById(R.id.cover_img);
         txt_nav_name = findViewById(R.id.txt_nav_name);
         bottomNavigation = findViewById(R.id.BottomNavigation);
@@ -159,16 +161,8 @@ public class MainActivity extends BaseActivity {
         // Record Video Code Commented
         //text.add(new Drawer(getString(R.string.recorded_video),false, R.drawable.record_video));
 
-        profile_pic.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(mActivity, ProfileActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        });
 
-
+       Log.d("Coach",SessionManager.get_profiletype(prefs));
         if (SessionManager.get_profiletype(prefs).equalsIgnoreCase("coach")) {
             //text.add(new Drawer(getString(R.string.join_as_coach),false, R.drawable.ic_sports_handball_black_24dp));
         }else{
@@ -265,6 +259,28 @@ public class MainActivity extends BaseActivity {
                     }
                 }
         );
+
+        if (SessionManager.get_profiletype(prefs).equalsIgnoreCase("coach")) {
+            txt_visit_profile.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(mActivity, CoachProfileActivity.class);
+                    startActivity(intent);
+                    drawer.closeDrawers();
+                    //finish();
+                }
+            });
+        }else{
+            txt_visit_profile.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(mActivity, ProfileActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+            });
+        }
+
         if (getIntent().getExtras() != null) {
             if (getIntent().getExtras().getString("type").equalsIgnoreCase("live_streaming")) {
                 navigationController.navigatoLiveMatchesFragment();
@@ -275,8 +291,6 @@ public class MainActivity extends BaseActivity {
             }
            // Log.d("Type",getIntent().getExtras().getString("type"));
         }
-
-
     }
 
 
@@ -296,7 +310,6 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void initUIandEvent() {
-
     }
 
     @Override
@@ -341,8 +354,6 @@ public class MainActivity extends BaseActivity {
         });
 
     }*/
-
-
 
     @Override
     public void onBackPressed() {
@@ -400,8 +411,8 @@ public class MainActivity extends BaseActivity {
             navigationController.navigateToHomeFragment();
         }else if (text.get(position).getTitle().equalsIgnoreCase("Register as an e-Coach")) {
            //startActivity(new Intent(mActivity,CoachSloatAvailabilityActivity.class));
-            startActivity(new Intent(mActivity,CoachPersonalInfoActivity.class).putExtra("FROM","3"));
-            finish();
+            startActivity(new Intent(mActivity,CoachPersonalInfoActivity.class));
+            //finish();
         }
 
         else if (text.get(position).getTitle().equalsIgnoreCase("Slot")) {

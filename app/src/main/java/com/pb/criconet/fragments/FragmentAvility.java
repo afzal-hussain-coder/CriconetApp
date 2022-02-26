@@ -3,10 +3,12 @@ package com.pb.criconet.fragments;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Gravity;
@@ -46,6 +48,7 @@ import com.pb.criconet.Utills.GridSpacingItemDecoration;
 import com.pb.criconet.Utills.NavigationController;
 import com.pb.criconet.Utills.SessionManager;
 import com.pb.criconet.Utills.Toaster;
+import com.pb.criconet.activity.CoachProfileActivity;
 import com.pb.criconet.adapters.CoachButtonAdapter;
 import com.pb.criconet.adapters.TimeAdapter;
 import com.pb.criconet.adapters.TimeAdaptercoachh;
@@ -64,6 +67,7 @@ import org.json.JSONObject;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -80,6 +84,8 @@ public class FragmentAvility extends Fragment {
     private String dateGott = "";
     private String year;
     private String month;
+    private String currentyear;
+    private String currentmonth;
     private String day;
     private String dateGot = "";
     private StringBuilder multiDate;
@@ -112,6 +118,7 @@ public class FragmentAvility extends Fragment {
     ArrayList<updatedTimeSlot>updatedSlotList;
     JSONArray updateJsonArray=null;
     Calendar cal;
+    Date previousDate;
 
     public static FragmentAvility newInstance() {
         return new FragmentAvility();
@@ -137,15 +144,18 @@ public class FragmentAvility extends Fragment {
 
         btn_login = rootView.findViewById(R.id.btn_login);
         datePicker = rootView.findViewById(R.id.calendarView);
+
+
         prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         queue = Volley.newRequestQueue(getActivity());
         spinerCurency = rootView.findViewById(R.id.spinerCurency);
+        //option_currency.add(new com.pb.criconet.Utills.DataModel("Select booking session close time"));
         option_currency.add(new com.pb.criconet.Utills.DataModel("Booking session should be closed before 4 hours"));
         option_currency.add(new com.pb.criconet.Utills.DataModel("Booking session should be closed before 6 hours"));
         option_currency.add(new com.pb.criconet.Utills.DataModel("Booking session should be closed before 8 hours"));
         spinerCurency.setOptionList(option_currency);
-        selectedCloseLimit = option_currency.get(0).getName();
-        spinerCurency.setText(selectedCloseLimit);
+        //selectedCloseLimit = option_currency.get(0).getName();
+        //spinerCurency.setText(selectedCloseLimit);
         spinerCurency.setTypeface(typeface);
         spinerCurency.setClickListener(new FilterCoachCloseTimeDropDownView.onClickInterface() {
             @Override
@@ -175,14 +185,26 @@ public class FragmentAvility extends Fragment {
 
         year = Global.getYear(datePicker.getCurrentPageDate().getTime().toString());
         month = Global.getMonth(datePicker.getCurrentPageDate().getTime().toString());
+        //dateGot = Global.getDateGotCoach(datePicker.getCurrentPageDate().getTime().toString());
+        printDatesInMonth(Integer.parseInt(year), Integer.parseInt(month));
         if (Global.isOnline(mContext)) {
             getUsersDetails();
         } else {
             Global.showDialog(getActivity());
         }
-        printDatesInMonth(Integer.parseInt(year), Integer.parseInt(month));
+
         // disable dates before today
         Calendar min = Calendar.getInstance();
+        previousDate = min.getTime();
+        //currentyear = String.valueOf(min.get(Calendar.YEAR));
+
+
+//        if((min.get(Calendar.MONTH)+1)<10){
+//            currentmonth="0"+String.valueOf(min.get(Calendar.MONTH)+1);
+//        }else{
+//            currentmonth=String.valueOf(min.get(Calendar.MONTH)+1);
+//        }
+
         min.add(Calendar.DAY_OF_MONTH, -1);
         datePicker.setMinimumDate(min);
 
@@ -265,19 +287,26 @@ public class FragmentAvility extends Fragment {
 
             }
 
-
-
 //            for(int k =0; k<updatedSlotList.size();k++){
 //                Log.d("DateSize",updatedSlotList.get(k).getSlotId()+"");
 //            }
 
+            //Log.d("date",eventDay.getCalendar().getTime().compareTo(previousDate)+"/"+Global.getDateGot(previousDate.toString())+"/"+Global.getDateGot(eventDay.getCalendar().getTime().toString()));
 
-            if (Global.isOnline(getActivity())) {
-                getDateSlote(dateGot,updatedSlotList);
-            } else {
-                Global.showDialog(getActivity());
+            if(Global.getDateGot(eventDay.getCalendar().getTime().toString()).equals(Global.getDateGot(previousDate.toString()))||eventDay.getCalendar().getTime().compareTo(previousDate)>0){
+                if (Global.isOnline(getActivity())) {
+                    getDateSlote(dateGot,updatedSlotList);
+                } else {
+                    Global.showDialog(getActivity());
+                }
             }
+            else{
+                Toaster.customToast("Select enabled date");
+            }
+
+
         });
+
 
         datePicker.setOnForwardPageChangeListener(() -> {
             year = Global.getYear(datePicker.getCurrentPageDate().getTime().toString());
@@ -292,10 +321,35 @@ public class FragmentAvility extends Fragment {
             year = Global.getYear(datePicker.getCurrentPageDate().getTime().toString());
             month = Global.getMonth(datePicker.getCurrentPageDate().getTime().toString());
             //getCoachDete();
-            printDatesInMonth(Integer.parseInt(year), Integer.parseInt(month));
-            dateGot = Global.getDateGotCoach(datePicker.getCurrentPageDate().getTime().toString());
+            printDatesInMonth(Integer.parseInt(year),Integer.parseInt(month));
+            dateGot=Global.getDateGotCoach(datePicker.getCurrentPageDate().getTime().toString());
             //getDateSlote(dateGot);
         });
+
+//        Log.d("date",currentmonth+"/"+month+"/"+currentyear+"/"+year);
+//        if (year.equals(currentyear) && month.equals(currentmonth)) {
+//         datePicker.setPreviousButtonImage(getResources().getDrawable(R.drawable.ic_arrow_leftt));
+//            //disable right button
+//        }else{
+//            datePicker.setPreviousButtonImage(getResources().getDrawable(R.drawable.ic_arrow_left));
+//            // enable both button
+//            datePicker.setOnPreviousPageChangeListener(() -> {
+//                year = Global.getYear(datePicker.getCurrentPageDate().getTime().toString());
+//                month = Global.getMonth(datePicker.getCurrentPageDate().getTime().toString());
+//                //getCoachDete();
+//                printDatesInMonth(Integer.parseInt(year), Integer.parseInt(month));
+//                dateGot = Global.getDateGotCoach(datePicker.getCurrentPageDate().getTime().toString());
+//                //getDateSlote(dateGot);
+//            });
+//        }
+
+
+
+//        if(month.equalsIgnoreCase("12")){
+//            datePicker.setSwipeEnabled(false);
+//        }else{
+//            datePicker.setSwipeEnabled(true);
+//        }
 
         btn_login.setOnClickListener(view -> {
             multiDate = new StringBuilder();
@@ -409,8 +463,29 @@ public class FragmentAvility extends Fragment {
                     if (jsonObject.getString("api_status").equalsIgnoreCase("200")) {
                         data = jsonObject.getJSONObject("data");
                         Toaster.customToast(data.getString("message"));
+
+                        year = Global.getYear(datePicker.getCurrentPageDate().getTime().toString());
+                        month = Global.getMonth(datePicker.getCurrentPageDate().getTime().toString());
+                        if (Global.isOnline(mContext)) {
+                            getUsersDetails();
+                        } else {
+                            Global.showDialog(getActivity());
+                        }
+                        printDatesInMonth(Integer.parseInt(year), Integer.parseInt(month));
+
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                Intent intent = new Intent(getActivity(), CoachProfileActivity.class);
+                                startActivity(intent);
+                                getActivity().finish();
+                            }
+                        },2000);
+
+                    } else if (jsonObject.optString("api_text").equalsIgnoreCase("failed")) {
+                        Global.msgDialog(getActivity(), jsonObject.optJSONObject("errors").optString("error_text"));
                     } else {
-                        Toaster.customToast(data.getString("error"));
+                        Global.msgDialog(getActivity(), getResources().getString(R.string.error_server));
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -506,12 +581,13 @@ public class FragmentAvility extends Fragment {
     private boolean checkValidation() {
 
         if (dateGot.equalsIgnoreCase("")) {
-            Toast.makeText(getActivity(), getResources().getString(R.string.Please_select_date_first), Toast.LENGTH_SHORT).show();
-            return false;
-        } else if (selectedTimeSlot.equalsIgnoreCase("")) {
-            Toast.makeText(getActivity(), getResources().getString(R.string.Please_select_time_first), Toast.LENGTH_SHORT).show();
+            Toaster.customToast(getResources().getString(R.string.Please_select_date_first));
             return false;
         }
+//        else if (selectedTimeSlot.equalsIgnoreCase("")) {
+//            Toaster.customToast(getResources().getString(R.string.Please_select_date_first));
+//            return false;
+//        }
         return true;
     }
 
@@ -547,8 +623,8 @@ public class FragmentAvility extends Fragment {
 
                                 if(object.has("coach_booking_close_time")){
 
-                                    closeTime = object.getString("coach_booking_close_time");
-                                    selectedCloseLimit = "Booking session should be closed before " + closeTime +" hours";
+                                    booking_close_time = object.getString("coach_booking_close_time");
+                                    selectedCloseLimit = "Booking session should be closed before " + booking_close_time +" hours";
                                     spinerCurency.setText(selectedCloseLimit);
                                     //Toaster.customToast(closeTime);
                                 }

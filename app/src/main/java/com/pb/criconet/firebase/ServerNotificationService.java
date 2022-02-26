@@ -43,12 +43,13 @@ public class ServerNotificationService extends FirebaseMessagingService {
         Log.d(TAG, "From: " + remoteMessage.getFrom());
 
         if (remoteMessage.getData().size() > 0) {
-           // Log.d(TAG, "Message data payload: " + remoteMessage.getData());
+           Log.d(TAG, "Message data payload: " + remoteMessage.getData());
             JSONObject json = null;//notification;
 
             json = new JSONObject(remoteMessage.getData());
             //Log.d("Json", json + "");
             messageBody = remoteMessage.getNotification().getBody();
+            //Log.d("Json", messageBody + "");
             title = remoteMessage.getNotification().getTitle();
             icon = remoteMessage.getNotification().getIcon();
             sound = remoteMessage.getNotification().getSound();
@@ -107,6 +108,9 @@ public class ServerNotificationService extends FirebaseMessagingService {
                 intent.putExtra("type", "live_streaming");
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             }
+            
+            ///....after click on notification like/dislike/comment......particuler comment pe accordingb to postId..
+
 
             PendingIntent contentIntent = PendingIntent.getActivity(this, (int) (Math.random() * 100), intent, 0);
 

@@ -72,9 +72,9 @@ public class Global {
 
 
     /*for live*/
-   // public static final String URL = "https://www.criconet.com/app_api.php?type=";
-   // public static final String URL_CHAT = "https://www.criconet.com";
-   // public static String GameURL ="https://www.criconet.com/cricket_js/index.php?";
+   //public static final String URL = "https://www.criconet.com/app_api.php?type=";
+   //public static final String URL_CHAT = "https://www.criconet.com";
+   //public static String GameURL ="https://www.criconet.com/cricket_js/index.php?";
     
     // for video upload testing..
     //public static final String URL = "https://www.criconet.com/app_api.php?type=";
@@ -152,7 +152,14 @@ public class Global {
         return name.length() >= len;
     }
     public static boolean validateLengthofCoachRegister(String name) {
-        if (name.length() < 3 || name.length()>30) {
+        if (name.length() < 3) {
+            name.length();
+            return false;
+        }
+        return true;
+    }
+    public static boolean validateLengthofCoachRegisterr(String name) {
+        if (name.length() < 3) {
             name.length();
             return false;
         }
