@@ -105,7 +105,8 @@ public class FragmentCoachEditProfile extends Fragment implements AdapterView.On
     private static final int PICK_IMAGEid = 100;
     private SharedPreferences prefs;
     private String  fname_String, mname_String, lname_String, gender_String, countryID="", stateID="",cityID="",address1,address2,pincode,mobile;
-    private EditText etAddress2, edttxt_fname, edttxt_lname, etAddress, edttxt_birthday, edttxt_phone,etPincode;
+    private EditText etAddress2, edttxt_fname, edttxt_lname, etAddress, edttxt_birthday, edttxt_phone,etPincode,
+            edttxt_fb_profileLink, edttxt_twitter_profile, edttxt_linkind_profile, edttxt_instagram_profile, edttxt_youtube_profile;
     private Spinner spn_language;
     private Spinner spinnerCountry;
     private Spinner spinnerState;
@@ -150,6 +151,11 @@ public class FragmentCoachEditProfile extends Fragment implements AdapterView.On
     String state_Name="";
     String country_Name="";
     String city_Name="";
+    String twitter="";
+    String facebook="";
+    String linkedin="";
+    String instagram="";
+    String youtube="";
 
     ArrayList<String> languageArray_new = new ArrayList<>();
     Dialog dialog;
@@ -193,6 +199,11 @@ public class FragmentCoachEditProfile extends Fragment implements AdapterView.On
         etAddress2 = rootView.findViewById(R.id.etAddress2);
         edttxt_phone = rootView.findViewById(R.id.edttxt_phone);
         etPincode = rootView.findViewById(R.id.etPincode);
+        edttxt_fb_profileLink = rootView.findViewById(R.id.edttxt_fb_profileLink);
+        edttxt_twitter_profile = rootView.findViewById(R.id.edttxt_twitter_profile);
+        edttxt_linkind_profile = rootView.findViewById(R.id.edttxt_linkind_profile);
+        edttxt_instagram_profile = rootView.findViewById(R.id.edttxt_instagram_profile);
+        edttxt_youtube_profile = rootView.findViewById(R.id.edttxt_youtube_profile);
         textView_language = rootView.findViewById(R.id.textView_language);
         spn_language = rootView.findViewById(R.id.spn_language);
         spinnerCountry = rootView.findViewById(R.id.spinerCountry);
@@ -296,10 +307,16 @@ public class FragmentCoachEditProfile extends Fragment implements AdapterView.On
         mname_String = edttxt_Mname.getText().toString().trim();
         lname_String = edttxt_lname.getText().toString().trim();
         address1 = etAddress.getText().toString().trim();
+        //Toaster.customToast(address1);
         address2 = etAddress2.getText().toString().trim();
         gender_String = spn_language.getSelectedItem().toString();
         pincode = etPincode.getText().toString().trim();
         mobile = edttxt_phone.getText().toString().trim();
+        facebook = edttxt_fb_profileLink.getText().toString().trim();
+        twitter = edttxt_twitter_profile.getText().toString().trim();
+        instagram = edttxt_instagram_profile.getText().toString().trim();
+        linkedin = edttxt_linkind_profile.getText().toString().trim();
+        youtube = edttxt_youtube_profile.getText().toString().trim();
 
         if (!Global.validateLengthofCoachRegister(fname_String)) {
             Toaster.customToast(getResources().getString(R.string.Enter_First_Name));
@@ -323,12 +340,19 @@ public class FragmentCoachEditProfile extends Fragment implements AdapterView.On
 //        }else if(cityID.equalsIgnoreCase("")){
            // Toaster.customToast(getResources().getString(R.string.Select_State));
 //        }
-        else if(!Global.validateLengthofCoachRegister(address1)){
+        else if(address1.isEmpty()){
             Toaster.customToast(getResources().getString(R.string.Enter_your_address));
         }
 //        else if(!Global.validateLength(address2, 3)){
 //            Toaster.customToast(getResources().getString(R.string.enter_landmark));
 //        }
+        else if(pincode.equalsIgnoreCase("111111") ||pincode.equalsIgnoreCase("222222")||
+                pincode.equalsIgnoreCase("333333") || pincode.equalsIgnoreCase("444444") ||
+                pincode.equalsIgnoreCase("555555") || pincode.equalsIgnoreCase("666666")||
+                pincode.equalsIgnoreCase("777777") || pincode.equalsIgnoreCase("888888")||
+                pincode.equalsIgnoreCase("999999")||pincode.equalsIgnoreCase("000000")){
+            Toaster.customToast(getResources().getString(R.string.enter_pincodee));
+        }
         else if(!Global.isValidPincode(pincode)){
             Toaster.customToast(getResources().getString(R.string.enter_pincode));
         }else if(!Global.isValidPhoneNumber(mobile)){
@@ -439,6 +463,7 @@ public class FragmentCoachEditProfile extends Fragment implements AdapterView.On
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
+
     public String getRealPathFromURI(Uri uri) {
         Cursor cursor = getActivity().getContentResolver().query(uri, null, null, null, null);
         cursor.moveToFirst();
@@ -491,6 +516,22 @@ public class FragmentCoachEditProfile extends Fragment implements AdapterView.On
         }
         if(data.has("address2")){
             etAddress2.setText(data.optString("address2"));
+        }
+        if(data.has("facebook")){
+            edttxt_fb_profileLink.setText(data.optString("facebook"));
+        }
+        if(data.has("twitter")){
+            edttxt_twitter_profile.setText(data.optString("twitter"));
+        }
+
+        if(data.has("linkedin")){
+            edttxt_linkind_profile.setText(data.optString("linkedin"));
+        }
+        if(data.has("instagram")){
+            edttxt_instagram_profile.setText(data.optString("instagram"));
+        }
+        if(data.has("youtube")){
+            edttxt_youtube_profile.setText(data.optString("youtube"));
         }
 
         if(data.has("languages")){
@@ -823,6 +864,8 @@ public class FragmentCoachEditProfile extends Fragment implements AdapterView.On
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
 
         if(adapterView==spinnerCountry && i!=0) {
+            state_Name="";
+            city_Name="";
             getState(modelArrayList.getData().get(i).getId());
             countryID=modelArrayList.getData().get(i).getId();
         }else if(adapterView==spinnerState && i!=0){
@@ -964,6 +1007,11 @@ public class FragmentCoachEditProfile extends Fragment implements AdapterView.On
                 param.put("city_id", cityID);
                 param.put("pincode", pincode);
                 param.put("phone_number", mobile);
+                param.put("twitter", twitter);
+                param.put("facebook", facebook);
+                param.put("linkedin", linkedin);
+                param.put("instagram", instagram);
+                param.put("youtube", youtube);
                 param.put("user_id", SessionManager.get_user_id(prefs));
                 param.put("s", SessionManager.get_session_id(prefs));
                 param.put("language_id", textView_language.getText().toString().trim());

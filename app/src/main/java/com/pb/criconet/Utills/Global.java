@@ -63,18 +63,18 @@ public class Global {
 
     public static final String FILE_UPLOAD_URL = "https://criconetonline.com/app_api.php?type=new_post";
     /*for debug*/
-    public static final String URL = "https://stage.criconetonline.com/app_api.php?type=";
+    /*public static final String URL = "https://stage.criconetonline.com/app_api.php?type=";
     public static final String URL_CHAT = "https://stage.criconetonline.com";
-    public static String GameURL = "https://criconetonline.com/cricket_js/index.php?";
+    public static String GameURL = "https://criconetonline.com/cricket_js/index.php?";*/
 
     public static String GET_CAMPUS_AMBASSADOAR = "https://www.criconet.com/campus-ambassador?rst=app";
 
 
 
     /*for live*/
-   //public static final String URL = "https://www.criconet.com/app_api.php?type=";
-   //public static final String URL_CHAT = "https://www.criconet.com";
-   //public static String GameURL ="https://www.criconet.com/cricket_js/index.php?";
+   public static final String URL = "https://www.criconet.com/app_api.php?type=";
+   public static final String URL_CHAT = "https://www.criconet.com";
+   public static String GameURL ="https://www.criconet.com/cricket_js/index.php?";
     
     // for video upload testing..
     //public static final String URL = "https://www.criconet.com/app_api.php?type=";
@@ -115,6 +115,8 @@ public class Global {
     public static final String GET_SPECIALITIES_CATEGORY = "get_specialities_cat";
     public static final String ADD_COACH_QUALIFICATION = "update_coach_spec_exp";
     public static final String REMOVE_CERTIFICATE = "remove_certificate";
+    public static final String SESSION_CLOSE_TIME = "session_close_time";
+
 
 
 
@@ -152,14 +154,14 @@ public class Global {
         return name.length() >= len;
     }
     public static boolean validateLengthofCoachRegister(String name) {
-        if (name.length() < 3) {
+        if (name.length() < 3 || name.length()>32) {
             name.length();
             return false;
         }
         return true;
     }
     public static boolean validateLengthofCoachRegisterr(String name) {
-        if (name.length() < 3) {
+        if (name.length() < 3 || name.length()>32) {
             name.length();
             return false;
         }
@@ -184,7 +186,7 @@ public class Global {
     }
 
     public static boolean isValidPhoneNumber(String testString) {
-        return (testString.length() >= 8 && testString.length() == 10);
+        return (testString.length() >= 8 && testString.length() <=10 && android.util.Patterns.PHONE.matcher(testString).matches());
     }
 
     public static boolean isValidPincode(String testString) {

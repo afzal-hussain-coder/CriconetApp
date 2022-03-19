@@ -72,7 +72,7 @@ public class FilterCoachCloseTimeDropDownView extends OSLTextView implements Vie
             Typeface typeface = ResourcesCompat.getFont(context, R.font.opensans_semibold);
             this.setTypeface(typeface);
             if (onClickInterface != null)
-                onClickInterface.onClickDone(model.getName());
+                onClickInterface.onClickDone(model.getName(),model.getId());
             popupWindow.dismiss();
         });
 
@@ -124,7 +124,7 @@ public class FilterCoachCloseTimeDropDownView extends OSLTextView implements Vie
     public interface onClickInterface {
         void onClickAction();
 
-        void onClickDone(String name);
+        void onClickDone(String name,String id);
 
         void onDismiss();
     }

@@ -159,7 +159,7 @@ public class MainActivity extends BaseActivity {
 
 
         // Record Video Code Commented
-        //text.add(new Drawer(getString(R.string.recorded_video),false, R.drawable.record_video));
+        text.add(new Drawer(getString(R.string.recorded_video),false, R.drawable.recording_icon));
 
 
        Log.d("Coach",SessionManager.get_profiletype(prefs));

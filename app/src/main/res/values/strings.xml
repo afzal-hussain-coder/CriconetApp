@@ -513,7 +513,7 @@
     <string name="enter_landmark">Enter Landmark</string>
     <string name="Select_Language_You_Speak">Select Language You Speak*</string>
     <string name="Enter_middle_name">Enter Middle Name</string>
-    <string name="Enter_Last_Name">Enter Last name (should be 3 characters to 30 characters)</string>
+    <string name="Enter_Last_Name">Enter Last name (should be 3 to 32 characters)</string>
     <string name="select_state">Select State</string>
     <string name="select_city">Select City</string>
     <string name="what_you_teach">What You Teach</string>
@@ -524,15 +524,15 @@
     <string name="tearms_of_use">Terms of Use</string>
     <string name="privacy_policy_data">Privacy Policy,Data Policy and Cookies Policy</string>
     <string name="certificate_title">Certificate Title</string>
-    <string name="Please_choose_your_specialities">Please choose your specialities</string>
-    <string name="Fill_your_profile_title">Fill your profile title</string>
+    <string name="Please_choose_your_specialities">Choose your specialities</string>
+    <string name="Fill_your_profile_title">Enter profile title (should be 3 to 32 characters)</string>
     <string name="Select_year_and_month">Select year and month</string>
     <string name="Enter_Amount_session">Enter Amount/Session</string>
     <string name="Enter_Amount_sessionn">Enter Amount/Session should be greater than zero(0) </string>
     <string name="Please_check_tearms">Please check our Terms/Policy if you want to proceed</string>
     <string name="remove_certificate">Remove Certificate</string>
     <string name="add_profile_picture">Add Profile Picture</string>
-    <string name="Enter_First_Name">Enter First Name (should be 3 characters to 30 characters)</string>
+    <string name="Enter_First_Name">Enter First Name (should be 3 to 32 characters)</string>
     <string name="Select_Country">Select Country</string>
     <string name="Enter_your_address">Enter your address</string>
     <string name="Enter_your_addresss">Complete your address</string>
@@ -551,6 +551,14 @@
     <string name="Booking_Session_Close_Timee">Select Booking Session Close Time</string>
     <string name="update_profile">Update Profile</string>
     <string name="visit_profile"><u>Visit Profile</u></string>
+    <string name="What_you_Learn">What you Learn</string>
+    <string name="skills_you_learn">Course Outline</string>
+    <string name="Select_month">Minimum experience of 1 month is allowed</string>
+    <string name="fb_profile_link">Facebook profile</string>
+    <string name="fb_twitter_profile">Twitter handle</string>
+    <string name="linkind_profile">"LinkedIn profile "</string>
+    <string name="instagram_profile">Instagram profile</string>
+    <string name="youtube_profile">Youtube profile</string>
 
 
 </resources>

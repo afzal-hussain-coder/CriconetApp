@@ -73,6 +73,7 @@
             android:layout_marginStart="@dimen/_10sdp"
             android:layout_marginEnd="@dimen/_10sdp"
             android:layout_marginTop="@dimen/_4sdp"
+            android:text="Select booking session close time"
             android:background="@drawable/editboxx"
             android:drawableEnd="@drawable/ic_keyboard_arrow_down_black_24dp"
             android:padding="@dimen/_10sdp"

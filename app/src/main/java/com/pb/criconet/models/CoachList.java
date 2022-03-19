@@ -79,6 +79,33 @@ public class CoachList {
         @SerializedName("profile_title")
         @Expose
         private String profileTitle;
+
+
+        public String getWhat_you_teach() {
+            return what_you_teach;
+        }
+
+        public void setWhat_you_teach(String what_you_teach) {
+            this.what_you_teach = what_you_teach;
+        }
+
+        @SerializedName("what_you_teach")
+        @Expose
+        private String what_you_teach;
+
+
+        public String getSkills_you_learn() {
+            return skills_you_learn;
+        }
+
+        public void setSkills_you_learn(String skills_you_learn) {
+            this.skills_you_learn = skills_you_learn;
+        }
+
+        @SerializedName("skills_you_learn")
+        @Expose
+        private String skills_you_learn;
+
         @SerializedName("about_coach_profile")
         @Expose
         private String aboutCoachProfile;

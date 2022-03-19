@@ -1,18 +1,11 @@
 package com.pb.criconet.activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -21,7 +14,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -42,6 +34,11 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -61,7 +58,6 @@ import com.pb.criconet.Utills.Global;
 import com.pb.criconet.Utills.MultipartRequest;
 import com.pb.criconet.Utills.SessionManager;
 import com.pb.criconet.Utills.Toaster;
-import com.pb.criconet.fragments.FragmentCoachEditProfile;
 import com.pb.criconet.models.City;
 import com.pb.criconet.models.CoachLanguage;
 import com.pb.criconet.models.Country;
@@ -85,14 +81,15 @@ import java.util.Objects;
 
 import timber.log.Timber;
 
-public class CoachPersonalInfoActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
+public class CoachPersonalInfoActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     Context mContext;
     Activity mActivity;
     private static final int CAMERA_REQUESTid = 2015;
     private static final int PICK_IMAGEid = 100;
     private SharedPreferences prefs;
-    private String  fname_String, mname_String, lname_String, gender_String, countryID="", stateID="",cityID="",address1,address2,pincode,mobile;
-    private EditText etAddress2, edttxt_fname, edttxt_lname, etAddress, edttxt_birthday, edttxt_phone,etPincode;
+    private String fname_String, mname_String, lname_String, gender_String, countryID = "", stateID = "", cityID = "", address1, address2, pincode, mobile;
+    private EditText etAddress2, edttxt_fname, edttxt_lname, etAddress, edttxt_birthday, edttxt_phone, etPincode,
+            edttxt_fb_profileLink, edttxt_twitter_profile, edttxt_linkind_profile, edttxt_instagram_profile, edttxt_youtube_profile;
     private Spinner spn_language;
     private Spinner spinnerCountry;
     private Spinner spinnerState;
@@ -105,7 +102,7 @@ public class CoachPersonalInfoActivity extends AppCompatActivity implements Adap
     private int columnindex, i;
     private Uri URIid = null;
     private Uri selectedImageid, mCapturedImageURIid;
-    private String file_pathid = "", image_pathid = "",phoneNumber;
+    private String file_pathid = "", image_pathid = "", phoneNumber;
     private String imagepath = "";
     private String img_type = "";
 
@@ -132,21 +129,26 @@ public class CoachPersonalInfoActivity extends AppCompatActivity implements Adap
     //ArrayList<String> language=null;
     String[] langArray = null;
     private OtpView otpView;
-    private String from_where="";
-    String state_Name="";
-    String city_Name="";
-    String countryName="";
-    ArrayList<String>coachLanguages = new ArrayList<>();
+    private String from_where = "";
+    String state_Name = "";
+    String city_Name = "";
+    String countryName = "";
+    String twitter = "";
+    String facebook = "";
+    String linkedin = "";
+    String instagram = "";
+    String youtube = "";
+    ArrayList<String> coachLanguages = new ArrayList<>();
     ArrayList<String> languageArray_new = new ArrayList<>();
     Dialog dialog;
     private StringBuilder langStringBuilder;
-    ArrayList<Language.Datum> language=null;
+    ArrayList<Language.Datum> language = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_coach_personal_info);
-        mActivity=this;
+        mActivity = this;
         mContext = this;
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -188,30 +190,35 @@ public class CoachPersonalInfoActivity extends AppCompatActivity implements Adap
         });
 
         edttxt_fname = findViewById(R.id.edttxt_fname);
-        edttxt_Mname =findViewById(R.id.edttxt_Mname);
-        edttxt_lname =findViewById(R.id.edttxt_lname);
+        edttxt_Mname = findViewById(R.id.edttxt_Mname);
+        edttxt_lname = findViewById(R.id.edttxt_lname);
         etAddress = findViewById(R.id.etAddress);
         etAddress2 = findViewById(R.id.etAddress2);
         edttxt_phone = findViewById(R.id.edttxt_phone);
         etPincode = findViewById(R.id.etPincode);
+        edttxt_fb_profileLink = findViewById(R.id.edttxt_fb_profileLink);
+        edttxt_twitter_profile = findViewById(R.id.edttxt_twitter_profile);
+        edttxt_linkind_profile = findViewById(R.id.edttxt_linkind_profile);
+        edttxt_instagram_profile = findViewById(R.id.edttxt_instagram_profile);
+        edttxt_youtube_profile = findViewById(R.id.edttxt_youtube_profile);
         textView_language = findViewById(R.id.textView_language);
         spn_language = findViewById(R.id.spn_language);
         spinnerCountry = findViewById(R.id.spinerCountry);
         spinnerState = findViewById(R.id.spinerState);
-        spinnerCity =  findViewById(R.id.spinerCity);
-        profile_image =  findViewById(R.id.profile_pic);
+        spinnerCity = findViewById(R.id.spinerCity);
+        profile_image = findViewById(R.id.profile_pic);
         middle = findViewById(R.id.middle);
-        cover_img =findViewById(R.id.cover_img);
-        imageView =findViewById(R.id.imageView);
-        btn_login =findViewById(R.id.btn_login);
+        cover_img = findViewById(R.id.cover_img);
+        imageView = findViewById(R.id.imageView);
+        btn_login = findViewById(R.id.btn_login);
 
         rootViewPost = findViewById(R.id.root_vieww);
         slideView = findViewById(R.id.slideView);
         dim = findViewById(R.id.dim);
-        tv_camera=findViewById(R.id.tv_camera);
-        tvGallery=findViewById(R.id.tvGallery);
-        tvCancel=findViewById(R.id.tvCancel);
-        tv_choose=findViewById(R.id.tv_choose);
+        tv_camera = findViewById(R.id.tv_camera);
+        tvGallery = findViewById(R.id.tvGallery);
+        tvCancel = findViewById(R.id.tvCancel);
+        tv_choose = findViewById(R.id.tv_choose);
         slideUp = new SlideUpBuilder(slideView)
                 .withListeners(new SlideUp.Listener.Events() {
                     @Override
@@ -245,8 +252,8 @@ public class CoachPersonalInfoActivity extends AppCompatActivity implements Adap
 
         if (Global.isOnline(mActivity)) {
             getCountry();
-            getLanguage();
             getUsersDetails();
+            getLanguage();
         } else {
             Global.showDialog(mActivity);
         }
@@ -256,11 +263,11 @@ public class CoachPersonalInfoActivity extends AppCompatActivity implements Adap
             img_type = "profile";
             selectImage();
         });
+
         cover_img.setOnClickListener(v -> {
             img_type = "cover";
             selectImage();
         });
-
 
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -273,7 +280,6 @@ public class CoachPersonalInfoActivity extends AppCompatActivity implements Adap
                 checkMethod();
             }
         });
-
 
         textView_language.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -381,6 +387,7 @@ public class CoachPersonalInfoActivity extends AppCompatActivity implements Adap
             slideUp.hide();
         });
     }
+
     private void checkMethod() {
         fname_String = edttxt_fname.getText().toString().trim();
         mname_String = edttxt_Mname.getText().toString().trim();
@@ -390,6 +397,11 @@ public class CoachPersonalInfoActivity extends AppCompatActivity implements Adap
         gender_String = spn_language.getSelectedItem().toString();
         pincode = etPincode.getText().toString().trim();
         mobile = edttxt_phone.getText().toString().trim();
+        facebook = edttxt_fb_profileLink.getText().toString().trim();
+        twitter = edttxt_twitter_profile.getText().toString().trim();
+        instagram = edttxt_instagram_profile.getText().toString().trim();
+        linkedin = edttxt_linkind_profile.getText().toString().trim();
+        youtube = edttxt_youtube_profile.getText().toString().trim();
 
         if (!Global.validateLengthofCoachRegister(fname_String)) {
             Toaster.customToast(getResources().getString(R.string.Enter_First_Name));
@@ -399,13 +411,11 @@ public class CoachPersonalInfoActivity extends AppCompatActivity implements Adap
 //        }
         else if (!Global.validateLengthofCoachRegister(lname_String)) {
             Toaster.customToast(getResources().getString(R.string.Enter_Last_Name));
-        }
-        else if (textView_language.getText().equals("")) {
+        } else if (textView_language.getText().equals("")) {
             Toaster.customToast(getResources().getString(R.string.select_language));
-        }else if (languageArray_new.size() >5) {
+        } else if (languageArray_new.size() > 5) {
             Toaster.customToast(getResources().getString(R.string.you_can_only_select_five_item));
-        }
-        else if(countryID.equalsIgnoreCase("") || spinnerCountry.getSelectedItem().equals("Country")){
+        } else if (countryID.equalsIgnoreCase("") || spinnerCountry.getSelectedItem().equals("Country")) {
             Toaster.customToast(getResources().getString(R.string.Select_Country));
         }
 //        else if(stateID.equalsIgnoreCase("")){
@@ -413,30 +423,32 @@ public class CoachPersonalInfoActivity extends AppCompatActivity implements Adap
 //        }else if(cityID.equalsIgnoreCase("")){
         // Toaster.customToast(getResources().getString(R.string.Select_State));
 //        }
-        else if(address1.isEmpty()){
+        else if (address1.isEmpty()) {
             Toaster.customToast(getResources().getString(R.string.Enter_your_address));
         }
-        else if(!Global.validateLengthofCoachRegisterr(address1)){
-            Toaster.customToast(getResources().getString(R.string.Enter_your_addresss));
-        }
+//        else if(!Global.validateLengthofCoachRegisterr(address1)){
+//            Toaster.customToast(getResources().getString(R.string.Enter_your_addresss));
+//        }
 //        else if(!Global.validateLength(address2, 3)){
 //            Toaster.customToast(getResources().getString(R.string.enter_landmark));
 //        }
-        else if(pincode.isEmpty()){
+        else if (pincode.isEmpty()) {
             Toaster.customToast(getResources().getString(R.string.enter_pincode));
-        }else if(!Global.isValidPincode(pincode)){
+        } else if (pincode.equalsIgnoreCase("111111") || pincode.equalsIgnoreCase("222222") ||
+                pincode.equalsIgnoreCase("333333") || pincode.equalsIgnoreCase("444444") ||
+                pincode.equalsIgnoreCase("555555") || pincode.equalsIgnoreCase("666666") ||
+                pincode.equalsIgnoreCase("777777") || pincode.equalsIgnoreCase("888888") ||
+                pincode.equalsIgnoreCase("999999") || pincode.equalsIgnoreCase("000000")) {
             Toaster.customToast(getResources().getString(R.string.enter_pincodee));
-        }
-        else if(mobile.isEmpty()){
+        } else if (!Global.isValidPincode(pincode)) {
+            Toaster.customToast(getResources().getString(R.string.enter_pincodee));
+        } else if (mobile.isEmpty()) {
             Toaster.customToast(getResources().getString(R.string.Enter_your_phone_number));
-        }
-        else if(!Global.isValidPhoneNumber(mobile)){
+        } else if (!Global.isValidPhoneNumber(mobile)) {
             Toaster.customToast(getResources().getString(R.string.Enter_your_phone_numberr));
-        }
-        else if(imagepath.equalsIgnoreCase("")){
+        } else if (imagepath.equalsIgnoreCase("")) {
             Toaster.customToast(getResources().getString(R.string.Upload_profile_picture));
-        }
-        else {
+        } else {
             if (Global.isOnline(mActivity)) {
                 submitCoachPersonalInfo();
             } else {
@@ -539,6 +551,7 @@ public class CoachPersonalInfoActivity extends AppCompatActivity implements Adap
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
+
     public String getRealPathFromURI(Uri uri) {
         Cursor cursor = mActivity.getContentResolver().query(uri, null, null, null, null);
         cursor.moveToFirst();
@@ -603,157 +616,21 @@ public class CoachPersonalInfoActivity extends AppCompatActivity implements Adap
 
 
     }
-    private void getCountry() {
-        StringRequest postRequest = new StringRequest(Request.Method.POST, Global.URL + "get_countries", new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                Log.d("ResponseCountry",response);
-                Gson gson = new Gson();
-                modelArrayList = gson.fromJson(response, Country.class);
-                if(modelArrayList.getApiStatus().equalsIgnoreCase("200")) {
-                    ArrayList<String> country = new ArrayList<>();
-                    country.add("Country");
-                    for (Country.Datum data : modelArrayList.getData()) {
-                        country.add(data.getName());
-                    }
-                    ArrayAdapter aa = new ArrayAdapter(mActivity, R.layout.custom_spinner, country);
-                    aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    spinnerCountry.setAdapter(aa);
-                    countryID="";
-
-                    for(int i=0;i<country.size();i++){
-                        if(country.get(i).equalsIgnoreCase("India")){
-                            spinnerCountry.setSelection(Global.getIndex(spinnerCountry, country.get(i)));
-                            break;
-                        }
-                    }
-
-
-
-
-                }
-
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
-                Global.msgDialog(mActivity, getResources().getString(R.string.error_server));
-            }
-        }) {
-            @Override
-            protected Map<String, String> getParams() {
-                Map<String, String> param = new HashMap<String, String>();
-                param.put("user_id", SessionManager.get_user_id(prefs));
-                param.put("s", SessionManager.get_session_id(prefs));
-                return param;
-            }
-        };
-        int socketTimeout = 30000;
-        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-        postRequest.setRetryPolicy(policy);
-        queue.add(postRequest);
-    }
-
-    private void getState(String countryId) {
-        loaderView.showLoader();
-        StringRequest postRequest = new StringRequest(Request.Method.GET, Global.URL + "get_states"+"&country_id="+countryId, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                Log.d("ResponseSatate",response);
-                if(!response.isEmpty()) {
-                    loaderView.hideLoader();
-                    Gson gson = new Gson();
-                    statemodelArrayList = gson.fromJson(response, States.class);
-                    if(statemodelArrayList.getApiStatus().equalsIgnoreCase("200")) {
-                        ArrayList<String> state = new ArrayList<>();
-                        state.add("States");
-                        for (States.Datum data : statemodelArrayList.getData()) {
-                            state.add(data.getName());
-                        }
-                        ArrayAdapter aa = new ArrayAdapter(mActivity, R.layout.custom_spinner, state);
-                        aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        spinnerState.setAdapter(aa);
-                        spinnerState.setSelection(Global.getIndex(spinnerState, state_Name));
-                        //spinnerState.setSelection(Global.getIndex(spinnerState, SessionManager.getStates(prefs)));
-                    }
-                }
-
-
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                loaderView.hideLoader();
-                error.printStackTrace();
-                Global.msgDialog(mActivity, getResources().getString(R.string.error_server));
-            }
-        });
-        int socketTimeout = 30000;
-        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-        postRequest.setRetryPolicy(policy);
-        queue.add(postRequest);
-    }
-
-    private void getCity(String stateId) {
-        loaderView.showLoader();
-        StringRequest postRequest = new StringRequest(Request.Method.GET, Global.URL + "get_cities"+"&state_id="+stateId, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                Log.d("ResponseCity",response);
-                loaderView.hideLoader();
-                Gson gson = new Gson();
-                citymodelArrayList = gson.fromJson(response, City.class);
-                if(citymodelArrayList.getApiStatus().equalsIgnoreCase("200")) {
-                    ArrayList<String> city = new ArrayList<>();
-                    city.add("City");
-                    for (City.Datum data : citymodelArrayList.getData()) {
-                        city.add(data.getName());
-                    }
-                    ArrayAdapter aa = new ArrayAdapter(mActivity, R.layout.custom_spinner, city);
-                    aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    spinnerCity.setAdapter(aa);
-                    spinnerCity.setSelection(Global.getIndex(spinnerCity, city_Name));
-                    //spinnerCity.setSelection(Global.getIndex(spinnerCity, SessionManager.getCity(prefs)));
-                }
-
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                loaderView.hideLoader();
-                error.printStackTrace();
-                Global.msgDialog(mActivity, getResources().getString(R.string.error_server));
-            }
-        }) ;
-        int socketTimeout = 30000;
-        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-        postRequest.setRetryPolicy(policy);
-        queue.add(postRequest);
-    }
 
     private void getLanguage() {
         StringRequest postRequest = new StringRequest(Request.Method.POST, Global.URL + Global.GET_LANGUAGE, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Log.d("ResponseCountry",response);
+                Log.d("ResponseCountry", response);
                 Gson gson = new Gson();
                 languageModelArrayList = gson.fromJson(response, Language.class);
-                if(languageModelArrayList.getApiStatus().equalsIgnoreCase("200")) {
+                if (languageModelArrayList.getApiStatus().equalsIgnoreCase("200")) {
                     language = new ArrayList<>();
-                    //language.add("Language");
                     for (Language.Datum datum : languageModelArrayList.getData()) {
                         language.add(datum);
                     }
-                    //language.remove(0);
-                    languageSelectionDialog(language,new ArrayList<>());
+                    languageSelectionDialog(language, new ArrayList<>());
 
-//                    langArray= language.toArray(new String[language.size()]);
-//                    selectedLanguage = new boolean[langArray.length];
-//                    ArrayAdapter aa = new ArrayAdapter(getActivity(), R.layout.custom_spinner, language);
-//                    aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//                    spn_language.setAdapter(aa);
-//                    spn_language.setSelection(Global.getIndex(spn_language, SessionManager.getLanguage(prefs)));
                 }
             }
         }, new Response.ErrorListener() {
@@ -775,29 +652,6 @@ public class CoachPersonalInfoActivity extends AppCompatActivity implements Adap
         RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
         postRequest.setRetryPolicy(policy);
         queue.add(postRequest);
-    }
-
-
-    @Override
-    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-
-        if(adapterView==spinnerCountry && i!=0) {
-            countryID="";
-            getState(modelArrayList.getData().get(i-1).getId());
-            countryID=modelArrayList.getData().get(i-1).getId();
-
-        }else if(adapterView==spinnerState && i!=0){
-            getCity(statemodelArrayList.getData().get(i-1).getId());
-            stateID=statemodelArrayList.getData().get(i-1).getId();
-        }else if(adapterView==spinnerCity && i!=0){
-            cityID=citymodelArrayList.getData().get(i-1).getId();
-        }
-
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> adapterView) {
-
     }
 
     public void getUsersDetails() {
@@ -806,15 +660,15 @@ public class CoachPersonalInfoActivity extends AppCompatActivity implements Adap
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Log.d("getUserDetails",response);
+                        Log.d("getUserDetails", response);
                         //loaderView.hideLoader();
                         try {
                             JSONObject jsonObject = new JSONObject(response.toString());
                             if (jsonObject.optString("api_text").equalsIgnoreCase("Success")) {
                                 JSONObject object = jsonObject.getJSONObject("coach_data");
 
-                                if(object.has("personal_info")){
-                                    JSONObject jsonObject_personal_info= object.getJSONObject("personal_info");
+                                if (object.has("personal_info")) {
+                                    JSONObject jsonObject_personal_info = object.getJSONObject("personal_info");
                                     setData(jsonObject_personal_info);
                                 }
                             } else if (jsonObject.optString("api_text").equalsIgnoreCase("failed")) {
@@ -853,65 +707,180 @@ public class CoachPersonalInfoActivity extends AppCompatActivity implements Adap
         queue.add(postRequest);
 
     }
-    private void setData(JSONObject  data) {
 
-        if(data.has("first_name")){
-            edttxt_fname.setText(data.optString("first_name"));
-        }
-        if(data.has("last_name")){
-            edttxt_lname.setText(data.optString("last_name"));
-        }
-        if(data.has("mid_name")){
-            try {
-                edttxt_Mname.setText(data.getString("mid_name"));
-            } catch (JSONException e) {
-                e.printStackTrace();
+    private void getCountry() {
+        StringRequest postRequest = new StringRequest(Request.Method.POST, Global.URL + "get_countries", new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.d("ResponseCountry", response);
+                Gson gson = new Gson();
+                modelArrayList = gson.fromJson(response, Country.class);
+                if (modelArrayList.getApiStatus().equalsIgnoreCase("200")) {
+                    ArrayList<String> country = new ArrayList<>();
+                    country.add("Country");
+                    for (Country.Datum data : modelArrayList.getData()) {
+                        country.add(data.getName());
+                    }
+
+                    //countryID="";
+                    ArrayAdapter aa = new ArrayAdapter(mActivity, R.layout.custom_spinner, country);
+                    aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    spinnerCountry.setAdapter(aa);
+
+                    for (int i = 0; i < country.size(); i++) {
+                        if (country.get(i).equalsIgnoreCase("India")) {
+                            countryName = country.get(i);
+                            spinnerCountry.setSelection(Global.getIndex(spinnerCountry, countryName));
+                            break;
+                        }
+                    }
+
+                }
+
             }
-        }
-        if(data.has("avatar")){
-            imagepath=data.optString("avatar");
-            Glide.with(mActivity).load(data.optString("avatar")).into(profile_image);
-        }
-        if(data.has("country_name")){
-            countryName = data.optString("country_name");
-            countryID= data.optString("country_id");
-            getState(countryID);
-            spinnerCountry.setSelection(Global.getIndex(spinnerCountry,countryName));
-        }
-        if(data.has("state_name")){
-            state_Name = data.optString("state_name");
-            stateID = data.optString("state_id");
-            getCity(stateID);
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                Global.msgDialog(mActivity, getResources().getString(R.string.error_server));
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> param = new HashMap<String, String>();
+                param.put("user_id", SessionManager.get_user_id(prefs));
+                param.put("s", SessionManager.get_session_id(prefs));
+                return param;
+            }
+        };
+        int socketTimeout = 30000;
+        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        postRequest.setRetryPolicy(policy);
+        queue.add(postRequest);
+    }
+
+    private void getState(String countryId) {
+        loaderView.showLoader();
+        StringRequest postRequest = new StringRequest(Request.Method.GET, Global.URL + "get_states" + "&country_id=" + countryId, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.d("ResponseSatate", response);
+                if (!response.isEmpty()) {
+                    loaderView.hideLoader();
+                    Gson gson = new Gson();
+                    statemodelArrayList = gson.fromJson(response, States.class);
+                    if (statemodelArrayList.getApiStatus().equalsIgnoreCase("200")) {
+                        ArrayList<String> state = new ArrayList<>();
+                        state.add("States");
+                        for (States.Datum data : statemodelArrayList.getData()) {
+                            state.add(data.getName());
+                        }
+                        ArrayAdapter aa = new ArrayAdapter(mActivity, R.layout.custom_spinner, state);
+                        aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        spinnerState.setAdapter(aa);
+                        spinnerState.setSelection(Global.getIndex(spinnerState, state_Name));
+                        //spinnerState.setSelection(Global.getIndex(spinnerState, SessionManager.getStates(prefs)));
+                    }
+                }
+
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                loaderView.hideLoader();
+                error.printStackTrace();
+                Global.msgDialog(mActivity, getResources().getString(R.string.error_server));
+            }
+        });
+        int socketTimeout = 30000;
+        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        postRequest.setRetryPolicy(policy);
+        queue.add(postRequest);
+    }
+
+    private void getCity(String stateId) {
+        loaderView.showLoader();
+        StringRequest postRequest = new StringRequest(Request.Method.GET, Global.URL + "get_cities" + "&state_id=" + stateId, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.d("ResponseCity", response);
+                loaderView.hideLoader();
+                Gson gson = new Gson();
+                citymodelArrayList = gson.fromJson(response, City.class);
+                if (citymodelArrayList.getApiStatus().equalsIgnoreCase("200")) {
+                    ArrayList<String> city = new ArrayList<>();
+                    city.add("City");
+                    for (City.Datum data : citymodelArrayList.getData()) {
+                        city.add(data.getName());
+                    }
+                    ArrayAdapter aa = new ArrayAdapter(mActivity, R.layout.custom_spinner, city);
+                    aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    spinnerCity.setAdapter(aa);
+                    spinnerCity.setSelection(Global.getIndex(spinnerCity, city_Name));
+                    //spinnerCity.setSelection(Global.getIndex(spinnerCity, SessionManager.getCity(prefs)));
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                loaderView.hideLoader();
+                error.printStackTrace();
+                Global.msgDialog(mActivity, getResources().getString(R.string.error_server));
+            }
+        });
+        int socketTimeout = 30000;
+        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        postRequest.setRetryPolicy(policy);
+        queue.add(postRequest);
+    }
+
+
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
+        if (adapterView == spinnerCountry && i != 0) {
+            //countryID = "";
+            //state_Name="";
+            //city_Name="";
             //spinnerState.setSelection(Global.getIndex(spinnerState, state_Name));
-        }
-        if(data.has("city_name")){
-            city_Name = data.optString("city_name");
+            //spinnerCity.setSelection(Global.getIndex(spinnerCity, city_Name));
+            getState(modelArrayList.getData().get(i - 1).getId());
+            countryID = modelArrayList.getData().get(i - 1).getId();
 
-        }
-        if(data.has("pincode")){
-            etPincode.setText(data.optString("pincode"));
-        }
-        if(data.has("phone_number")){
-            edttxt_phone.setText(data.optString("phone_number"));
-        }
-        if(data.has("address")){
-            etAddress.setText(data.optString("address"));
-        }
-        if(data.has("address2")){
-            etAddress2.setText(data.optString("address2"));
+
+        } else if (adapterView == spinnerState && i != 0) {
+            getCity(statemodelArrayList.getData().get(i - 1).getId());
+            stateID = statemodelArrayList.getData().get(i - 1).getId();
+        } else if (adapterView == spinnerCity && i != 0) {
+            cityID = citymodelArrayList.getData().get(i - 1).getId();
+        } else {
+            state_Name = "";
+            city_Name = "";
         }
 
-        if(data.has("languages")){
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
+    }
+
+
+    private void setData(JSONObject data) {
+        if (data.has("languages")) {
 
             try {
                 JSONArray jsonArray = data.getJSONArray("languages");
-                JSONObject jsonObject=null;
-                CoachLanguage coachLanguage=null;
-                for(int i= 0;i<jsonArray.length();i++){
+                JSONObject jsonObject = null;
+                CoachLanguage coachLanguage = null;
+                for (int i = 0; i < jsonArray.length(); i++) {
                     jsonObject = jsonArray.getJSONObject(i);
-                    coachLanguage= new CoachLanguage(jsonObject);
+                    coachLanguage = new CoachLanguage(jsonObject);
                     coachLanguages.add(coachLanguage.getName_eng());
                 }
+                languageSelectionDialog(language, coachLanguages);
 
                 langStringBuilder = new StringBuilder();
                 String prefix = "";
@@ -924,15 +893,104 @@ public class CoachPersonalInfoActivity extends AppCompatActivity implements Adap
 
                 textView_language.setText(langStringBuilder.toString());
 
-                Log.d("size",coachLanguages.size()+"");
-
-                languageSelectionDialog(language,coachLanguages);
+                //Log.d("size",coachLanguages.size()+"");
 
 
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
+
+        if (data.has("first_name")) {
+            edttxt_fname.setText(data.optString("first_name"));
+        }
+        if (data.has("last_name")) {
+            edttxt_lname.setText(data.optString("last_name"));
+        }
+        if (data.has("mid_name")) {
+            try {
+                edttxt_Mname.setText(data.getString("mid_name"));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        if (data.has("avatar")) {
+            imagepath = data.optString("avatar");
+            Glide.with(mActivity).load(data.optString("avatar")).into(profile_image);
+        }
+        if (data.has("country_name")) {
+            countryName = data.optString("country_name");
+
+            if (countryName.isEmpty()) {
+
+            } else {
+                //Toaster.customToast(countryName);
+                countryID = data.optString("country_id");
+                getState(countryID);
+                spinnerCountry.setSelection(Global.getIndex(spinnerCountry, countryName));
+            }
+
+        }
+        if (data.has("state_name")) {
+            state_Name = data.optString("state_name");
+            if (state_Name.equalsIgnoreCase("")) {
+
+            } else {
+                stateID = data.optString("state_id");
+                getCity(stateID);
+                //Toaster.customToast(state_Name);
+
+            }
+
+
+        }
+        if (data.has("city_name")) {
+            city_Name = data.optString("city_name");
+            if (city_Name.isEmpty()) {
+
+            } else {
+                // Toaster.customToast(city_Name);
+                //spinnerCity.setSelection(Global.getIndex(spinnerCity, city_Name));
+            }
+
+
+        }
+        if (data.has("pincode")) {
+            etPincode.setText(data.optString("pincode"));
+        }
+        if (data.has("phone_number")) {
+            edttxt_phone.setText(data.optString("phone_number"));
+        }
+        if (data.has("address")) {
+            etAddress.setText(data.optString("address"));
+        }
+        if (data.has("address2")) {
+            etAddress2.setText(data.optString("address2"));
+        }
+
+        if (data.has("facebook")) {
+            edttxt_fb_profileLink.setText(data.optString("facebook"));
+        }
+        if (data.has("twitter")) {
+            edttxt_twitter_profile.setText(data.optString("twitter"));
+        }
+
+        if (data.has("linkedin")) {
+            edttxt_linkind_profile.setText(data.optString("linkedin"));
+        }
+        if (data.has("instagram")) {
+            edttxt_instagram_profile.setText(data.optString("instagram"));
+        }
+        if (data.has("youtube")) {
+            edttxt_youtube_profile.setText(data.optString("youtube"));
+        }
+//
+//        "facebook": "https://www.facebook.com/criconetonline12/",
+//                "twitter": "Afzal Hussain",
+//                "linkedin": "Afzal Hussain",
+//                "instagram": "hafzal446",
+//                "youtube": "https://youtube.com/channel/UCEDb-adU-R4urGLkXlMileg",
+
 
     }
 
@@ -964,9 +1022,9 @@ public class CoachPersonalInfoActivity extends AppCompatActivity implements Adap
                                     SessionManager.save_profiletype(prefs, jsonObjectData.getString("profile_type"));
 
                                     String is_contact_verify = jsonObjectData.getString("is_mobile_verified");
-                                    if(is_contact_verify.equalsIgnoreCase("0")){
+                                    if (is_contact_verify.equalsIgnoreCase("0")) {
                                         EmailOtpDialog(phoneNumber);
-                                    }else{
+                                    } else {
                                         congratsDialog();
                                     }
                                 }
@@ -1004,9 +1062,15 @@ public class CoachPersonalInfoActivity extends AppCompatActivity implements Adap
                 param.put("city_id", cityID);
                 param.put("pincode", pincode);
                 param.put("phone_number", mobile);
+                param.put("twitter", twitter);
+                param.put("facebook", facebook);
+                param.put("linkedin", linkedin);
+                param.put("instagram", instagram);
+                param.put("youtube", youtube);
                 param.put("user_id", SessionManager.get_user_id(prefs));
                 param.put("s", SessionManager.get_session_id(prefs));
                 param.put("language_id", textView_language.getText().toString().trim());
+
 
                 System.out.println("data   :" + param);
                 return param;
@@ -1232,13 +1296,13 @@ public class CoachPersonalInfoActivity extends AppCompatActivity implements Adap
         dialog.show();
     }
 
-    private void languageSelectionDialog(ArrayList<Language.Datum> languageArray,ArrayList<String> coachLanguages) {
+    private void languageSelectionDialog(ArrayList<Language.Datum> languageArray, ArrayList<String> coachLanguages) {
         TextView btnOk = dialog.findViewById(R.id.btnOk);
-        RecyclerView rv_language= dialog.findViewById(R.id.rv_language);
+        RecyclerView rv_language = dialog.findViewById(R.id.rv_language);
         rv_language.setHasFixedSize(true);
         rv_language.setLayoutManager(new LinearLayoutManager(mActivity));
-        Log.d("ReSize",coachLanguages.size()+"");
-        selectCoachLanguageAdapter selectCoachLanguageAdapter = new selectCoachLanguageAdapter(languageArray,coachLanguages, mActivity, new selectCoachLanguageAdapter.languageSelectionListner() {
+        //Log.d("ReSize",coachLanguages.size()+"");
+        selectCoachLanguageAdapter selectCoachLanguageAdapter = new selectCoachLanguageAdapter(languageArray, coachLanguages, mActivity, new selectCoachLanguageAdapter.languageSelectionListner() {
             @Override
             public void itemChcked(ArrayList<String> languageArrayy) {
                 // Log.d("SizeSelected",languageArrayy.size()+"");
@@ -1256,7 +1320,7 @@ public class CoachPersonalInfoActivity extends AppCompatActivity implements Adap
             langStringBuilder = new StringBuilder();
             String prefix = "";
 
-            for(int i = 0;i<languageArray_new.size();i++){
+            for (int i = 0; i < languageArray_new.size(); i++) {
                 langStringBuilder.append(prefix);
                 prefix = ",";
                 langStringBuilder.append(languageArray_new.get(i));
@@ -1275,12 +1339,13 @@ public class CoachPersonalInfoActivity extends AppCompatActivity implements Adap
     public static class selectCoachLanguageAdapter extends RecyclerView.Adapter<selectCoachLanguageAdapter.MyViewHolder> {
         Context context;
         ArrayList<Language.Datum> languageArray;
-        ArrayList<String>checkedArray;
+        ArrayList<String> checkedArray;
         ArrayList<String> coachLanguages;
         selectCoachLanguageAdapter.languageSelectionListner languageSelectionListner;
+
         public selectCoachLanguageAdapter(ArrayList<Language.Datum> languageArray, ArrayList<String> coachLanguages, Context context, selectCoachLanguageAdapter.languageSelectionListner languageSelectionListner) {
             this.context = context;
-            this.languageArray=languageArray;
+            this.languageArray = languageArray;
             this.languageSelectionListner = languageSelectionListner;
             this.coachLanguages = coachLanguages;
             checkedArray = new ArrayList<>();
@@ -1296,15 +1361,15 @@ public class CoachPersonalInfoActivity extends AppCompatActivity implements Adap
 
         @Override
         public void onBindViewHolder(selectCoachLanguageAdapter.MyViewHolder holder, final int position) {
-            Language.Datum coachLanguage= languageArray.get(position);
+            Language.Datum coachLanguage = languageArray.get(position);
 
             holder.textView.setText(coachLanguage.getName_eng());
             holder.checkBox.setChecked(coachLanguage.isSelected());
 
-            Log.d("coachSize",coachLanguages.size()+"");
+            Log.d("coachSize", coachLanguages.size() + "");
 
-            for(int j= 0; j<coachLanguages.size();j++){
-                if(coachLanguages.get(j).equalsIgnoreCase(coachLanguage.getName_eng())){
+            for (int j = 0; j < coachLanguages.size(); j++) {
+                if (coachLanguages.get(j).equalsIgnoreCase(coachLanguage.getName_eng())) {
                     holder.checkBox.setChecked(true);
                     checkedArray.add(coachLanguages.get(j));
                     languageSelectionListner.itemChcked(checkedArray);
@@ -1318,14 +1383,13 @@ public class CoachPersonalInfoActivity extends AppCompatActivity implements Adap
             holder.checkBox.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    CheckBox myCheckBox= (CheckBox) view;
-                    Language.Datum coachLanguage=languageArray.get(position);
+                    CheckBox myCheckBox = (CheckBox) view;
+                    Language.Datum coachLanguage = languageArray.get(position);
 
-                    if(myCheckBox.isChecked()) {
+                    if (myCheckBox.isChecked()) {
                         coachLanguage.setSelected(true);
                         checkedArray.add(coachLanguage.getName_eng());
-                    }
-                    else if(!myCheckBox.isChecked()) {
+                    } else if (!myCheckBox.isChecked()) {
                         coachLanguage.setSelected(false);
                         checkedArray.remove(coachLanguage.getName_eng());
                     }
@@ -1348,12 +1412,12 @@ public class CoachPersonalInfoActivity extends AppCompatActivity implements Adap
             MyViewHolder(View itemView) {
                 super(itemView);
                 checkBox = itemView.findViewById(R.id.radio);
-                textView =  itemView.findViewById(R.id.textView);
+                textView = itemView.findViewById(R.id.textView);
 
             }
         }
 
-        interface languageSelectionListner{
+        interface languageSelectionListner {
             void itemChcked(ArrayList<String> languageArray);
         }
     }

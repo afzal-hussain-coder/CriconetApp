@@ -255,7 +255,7 @@ public class CoachProfessionalInfoActivity extends AppCompatActivity implements 
             public void onClickDone(String name) {
                 if(name.contains("month")){
                     selectedMonth = name.replace("month","").trim();
-                }else if(name.contains("months")){
+                }if(name.contains("months")){
                     selectedMonth = name.replace("months","").trim();
                 }
             }
@@ -311,7 +311,7 @@ public class CoachProfessionalInfoActivity extends AppCompatActivity implements 
             public void onClickDone(String name) {
                 if(name.contains("year")){
                     selectedYear = name.replace("year","").trim();
-                }else if(name.contains("years")){
+                }if(name.contains("years")){
                     selectedYear = name.replace("years","").trim();
                 }
             }
@@ -503,13 +503,20 @@ public class CoachProfessionalInfoActivity extends AppCompatActivity implements 
         if (categoryId == null) {
             Toaster.customToast(mContext.getResources().getString(R.string.Please_choose_your_specialities));
             return false;
-        } else if (etProfileTitle.getText().toString().equalsIgnoreCase("")) {
+        } else if (!Global.validateLengthofCoachRegister(etProfileTitle.getText().toString())) {
             Toaster.customToast(mContext.getResources().getString(R.string.Fill_your_profile_title));
             return false;
         } else if (selectedYear.equalsIgnoreCase("Select Year") || selectedMonth.equalsIgnoreCase("Select Month")) {
             Toaster.customToast(mContext.getResources().getString(R.string.Select_year_and_month));
             return false;
+        }else if(selectedYear.equalsIgnoreCase("0") && selectedMonth.equalsIgnoreCase("0")){
+            Toaster.customToast(mContext.getResources().getString(R.string.Select_month));
+            return false;
         }
+        /*else if(selectedMonth.equalsIgnoreCase("0")){
+            Toaster.customToast(mContext.getResources().getString(R.string.Select_month));
+            return false;
+        }*/
 //        else if(mcuurency.equalsIgnoreCase("")){
 //            Toast.makeText(mContext,"Please select currency",Toast.LENGTH_SHORT).show();
 //            return  false;
@@ -585,7 +592,11 @@ public class CoachProfessionalInfoActivity extends AppCompatActivity implements 
                         JSONObject jsonObject = new JSONObject(response.toString());
                         if (jsonObject.optString("api_text").equalsIgnoreCase("Success")) {
                            //SessionManager.save_profileType(prefs,"coach");
-                           SessionManager.save_profiletype(prefs,"coach");
+                            if (jsonObject.has("data")) {
+                                JSONObject jsonObjectData = jsonObject.getJSONObject("data");
+                                SessionManager.save_profiletype(prefs, jsonObjectData.getString("profile_type"));
+                            }
+
                             Toaster.customToast(jsonObject.optString("msg"));
 
                             if(imagepath.isEmpty()){

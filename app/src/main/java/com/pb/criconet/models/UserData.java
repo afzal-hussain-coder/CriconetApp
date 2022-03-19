@@ -231,7 +231,6 @@ public class UserData implements Parcelable {
            b.following_users = NewUserModel.fromJson(Objects.requireNonNull(jsonObject.optJSONArray("following_users")));
            b.follow_request_users = NewUserModel.fromJson(Objects.requireNonNull(jsonObject.optJSONArray("follow_request_users")));
 
-
         } catch (Exception e) {
             e.printStackTrace();
             return b;

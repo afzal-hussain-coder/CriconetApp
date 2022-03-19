@@ -74,13 +74,55 @@ public class CoachListAdapter extends RecyclerView.Adapter<CoachListAdapter.MyVi
         }
 
 
-        if(mdata.get(position).getExps().equals("0")){
+        /*if(mdata.get(position).getExps().equals("0")){
             holder.tvCoacExp.setVisibility(View.GONE);
         }else{
             holder.tvCoacExp.setVisibility(View.VISIBLE);
             //totalExperience=mdata.get(position).getExp_years()+"."+ mdata.get(position).getExp_months()+" "+context.getResources().getString(R.string.yearse_xperience);
             holder.tvCoacExp.setText(mdata.get(position).getExps());
+        }*/
+
+        if((mdata.get(position).getExp_years().equalsIgnoreCase("") || mdata.get(position).getExp_years().equalsIgnoreCase("0")) && (mdata.get(position).getExp_months().equalsIgnoreCase("")||mdata.get(position).getExp_months().equalsIgnoreCase("0")) ){
+            holder.tvCoacExp.setVisibility(View.GONE);
+        }else{
+            holder.tvCoacExp.setVisibility(View.VISIBLE);
         }
+
+        if(mdata.get(position).getExp_years().equalsIgnoreCase("1") && mdata.get(position).getExp_months().equalsIgnoreCase("1") ){
+            holder.tvCoacExp.setText(mdata.get(position).getExp_years()+"."+mdata.get(position).getExp_months()+" "+"Year Experience");
+        }else if(mdata.get(position).getExp_years().equalsIgnoreCase("") && mdata.get(position).getExp_months().equalsIgnoreCase("1")){
+            holder.tvCoacExp.setText(mdata.get(position).getExp_months()+" "+"Month Experience");
+        }else if(mdata.get(position).getExp_months().equalsIgnoreCase("")){
+            if(mdata.get(position).getExp_years().equalsIgnoreCase("1")){
+
+                holder.tvCoacExp.setText(mdata.get(position).getExp_years()+" "+"Year Experience");
+            }else{
+
+                holder.tvCoacExp.setText(mdata.get(position).getExp_years()+" "+"Years Experience");
+            }
+
+        }else if(mdata.get(position).getExp_years().equalsIgnoreCase("") && mdata.get(position).getExp_months().equalsIgnoreCase("0")){
+            holder.tvCoacExp.setText(mdata.get(position).getExp_months()+" "+"Month Experience");
+        }
+        else if(mdata.get(position).getExp_years().equalsIgnoreCase("") && Integer.parseInt(mdata.get(position).getExp_months())>1){
+            holder.tvCoacExp.setText(mdata.get(position).getExp_months()+" "+"Months Experience");
+        }
+
+        else if(mdata.get(position).getExp_years().equalsIgnoreCase("0")){
+            if(mdata.get(position).getExp_months().equalsIgnoreCase("1")){
+                holder.tvCoacExp.setText(mdata.get(position).getExp_months()+" "+"Month Experience");
+            }else{
+                holder.tvCoacExp.setText(mdata.get(position).getExp_months()+" "+"Months Experience");
+            }
+
+
+        }
+        else {
+            holder.tvCoacExp.setText(mdata.get(position).getExp_years()+"."+mdata.get(position).getExp_months()+" "+"Years Experience");
+        }
+
+
+
 
         if (mdata.get(position).getRating()==0){
          holder.rating_bar_review.setVisibility(View.GONE);
@@ -100,7 +142,7 @@ public class CoachListAdapter extends RecyclerView.Adapter<CoachListAdapter.MyVi
             holder.tvOfferP.setText(context.getString(R.string.offer_price)+"\u20B9" +mdata.get(position).getPrice().getPaymentPrice() +"/"+context.getString(R.string.session));
         }
 
-        if(mdata.get(position).getADAYS().equalsIgnoreCase("0")){
+        if(mdata.get(position).getADAYS().equalsIgnoreCase("")||mdata.get(position).getADAYS().equalsIgnoreCase("0")){
             holder.tv_booked_session.setText(mdata.get(position).getADAYS_msg());
             holder.rl_session_available_or_not.setVisibility(View.VISIBLE);
             holder.rl_offer.setVisibility(View.GONE);
@@ -127,11 +169,14 @@ public class CoachListAdapter extends RecyclerView.Adapter<CoachListAdapter.MyVi
             CoachList.Price price = mdata.get(position).getPrice();
             Intent intent =new Intent(context, visitCoachProfileActivity.class);
             intent.putExtra("coachId",mdata.get(position).getUserId());
+            intent.putExtra("what_you_teach",mdata.get(position).getWhat_you_teach());
+            intent.putExtra("skills_you_learn",mdata.get(position).getSkills_you_learn());
             intent.putExtra("image",mdata.get(position).getAvatar());
             intent.putExtra("Cover",mdata.get(position).getCover());
             intent.putExtra("name",mdata.get(position).getName());
             intent.putExtra("coachTitle",mdata.get(position).getProfileTitle());
             intent.putExtra("Language",mdata.get(position).getLang());
+            intent.putExtra("lang",mdata.get(position).getLang());
             Bundle args = new Bundle();
              try{
                  if(mdata.get(position).getCertificate().isEmpty()){
@@ -169,6 +214,8 @@ public class CoachListAdapter extends RecyclerView.Adapter<CoachListAdapter.MyVi
 
             intent.putExtra("price",mdata.get(position).getChargeAmount());
             intent.putExtra("exp",mdata.get(position).getExps());
+            intent.putExtra("expY",mdata.get(position).getExp_years());
+            intent.putExtra("expM",mdata.get(position).getExp_months());
             intent.putExtra("rating",mdata.get(position).getRating());
             context.startActivity(intent);
 
@@ -179,11 +226,14 @@ public class CoachListAdapter extends RecyclerView.Adapter<CoachListAdapter.MyVi
             CoachList.Price price = mdata.get(position).getPrice();
             Intent intent =new Intent(context, visitCoachProfileActivity.class);
             intent.putExtra("coachId",mdata.get(position).getUserId());
+            intent.putExtra("what_you_teach",mdata.get(position).getWhat_you_teach());
+            intent.putExtra("skills_you_learn",mdata.get(position).getSkills_you_learn());
             intent.putExtra("image",mdata.get(position).getAvatar());
             intent.putExtra("Cover",mdata.get(position).getCover());
             intent.putExtra("name",mdata.get(position).getName());
             intent.putExtra("coachTitle",mdata.get(position).getProfileTitle());
             intent.putExtra("Language",mdata.get(position).getLang());
+            intent.putExtra("lang",mdata.get(position).getLang());
             Bundle args = new Bundle();
 
 
@@ -221,6 +271,8 @@ public class CoachListAdapter extends RecyclerView.Adapter<CoachListAdapter.MyVi
 
             intent.putExtra("price",mdata.get(position).getChargeAmount());
             intent.putExtra("exp",mdata.get(position).getExps());
+            intent.putExtra("expY",mdata.get(position).getExp_years());
+            intent.putExtra("expM",mdata.get(position).getExp_months());
             intent.putExtra("rating",mdata.get(position).getRating());
             context.startActivity(intent);
 

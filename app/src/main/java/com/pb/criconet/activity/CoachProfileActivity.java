@@ -12,6 +12,7 @@ import android.graphics.Paint;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
+import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -73,9 +74,9 @@ public class CoachProfileActivity extends AppCompatActivity {
     private RelativeLayout rl_offer;
     private TextView tvoffer;
     private LinearLayout li_offer;
-    private TextView tvOfferPrice,tvLanguage_details;
+    private TextView tvOfferPrice,tvLanguage_details,tvwht_learn_details, tvskills_you_learn_details;
     private RoundedImageView img_banner,img_certificate;
-    RelativeLayout lay_specilization,rl_session_available_or_not,rel_language,rl_certificate;
+    RelativeLayout lay_specilization,rl_session_available_or_not,rel_language,rl_certificate,rel_wht_learn, rel_skills_you_learn;
     String ADAYS="",ADAYS_msg="";
     ImageView img_edit;
     private RequestQueue queue;
@@ -141,6 +142,10 @@ public class CoachProfileActivity extends AppCompatActivity {
         lay_specilization = findViewById(R.id.lay_specilization);
         tvCoachSpecialization= findViewById(R.id.tvCoachSpecialization);
         rel_achievement = findViewById(R.id.rel_achievement);
+        rel_wht_learn = findViewById(R.id.rel_wht_learn);
+        rel_skills_you_learn = findViewById(R.id.rel_skills_you_learn);
+        tvwht_learn_details = findViewById(R.id.tvwht_learn_details);
+        tvskills_you_learn_details = findViewById(R.id.tvskills_you_learn_details);
         rl_bio = findViewById(R.id.rl_bio);
         tvPrice=findViewById(R.id.tvPrice);
 
@@ -293,6 +298,23 @@ public class CoachProfileActivity extends AppCompatActivity {
         }else{
             rl_bio.setVisibility(View.GONE);
         }
+
+        if (!jsonObject_professional_info.optString("what_you_teach").isEmpty()) {
+            rel_wht_learn.setVisibility(View.VISIBLE);
+            tvwht_learn_details.setText(Html.fromHtml(jsonObject_professional_info.optString("what_you_teach")));
+            //tvwht_learn_details.setText(extras.getString("what_you_teach"));
+        } else {
+            rel_wht_learn.setVisibility(View.GONE);
+        }
+
+        if (!jsonObject_professional_info.optString("skills_you_learn").isEmpty()) {
+            rel_skills_you_learn.setVisibility(View.VISIBLE);
+            tvskills_you_learn_details.setText(jsonObject_professional_info.optString("skills_you_learn"));
+        } else {
+            rel_skills_you_learn.setVisibility(View.GONE);
+        }
+
+
 //        if (extras.getInt("rating")==0){
 //            rating_bar_review.setVisibility(View.GONE);
 //        }else{
@@ -311,7 +333,7 @@ public class CoachProfileActivity extends AppCompatActivity {
             tvCoachSpecialization.setText(jsonObject_professional_info.optString("cat_title"));
         }
 
-        if(data.has("languages")){
+        /*if(data.has("languages")){
 
             try {
                 JSONArray jsonArray = data.getJSONArray("languages");
@@ -340,6 +362,11 @@ public class CoachProfileActivity extends AppCompatActivity {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+        }*/
+
+
+        if(data.has("user_lang")){
+            tvLanguage_details.setText(data.optString("user_lang"));
         }
 
         if (jsonObject_professional_info.has("exp_years")) {
@@ -349,7 +376,33 @@ public class CoachProfileActivity extends AppCompatActivity {
         if (jsonObject_professional_info.has("exp_months")) {
             exp_month=jsonObject_professional_info.optString("exp_months");
         }
-        tvCoachExp.setText(exp_years+"."+exp_month+" "+"Years Experience");
+
+        if(exp_years.equalsIgnoreCase("1") &&exp_month.equalsIgnoreCase("1") ){
+            tvCoachExp.setText(exp_years+"."+exp_month+" "+"Year Experience");
+        }else if(exp_years.equalsIgnoreCase("") &&exp_month.equalsIgnoreCase("1")){
+            tvCoachExp.setText(exp_month+" "+"Month Experience");
+        }else if(exp_month.equalsIgnoreCase("")){
+            if(exp_years.equalsIgnoreCase("1")){
+                tvCoachExp.setText(exp_years+" "+"Year Experience");
+            }else{
+                tvCoachExp.setText(exp_years+" "+"Years Experience");
+            }
+
+        }
+
+        else if(exp_years.equalsIgnoreCase("0")){
+            if(exp_month.equalsIgnoreCase("1")){
+                tvCoachExp.setText(exp_month+" "+"Month Experience");
+            }else{
+                tvCoachExp.setText(exp_month+" "+"Months Experience");
+            }
+
+
+        }
+        else {
+            tvCoachExp.setText(exp_years+"."+exp_month+" "+"Years Experience");
+        }
+
 
         if(jsonObject_professional_info.has("certificate_url")){
             if((jsonObject_professional_info.optString("certificate_url").isEmpty())){
@@ -380,9 +433,6 @@ public class CoachProfileActivity extends AppCompatActivity {
                 Log.d("link",object.size()+"");*/
 
         }
-
-
-
 
     }
 

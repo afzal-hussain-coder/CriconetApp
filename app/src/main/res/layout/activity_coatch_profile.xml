@@ -367,9 +367,9 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_below="@+id/linegradientt"
-                                android:layout_marginStart="@dimen/_10sdp"
+                                android:layout_marginStart="@dimen/_15sdp"
                                 android:layout_marginTop="@dimen/_5sdp"
-                                android:layout_marginEnd="@dimen/_10sdp"
+                                android:layout_marginEnd="@dimen/_18sdp"
                                 android:layout_marginBottom="@dimen/_5sdp"
                                 android:gravity="left"
                                 android:lineSpacingExtra="@dimen/_1sdp"
@@ -453,11 +453,151 @@
 
                 </com.google.android.material.card.MaterialCardView>
 
+                 <!--///.............new code today...-->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/wht_learn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/middle_card"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:layout_marginBottom="@dimen/_10sdp"
+                    app:cardBackgroundColor="@color/bckground"
+                    app:cardCornerRadius="@dimen/_10sdp"
+                    app:cardElevation="@dimen/_5sdp"
+                    tools:ignore="NamespaceTypo">
+
+
+                    <RelativeLayout
+                        android:id="@+id/rel_wht_learn"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_5sdp"
+                            android:orientation="vertical"
+                            android:paddingBottom="@dimen/_10sdp">
+
+                            <TextView
+                                android:id="@+id/tvwht_learn"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerHorizontal="true"
+                                android:layout_marginTop="@dimen/_2sdp"
+                                android:gravity="center_horizontal"
+                                android:text="@string/What_you_Learn"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/_12sdp"
+                                app:fontFamily="@font/opensans_regular" />
+
+                            <LinearLayout
+                                android:id="@+id/linegradient_wht_learn"
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/_1sdp"
+                                android:layout_below="@+id/tvwht_learn"
+                                android:layout_centerHorizontal="true"
+                                android:layout_marginTop="@dimen/_5sdp"
+                                android:background="@drawable/line_gradient"
+                                android:orientation="horizontal" />
+
+                            <TextView
+                                android:id="@+id/tvwht_learn_details"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@+id/linegradient_wht_learn"
+                                android:layout_marginStart="@dimen/_10sdp"
+                                android:layout_marginTop="@dimen/_5sdp"
+                                android:layout_marginEnd="@dimen/_10sdp"
+                                android:layout_marginBottom="@dimen/_5sdp"
+                                android:text="Have completed the coaching for many kids"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/_10sdp"
+                                app:fontFamily="@font/opensans_semibold" />
+
+
+                        </RelativeLayout>
+                    </RelativeLayout>
+                    <!--</androidx.cardview.widget.CardView>-->
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/skills_you_learn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/wht_learn"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:layout_marginBottom="@dimen/_10sdp"
+                    app:cardBackgroundColor="@color/bckground"
+                    app:cardCornerRadius="@dimen/_10sdp"
+                    app:cardElevation="@dimen/_5sdp"
+                    tools:ignore="NamespaceTypo">
+
+
+                    <RelativeLayout
+                        android:id="@+id/rel_skills_you_learn"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_5sdp"
+                            android:orientation="vertical"
+                            android:paddingBottom="@dimen/_10sdp">
+
+                            <TextView
+                                android:id="@+id/tvskills_you_learn"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerHorizontal="true"
+                                android:layout_marginTop="@dimen/_2sdp"
+                                android:gravity="center_horizontal"
+                                android:text="@string/skills_you_learn"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/_12sdp"
+                                app:fontFamily="@font/opensans_regular" />
+
+                            <LinearLayout
+                                android:id="@+id/linegradient_skills_you_learn"
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/_1sdp"
+                                android:layout_below="@+id/tvskills_you_learn"
+                                android:layout_centerHorizontal="true"
+                                android:layout_marginTop="@dimen/_5sdp"
+                                android:background="@drawable/line_gradient"
+                                android:orientation="horizontal" />
+
+                            <TextView
+                                android:id="@+id/tvskills_you_learn_details"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@+id/linegradient_skills_you_learn"
+                                android:layout_centerHorizontal="true"
+                                android:layout_margin="@dimen/_5sdp"
+                                android:gravity="center_horizontal"
+                                android:text="Have completed the coaching for many kids"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/_10sdp"
+                                app:fontFamily="@font/opensans_semibold" />
+
+
+                        </RelativeLayout>
+                    </RelativeLayout>
+                    <!--</androidx.cardview.widget.CardView>-->
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <!--///.......new code end here..today...-->
+
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/card_lang"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/middle_card"
+                    android:layout_below="@+id/skills_you_learn"
                     android:layout_marginStart="@dimen/_10sdp"
                     android:layout_marginEnd="@dimen/_10sdp"
                     android:layout_marginBottom="@dimen/_10sdp"

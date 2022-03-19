@@ -48,6 +48,7 @@ import com.pb.criconet.models.DateSlotes;
 import com.pb.criconet.models.TimeSlot;
 
 import org.greenrobot.eventbus.EventBus;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -132,51 +133,45 @@ public class CoachSloatAvailabilityActivity extends BaseActivity implements Time
         prefs = PreferenceManager.getDefaultSharedPreferences(mActivity);
         queue = Volley.newRequestQueue(mActivity);
         spinerCurency = findViewById(R.id.spinerCurency);
-        option_currency.add(new com.pb.criconet.Utills.DataModel("Select booking session close time"));
-        option_currency.add(new com.pb.criconet.Utills.DataModel("Booking session should be closed before 4 hours"));
-        option_currency.add(new com.pb.criconet.Utills.DataModel("Booking session should be closed before 6 hours"));
-        option_currency.add(new com.pb.criconet.Utills.DataModel("Booking session should be closed before 8 hours"));
-        spinerCurency.setOptionList(option_currency);
+
+        //option_currency.add(new com.pb.criconet.Utills.DataModel("Booking session should be closed before 4 hours"));
+        //option_currency.add(new com.pb.criconet.Utills.DataModel("Booking session should be closed before 6 hours"));
+        //option_currency.add(new com.pb.criconet.Utills.DataModel("Booking session should be closed before 8 hours"));
+        //spinerCurency.setOptionList(option_currency);
 //    selectedCloseLimit = option_currency.get(0).getName();
-        spinerCurency.setText(option_currency.get(0).getName());
+        //spinerCurency.setText(option_currency.get(0).getName());
         spinerCurency.setTypeface(typeface);
+
+        if (Global.isOnline(mActivity)) {
+            getSessionCloseTime();
+        } else {
+            Global.showDialog(mActivity);
+        }
         spinerCurency.setClickListener(new FilterCoachCloseTimeDropDownView.onClickInterface() {
             @Override
             public void onClickAction() {
             }
 
             @Override
-            public void onClickDone(String name) {
+            public void onClickDone(String name,String id) {
                 selectedCloseLimit = name;
-
-                if(selectedCloseLimit.contains("4")){
-                    booking_close_time="4";
-                }else if(selectedCloseLimit.contains("6")){
-                    booking_close_time="6";
-                }else{
-                    booking_close_time="8";
-                }
-
-
+                booking_close_time= id;
                 //Toaster.customToast(selectedCloseLimit);
             }
-
 
             @Override
             public void onDismiss() {
             }
         });
-
-
-        year = Global.getYear(datePicker.getCurrentPageDate().getTime().toString());
-        month = Global.getMonth(datePicker.getCurrentPageDate().getTime().toString());
-
-        printDatesInMonth(Integer.parseInt(year),Integer.parseInt(month));
         // disable dates before today
         Calendar min = Calendar.getInstance();
         previousDate = min.getTime();
         min.add(Calendar.DAY_OF_MONTH, -1);
         datePicker.setMinimumDate(min);
+        year = Global.getYear(datePicker.getCurrentPageDate().getTime().toString());
+        month = Global.getMonth(datePicker.getCurrentPageDate().getTime().toString());
+        day=Global.getDay(datePicker.getCurrentPageDate().getTime().toString());
+        printDatesInMonth(Integer.parseInt(year),Integer.parseInt(month),Integer.parseInt(day));
         //int daysInMonth = min.getActualMaximum(Calendar.DAY_OF_MONTH);
 
 
@@ -204,8 +199,18 @@ public class CoachSloatAvailabilityActivity extends BaseActivity implements Time
         datePicker.setOnForwardPageChangeListener(() -> {
             year = Global.getYear(datePicker.getCurrentPageDate().getTime().toString());
             month = Global.getMonth(datePicker.getCurrentPageDate().getTime().toString());
+            //Toaster.customToast(month);
+            day=Global.getDay(datePicker.getCurrentPageDate().getTime().toString());
+            //calendar.getFirstDayOfWeek()
+            //Toaster.customToast(datePicker.getCurrentPageDate().getFirstDayOfWeek()+"");
+//            if(month.equalsIgnoreCase("12")){
+//                datePicker.setSwipeEnabled(false);
+//                datePicker.setForwardButtonImage(mActivity.getResources().getDrawable(R.drawable.ic_arrow_leftt));
+//            }else{
+//                datePicker.setSwipeEnabled(true);
+//            }
            // getCoachDete();
-            printDatesInMonth(Integer.parseInt(year),Integer.parseInt(month));
+            printDatesInMonth(Integer.parseInt(year),Integer.parseInt(month),Integer.parseInt(day));
             dateGot=Global.getDateGotCoach(datePicker.getCurrentPageDate().getTime().toString());
             //getDateSlote(dateGot);
         });
@@ -213,11 +218,20 @@ public class CoachSloatAvailabilityActivity extends BaseActivity implements Time
         datePicker.setOnPreviousPageChangeListener(() -> {
             year = Global.getYear(datePicker.getCurrentPageDate().getTime().toString());
             month = Global.getMonth(datePicker.getCurrentPageDate().getTime().toString());
+            day=Global.getDay(datePicker.getCurrentPageDate().getTime().toString());
             //getCoachDete();
-            printDatesInMonth(Integer.parseInt(year),Integer.parseInt(month));
+            printDatesInMonth(Integer.parseInt(year),Integer.parseInt(month),Integer.parseInt(day));
             dateGot=Global.getDateGotCoach(datePicker.getCurrentPageDate().getTime().toString());
             //getDateSlote(dateGot);
+//            if(month.equalsIgnoreCase("1")){
+//                datePicker.setSwipeEnabled(true);
+//                datePicker.setForwardButtonImage(mActivity.getResources().getDrawable(R.drawable.ic_arrow_right));
+//            }else{
+//                datePicker.setSwipeEnabled(true);
+//            }
         });
+
+
 
         btn_login.setOnClickListener(view -> {
             multiDate=new StringBuilder();
@@ -250,16 +264,18 @@ public class CoachSloatAvailabilityActivity extends BaseActivity implements Time
 
     }
 
-    public void printDatesInMonth(int year, int month) {
+    public void printDatesInMonth(int year, int month,int day) {
         SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
         Calendar cal = Calendar.getInstance();
         cal.clear();
-        cal.set(year, month - 1, 0);
+        cal.set(year, month, day);
         events = new ArrayList<>();
         int daysInMonth = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
-        for (int i = 0; i < daysInMonth; i++) {
+        //Toaster.customToast(daysInMonth+"");
+        //cal.get
+        for (int i = 0; i <=daysInMonth; i++) {
             System.out.println(fmt.format(cal.getTime()));
-            cal.add(Calendar.DAY_OF_MONTH, 1);
+            cal.add(Calendar.DAY_OF_MONTH, -1);
             events.add(new EventDay(Global.convertStringToCalendar(fmt.format(cal.getTime())), Global.getThreeDots(mActivity)));
             datePicker.setEvents(events);
         }
@@ -366,6 +382,46 @@ public class CoachSloatAvailabilityActivity extends BaseActivity implements Time
                 return param;
             }
         };
+        int socketTimeout = 30000;
+        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        postRequest.setRetryPolicy(policy);
+        queue.add(postRequest);
+    }
+    private void getSessionCloseTime() {
+        StringRequest postRequest = new StringRequest(Request.Method.GET, Global.URL + Global.SESSION_CLOSE_TIME, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.d("SessionCloseTime", response);
+                try {
+
+
+                    JSONObject jsonObject = new JSONObject(response);
+                    if (jsonObject.getString("api_text").equalsIgnoreCase("success")) {
+                        JSONArray jsonObject1 = jsonObject.getJSONArray("data");
+                        for(int i=0;i<jsonObject1.length();i++){
+                            JSONObject  jsonObject2= jsonObject1.getJSONObject(i);
+                            option_currency.add(new com.pb.criconet.Utills.DataModel(jsonObject2.getString("msg"),jsonObject2.getString("id")));
+                            spinerCurency.setOptionList(option_currency);
+                        }
+
+
+                    } else if (jsonObject.optString("api_text").equalsIgnoreCase("failed")) {
+                        Toaster.customToast(jsonObject.optJSONObject("errors").optString("error_text"));
+                    } else {
+                        Toaster.customToast(getResources().getString(R.string.socket_timeout));
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                //Global.msgDialog((Activity) mActivity, "Error from server");
+            }
+        }) ;
         int socketTimeout = 30000;
         RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
         postRequest.setRetryPolicy(policy);
@@ -478,5 +534,5 @@ public class CoachSloatAvailabilityActivity extends BaseActivity implements Time
 //        EventBus.getDefault().unregister(this);
 //        super.onStop();
 //    }
-    
+
 }

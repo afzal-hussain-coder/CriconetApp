@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
+import android.text.Html;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -249,9 +250,10 @@ public class FragmentExperienceSetting extends Fragment implements CoachButtonAd
             public void onClickDone(String name) {
                 if(name.contains("month")){
                     selectedMonth = name.replace("month","").trim();
-                }else if(name.contains("months")){
+                }if(name.contains("months")){
                     selectedMonth = name.replace("months","").trim();
                 }
+                /*Toaster.customToast(name+"/ "+selectedMonth);*/
             }
 
             @Override
@@ -306,7 +308,7 @@ public class FragmentExperienceSetting extends Fragment implements CoachButtonAd
             public void onClickDone(String name) {
                 if(name.contains("year")){
                     selectedYear = name.replace("year","").trim();
-                }else if(name.contains("years")){
+                }if(name.contains("years")){
                     selectedYear = name.replace("years","").trim();
                 }
             }
@@ -497,13 +499,20 @@ public class FragmentExperienceSetting extends Fragment implements CoachButtonAd
         if (categoryId == null) {
             Toaster.customToast(getActivity().getResources().getString(R.string.Please_choose_your_specialities));
             return false;
-        } else if (etProfileTitle.getText().toString().equalsIgnoreCase("")) {
-            Toaster.customToast(getActivity().getResources().getString(R.string.Fill_your_profile_title));
+        } else if (!Global.validateLengthofCoachRegister(etProfileTitle.getText().toString())) {
+            Toaster.customToast(mContext.getResources().getString(R.string.Fill_your_profile_title));
             return false;
         } else if (selectedYear.equalsIgnoreCase("Select Year") || selectedMonth.equalsIgnoreCase("Select Month")) {
-            Toaster.customToast(getActivity().getResources().getString(R.string.Select_year_and_month));
+            Toaster.customToast(mContext.getResources().getString(R.string.Select_year_and_month));
+            return false;
+        }else if(selectedYear.equalsIgnoreCase("0") && selectedMonth.equalsIgnoreCase("0")){
+            Toaster.customToast(mContext.getResources().getString(R.string.Select_month));
             return false;
         }
+//        else if(selectedMonth.equalsIgnoreCase("0")){
+//            Toaster.customToast(mContext.getResources().getString(R.string.Select_month));
+//            return false;
+//        }
 //        else if(mcuurency.equalsIgnoreCase("")){
 //            Toast.makeText(getActivity(),"Please select currency",Toast.LENGTH_SHORT).show();
 //            return  false;
@@ -579,7 +588,8 @@ public class FragmentExperienceSetting extends Fragment implements CoachButtonAd
                         JSONObject jsonObject = new JSONObject(response.toString());
                         if (jsonObject.optString("api_text").equalsIgnoreCase("Success")) {
 
-                            Toaster.customToast(jsonObject.optString("msg"));
+                            //Toaster.customToast(jsonObject.optString("msg"));
+                            Toaster.customToast(getResources().getString(R.string.Information_update_successfully));
                             if(imagepath.isEmpty()){
                                 tv_click_uploadCertificate.setText(mContext.getResources().getString(R.string.upload_certificate));
                             }else{
@@ -755,7 +765,7 @@ public class FragmentExperienceSetting extends Fragment implements CoachButtonAd
             }
         }
         if (data.has("what_you_teach")) {
-            etwhat_you_teach.setText(data.optString("what_you_teach"));
+            etwhat_you_teach.setText(Html.fromHtml(data.optString("what_you_teach")));
         }
         if (data.has("about_coach_profile")) {
             etAnyOtherInformation.setText(data.optString("about_coach_profile"));
@@ -836,16 +846,21 @@ public class FragmentExperienceSetting extends Fragment implements CoachButtonAd
         if (data.has("exp_years")) {
 
             String yearName="";
-            if(data.optString("exp_years").equalsIgnoreCase("0") || data.optString("exp_years").equalsIgnoreCase("1")){
+            if(data.optString("exp_years").equalsIgnoreCase("0")){
                 yearName = data.optString("exp_years") + " " + "year";
-            }else{
+            }else if(data.optString("exp_years").equalsIgnoreCase("1")){
+                yearName = data.optString("exp_years") + " " + "year";
+            }else if(data.optString("exp_years").equalsIgnoreCase("")){
+                yearName = "0" + " " + "year";
+            }
+            else{
                 yearName = data.optString("exp_years") + " " + "years";
             }
 
             selectedYear = yearName;
             if(yearName.contains("year")){
                 selectedYear = yearName.replace("year","").trim();
-            }else if(yearName.contains("years")){
+            }if(yearName.contains("years")){
                 selectedYear = yearName.replace("years","").trim();
             }
 
@@ -856,7 +871,10 @@ public class FragmentExperienceSetting extends Fragment implements CoachButtonAd
             String monthName="";
             if(data.optString("exp_months").equalsIgnoreCase("0") || data.optString("exp_months").equalsIgnoreCase("1")){
                 monthName = data.optString("exp_months") + " " + "month";
-            }else{
+            }else if(data.optString("exp_months").equalsIgnoreCase("")){
+                monthName = "0" + " " + "month";
+            }
+            else{
                 monthName = data.optString("exp_months") + " " + "months";
             }
 
@@ -864,7 +882,7 @@ public class FragmentExperienceSetting extends Fragment implements CoachButtonAd
             selectedMonth = monthName;
             if(monthName.contains("month")){
                 selectedMonth = monthName.replace("month","").trim();
-            }else if(monthName.contains("months")){
+            }if(monthName.contains("months")){
                 selectedMonth = monthName.replace("months","").trim();
             }
             spinerMonth.setText(monthName);
