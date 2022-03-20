@@ -23,6 +23,22 @@
           }
         },
         {
+          "client_id": "1072621342122-pecp145j0l6ho3uc4gna8c9h249ckrhp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.pb.criconet",
+            "certificate_hash": "c358cd05ae05151c08bbeb14ccf8892e786670c4"
+          }
+        },
+        {
+          "client_id": "1072621342122-q08ukmekjessbv4nd4mbuefp41kf0c15.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.pb.criconet",
+            "certificate_hash": "3d576f6c223d0f09ea01063798647c54e4579803"
+          }
+        },
+        {
           "client_id": "1072621342122-hrdbvme9dvs47eq072q7d492ruu01ahj.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -36,7 +52,7 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "1072621342122-79db54nr4q2n5159h5ck25q7f2t38p88.apps.googleusercontent.com",
+              "client_id": "1072621342122-3e5u6pb066sr6orefostgdg1teih9dcp.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

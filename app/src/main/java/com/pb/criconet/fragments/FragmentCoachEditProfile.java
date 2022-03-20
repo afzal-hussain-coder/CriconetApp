@@ -99,7 +99,7 @@ import java.util.Objects;
 
 import timber.log.Timber;
 
-public class FragmentCoachEditProfile extends Fragment implements AdapterView.OnItemSelectedListener {
+public class FragmentCoachEditProfile extends Fragment {
     View rootView;
     private static final int CAMERA_REQUESTid = 2015;
     private static final int PICK_IMAGEid = 100;
@@ -247,10 +247,10 @@ public class FragmentCoachEditProfile extends Fragment implements AdapterView.On
         tvCancel.setOnClickListener(v -> {
             slideUp.hide();
         });
-
-        spinnerCountry.setOnItemSelectedListener(this);
-        spinnerState.setOnItemSelectedListener(this);
-        spinnerCity.setOnItemSelectedListener(this);
+//
+//        spinnerCountry.setOnItemSelectedListener(this);
+//        spinnerState.setOnItemSelectedListener(this);
+//        spinnerCity.setOnItemSelectedListener(this);
 
 
         if (Global.isOnline(getActivity())) {
@@ -282,6 +282,52 @@ public class FragmentCoachEditProfile extends Fragment implements AdapterView.On
             @Override
             public void onClick(View view) {
                 dialog.show();
+            }
+        });
+
+        spinnerCountry.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (parent == spinnerCountry && position != 0) {
+                    countryID = "";
+                    state_Name = "";
+                    city_Name = "";
+                    spinnerCity.setSelection(Global.getIndex(spinnerCity, city_Name));
+                    countryID = modelArrayList.getData().get(position - 1).getId();
+                    getState(modelArrayList.getData().get(position - 1).getId());
+
+                }
+            } // to close the onItemSelected
+
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+
+        spinnerState.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (parent == spinnerState && position != 0) {
+                    stateID = statemodelArrayList.getData().get(position - 1).getId();
+                    getCity(statemodelArrayList.getData().get(position - 1).getId());
+
+                }
+            }
+
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+
+        spinnerCity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (parent == spinnerCity && position != 0) {
+                    cityID = citymodelArrayList.getData().get(position - 1).getId();
+                }
+            }
+
+            public void onNothingSelected(AdapterView<?> parent) {
+
             }
         });
 
@@ -860,27 +906,27 @@ public class FragmentCoachEditProfile extends Fragment implements AdapterView.On
         queue.add(postRequest);
     }
 
-    @Override
-    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-
-        if(adapterView==spinnerCountry && i!=0) {
-            state_Name="";
-            city_Name="";
-            getState(modelArrayList.getData().get(i).getId());
-            countryID=modelArrayList.getData().get(i).getId();
-        }else if(adapterView==spinnerState && i!=0){
-            getCity(statemodelArrayList.getData().get(i).getId());
-            stateID=statemodelArrayList.getData().get(i).getId();
-        }else if(adapterView==spinnerCity && i!=0){
-            cityID=citymodelArrayList.getData().get(i).getId();
-        }
-
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> adapterView) {
-
-    }
+//    @Override
+//    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+//
+//        if(adapterView==spinnerCountry && i!=0) {
+//            state_Name="";
+//            city_Name="";
+//            getState(modelArrayList.getData().get(i).getId());
+//            countryID=modelArrayList.getData().get(i).getId();
+//        }else if(adapterView==spinnerState && i!=0){
+//            getCity(statemodelArrayList.getData().get(i).getId());
+//            stateID=statemodelArrayList.getData().get(i).getId();
+//        }else if(adapterView==spinnerCity && i!=0){
+//            cityID=citymodelArrayList.getData().get(i).getId();
+//        }
+//
+//    }
+//
+//    @Override
+//    public void onNothingSelected(AdapterView<?> adapterView) {
+//
+//    }
 
     public void getUsersDetails() {
         //loaderView.showLoader();

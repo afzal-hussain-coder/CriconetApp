@@ -81,7 +81,7 @@ import java.util.Objects;
 
 import timber.log.Timber;
 
-public class CoachPersonalInfoActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class CoachPersonalInfoActivity extends AppCompatActivity {
     Context mContext;
     Activity mActivity;
     private static final int CAMERA_REQUESTid = 2015;
@@ -244,10 +244,10 @@ public class CoachPersonalInfoActivity extends AppCompatActivity implements Adap
         tvCancel.setOnClickListener(v -> {
             slideUp.hide();
         });
-
-        spinnerCountry.setOnItemSelectedListener(this);
-        spinnerState.setOnItemSelectedListener(this);
-        spinnerCity.setOnItemSelectedListener(this);
+//
+//        spinnerCountry.setOnItemSelectedListener(this);
+//        spinnerState.setOnItemSelectedListener(this);
+//        spinnerCity.setOnItemSelectedListener(this);
 
 
         if (Global.isOnline(mActivity)) {
@@ -367,6 +367,52 @@ public class CoachPersonalInfoActivity extends AppCompatActivity implements Adap
 //                });
 //                // show dialog
 //                builder.show();
+            }
+        });
+
+        spinnerCountry.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (parent == spinnerCountry && position != 0) {
+                    countryID = "";
+                    state_Name = "";
+                    city_Name = "";
+                    spinnerCity.setSelection(Global.getIndex(spinnerCity, city_Name));
+                    countryID = modelArrayList.getData().get(position - 1).getId();
+                    getState(modelArrayList.getData().get(position - 1).getId());
+
+                }
+            } // to close the onItemSelected
+
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+
+        spinnerState.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (parent == spinnerState && position != 0) {
+                    stateID = statemodelArrayList.getData().get(position - 1).getId();
+                    getCity(statemodelArrayList.getData().get(position - 1).getId());
+
+                }
+            }
+
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+
+        spinnerCity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (parent == spinnerCity && position != 0) {
+                    cityID = citymodelArrayList.getData().get(position - 1).getId();
+                }
+            }
+
+            public void onNothingSelected(AdapterView<?> parent) {
+
             }
         });
     }
@@ -837,35 +883,36 @@ public class CoachPersonalInfoActivity extends AppCompatActivity implements Adap
     }
 
 
-    @Override
-    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-
-        if (adapterView == spinnerCountry && i != 0) {
-            //countryID = "";
-            //state_Name="";
-            //city_Name="";
-            //spinnerState.setSelection(Global.getIndex(spinnerState, state_Name));
-            //spinnerCity.setSelection(Global.getIndex(spinnerCity, city_Name));
-            getState(modelArrayList.getData().get(i - 1).getId());
-            countryID = modelArrayList.getData().get(i - 1).getId();
-
-
-        } else if (adapterView == spinnerState && i != 0) {
-            getCity(statemodelArrayList.getData().get(i - 1).getId());
-            stateID = statemodelArrayList.getData().get(i - 1).getId();
-        } else if (adapterView == spinnerCity && i != 0) {
-            cityID = citymodelArrayList.getData().get(i - 1).getId();
-        } else {
-            state_Name = "";
-            city_Name = "";
-        }
-
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> adapterView) {
-
-    }
+//
+//    @Override
+//    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+//
+//        if (adapterView == spinnerCountry && i != 0) {
+//            //countryID = "";
+//            //state_Name="";
+//            //city_Name="";
+//            //spinnerState.setSelection(Global.getIndex(spinnerState, state_Name));
+//            //spinnerCity.setSelection(Global.getIndex(spinnerCity, city_Name));
+//            getState(modelArrayList.getData().get(i - 1).getId());
+//            countryID = modelArrayList.getData().get(i - 1).getId();
+//
+//
+//        } else if (adapterView == spinnerState && i != 0) {
+//            getCity(statemodelArrayList.getData().get(i - 1).getId());
+//            stateID = statemodelArrayList.getData().get(i - 1).getId();
+//        } else if (adapterView == spinnerCity && i != 0) {
+//            cityID = citymodelArrayList.getData().get(i - 1).getId();
+//        } else {
+//            state_Name = "";
+//            city_Name = "";
+//        }
+//
+//    }
+//
+//    @Override
+//    public void onNothingSelected(AdapterView<?> adapterView) {
+//
+//    }
 
 
     private void setData(JSONObject data) {
