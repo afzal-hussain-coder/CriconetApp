@@ -3,18 +3,22 @@ package com.pb.criconet.activity;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.fonts.Font;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Looper;
 import android.preference.PreferenceManager;
@@ -27,10 +31,13 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -85,6 +92,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
+import com.mukesh.OtpView;
 import com.pb.criconet.R;
 import com.pb.criconet.Utills.CustomLoaderView;
 import com.pb.criconet.Utills.Global;
@@ -92,6 +100,7 @@ import com.pb.criconet.Utills.SessionManager;
 import com.pb.criconet.Utills.Toaster;
 import com.pb.criconet.models.UserData;
 import com.pnikosis.materialishprogress.ProgressWheel;
+import com.rilixtech.widget.countrycodepicker.CountryCodePicker;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -103,6 +112,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 
 import timber.log.Timber;
 
@@ -155,6 +165,8 @@ public class Login extends AppCompatActivity {
     private long UPDATE_INTERVAL = 10 * 1000;  /* 10 secs */
     private long FASTEST_INTERVAL = 2000; /* 2 sec */
     private Activity activity;
+    private LinearLayout layout_enter_mobile_no, layout_otp;
+    private OtpView otpView;
 
 
     @Override
@@ -162,7 +174,7 @@ public class Login extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 //        StatusBarGradient.setStatusBarGradiant(Login.this);
         setContentView(R.layout.activity_login_screen);
-        activity=this;
+        activity = this;
         enableLoc();
 
 
@@ -279,7 +291,7 @@ public class Login extends AppCompatActivity {
 
     public void onLocationChanged(Location location) {
         // New location has now been determined
-        getAddress(location.getLatitude(),location.getLongitude());
+        getAddress(location.getLatitude(), location.getLongitude());
         // You can now create a LatLng Object for use with maps
     }
 
@@ -363,7 +375,7 @@ public class Login extends AppCompatActivity {
         fb = findViewById(R.id.fb);
         fb_login = (LoginButton) findViewById(R.id.fb_login);
         gmail_login = (SignInButton) findViewById(R.id.gmail_login);
-        setGooglePlusButtonText(gmail_login,getResources().getString(R.string.Continue_with_Google));
+        setGooglePlusButtonText(gmail_login, getResources().getString(R.string.Continue_with_Google));
 
         click_signup = findViewById(R.id.txt_register);
         forgot_password = (TextView) findViewById(R.id.forgot_password);
@@ -727,7 +739,7 @@ public class Login extends AppCompatActivity {
 //                                SessionManager.save_image(prefs, jsonObject.optString("i"));
                                 SessionManager.save_check_login(prefs, true);
 
-                                JSONObject jsonData=jsonObject.optJSONObject("data");
+                                JSONObject jsonData = jsonObject.optJSONObject("data");
                                 UserData userData = UserData.fromJson(jsonObject.optJSONObject("data"));
                                 SessionManager.save_user_id(prefs, userData.getUser_id());
                                 SessionManager.save_name(prefs, userData.getUsername());
@@ -741,40 +753,55 @@ public class Login extends AppCompatActivity {
                                 SessionManager.save_profiletype(prefs, userData.getProfile_type());
                                 SessionManager.save_mobile_verified(prefs, userData.getIs_mobile_verified());
                                 //Toaster.customToast(SessionManager.get_mobile_verified(prefs));
-                                if(jsonData.has("ambassadorProfile")){
-                                   JSONObject ambassadorProfile = jsonData.getJSONObject("ambassadorProfile");
 
-                                  if(ambassadorProfile.length()>0){
-                                      SessionManager.save_is_ambassador(prefs,"1");
-                                      SessionManager.save_is_amb_name(prefs,ambassadorProfile.getString("name"));
-                                      SessionManager.save_is_amb_fullname(prefs,ambassadorProfile.getString("full_name"));
-                                      SessionManager.save_is_amb_email(prefs,ambassadorProfile.getString("email"));
-                                      SessionManager.save_mobile(prefs,ambassadorProfile.getString("phone_number"));
-                                      SessionManager.save_is_amb_college(prefs,ambassadorProfile.getString("school_college_name"));
-                                      SessionManager.save_is_amb_highestQ(prefs,ambassadorProfile.getString("height_qualification"));
-                                      SessionManager.save_is_ambs_have_you_org_event_flag(prefs,ambassadorProfile.getString("have_you_org_event_flag"));
-                                      SessionManager.save_is_ambs_have_you_org_event_txt(prefs,ambassadorProfile.getString("have_you_org_event_txt"));
-                                      SessionManager.save_is_ambs_innovative_thing(prefs,ambassadorProfile.getString("innovative_thing"));
-                                      SessionManager.save_is_ambs_how_many_hrs_per_week(prefs,ambassadorProfile.getString("how_many_hrs_per_week"));
-                                      SessionManager.save_is_ambs_passionate_thing(prefs,ambassadorProfile.getString("passionate_thing"));
-                                      SessionManager.save_is_ambs_do_you_want_campus_ambassdor(prefs,ambassadorProfile.getString("do_you_want_campus_ambassdor"));
-                                      SessionManager.save_is_ambs_thing_you_are_know_criconet(prefs,ambassadorProfile.getString("thing_you_are_know_criconet"));
-                                  }else{
-                                      SessionManager.save_is_ambassador(prefs,"0");
-                                  }
-                                   //Toaster.customToast(ambassadorProfile.length()+"");
+
+                                // String is_mobile_verified = userData.getIs_mobile_verified();
+                                //String is_email_verified= userData.getIs_email_verified();
+
+                                if (jsonData.has("ambassadorProfile")) {
+                                    JSONObject ambassadorProfile = jsonData.getJSONObject("ambassadorProfile");
+
+                                    if (ambassadorProfile.length() > 0) {
+                                        SessionManager.save_is_ambassador(prefs, "1");
+                                        SessionManager.save_is_amb_name(prefs, ambassadorProfile.getString("name"));
+                                        SessionManager.save_is_amb_fullname(prefs, ambassadorProfile.getString("full_name"));
+                                        SessionManager.save_is_amb_email(prefs, ambassadorProfile.getString("email"));
+                                        SessionManager.save_mobile(prefs, ambassadorProfile.getString("phone_number"));
+                                        SessionManager.save_is_amb_college(prefs, ambassadorProfile.getString("school_college_name"));
+                                        SessionManager.save_is_amb_highestQ(prefs, ambassadorProfile.getString("height_qualification"));
+                                        SessionManager.save_is_ambs_have_you_org_event_flag(prefs, ambassadorProfile.getString("have_you_org_event_flag"));
+                                        SessionManager.save_is_ambs_have_you_org_event_txt(prefs, ambassadorProfile.getString("have_you_org_event_txt"));
+                                        SessionManager.save_is_ambs_innovative_thing(prefs, ambassadorProfile.getString("innovative_thing"));
+                                        SessionManager.save_is_ambs_how_many_hrs_per_week(prefs, ambassadorProfile.getString("how_many_hrs_per_week"));
+                                        SessionManager.save_is_ambs_passionate_thing(prefs, ambassadorProfile.getString("passionate_thing"));
+                                        SessionManager.save_is_ambs_do_you_want_campus_ambassdor(prefs, ambassadorProfile.getString("do_you_want_campus_ambassdor"));
+                                        SessionManager.save_is_ambs_thing_you_are_know_criconet(prefs, ambassadorProfile.getString("thing_you_are_know_criconet"));
+                                    } else {
+                                        SessionManager.save_is_ambassador(prefs, "0");
+                                    }
+                                    //Toaster.customToast(ambassadorProfile.length()+"");
                                 }
-                                if(userData.getProfile_type().equalsIgnoreCase("coach")){
+                                if (userData.getProfile_type().equalsIgnoreCase("coach")) {
 
-                                    if(jsonData.has("coachProfile")){
-                                        JSONObject  jsonObject1= jsonData.getJSONObject("coachProfile");
+                                    if (jsonData.has("coachProfile")) {
+                                        JSONObject jsonObject1 = jsonData.getJSONObject("coachProfile");
                                         SessionManager.save_coach_id(prefs, jsonObject1.getString("coach_id"));
                                     }
-                                    
 
-                                }else{
-                                    SessionManager.save_coach_id(prefs,"");
+
+                                } else {
+                                    SessionManager.save_coach_id(prefs, "");
                                 }
+
+                                //                                if(is_mobile_verified.equalsIgnoreCase("0") && is_email_verified.equalsIgnoreCase("0")){
+//                                    EmailOtpDialog();
+//                                }else if(is_mobile_verified.equalsIgnoreCase("i") || is_email_verified.equalsIgnoreCase("1")){
+//
+//                                    Intent intent = new Intent(Login.this, MainActivity.class);
+//                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                                    startActivity(intent);
+//                                    finish();
+//                                }
 
                                 Intent intent = new Intent(Login.this, MainActivity.class);
                                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -829,14 +856,14 @@ public class Login extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         loaderView.hideLoader();
-                        Log.d("socialLogin",response);
+                        Log.d("socialLogin", response);
                         try {
                             JSONObject jsonObject2, jsonObject = new JSONObject(response.toString());
                             if (jsonObject.optString("api_text").equalsIgnoreCase("success")) {
                                 SessionManager.save_user_id(prefs, jsonObject.optString("user_id"));
                                 SessionManager.save_session_id(prefs, jsonObject.optString("session_id"));
                                 SessionManager.save_check_login(prefs, true);
-                                JSONObject jsonData=jsonObject.optJSONObject("data");
+                                JSONObject jsonData = jsonObject.optJSONObject("data");
                                 UserData userData = UserData.fromJson(jsonObject.optJSONObject("data"));
                                 SessionManager.save_user_id(prefs, userData.getUser_id());
                                 SessionManager.save_name(prefs, userData.getUsername());
@@ -848,7 +875,11 @@ public class Login extends AppCompatActivity {
                                 SessionManager.save_profiletype(prefs, userData.getProfile_type());
                                 SessionManager.save_mobile_verified(prefs, userData.getIs_mobile_verified());
 
-                                if(jsonData.has("ambassadorProfile")) {
+
+                                // String is_mobile_verified = userData.getIs_mobile_verified();
+                                //String is_email_verified= userData.getIs_email_verified();
+
+                                if (jsonData.has("ambassadorProfile")) {
                                     JSONObject ambassadorProfile = jsonData.optJSONObject("ambassadorProfile");
 
                                     if (ambassadorProfile.length() > 0) {
@@ -872,14 +903,24 @@ public class Login extends AppCompatActivity {
 
                                 }
 
-                                if(userData.getProfile_type().equalsIgnoreCase("coach")){
-                                    JSONObject  jsonObject1= jsonData.optJSONObject("coachProfile");
+                                if (userData.getProfile_type().equalsIgnoreCase("coach")) {
+                                    JSONObject jsonObject1 = jsonData.optJSONObject("coachProfile");
                                     SessionManager.save_coach_id(prefs, jsonObject1.optString("coach_id"));
-                                }else{
-                                    SessionManager.save_coach_id(prefs,"");
+                                } else {
+                                    SessionManager.save_coach_id(prefs, "");
                                 }
                                 edit_text_email_red.setText("");
                                 editText_password_red.setText("");
+
+                                //                                if(is_mobile_verified.equalsIgnoreCase("0") && is_email_verified.equalsIgnoreCase("0")){
+//                                    EmailOtpDialog();
+//                                }else if(is_mobile_verified.equalsIgnoreCase("i") || is_email_verified.equalsIgnoreCase("1")){
+//
+//                                    Intent intent = new Intent(Login.this, MainActivity.class);
+//                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                                    startActivity(intent);
+//                                    finish();
+//                                }
 
                                 Intent intent = new Intent(Login.this, MainActivity.class);
                                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -1019,7 +1060,7 @@ public class Login extends AppCompatActivity {
                                 String personemail = json.optString("email");
                                 String personName = json.getString("first_name");
                                 String personPhotoUrl = "https://graph.facebook.com/" + personid + "/picture?type=large";
-                                System.out.println("Login details = " + personid + " " + personemail + " " + personName+" "+personPhotoUrl);
+                                System.out.println("Login details = " + personid + " " + personemail + " " + personName + " " + personPhotoUrl);
                                 String logintype = "Facebook";
                                 fb.setText(R.string.facebook_logout);
 
@@ -1119,13 +1160,13 @@ public class Login extends AppCompatActivity {
         fb_login.performClick();
     }
 
-    public void getAddress(Double latitude,Double Longitude) {
-            Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
+    public void getAddress(Double latitude, Double Longitude) {
+        Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
         List<Address> listAddresses = null;
         try {
             listAddresses = geocoder.getFromLocation(latitude, Longitude, 1);
             String countryCode = listAddresses.get(0).getCountryCode();
-            SessionManager.saveCountryCode(prefs,countryCode);
+            SessionManager.saveCountryCode(prefs, countryCode);
             //Toaster.customToast(countryCode);
         } catch (IOException e) {
             e.printStackTrace();
@@ -1150,6 +1191,263 @@ public class Login extends AppCompatActivity {
                 return;
             }
         }
+    }
+
+    private void EmailOtpDialog() {
+        final Dialog dialog = new Dialog(Login.this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.setContentView(R.layout.dialog_email_verification_checkout);
+        dialog.setCancelable(false);
+
+        TextView tvOTPTime = dialog.findViewById(R.id.tv_otp_time);
+        TextView btResend = dialog.findViewById(R.id.btn_resend);
+        Button btContinue = dialog.findViewById(R.id.btn_continue);
+        ImageView img_close = dialog.findViewById(R.id.img_close);
+        layout_enter_mobile_no = dialog.findViewById(R.id.layout_enter_mobile_no);
+        layout_otp = dialog.findViewById(R.id.layout_otp);
+        LinearLayout lay_otp_expire = dialog.findViewById(R.id.lay_otp_expire);
+        CountryCodePicker ccp = dialog.findViewById(R.id.ccp);
+        EditText edit_phone = dialog.findViewById(R.id.edit_phone);
+        Button btn_send = dialog.findViewById(R.id.btn_send);
+
+        btn_send.setOnClickListener(v -> {
+            if (edit_phone.getText().toString().trim().isEmpty()) {
+                Toaster.customToast(getResources().getString(R.string.Please_enter_mobile_no));
+            } else {
+//                /String phoneCode = ccp.getSelectedCountryCode();/
+                String phoneCode = "91";
+                String phoneNumber = edit_phone.getText().toString().trim();
+                updateMobileNo(phoneNumber, phoneCode, layout_otp, layout_enter_mobile_no);
+            }
+
+        });
+
+//        layout_enter_mobile_no.setVisibility(View.GONE);
+//        layout_otp.setVisibility(View.VISIBLE);
+        startTimer(tvOTPTime, btResend, lay_otp_expire);
+
+        btResend.setOnClickListener(view -> {
+            String phoneCode = ccp.getSelectedCountryCode();
+            String phoneNumber = edit_phone.getText().toString().trim();
+            lay_otp_expire.setVisibility(View.VISIBLE);
+            startTimer(tvOTPTime, btResend, lay_otp_expire);
+            resendOTP(phoneNumber);
+        });
+        otpView = dialog.findViewById(R.id.otp_view);
+        /*otpView.setOtpCompletionListener(new OnOtpCompletionListener() {
+            @Override
+            public void onOtpCompleted(String s) {
+
+            }
+        });
+        otpView.setOtpCompletionListener(s -> {
+        });*/
+
+        btContinue.setOnClickListener(v -> {
+            lay_otp_expire.setVisibility(View.VISIBLE);
+            if (Objects.requireNonNull(otpView.getText()).toString().isEmpty()) {
+                Toaster.customToast(getString(R.string.code_msg));
+            } else if (otpView.getText().toString().length() != 4) {
+                Toaster.customToast(getString(R.string.code_invalid));
+            } else {
+                sendVerifyOtp(otpView.getText().toString().trim(), dialog);
+            }
+        });
+
+        img_close.setOnClickListener(v -> {
+            dialog.dismiss();
+        });
+        dialog.show();
+    }
+
+    private void resendOTP(String mobile) {
+        loaderView.showLoader();
+        StringRequest postRequest = new StringRequest(Request.Method.POST, Global.URL + Global.RESEND_OTP,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Timber.tag("login response").e("%s", response);
+                        loaderView.hideLoader();
+                        try {
+                            JSONObject jsonObject = new JSONObject(response.toString());
+                            if (jsonObject.optString("api_text").equalsIgnoreCase("success")) {
+
+                            } else if (jsonObject.optString("api_text").equalsIgnoreCase("failed")) {
+                                Toaster.customToast(jsonObject.optJSONObject("errors").optString("error_text"));
+                            } else {
+                                Toaster.customToast(getResources().getString(R.string.socket_timeout));
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
+                        loaderView.hideLoader();
+                        Toaster.customToast(getResources().getString(R.string.socket_timeout));
+//                Global.msgDialog(Signup.this, "Internet connection is slow");
+                    }
+                }
+        ) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> param = new HashMap<String, String>();
+                param.put("phone_number", mobile);
+                param.put("user_id", SessionManager.get_user_id(prefs));
+                param.put("s", SessionManager.get_session_id(prefs));
+                System.out.println("data   " + param);
+                return param;
+            }
+        };
+        int socketTimeout = 30000;
+        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        postRequest.setRetryPolicy(policy);
+        queue.add(postRequest);
+    }
+
+    private void sendVerifyOtp(String otp, Dialog dialog) {
+        loaderView.showLoader();
+        StringRequest postRequest = new StringRequest(Request.Method.POST, Global.URL + Global.OTP_VERIFY,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Timber.tag("login response").e("%s", response);
+                        loaderView.hideLoader();
+                        try {
+                            JSONObject jsonObject = new JSONObject(response.toString());
+                            if (jsonObject.optString("api_text").equalsIgnoreCase("success")) {
+                                dialog.dismiss();
+
+                                Intent intent = new Intent(Login.this, MainActivity.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                startActivity(intent);
+                                finish();
+
+//                                if (Global.isOnline(mActivity)) {
+//                                    BookCoach();
+//                                } else {
+//                                    Global.showDialog(mActivity);
+//                                }
+
+                                //finish();
+                            } else if (jsonObject.optString("api_text").equalsIgnoreCase("failed")) {
+                                otpView.setText("");
+                                Toaster.customToast(jsonObject.optJSONObject("errors").optString("error_text"));
+                            } else {
+                                Toaster.customToast(getResources().getString(R.string.socket_timeout));
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
+                        loaderView.hideLoader();
+                        Toaster.customToast(getResources().getString(R.string.socket_timeout));
+//                Global.msgDialog(Signup.this, "Internet connection is slow");
+                    }
+                }
+        ) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> param = new HashMap<String, String>();
+                param.put("otp", otp);
+                param.put("user_id", SessionManager.get_user_id(prefs));
+                param.put("s", SessionManager.get_session_id(prefs));
+                System.out.println("data   " + param);
+                return param;
+            }
+        };
+        int socketTimeout = 30000;
+        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        postRequest.setRetryPolicy(policy);
+        queue.add(postRequest);
+    }
+
+    private void updateMobileNo(String mobile, String phone_code, LinearLayout lin_opt, LinearLayout lin_mobile) {
+        loaderView.showLoader();
+        StringRequest postRequest = new StringRequest(Request.Method.POST, Global.URL + Global.VERIFY_MOBILE,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Timber.tag("login response").e("%s", response);
+                        loaderView.hideLoader();
+                        try {
+                            JSONObject jsonObject = new JSONObject(response.toString());
+                            if (jsonObject.optString("api_text").equalsIgnoreCase("success")) {
+                                lin_mobile.setVisibility(View.GONE);
+                                lin_opt.setVisibility(View.VISIBLE);
+                                if (jsonObject.has("data")) {
+                                    JSONObject jsonObjectData = jsonObject.getJSONObject("data");
+                                    //phoneNumber = jsonObjectData.getString("temp_mobile_no");
+                                    SessionManager.save_name(prefs, jsonObjectData.getString("username"));
+                                    SessionManager.save_emailid(prefs, jsonObjectData.getString("email"));
+                                    SessionManager.savePhone(prefs, jsonObjectData.getString("phone_number"));
+                                    SessionManager.savePhoneCode(prefs, jsonObjectData.getString("phone_code"));
+                                    SessionManager.save_mobile_verified(prefs, jsonObjectData.getString("is_mobile_verified"));
+                                    //congratsDialog();
+
+                                }
+                            } else if (jsonObject.optString("api_text").equalsIgnoreCase("failed")) {
+                                lin_mobile.setVisibility(View.VISIBLE);
+                                lin_opt.setVisibility(View.GONE);
+                                Toaster.customToastUp(jsonObject.optJSONObject("errors").optString("error_text"));
+                            } else {
+                                Toaster.customToastUp(getResources().getString(R.string.socket_timeout));
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
+                        loaderView.hideLoader();
+                        Toaster.customToast(getResources().getString(R.string.socket_timeout));
+//                Global.msgDialog(Signup.this, "Internet connection is slow");
+                    }
+                }
+        ) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> param = new HashMap<String, String>();
+                param.put("phone_code", phone_code);
+                param.put("phone_number", mobile);
+                param.put("user_id", SessionManager.get_user_id(prefs));
+                param.put("s", SessionManager.get_session_id(prefs));
+                System.out.println("data   " + param);
+                return param;
+            }
+        };
+        int socketTimeout = 30000;
+        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        postRequest.setRetryPolicy(policy);
+        queue.add(postRequest);
+    }
+
+    private void startTimer(TextView tvOTPTime, TextView btResend, LinearLayout lay_otp_expire) {
+        new CountDownTimer(180000, 1000) {
+
+            public void onTick(long millisUntilFinished) {
+                tvOTPTime.setText("00 : " + millisUntilFinished / 1000);
+                //here you can have your logic to set text to edittext
+            }
+
+            public void onFinish() {
+                lay_otp_expire.setVisibility(View.GONE);
+                btResend.setVisibility(View.VISIBLE);
+            }
+
+        }.start();
     }
 
 }

@@ -162,7 +162,8 @@ public class MainActivity extends BaseActivity {
         text.add(new Drawer(getString(R.string.recorded_video),false, R.drawable.recording_icon));
 
 
-       Log.d("Coach",SessionManager.get_profiletype(prefs));
+      // Log.d("Coach",SessionManager.get_profiletype(prefs))
+       //Toaster.customToast(SessionManager.get_profiletype(prefs));
         if (SessionManager.get_profiletype(prefs).equalsIgnoreCase("coach")) {
             //text.add(new Drawer(getString(R.string.join_as_coach),false, R.drawable.ic_sports_handball_black_24dp));
         }else{
@@ -412,7 +413,7 @@ public class MainActivity extends BaseActivity {
         }else if (text.get(position).getTitle().equalsIgnoreCase("Register as an e-Coach")) {
            //startActivity(new Intent(mActivity,CoachSloatAvailabilityActivity.class));
             startActivity(new Intent(mActivity,CoachPersonalInfoActivity.class));
-            //finish();
+            finish();
         }
 
         else if (text.get(position).getTitle().equalsIgnoreCase("Slot")) {

@@ -227,6 +227,8 @@ public class ReferralIntroActivity extends AppCompatActivity {
                 .addOnCompleteListener(this, new OnCompleteListener<ShortDynamicLink>() {
                     @Override
                     public void onComplete(@NonNull @NotNull com.google.android.gms.tasks.Task<ShortDynamicLink> task) {
+
+                        //Log.d("task",task.getException().getMessage());
                         if (task.isSuccessful()) {
                             // Short link created
                             Uri shortLink = Objects.requireNonNull(task.getResult()).getShortLink();
@@ -423,6 +425,7 @@ public class ReferralIntroActivity extends AppCompatActivity {
                                 .buildDynamicLink();
 
                         Uri dynamicLinkUri = dynamicLink.getUri();
+                        Log.d("link",dynamicLinkUri.toString());
 
                         shareDeepLinkk(dynamicLinkUri.toString(),ref_code);
 

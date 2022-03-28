@@ -417,16 +417,16 @@ public abstract class BaseActivity extends AppCompatActivity {
      */
     protected void enablePreProcessor() {
         if (Constant.BEAUTY_EFFECT_ENABLED) {
-            rtcEngine().setBeautyEffectOptions(true, Constant.BEAUTY_OPTIONS);
+            //rtcEngine().setBeautyEffectOptions(true, Constant.BEAUTY_OPTIONS);
             //
             //rtcEngine().enableVideo();
         }
     }
 
     public final void setBeautyEffectParameters(float lightness, float smoothness, float redness) {
-        Constant.BEAUTY_OPTIONS.lighteningLevel = lightness;
-        Constant.BEAUTY_OPTIONS.smoothnessLevel = smoothness;
-        Constant.BEAUTY_OPTIONS.rednessLevel = redness;
+        //Constant.BEAUTY_OPTIONS.lighteningLevel = lightness;
+        //Constant.BEAUTY_OPTIONS.smoothnessLevel = smoothness;
+       // Constant.BEAUTY_OPTIONS.rednessLevel = redness;
     }
 
 
@@ -435,7 +435,7 @@ public abstract class BaseActivity extends AppCompatActivity {
      */
     protected void disablePreProcessor() {
         // do not support null when setBeautyEffectOptions to false
-        rtcEngine().setBeautyEffectOptions(false, Constant.BEAUTY_OPTIONS);
+        //rtcEngine().setBeautyEffectOptions(false, Constant.BEAUTY_OPTIONS);
     }
 
     protected void configEngine(VideoEncoderConfiguration.VideoDimensions videoDimension, VideoEncoderConfiguration.FRAME_RATE fps, String encryptionKey, String encryptionMode) {

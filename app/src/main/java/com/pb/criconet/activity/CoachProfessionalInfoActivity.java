@@ -138,6 +138,7 @@ public class CoachProfessionalInfoActivity extends AppCompatActivity implements 
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         toolbar.setNavigationOnClickListener(v -> {
+            startActivity(new Intent(mActivity,MainActivity.class));
             finish();
 //            if(from_where.equalsIgnoreCase("2")){
 //
@@ -503,8 +504,8 @@ public class CoachProfessionalInfoActivity extends AppCompatActivity implements 
         if (categoryId == null) {
             Toaster.customToast(mContext.getResources().getString(R.string.Please_choose_your_specialities));
             return false;
-        } else if (!Global.validateLengthofCoachRegister(etProfileTitle.getText().toString())) {
-            Toaster.customToast(mContext.getResources().getString(R.string.Fill_your_profile_title));
+        } else if (!Global.validateLengthofCoachRegisterProfileTitle(etProfileTitle.getText().toString())) {
+            Toaster.customToast(mContext.getResources().getString(R.string.Fill_your_profile_title_long));
             return false;
         } else if (selectedYear.equalsIgnoreCase("Select Year") || selectedMonth.equalsIgnoreCase("Select Month")) {
             Toaster.customToast(mContext.getResources().getString(R.string.Select_year_and_month));
@@ -595,9 +596,10 @@ public class CoachProfessionalInfoActivity extends AppCompatActivity implements 
                             if (jsonObject.has("data")) {
                                 JSONObject jsonObjectData = jsonObject.getJSONObject("data");
                                 SessionManager.save_profiletype(prefs, jsonObjectData.getString("profile_type"));
+                                Toaster.customToast(jsonObject.optString("msg"));
                             }
 
-                            Toaster.customToast(jsonObject.optString("msg"));
+
 
                             if(imagepath.isEmpty()){
                                 tv_click_uploadCertificate.setText(mContext.getResources().getString(R.string.upload_certificate));
@@ -707,5 +709,12 @@ public class CoachProfessionalInfoActivity extends AppCompatActivity implements 
         RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
         postRequest.setRetryPolicy(policy);
         queue.add(postRequest);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        startActivity(new Intent(mContext,MainActivity.class));
+        finish();
     }
 }

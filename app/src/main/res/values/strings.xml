@@ -526,6 +526,7 @@
     <string name="certificate_title">Certificate Title</string>
     <string name="Please_choose_your_specialities">Choose your specialities</string>
     <string name="Fill_your_profile_title">Enter profile title (should be 3 to 32 characters)</string>
+    <string name="Fill_your_profile_title_long">Profile title should be 8 to 40 Characters Long.</string>
     <string name="Select_year_and_month">Select year and month</string>
     <string name="Enter_Amount_session">Enter Amount/Session</string>
     <string name="Enter_Amount_sessionn">Enter Amount/Session should be greater than zero(0) </string>

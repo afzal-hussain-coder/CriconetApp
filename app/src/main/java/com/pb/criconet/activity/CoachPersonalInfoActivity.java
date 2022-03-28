@@ -81,7 +81,7 @@ import java.util.Objects;
 
 import timber.log.Timber;
 
-public class CoachPersonalInfoActivity extends AppCompatActivity {
+public class CoachPersonalInfoActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     Context mContext;
     Activity mActivity;
     private static final int CAMERA_REQUESTid = 2015;
@@ -244,10 +244,10 @@ public class CoachPersonalInfoActivity extends AppCompatActivity {
         tvCancel.setOnClickListener(v -> {
             slideUp.hide();
         });
-//
-//        spinnerCountry.setOnItemSelectedListener(this);
-//        spinnerState.setOnItemSelectedListener(this);
-//        spinnerCity.setOnItemSelectedListener(this);
+
+        spinnerCountry.setOnItemSelectedListener(this);
+        spinnerState.setOnItemSelectedListener(this);
+        spinnerCity.setOnItemSelectedListener(this);
 
 
         if (Global.isOnline(mActivity)) {
@@ -367,52 +367,6 @@ public class CoachPersonalInfoActivity extends AppCompatActivity {
 //                });
 //                // show dialog
 //                builder.show();
-            }
-        });
-
-        spinnerCountry.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (parent == spinnerCountry && position != 0) {
-                    countryID = "";
-                    state_Name = "";
-                    city_Name = "";
-                    spinnerCity.setSelection(Global.getIndex(spinnerCity, city_Name));
-                    countryID = modelArrayList.getData().get(position - 1).getId();
-                    getState(modelArrayList.getData().get(position - 1).getId());
-
-                }
-            } // to close the onItemSelected
-
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
-
-        spinnerState.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (parent == spinnerState && position != 0) {
-                    stateID = statemodelArrayList.getData().get(position - 1).getId();
-                    getCity(statemodelArrayList.getData().get(position - 1).getId());
-
-                }
-            }
-
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
-
-        spinnerCity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (parent == spinnerCity && position != 0) {
-                    cityID = citymodelArrayList.getData().get(position - 1).getId();
-                }
-            }
-
-            public void onNothingSelected(AdapterView<?> parent) {
-
             }
         });
     }
@@ -825,6 +779,11 @@ public class CoachPersonalInfoActivity extends AppCompatActivity {
                         aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                         spinnerState.setAdapter(aa);
                         spinnerState.setSelection(Global.getIndex(spinnerState, state_Name));
+
+                        if(spinnerState.getSelectedItem().equals("States")){
+                            getCity(statemodelArrayList.getData().get(i).getId());
+                        }
+                        //getCity(statemodelArrayList.getData().get(i-1).getId());
                         //spinnerState.setSelection(Global.getIndex(spinnerState, SessionManager.getStates(prefs)));
                     }
                 }
@@ -882,38 +841,35 @@ public class CoachPersonalInfoActivity extends AppCompatActivity {
         queue.add(postRequest);
     }
 
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
 
-//
-//    @Override
-//    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-//
-//        if (adapterView == spinnerCountry && i != 0) {
-//            //countryID = "";
-//            //state_Name="";
-//            //city_Name="";
-//            //spinnerState.setSelection(Global.getIndex(spinnerState, state_Name));
-//            //spinnerCity.setSelection(Global.getIndex(spinnerCity, city_Name));
-//            getState(modelArrayList.getData().get(i - 1).getId());
-//            countryID = modelArrayList.getData().get(i - 1).getId();
-//
-//
-//        } else if (adapterView == spinnerState && i != 0) {
-//            getCity(statemodelArrayList.getData().get(i - 1).getId());
-//            stateID = statemodelArrayList.getData().get(i - 1).getId();
-//        } else if (adapterView == spinnerCity && i != 0) {
-//            cityID = citymodelArrayList.getData().get(i - 1).getId();
-//        } else {
-//            state_Name = "";
-//            city_Name = "";
-//        }
-//
-//    }
-//
-//    @Override
-//    public void onNothingSelected(AdapterView<?> adapterView) {
-//
-//    }
+        if (adapterView == spinnerCountry && i != 0) {
+            //countryID = "";
+            //state_Name="";
+            //city_Name="";
+            //spinnerState.setSelection(Global.getIndex(spinnerState, state_Name));
+            //spinnerCity.setSelection(Global.getIndex(spinnerCity, city_Name));
+            getState(modelArrayList.getData().get(i - 1).getId());
+            countryID = modelArrayList.getData().get(i - 1).getId();
 
+
+        } else if (adapterView == spinnerState && i != 0) {
+            getCity(statemodelArrayList.getData().get(i - 1).getId());
+            stateID = statemodelArrayList.getData().get(i - 1).getId();
+        } else if (adapterView == spinnerCity && i != 0) {
+            cityID = citymodelArrayList.getData().get(i - 1).getId();
+        } else {
+            state_Name = "";
+            city_Name = "";
+        }
+
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
+    }
 
     private void setData(JSONObject data) {
         if (data.has("languages")) {
@@ -1474,6 +1430,5 @@ public class CoachPersonalInfoActivity extends AppCompatActivity {
         super.onBackPressed();
         finish();
     }
-
 
 }

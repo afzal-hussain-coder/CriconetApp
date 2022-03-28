@@ -261,7 +261,6 @@ public class FragmentExperienceSetting extends Fragment implements CoachButtonAd
             }
         });
 
-
         spinerYear = rootView.findViewById(R.id.spinerYear);
         //option.add(new com.pb.criconet.Utills.DataModel("Select Year"));
         option.add(new com.pb.criconet.Utills.DataModel("0 year"));
@@ -499,8 +498,8 @@ public class FragmentExperienceSetting extends Fragment implements CoachButtonAd
         if (categoryId == null) {
             Toaster.customToast(getActivity().getResources().getString(R.string.Please_choose_your_specialities));
             return false;
-        } else if (!Global.validateLengthofCoachRegister(etProfileTitle.getText().toString())) {
-            Toaster.customToast(mContext.getResources().getString(R.string.Fill_your_profile_title));
+        }else if (!Global.validateLengthofCoachRegisterProfileTitle(etProfileTitle.getText().toString())) {
+            Toaster.customToast(mContext.getResources().getString(R.string.Fill_your_profile_title_long));
             return false;
         } else if (selectedYear.equalsIgnoreCase("Select Year") || selectedMonth.equalsIgnoreCase("Select Month")) {
             Toaster.customToast(mContext.getResources().getString(R.string.Select_year_and_month));

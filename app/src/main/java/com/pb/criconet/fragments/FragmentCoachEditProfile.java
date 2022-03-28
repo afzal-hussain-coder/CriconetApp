@@ -99,13 +99,13 @@ import java.util.Objects;
 
 import timber.log.Timber;
 
-public class FragmentCoachEditProfile extends Fragment {
+public class FragmentCoachEditProfile extends Fragment implements AdapterView.OnItemSelectedListener {
     View rootView;
     private static final int CAMERA_REQUESTid = 2015;
     private static final int PICK_IMAGEid = 100;
     private SharedPreferences prefs;
-    private String  fname_String, mname_String, lname_String, gender_String, countryID="", stateID="",cityID="",address1,address2,pincode,mobile;
-    private EditText etAddress2, edttxt_fname, edttxt_lname, etAddress, edttxt_birthday, edttxt_phone,etPincode,
+    private String fname_String, mname_String, lname_String, gender_String, countryID = "", stateID = "", cityID = "", address1, address2, pincode, mobile;
+    private EditText etAddress2, edttxt_fname, edttxt_lname, etAddress, edttxt_birthday, edttxt_phone, etPincode,
             edttxt_fb_profileLink, edttxt_twitter_profile, edttxt_linkind_profile, edttxt_instagram_profile, edttxt_youtube_profile;
     private Spinner spn_language;
     private Spinner spinnerCountry;
@@ -119,7 +119,7 @@ public class FragmentCoachEditProfile extends Fragment {
     private int columnindex, i;
     private Uri URIid = null;
     private Uri selectedImageid, mCapturedImageURIid;
-    private String file_pathid = "", image_pathid = "",phoneNumber;
+    private String file_pathid = "", image_pathid = "", phoneNumber;
     private String imagepath = "";
     private String img_type = "";
 
@@ -143,20 +143,20 @@ public class FragmentCoachEditProfile extends Fragment {
     TextView textView_language;
     boolean[] selectedLanguage;
     ArrayList<Integer> langList = new ArrayList<>();
-    ArrayList<Language.Datum> language=null;
-    ArrayList<CoachLanguage> editlanguage=null;
+    ArrayList<Language.Datum> language = null;
+    ArrayList<CoachLanguage> editlanguage = null;
     String[] langArray = null;
     private OtpView otpView;
-    String countryId="";
-    String state_Name="";
-    String country_Name="";
-    String city_Name="";
-    String twitter="";
-    String facebook="";
-    String linkedin="";
-    String instagram="";
-    String youtube="";
-
+    String countryId = "";
+    String state_Name = "";
+    String country_Name = "";
+    String city_Name = "";
+    String twitter = "";
+    String facebook = "";
+    String linkedin = "";
+    String instagram = "";
+    String youtube = "";
+    String country_Namee="";
     ArrayList<String> languageArray_new = new ArrayList<>();
     Dialog dialog;
     private StringBuilder langStringBuilder;
@@ -165,8 +165,6 @@ public class FragmentCoachEditProfile extends Fragment {
     public static FragmentCoachEditProfile newInstance() {
         return new FragmentCoachEditProfile();
     }
-
-
 
 
     @Override
@@ -193,8 +191,8 @@ public class FragmentCoachEditProfile extends Fragment {
 
 
         edttxt_fname = rootView.findViewById(R.id.edttxt_fname);
-        edttxt_Mname =rootView.findViewById(R.id.edttxt_Mname);
-        edttxt_lname =rootView.findViewById(R.id.edttxt_lname);
+        edttxt_Mname = rootView.findViewById(R.id.edttxt_Mname);
+        edttxt_lname = rootView.findViewById(R.id.edttxt_lname);
         etAddress = rootView.findViewById(R.id.etAddress);
         etAddress2 = rootView.findViewById(R.id.etAddress2);
         edttxt_phone = rootView.findViewById(R.id.edttxt_phone);
@@ -208,20 +206,20 @@ public class FragmentCoachEditProfile extends Fragment {
         spn_language = rootView.findViewById(R.id.spn_language);
         spinnerCountry = rootView.findViewById(R.id.spinerCountry);
         spinnerState = rootView.findViewById(R.id.spinerState);
-        spinnerCity =  rootView.findViewById(R.id.spinerCity);
-        profile_image =  rootView.findViewById(R.id.profile_pic);
+        spinnerCity = rootView.findViewById(R.id.spinerCity);
+        profile_image = rootView.findViewById(R.id.profile_pic);
         middle = rootView.findViewById(R.id.middle);
-        cover_img =rootView.findViewById(R.id.cover_img);
-        imageView =rootView.findViewById(R.id.imageView);
-        btn_login =rootView.findViewById(R.id.btn_login);
+        cover_img = rootView.findViewById(R.id.cover_img);
+        imageView = rootView.findViewById(R.id.imageView);
+        btn_login = rootView.findViewById(R.id.btn_login);
 
         rootViewPost = rootView.findViewById(R.id.root_vieww);
         slideView = rootView.findViewById(R.id.slideView);
         dim = rootView.findViewById(R.id.dim);
-        tv_camera=rootView.findViewById(R.id.tv_camera);
-        tvGallery=rootView.findViewById(R.id.tvGallery);
-        tvCancel=rootView.findViewById(R.id.tvCancel);
-        tv_choose=rootView.findViewById(R.id.tv_choose);
+        tv_camera = rootView.findViewById(R.id.tv_camera);
+        tvGallery = rootView.findViewById(R.id.tvGallery);
+        tvCancel = rootView.findViewById(R.id.tvCancel);
+        tv_choose = rootView.findViewById(R.id.tv_choose);
         slideUp = new SlideUpBuilder(slideView)
                 .withListeners(new SlideUp.Listener.Events() {
                     @Override
@@ -247,17 +245,16 @@ public class FragmentCoachEditProfile extends Fragment {
         tvCancel.setOnClickListener(v -> {
             slideUp.hide();
         });
-//
-//        spinnerCountry.setOnItemSelectedListener(this);
-//        spinnerState.setOnItemSelectedListener(this);
-//        spinnerCity.setOnItemSelectedListener(this);
+
+        spinnerCountry.setOnItemSelectedListener(this);
+        spinnerState.setOnItemSelectedListener(this);
+        spinnerCity.setOnItemSelectedListener(this);
 
 
         if (Global.isOnline(getActivity())) {
-
             getLanguage();
             getUsersDetails();
-
+            getCountry();
         } else {
             Global.showDialog(getActivity());
         }
@@ -274,7 +271,8 @@ public class FragmentCoachEditProfile extends Fragment {
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                checkMethod();
+
+               checkMethod();
             }
         });
 
@@ -282,52 +280,6 @@ public class FragmentCoachEditProfile extends Fragment {
             @Override
             public void onClick(View view) {
                 dialog.show();
-            }
-        });
-
-        spinnerCountry.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (parent == spinnerCountry && position != 0) {
-                    countryID = "";
-                    state_Name = "";
-                    city_Name = "";
-                    spinnerCity.setSelection(Global.getIndex(spinnerCity, city_Name));
-                    countryID = modelArrayList.getData().get(position - 1).getId();
-                    getState(modelArrayList.getData().get(position - 1).getId());
-
-                }
-            } // to close the onItemSelected
-
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
-
-        spinnerState.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (parent == spinnerState && position != 0) {
-                    stateID = statemodelArrayList.getData().get(position - 1).getId();
-                    getCity(statemodelArrayList.getData().get(position - 1).getId());
-
-                }
-            }
-
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
-
-        spinnerCity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (parent == spinnerCity && position != 0) {
-                    cityID = citymodelArrayList.getData().get(position - 1).getId();
-                }
-            }
-
-            public void onNothingSelected(AdapterView<?> parent) {
-
             }
         });
 
@@ -348,6 +300,7 @@ public class FragmentCoachEditProfile extends Fragment {
             slideUp.hide();
         });
     }
+
     private void checkMethod() {
         fname_String = edttxt_fname.getText().toString().trim();
         mname_String = edttxt_Mname.getText().toString().trim();
@@ -372,41 +325,37 @@ public class FragmentCoachEditProfile extends Fragment {
 //        }
         else if (!Global.validateLengthofCoachRegister(lname_String)) {
             Toaster.customToast(getResources().getString(R.string.Enter_Last_Name));
-        }
-        else if (textView_language.getText().equals("")) {
+        } else if (textView_language.getText().equals("")) {
             Toaster.customToast(getResources().getString(R.string.select_language));
-        }else if (languageArray_new.size() >5) {
+        } else if (languageArray_new.size() > 5) {
             Toaster.customToast(getResources().getString(R.string.you_can_only_select_five_item));
-        }
-        else if(countryID.equalsIgnoreCase("")){
+        } else if (spinnerCountry.getSelectedItem().equals("Country")) {
             Toaster.customToast(getResources().getString(R.string.Select_Country));
         }
-//        else if(stateID.equalsIgnoreCase("")){
-            //Toaster.customToast(getResources().getString(R.string.Select_City));
-//        }else if(cityID.equalsIgnoreCase("")){
-           // Toaster.customToast(getResources().getString(R.string.Select_State));
+//        else if(spinnerState.getSelectedItem().equals("States")){
+//            Toaster.customToast(getResources().getString(R.string.Select_State));
+//        }else if(spinnerCity.getSelectedItem().equals("City")){
+//            Toaster.customToast(getResources().getString(R.string.Select_City));
 //        }
-        else if(address1.isEmpty()){
+        else if (address1.isEmpty()) {
             Toaster.customToast(getResources().getString(R.string.Enter_your_address));
         }
 //        else if(!Global.validateLength(address2, 3)){
 //            Toaster.customToast(getResources().getString(R.string.enter_landmark));
 //        }
-        else if(pincode.equalsIgnoreCase("111111") ||pincode.equalsIgnoreCase("222222")||
+        else if (pincode.equalsIgnoreCase("111111") || pincode.equalsIgnoreCase("222222") ||
                 pincode.equalsIgnoreCase("333333") || pincode.equalsIgnoreCase("444444") ||
-                pincode.equalsIgnoreCase("555555") || pincode.equalsIgnoreCase("666666")||
-                pincode.equalsIgnoreCase("777777") || pincode.equalsIgnoreCase("888888")||
-                pincode.equalsIgnoreCase("999999")||pincode.equalsIgnoreCase("000000")){
+                pincode.equalsIgnoreCase("555555") || pincode.equalsIgnoreCase("666666") ||
+                pincode.equalsIgnoreCase("777777") || pincode.equalsIgnoreCase("888888") ||
+                pincode.equalsIgnoreCase("999999") || pincode.equalsIgnoreCase("000000")) {
             Toaster.customToast(getResources().getString(R.string.enter_pincodee));
-        }
-        else if(!Global.isValidPincode(pincode)){
+        } else if (!Global.isValidPincode(pincode)) {
             Toaster.customToast(getResources().getString(R.string.enter_pincode));
-        }else if(!Global.isValidPhoneNumber(mobile)){
+        } else if (!Global.isValidPhoneNumber(mobile)) {
             Toaster.customToast(getResources().getString(R.string.Enter_your_phone_number));
-        } else if(imagepath.equalsIgnoreCase("")){
+        } else if (imagepath.equalsIgnoreCase("")) {
             Toaster.customToast(getResources().getString(R.string.Upload_profile_picture));
-        }
-        else {
+        } else {
             if (Global.isOnline(getActivity())) {
                 submitCoachPersonalInfo();
             } else {
@@ -517,113 +466,13 @@ public class FragmentCoachEditProfile extends Fragment {
         return cursor.getString(idx);
     }
 
-    private void setData(JSONObject  data) {
-
-        if(data.has("first_name")){
-            edttxt_fname.setText(data.optString("first_name"));
-        }
-        if(data.has("last_name")){
-            edttxt_lname.setText(data.optString("last_name"));
-        }
-        if(data.has("mid_name")){
-            try {
-                edttxt_Mname.setText(data.getString("mid_name"));
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-        if(data.has("avatar")){
-            imagepath=data.optString("avatar");
-            Glide.with(getActivity()).load(data.optString("avatar")).into(profile_image);
-        }
-        if(data.has("country_name")){
-            country_Name=data.optString("country_name");
-            countryID= data.optString("country_id");
-            getCountry();
-            getState(countryID);
-
-        }
-        if(data.has("state_name")){
-            state_Name = data.optString("state_name");
-            stateID = data.optString("state_id");
-            getCity(stateID);
-        }
-        if(data.has("city_name")){
-            city_Name = data.optString("city_name");
-        }
-        if(data.has("pincode")){
-            etPincode.setText(data.optString("pincode"));
-        }
-        if(data.has("phone_number")){
-            edttxt_phone.setText(data.optString("phone_number"));
-        }
-        if(data.has("address")){
-            etAddress.setText(data.optString("address"));
-        }
-        if(data.has("address2")){
-            etAddress2.setText(data.optString("address2"));
-        }
-        if(data.has("facebook")){
-            edttxt_fb_profileLink.setText(data.optString("facebook"));
-        }
-        if(data.has("twitter")){
-            edttxt_twitter_profile.setText(data.optString("twitter"));
-        }
-
-        if(data.has("linkedin")){
-            edttxt_linkind_profile.setText(data.optString("linkedin"));
-        }
-        if(data.has("instagram")){
-            edttxt_instagram_profile.setText(data.optString("instagram"));
-        }
-        if(data.has("youtube")){
-            edttxt_youtube_profile.setText(data.optString("youtube"));
-        }
-
-        if(data.has("languages")){
-
-            try {
-                JSONArray jsonArray = data.getJSONArray("languages");
-                JSONObject jsonObject=null;
-                Log.d("JSONL",jsonArray.length()+"");
-
-                ArrayList<String>coachLanguages = new ArrayList<>();
-                for(int i= 0;i<jsonArray.length();i++){
-                    jsonObject = jsonArray.getJSONObject(i);
-                    CoachLanguage coachLanguage= new CoachLanguage(jsonObject);
-                    coachLanguages.add(coachLanguage.getName_eng());
-                }
-                   Log.d("sizel",coachLanguages.size()+"");
-                langStringBuilder = new StringBuilder();
-                String prefix = "";
-                for (String item : coachLanguages) {
-                    langStringBuilder.append(prefix);
-                    prefix = ",";
-                    langStringBuilder.append(item);
-                }
-                //Log.d("size",langStringBuilder.toString());
-
-                textView_language.setText(langStringBuilder.toString());
-
-                //Log.d("size",coachLanguages.size()+"");
-
-                languageSelectionDialog(language,coachLanguages);
-
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-
-    }
-
     private void editprofile_task() {
         //loaderView.showLoader();
         StringRequest postRequest = new StringRequest(Request.Method.POST, Global.URL + "update_user_data",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Log.d("UpdateResponse",response);
+                        Log.d("UpdateResponse", response);
                         loaderView.hideLoader();
                         try {
                             JSONObject jsonObject = new JSONObject(response.toString());
@@ -739,210 +588,21 @@ public class FragmentCoachEditProfile extends Fragment {
 
     }
 
-    private void getCountry() {
-        StringRequest postRequest = new StringRequest(Request.Method.POST, Global.URL + "get_countries", new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                Log.d("ResponseCountry",response);
-                Gson gson = new Gson();
-                modelArrayList = gson.fromJson(response, Country.class);
-                if(modelArrayList.getApiStatus().equalsIgnoreCase("200")) {
-                    ArrayList<String> country = new ArrayList<>();
-                    //country.add("Country");
-                    for (Country.Datum data : modelArrayList.getData()) {
-                        country.add(data.getName());
-                    }
-                    ArrayAdapter aa = new ArrayAdapter(getActivity(), R.layout.custom_spinner, country);
-                    aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    spinnerCountry.setAdapter(aa);
-                    spinnerCountry.setSelection(Global.getIndex(spinnerCountry, country_Name));
-
-//                    for(int i=0;i<country.size();i++){
-//                        if(country.get(i).equalsIgnoreCase("India")){
-//                            spinnerCountry.setSelection(Global.getIndex(spinnerCountry, country.get(i)));
-//                            break;
-//                        }
-//                    }
-
-
-
-
-                }
-
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
-                Global.msgDialog(getActivity(), getResources().getString(R.string.error_server));
-            }
-        }) {
-            @Override
-            protected Map<String, String> getParams() {
-                Map<String, String> param = new HashMap<String, String>();
-                param.put("user_id", SessionManager.get_user_id(prefs));
-                param.put("s", SessionManager.get_session_id(prefs));
-                return param;
-            }
-        };
-        int socketTimeout = 30000;
-        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-        postRequest.setRetryPolicy(policy);
-        queue.add(postRequest);
-    }
-
-    private void getState(String countryId) {
-        //loaderView.showLoader();
-        StringRequest postRequest = new StringRequest(Request.Method.GET, Global.URL + "get_states"+"&country_id="+countryId, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                Log.d("ResponseSatate",response);
-                if(!response.isEmpty()) {
-                    //loaderView.hideLoader();
-                    Gson gson = new Gson();
-                    statemodelArrayList = gson.fromJson(response, States.class);
-                    if(statemodelArrayList.getApiStatus().equalsIgnoreCase("200")) {
-                        ArrayList<String> state = new ArrayList<>();
-                        //state.add("States");
-                        for (States.Datum data : statemodelArrayList.getData()) {
-                            state.add(data.getName());
-                        }
-                        ArrayAdapter aa = new ArrayAdapter(getActivity(), R.layout.custom_spinner, state);
-                        aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        spinnerState.setAdapter(aa);
-
-                        spinnerState.setSelection(Global.getIndex(spinnerState, state_Name));
-                    }
-                }
-
-
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                //loaderView.hideLoader();
-                error.printStackTrace();
-                Global.msgDialog(getActivity(), getResources().getString(R.string.error_server));
-            }
-        });
-        int socketTimeout = 30000;
-        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-        postRequest.setRetryPolicy(policy);
-        Log.e("Request",postRequest.toString());
-        queue.add(postRequest);
-    }
-
-    private void getCity(String stateId) {
-        //loaderView.showLoader();
-        StringRequest postRequest = new StringRequest(Request.Method.GET, Global.URL + "get_cities"+"&state_id="+stateId, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                Log.d("ResponseCity",response);
-                //loaderView.hideLoader();
-                Gson gson = new Gson();
-                citymodelArrayList = gson.fromJson(response, City.class);
-                if(citymodelArrayList.getApiStatus().equalsIgnoreCase("200")) {
-                    ArrayList<String> city = new ArrayList<>();
-                    //city.add("City");
-                    for (City.Datum data : citymodelArrayList.getData()) {
-                        city.add(data.getName());
-                    }
-                    ArrayAdapter aa = new ArrayAdapter(getActivity(), R.layout.custom_spinner, city);
-                    aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    spinnerCity.setAdapter(aa);
-                    spinnerCity.setSelection(Global.getIndex(spinnerCity, city_Name));
-                }
-
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                //loaderView.hideLoader();
-                error.printStackTrace();
-                Global.msgDialog(getActivity(), getResources().getString(R.string.error_server));
-            }
-        }) ;
-        int socketTimeout = 30000;
-        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-        postRequest.setRetryPolicy(policy);
-        queue.add(postRequest);
-    }
-
-    private void getLanguage() {
-        StringRequest postRequest = new StringRequest(Request.Method.POST, Global.URL + Global.GET_LANGUAGE, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                Log.d("ResponseCountry",response);
-                Gson gson = new Gson();
-                languageModelArrayList = gson.fromJson(response, Language.class);
-                if(languageModelArrayList.getApiStatus().equalsIgnoreCase("200")) {
-                    language = new ArrayList<>();
-                    //language.add("Language");
-                    for (Language.Datum datum : languageModelArrayList.getData()) {
-                        language.add(datum);
-                    }
-                    //language.remove(0);
-                    languageSelectionDialog(language,new ArrayList<>());
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
-                Global.msgDialog(getActivity(), getResources().getString(R.string.error_server));
-            }
-        }) {
-            @Override
-            protected Map<String, String> getParams() {
-                Map<String, String> param = new HashMap<String, String>();
-                param.put("user_id", SessionManager.get_user_id(prefs));
-                param.put("s", SessionManager.get_session_id(prefs));
-                return param;
-            }
-        };
-        int socketTimeout = 30000;
-        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-        postRequest.setRetryPolicy(policy);
-        queue.add(postRequest);
-    }
-
-//    @Override
-//    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-//
-//        if(adapterView==spinnerCountry && i!=0) {
-//            state_Name="";
-//            city_Name="";
-//            getState(modelArrayList.getData().get(i).getId());
-//            countryID=modelArrayList.getData().get(i).getId();
-//        }else if(adapterView==spinnerState && i!=0){
-//            getCity(statemodelArrayList.getData().get(i).getId());
-//            stateID=statemodelArrayList.getData().get(i).getId();
-//        }else if(adapterView==spinnerCity && i!=0){
-//            cityID=citymodelArrayList.getData().get(i).getId();
-//        }
-//
-//    }
-//
-//    @Override
-//    public void onNothingSelected(AdapterView<?> adapterView) {
-//
-//    }
-
     public void getUsersDetails() {
         //loaderView.showLoader();
         StringRequest postRequest = new StringRequest(Request.Method.POST, Global.URL + "get_user_data",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Log.d("getUserDetails",response);
+                        Log.d("getUserDetails", response);
                         //loaderView.hideLoader();
                         try {
                             JSONObject jsonObject = new JSONObject(response.toString());
                             if (jsonObject.optString("api_text").equalsIgnoreCase("Success")) {
                                 JSONObject object = jsonObject.getJSONObject("coach_data");
 
-                                if(object.has("personal_info")){
-                                    JSONObject jsonObject_personal_info= object.getJSONObject("personal_info");
+                                if (object.has("personal_info")) {
+                                    JSONObject jsonObject_personal_info = object.getJSONObject("personal_info");
                                     setData(jsonObject_personal_info);
                                 }
                             } else if (jsonObject.optString("api_text").equalsIgnoreCase("failed")) {
@@ -982,6 +642,323 @@ public class FragmentCoachEditProfile extends Fragment {
 
     }
 
+    private void getCountry() {
+        StringRequest postRequest = new StringRequest(Request.Method.POST, Global.URL + "get_countries", new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.d("ResponseCountry", response);
+                Gson gson = new Gson();
+                modelArrayList = gson.fromJson(response, Country.class);
+                if (modelArrayList.getApiStatus().equalsIgnoreCase("200")) {
+                    ArrayList<String> country = new ArrayList<>();
+                    //country.add("Country");
+                    for (Country.Datum data : modelArrayList.getData()) {
+                        country.add(data.getName());
+                    }
+
+                    //countryID="";
+                    ArrayAdapter aa = new ArrayAdapter(getContext(), R.layout.custom_spinner, country);
+                    aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    spinnerCountry.setAdapter(aa);
+
+//                    for (int i = 0; i < country.size(); i++) {
+//                        if (country.get(i).equalsIgnoreCase(country_Name)) {
+//                            country_Namee = country.get(i);
+//                            spinnerCountry.setSelection(Global.getIndex(spinnerCountry, country_Namee));
+//                            break;
+//                        }
+//                    }
+
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                Global.msgDialog(getActivity(), getResources().getString(R.string.error_server));
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> param = new HashMap<String, String>();
+                param.put("user_id", SessionManager.get_user_id(prefs));
+                param.put("s", SessionManager.get_session_id(prefs));
+                return param;
+            }
+        };
+        int socketTimeout = 30000;
+        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        postRequest.setRetryPolicy(policy);
+        queue.add(postRequest);
+    }
+
+    private void getState(String countryId) {
+        loaderView.showLoader();
+        StringRequest postRequest = new StringRequest(Request.Method.GET, Global.URL + "get_states" + "&country_id=" + countryId, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.d("ResponseSatate", response);
+                if (!response.isEmpty()) {
+                    loaderView.hideLoader();
+                    Gson gson = new Gson();
+                    statemodelArrayList = gson.fromJson(response, States.class);
+                    if (statemodelArrayList.getApiStatus().equalsIgnoreCase("200")) {
+                        ArrayList<String> state = new ArrayList<>();
+                        //state.add("States");
+                        for (States.Datum data : statemodelArrayList.getData()) {
+                            state.add(data.getName());
+                        }
+
+                        ArrayAdapter aa = new ArrayAdapter(getActivity(), R.layout.custom_spinner, state);
+                        aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        spinnerState.setAdapter(aa);
+
+                        spinnerState.setSelection(Global.getIndex(spinnerState, state_Name));
+//                        for (int i = 0; i < state.size(); i++) {
+//                            if (state.get(i).equalsIgnoreCase(state_Name)) {
+//                                country_Name = state.get(i);
+//                                spinnerState.setSelection(Global.getIndex(spinnerState, country_Name));
+//                                break;
+//                            }
+//                        }
+
+                        //Toaster.customToast(state_Name);
+                        //spinnerState.setSelection(Global.getIndex(spinnerState, state_Name));
+
+//                        if(spinnerState.getSelectedItem().equals("States")){
+//                            getCity(statemodelArrayList.getData().get(i).getId());
+//                        }
+                        //getCity(statemodelArrayList.getData().get(i-1).getId());
+                        //spinnerState.setSelection(Global.getIndex(spinnerState, SessionManager.getStates(prefs)));
+                    }
+                }
+
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                loaderView.hideLoader();
+                error.printStackTrace();
+                Global.msgDialog(getActivity(), getResources().getString(R.string.error_server));
+            }
+        });
+        int socketTimeout = 30000;
+        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        postRequest.setRetryPolicy(policy);
+        queue.add(postRequest);
+    }
+
+    private void getCity(String stateId) {
+        loaderView.showLoader();
+        StringRequest postRequest = new StringRequest(Request.Method.GET, Global.URL + "get_cities" + "&state_id=" + stateId, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.d("ResponseCity", response);
+                loaderView.hideLoader();
+                Gson gson = new Gson();
+                citymodelArrayList = gson.fromJson(response, City.class);
+                if (citymodelArrayList.getApiStatus().equalsIgnoreCase("200")) {
+                    ArrayList<String> city = new ArrayList<>();
+                    //city.add("City");
+                    for (City.Datum data : citymodelArrayList.getData()) {
+                        city.add(data.getName());
+                    }
+                    ArrayAdapter aa = new ArrayAdapter(getContext(), R.layout.custom_spinner, city);
+                    aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    spinnerCity.setAdapter(aa);
+                    spinnerCity.setSelection(Global.getIndex(spinnerCity, city_Name));
+
+//                    for (int i = 0; i < city.size(); i++) {
+//                        if (city.get(i).equalsIgnoreCase(city_Name)) {
+//                            country_Name = city.get(i);
+//                            spinnerCity.setSelection(Global.getIndex(spinnerCity, country_Name));
+//                            break;
+//                        }
+//                    }
+                    //spinnerCity.setSelection(Global.getIndex(spinnerCity, city_Name));
+                    //spinnerCity.setSelection(Global.getIndex(spinnerCity, SessionManager.getCity(prefs)));
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                loaderView.hideLoader();
+                error.printStackTrace();
+                Global.msgDialog(getActivity(), getResources().getString(R.string.error_server));
+            }
+        });
+        int socketTimeout = 30000;
+        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        postRequest.setRetryPolicy(policy);
+        queue.add(postRequest);
+    }
+
+    private void getLanguage() {
+        StringRequest postRequest = new StringRequest(Request.Method.POST, Global.URL + Global.GET_LANGUAGE, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.d("ResponseCountry", response);
+                Gson gson = new Gson();
+                languageModelArrayList = gson.fromJson(response, Language.class);
+                if (languageModelArrayList.getApiStatus().equalsIgnoreCase("200")) {
+                    language = new ArrayList<>();
+                    //language.add("Language");
+                    for (Language.Datum datum : languageModelArrayList.getData()) {
+                        language.add(datum);
+                    }
+                    //language.remove(0);
+                    languageSelectionDialog(language, new ArrayList<>());
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                Global.msgDialog(getActivity(), getResources().getString(R.string.error_server));
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> param = new HashMap<String, String>();
+                param.put("user_id", SessionManager.get_user_id(prefs));
+                param.put("s", SessionManager.get_session_id(prefs));
+                return param;
+            }
+        };
+        int socketTimeout = 30000;
+        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        postRequest.setRetryPolicy(policy);
+        queue.add(postRequest);
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
+        if (adapterView == spinnerCountry && i != 0) {
+            countryID = modelArrayList.getData().get(i).getId();
+            getState(countryID);
+            stateID="";
+            cityID="";
+            spinnerState.setSelection(Global.getIndex(spinnerState, ""));
+            spinnerCity.setSelection(Global.getIndex(spinnerCity, ""));
+
+        } else if (adapterView == spinnerState && i != 0) {
+            stateID = statemodelArrayList.getData().get(i - 1).getId();
+            getCity(statemodelArrayList.getData().get(i - 1).getId());
+        } else if (adapterView == spinnerCity && i != 0) {
+            cityID = citymodelArrayList.getData().get(i - 1).getId();
+        }
+
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
+    }
+
+    private void setData(JSONObject data) {
+
+        if (data.has("first_name")) {
+            edttxt_fname.setText(data.optString("first_name"));
+        }
+        if (data.has("last_name")) {
+            edttxt_lname.setText(data.optString("last_name"));
+        }
+        if (data.has("mid_name")) {
+            try {
+                edttxt_Mname.setText(data.getString("mid_name"));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        if (data.has("avatar")) {
+            imagepath = data.optString("avatar");
+            Glide.with(getActivity()).load(data.optString("avatar")).into(profile_image);
+        }
+        if (data.has("country_name")) {
+            country_Name = data.optString("country_name");
+            countryID = data.optString("country_id");
+            getState(countryID);
+            spinnerCountry.setSelection(Global.getIndex(spinnerCountry, country_Name));
+
+        }
+        if (data.has("state_name")) {
+            state_Name = data.optString("state_name");
+            stateID = data.optString("state_id");
+            getCity(stateID);
+        }
+        if (data.has("city_name")) {
+            city_Name = data.optString("city_name");
+        }
+        if (data.has("pincode")) {
+            etPincode.setText(data.optString("pincode"));
+        }
+        if (data.has("phone_number")) {
+            edttxt_phone.setText(data.optString("phone_number"));
+        }
+        if (data.has("address")) {
+            etAddress.setText(data.optString("address"));
+        }
+        if (data.has("address2")) {
+            etAddress2.setText(data.optString("address2"));
+        }
+        if (data.has("facebook")) {
+            edttxt_fb_profileLink.setText(data.optString("facebook"));
+        }
+        if (data.has("twitter")) {
+            edttxt_twitter_profile.setText(data.optString("twitter"));
+        }
+
+        if (data.has("linkedin")) {
+            edttxt_linkind_profile.setText(data.optString("linkedin"));
+        }
+        if (data.has("instagram")) {
+            edttxt_instagram_profile.setText(data.optString("instagram"));
+        }
+        if (data.has("youtube")) {
+            edttxt_youtube_profile.setText(data.optString("youtube"));
+        }
+
+        if (data.has("languages")) {
+
+            try {
+                JSONArray jsonArray = data.getJSONArray("languages");
+                JSONObject jsonObject = null;
+                Timber.d("%s", jsonArray.length());
+
+                ArrayList<String> coachLanguages = new ArrayList<>();
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    jsonObject = jsonArray.getJSONObject(i);
+                    CoachLanguage coachLanguage = new CoachLanguage(jsonObject);
+                    coachLanguages.add(coachLanguage.getName_eng());
+                }
+                Timber.d("%s", coachLanguages.size());
+                langStringBuilder = new StringBuilder();
+                String prefix = "";
+                for (String item : coachLanguages) {
+                    langStringBuilder.append(prefix);
+                    prefix = ",";
+                    langStringBuilder.append(item);
+                }
+                //Log.d("size",langStringBuilder.toString());
+
+                textView_language.setText(langStringBuilder.toString());
+
+                //Log.d("size",coachLanguages.size()+"");
+
+                languageSelectionDialog(language, coachLanguages);
+
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
+
     public void submitCoachPersonalInfo() {
         loaderView.showLoader();
         StringRequest postRequest = new StringRequest(Request.Method.POST, Global.URL + Global.UPDATE_COACH_PERSONAL_INFO,
@@ -994,7 +971,7 @@ public class FragmentCoachEditProfile extends Fragment {
                         try {
                             JSONObject jsonObject = new JSONObject(response.toString());
                             if (jsonObject.optString("api_text").equalsIgnoreCase("Success")) {
-                               // Global.msgDialog(getActivity(), "Profile saved successfully!");
+                                // Global.msgDialog(getActivity(), "Profile saved successfully!");
 
                                 if (jsonObject.has("data")) {
                                     JSONObject jsonObjectData = jsonObject.getJSONObject("data");
@@ -1011,16 +988,16 @@ public class FragmentCoachEditProfile extends Fragment {
 
 
                                     String is_contact_verify = jsonObjectData.getString("is_mobile_verified");
-                                    if(is_contact_verify.equalsIgnoreCase("0")){
+                                    if (is_contact_verify.equalsIgnoreCase("0")) {
                                         EmailOtpDialog(phoneNumber);
-                                    }else{
+                                    } else {
                                         Toaster.customToast(getResources().getString(R.string.Information_update_successfully));
                                     }
                                     //EmailOtpDialog(phoneNumber);
 
                                 }
 
-                                } else if (jsonObject.optString("api_text").equalsIgnoreCase("failed")) {
+                            } else if (jsonObject.optString("api_text").equalsIgnoreCase("failed")) {
                                 Global.msgDialog(getActivity(), jsonObject.optString("errors"));
                             } else {
                                 Global.msgDialog(getActivity(), getResources().getString(R.string.error_server));
@@ -1190,23 +1167,23 @@ public class FragmentCoachEditProfile extends Fragment {
                                     SessionManager.save_mobile_verified(prefs, jsonObjectData.getString("is_mobile_verified"));
                                     JSONObject ambassadorProfile = jsonObjectData.getJSONObject("ambassadorProfile");
 
-                                    if(ambassadorProfile.length()>0){
-                                        SessionManager.save_is_ambassador(prefs,"1");
-                                        SessionManager.save_is_amb_name(prefs,ambassadorProfile.getString("name"));
-                                        SessionManager.save_is_amb_fullname(prefs,ambassadorProfile.getString("full_name"));
-                                        SessionManager.save_is_amb_email(prefs,ambassadorProfile.getString("email"));
-                                        SessionManager.save_mobile(prefs,ambassadorProfile.getString("phone_number"));
-                                        SessionManager.save_is_amb_college(prefs,ambassadorProfile.getString("school_college_name"));
-                                        SessionManager.save_is_amb_highestQ(prefs,ambassadorProfile.getString("height_qualification"));
-                                        SessionManager.save_is_ambs_have_you_org_event_flag(prefs,ambassadorProfile.getString("have_you_org_event_flag"));
-                                        SessionManager.save_is_ambs_have_you_org_event_txt(prefs,ambassadorProfile.getString("have_you_org_event_txt"));
-                                        SessionManager.save_is_ambs_innovative_thing(prefs,ambassadorProfile.getString("innovative_thing"));
-                                        SessionManager.save_is_ambs_how_many_hrs_per_week(prefs,ambassadorProfile.getString("how_many_hrs_per_week"));
-                                        SessionManager.save_is_ambs_passionate_thing(prefs,ambassadorProfile.getString("passionate_thing"));
-                                        SessionManager.save_is_ambs_do_you_want_campus_ambassdor(prefs,ambassadorProfile.getString("do_you_want_campus_ambassdor"));
-                                        SessionManager.save_is_ambs_thing_you_are_know_criconet(prefs,ambassadorProfile.getString("thing_you_are_know_criconet"));
-                                    }else{
-                                        SessionManager.save_is_ambassador(prefs,"0");
+                                    if (ambassadorProfile.length() > 0) {
+                                        SessionManager.save_is_ambassador(prefs, "1");
+                                        SessionManager.save_is_amb_name(prefs, ambassadorProfile.getString("name"));
+                                        SessionManager.save_is_amb_fullname(prefs, ambassadorProfile.getString("full_name"));
+                                        SessionManager.save_is_amb_email(prefs, ambassadorProfile.getString("email"));
+                                        SessionManager.save_mobile(prefs, ambassadorProfile.getString("phone_number"));
+                                        SessionManager.save_is_amb_college(prefs, ambassadorProfile.getString("school_college_name"));
+                                        SessionManager.save_is_amb_highestQ(prefs, ambassadorProfile.getString("height_qualification"));
+                                        SessionManager.save_is_ambs_have_you_org_event_flag(prefs, ambassadorProfile.getString("have_you_org_event_flag"));
+                                        SessionManager.save_is_ambs_have_you_org_event_txt(prefs, ambassadorProfile.getString("have_you_org_event_txt"));
+                                        SessionManager.save_is_ambs_innovative_thing(prefs, ambassadorProfile.getString("innovative_thing"));
+                                        SessionManager.save_is_ambs_how_many_hrs_per_week(prefs, ambassadorProfile.getString("how_many_hrs_per_week"));
+                                        SessionManager.save_is_ambs_passionate_thing(prefs, ambassadorProfile.getString("passionate_thing"));
+                                        SessionManager.save_is_ambs_do_you_want_campus_ambassdor(prefs, ambassadorProfile.getString("do_you_want_campus_ambassdor"));
+                                        SessionManager.save_is_ambs_thing_you_are_know_criconet(prefs, ambassadorProfile.getString("thing_you_are_know_criconet"));
+                                    } else {
+                                        SessionManager.save_is_ambassador(prefs, "0");
                                     }
 
                                     Toaster.customToast(getResources().getString(R.string.Information_update_successfully));
@@ -1266,16 +1243,16 @@ public class FragmentCoachEditProfile extends Fragment {
         }.start();
     }
 
-    private void languageSelectionDialog(ArrayList<Language.Datum> languageArray,ArrayList<String> coachLanguages) {
+    private void languageSelectionDialog(ArrayList<Language.Datum> languageArray, ArrayList<String> coachLanguages) {
         TextView btnOk = dialog.findViewById(R.id.btnOk);
-        RecyclerView rv_language= dialog.findViewById(R.id.rv_language);
+        RecyclerView rv_language = dialog.findViewById(R.id.rv_language);
         rv_language.setHasFixedSize(true);
         rv_language.setLayoutManager(new LinearLayoutManager(getActivity()));
-        selectCoachLanguageAdapter selectCoachLanguageAdapter = new selectCoachLanguageAdapter(languageArray,coachLanguages, getActivity(), new selectCoachLanguageAdapter.languageSelectionListner() {
+        selectCoachLanguageAdapter selectCoachLanguageAdapter = new selectCoachLanguageAdapter(languageArray, coachLanguages, getActivity(), new selectCoachLanguageAdapter.languageSelectionListner() {
             @Override
             public void itemChcked(ArrayList<String> languageArrayy) {
-          // Log.d("SizeSelected",languageArrayy.size()+"");
-           languageArray_new = languageArrayy;
+                // Log.d("SizeSelected",languageArrayy.size()+"");
+                languageArray_new = languageArrayy;
             }
         });
         rv_language.setAdapter(selectCoachLanguageAdapter);
@@ -1289,7 +1266,7 @@ public class FragmentCoachEditProfile extends Fragment {
             langStringBuilder = new StringBuilder();
             String prefix = "";
 
-            for(int i = 0;i<languageArray_new.size();i++){
+            for (int i = 0; i < languageArray_new.size(); i++) {
                 langStringBuilder.append(prefix);
                 prefix = ",";
                 langStringBuilder.append(languageArray_new.get(i));
@@ -1297,8 +1274,8 @@ public class FragmentCoachEditProfile extends Fragment {
 
             //Log.d("size",langStringBuilder.toString());
 
-        textView_language.setText(langStringBuilder.toString());
-        dialog.dismiss();
+            textView_language.setText(langStringBuilder.toString());
+            dialog.dismiss();
         });
 
         //dialog.show();
@@ -1308,12 +1285,13 @@ public class FragmentCoachEditProfile extends Fragment {
     public static class selectCoachLanguageAdapter extends RecyclerView.Adapter<selectCoachLanguageAdapter.MyViewHolder> {
         Context context;
         ArrayList<Language.Datum> languageArray;
-        ArrayList<String>checkedArray;
+        ArrayList<String> checkedArray;
         ArrayList<String> coachLanguages;
         languageSelectionListner languageSelectionListner;
-        public selectCoachLanguageAdapter(ArrayList<Language.Datum> languageArray,ArrayList<String> coachLanguages, Context context,languageSelectionListner languageSelectionListner) {
+
+        public selectCoachLanguageAdapter(ArrayList<Language.Datum> languageArray, ArrayList<String> coachLanguages, Context context, languageSelectionListner languageSelectionListner) {
             this.context = context;
-            this.languageArray=languageArray;
+            this.languageArray = languageArray;
             this.languageSelectionListner = languageSelectionListner;
             this.coachLanguages = coachLanguages;
             checkedArray = new ArrayList<>();
@@ -1329,43 +1307,40 @@ public class FragmentCoachEditProfile extends Fragment {
 
         @Override
         public void onBindViewHolder(selectCoachLanguageAdapter.MyViewHolder holder, final int position) {
-            Language.Datum coachLanguage= languageArray.get(position);
+            Language.Datum coachLanguage = languageArray.get(position);
 
             holder.textView.setText(coachLanguage.getName_eng());
             holder.checkBox.setChecked(coachLanguage.isSelected());
 
-           // Log.d("coachSize",coachLanguages.size()+"");
+            // Log.d("coachSize",coachLanguages.size()+"");
 
-                for(int j= 0; j<coachLanguages.size();j++){
-                    if(coachLanguages.get(j).equalsIgnoreCase(coachLanguage.getName_eng())){
-                        holder.checkBox.setChecked(true);
-                        checkedArray.add(coachLanguages.get(j));
-                        languageSelectionListner.itemChcked(checkedArray);
-                        break;
-                    }
+            for (int j = 0; j < coachLanguages.size(); j++) {
+                if (coachLanguages.get(j).equalsIgnoreCase(coachLanguage.getName_eng())) {
+                    holder.checkBox.setChecked(true);
+                    checkedArray.add(coachLanguages.get(j));
+                    languageSelectionListner.itemChcked(checkedArray);
+                    break;
+                }
 
 
             }
 
-
             holder.checkBox.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    CheckBox myCheckBox= (CheckBox) view;
-                    Language.Datum coachLanguage=languageArray.get(position);
+                    CheckBox myCheckBox = (CheckBox) view;
+                    Language.Datum coachLanguage = languageArray.get(position);
 
-                    if(myCheckBox.isChecked()) {
+                    if (myCheckBox.isChecked()) {
                         coachLanguage.setSelected(true);
                         checkedArray.add(coachLanguage.getName_eng());
-                    }
-                    else if(!myCheckBox.isChecked()) {
+                    } else if (!myCheckBox.isChecked()) {
                         coachLanguage.setSelected(false);
                         checkedArray.remove(coachLanguage.getName_eng());
                     }
                     languageSelectionListner.itemChcked(checkedArray);
                 }
             });
-
 
         }
 
@@ -1381,12 +1356,12 @@ public class FragmentCoachEditProfile extends Fragment {
             MyViewHolder(View itemView) {
                 super(itemView);
                 checkBox = itemView.findViewById(R.id.radio);
-                textView =  itemView.findViewById(R.id.textView);
+                textView = itemView.findViewById(R.id.textView);
 
             }
         }
 
-        interface languageSelectionListner{
+        interface languageSelectionListner {
             void itemChcked(ArrayList<String> languageArray);
         }
     }

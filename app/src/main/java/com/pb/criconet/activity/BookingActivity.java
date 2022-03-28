@@ -509,18 +509,22 @@ public class BookingActivity extends AppCompatActivity implements BookingHistory
                 Log.d("Boking Response",response);
                 loaderView.hideLoader();
                 //Global.dismissDialog(progressDialog);
-                Gson gson = new Gson();
-                BookingHistory modelArrayList = gson.fromJson(response, BookingHistory.class);
 
-                if(modelArrayList.getData().isEmpty()){
-                    notfound.setVisibility(View.VISIBLE);
-                    coachlist.setVisibility(View.GONE);
-                }else{
-                    notfound.setVisibility(View.GONE);
-                    coachlist.setVisibility(View.VISIBLE);
-                    coachlist.setAdapter(new BookingHistoryAdapter(mContext,modelArrayList.getData(), BookingActivity.this));
+                try{
+                    Gson gson = new Gson();
+                    BookingHistory modelArrayList = gson.fromJson(response, BookingHistory.class);
+
+                    if(modelArrayList.getData().isEmpty()){
+                        notfound.setVisibility(View.VISIBLE);
+                        coachlist.setVisibility(View.GONE);
+                    }else{
+                        notfound.setVisibility(View.GONE);
+                        coachlist.setVisibility(View.VISIBLE);
+                        coachlist.setAdapter(new BookingHistoryAdapter(mContext,modelArrayList.getData(), BookingActivity.this));
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
                 }
-
 
             }
         }, new Response.ErrorListener() {

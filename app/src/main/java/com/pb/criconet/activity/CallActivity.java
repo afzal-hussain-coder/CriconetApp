@@ -395,7 +395,8 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
             shareId=1;
             mSSClient.start(getApplicationContext(), getResources().getString(R.string.agora_app_id), accessToken,
                     channelName, com.pb.criconet.sharedscreen.Constant.SCREEN_SHARE_UID, mVEC);
-
+              rtcEngine().enableAudio();
+              rtcEngine().enableLocalAudio(true);
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -463,6 +464,7 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
         });
 
         SurfaceView surfaceV = RtcEngine.CreateRendererView(getApplicationContext());
+        rtcEngine().enableVideo();
         preview(true, surfaceV, 0);
         surfaceV.setZOrderOnTop(false);
         surfaceV.setZOrderMediaOverlay(false);
@@ -1704,4 +1706,3 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
     }
 
 }
-

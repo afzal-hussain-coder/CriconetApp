@@ -63,19 +63,17 @@ public class Global {
 
     public static final String FILE_UPLOAD_URL = "https://criconetonline.com/app_api.php?type=new_post";
     /*for debug*/
-    /*public static final String URL = "https://stage.criconetonline.com/app_api.php?type=";
-    public static final String URL_CHAT = "https://stage.criconetonline.com";
-    public static String GameURL = "https://criconetonline.com/cricket_js/index.php?";*/
+    //public static final String URL = "https://stage.criconetonline.com/app_api.php?type=";
+    //public static final String URL_CHAT = "https://stage.criconetonline.com";
+    //public static String GameURL = "https://criconetonline.com/cricket_js/index.php?";
 
     public static String GET_CAMPUS_AMBASSADOAR = "https://www.criconet.com/campus-ambassador?rst=app";
 
-
-
     /*for live*/
-   public static final String URL = "https://www.criconet.com/app_api.php?type=";
-   public static final String URL_CHAT = "https://www.criconet.com";
-   public static String GameURL ="https://www.criconet.com/cricket_js/index.php?";
-    
+    public static final String URL = "https://www.criconet.com/app_api.php?type=";
+    public static final String URL_CHAT = "https://www.criconet.com";
+    public static String GameURL = "https://www.criconet.com/cricket_js/index.php?";
+
     // for video upload testing..
     //public static final String URL = "https://www.criconet.com/app_api.php?type=";
     public static final String BOOKING_URL = "https://stage.criconetonline.com/app_api.php?type=create_booking_order";
@@ -118,8 +116,6 @@ public class Global {
     public static final String SESSION_CLOSE_TIME = "session_close_time";
 
 
-
-
     public static final int TYPE_VIDEO = 0,
             TYPE_IMAGE = 1, TYPE_MULTI_IMAGE = 2,
             TYPE_TEXT = 3, TYPE_LINK = 4,
@@ -153,15 +149,24 @@ public class Global {
     public static boolean validateLength(String name, int len) {
         return name.length() >= len;
     }
+
     public static boolean validateLengthofCoachRegister(String name) {
-        if (name.length() < 3 || name.length()>32) {
+        if (name.length() < 3 || name.length() > 32) {
             name.length();
             return false;
         }
         return true;
     }
+    public static boolean validateLengthofCoachRegisterProfileTitle(String name) {
+        if (name.length() < 8 || name.length()>40) {
+            name.length();
+            return false;
+        }
+        return true;
+    }
+
     public static boolean validateLengthofCoachRegisterr(String name) {
-        if (name.length() < 3 || name.length()>32) {
+        if (name.length() < 3 || name.length() > 32) {
             name.length();
             return false;
         }
@@ -186,14 +191,15 @@ public class Global {
     }
 
     public static boolean isValidPhoneNumber(String testString) {
-        return (testString.length() >= 8 && testString.length() <=10 && android.util.Patterns.PHONE.matcher(testString).matches());
+        return (testString.length() >= 8 && testString.length() <= 10 && android.util.Patterns.PHONE.matcher(testString).matches());
     }
 
     public static boolean isValidPincode(String testString) {
         return (testString.length() == 6);
     }
+
     public static boolean isValidAddress(String testString) {
-        return (testString.length() >=5);
+        return (testString.length() >= 5);
     }
 
     public static String capitalizeFirstLatterOfString(String name) {
@@ -222,6 +228,7 @@ public class Global {
         } catch (Exception e) {
         }
     }
+
     public static void msgDialogg(Context ac, String msg) {
         try {
             AlertDialog.Builder alertbox = new AlertDialog.Builder(ac);
@@ -261,8 +268,7 @@ public class Global {
                         ac.finish();
                     }
                 });
-        if(!ac.isFinishing())
-        {
+        if (!ac.isFinishing()) {
             //show dialog
             alertbox.show();
         }
@@ -634,12 +640,12 @@ public class Global {
     }
 
 
-
     public static Drawable getThreeDots(Context context) {
         Drawable drawable = ContextCompat.getDrawable(context, R.drawable.sample_three_icons);
         //Add padding to too large icon
         return new InsetDrawable(drawable, 100, 0, 100, 0);
     }
+
     public static Drawable getThreeDotss(Context context) {
         Drawable drawable = ContextCompat.getDrawable(context, R.drawable.sample_three_iconss);
         //Add padding to too large icon
@@ -826,6 +832,7 @@ public class Global {
         return String.format("%d:%02d:%02d", h, m, s);
 
     }
+
     @SuppressLint("DefaultLocale")
     public static String convertSecondsTomSs(long seconds) {
 

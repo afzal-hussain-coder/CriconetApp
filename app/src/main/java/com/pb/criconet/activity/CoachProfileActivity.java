@@ -100,6 +100,7 @@ public class CoachProfileActivity extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                startActivity(new Intent(mContext,MainActivity.class));
                 finish();
             }
         });
@@ -455,5 +456,12 @@ public class CoachProfileActivity extends AppCompatActivity {
         });
 
         dialog.show();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        startActivity(new Intent(mContext,MainActivity.class));
+        finish();
     }
 }

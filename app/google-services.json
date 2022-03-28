@@ -23,19 +23,19 @@
           }
         },
         {
+          "client_id": "1072621342122-np90edlsiq702p96s3fdoft11dd2aji6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.pb.criconet",
+            "certificate_hash": "b0c242322d345f9fa30681cab432de6469d7471f"
+          }
+        },
+        {
           "client_id": "1072621342122-pecp145j0l6ho3uc4gna8c9h249ckrhp.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.pb.criconet",
             "certificate_hash": "c358cd05ae05151c08bbeb14ccf8892e786670c4"
-          }
-        },
-        {
-          "client_id": "1072621342122-q08ukmekjessbv4nd4mbuefp41kf0c15.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.pb.criconet",
-            "certificate_hash": "3d576f6c223d0f09ea01063798647c54e4579803"
           }
         },
         {
