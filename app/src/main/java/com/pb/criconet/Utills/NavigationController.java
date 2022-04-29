@@ -7,6 +7,7 @@ import androidx.fragment.app.FragmentManager;
 
 import com.pb.criconet.R;
 import com.pb.criconet.activity.MainActivity;
+import com.pb.criconet.fragments.AcademyFragment;
 import com.pb.criconet.fragments.CoachFragment;
 import com.pb.criconet.fragments.FeedsPhotos;
 import com.pb.criconet.fragments.Followers;
@@ -17,6 +18,7 @@ import com.pb.criconet.fragments.FragmentEditProfile;
 import com.pb.criconet.fragments.FragmentExperienceSetting;
 import com.pb.criconet.fragments.FragmentPager;
 import com.pb.criconet.fragments.HomeFragment;
+import com.pb.criconet.fragments.LiveAndRecentMatches;
 import com.pb.criconet.fragments.LiveMatches;
 import com.pb.criconet.fragments.RecMatches;
 import com.pb.criconet.fragments.TimePreode;
@@ -87,15 +89,16 @@ public class NavigationController {
 
 
     public void navigatoLiveMatchesFragment() {
+        //MainActivity.bottomNavigation.setMenuItemEnabled(2,true);
         fragmentManager.beginTransaction()
-                .replace(containerId, LiveMatches.newInstance())
+                .replace(containerId, LiveAndRecentMatches.newInstance())
                 .addToBackStack(null)
                 .commit();
     }
     public void navigatoRecMatchesFragment() {
-        MainActivity.bottomNavigation.setMenuItemEnabled(3,true);
+        //MainActivity.bottomNavigation.setMenuItemEnabled(3,true);
         fragmentManager.beginTransaction()
-                .replace(containerId, RecMatches.newInstance())
+                .replace(containerId, AcademyFragment.newInstance())
                 .addToBackStack(null)
                 .commit();
     }

@@ -3,6 +3,7 @@ package com.pb.criconet.fragments;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -66,6 +67,7 @@ public class LiveMatches extends Fragment {
     private RequestQueue queue;
     private TextView notfound;
     CustomLoaderView loaderView;
+    Activity mContext;
 
     public static LiveMatches newInstance() {
         return new LiveMatches();
@@ -76,43 +78,34 @@ public class LiveMatches extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.live_matches, container, false);
-
-        Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
-        TextView mTitle = (TextView) toolbar.findViewById(R.id.toolbartext);
-        String text = getString(R.string.Live_Matches);
-        mTitle.setText(text.toUpperCase());
-        ImageView img_addpost = toolbar.findViewById(R.id.img_addpost);
-        TextView tv_post = toolbar.findViewById(R.id.tv_post);
-        tv_post.setVisibility(View.GONE);
-        img_addpost.setVisibility(View.GONE);
-        img_addpost.setVisibility(View.GONE);
-        ImageView img_close = toolbar.findViewById(R.id.img_close);
-        img_close.setVisibility(View.GONE);
+        mContext = getActivity();
         loaderView = CustomLoaderView.initialize(getActivity());
+        //Toaster.customToast("1");
         prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        queue = Volley.newRequestQueue(getActivity());
+        queue = Volley.newRequestQueue(mContext);
         progress = new ProgressDialog(getActivity());
         progress.setMessage("Loading");
         progress.setCancelable(false);
         weeklist = rootView.findViewById(R.id.week_list);
         weeklist.setLayoutManager(new LinearLayoutManager(getContext()));
+        if (Global.isOnline(mContext)) {
+            getHelp();
+        } else {
+            Global.showDialog(mContext);
+        }
         notfound = (TextView) rootView.findViewById(R.id.notfound);
-
-
-
         return rootView;
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        MainActivity.bottomNavigation.setSelectedIndex(2, true);
-        if (Global.isOnline(getActivity())) {
+        //MainActivity.bottomNavigation.setSelectedIndex(2, true);
+        if (Global.isOnline(mContext)) {
             getHelp();
         } else {
-            Global.showDialog(getActivity());
+            Global.showDialog(mContext);
         }
-
     }
 
     private void getHelp() {
@@ -127,7 +120,7 @@ public class LiveMatches extends Fragment {
                         try {
                             Log.d("Live Strean Response",response);
                             JSONObject jsonObject2, jsonObject = new JSONObject(response.toString());
-                            if (jsonObject.optString("api_text").equalsIgnoreCase("Success")) {
+                            if (jsonObject.optString("api_text").equalsIgnoreCase("success")) {
                                 data = new ArrayList<>();
                                 data = LiveStreamingModel.fromJson(jsonObject.getJSONArray("data"));
                                 if (data.size() == 0) {
@@ -140,9 +133,9 @@ public class LiveMatches extends Fragment {
 
 
                             } else if (jsonObject.optString("api_text").equalsIgnoreCase("failed")) {
-                                Global.msgDialog(getActivity(), jsonObject.optJSONObject("errors").optString("error_text"));
+                                Global.msgDialog(mContext, jsonObject.optJSONObject("errors").optString("error_text"));
                             } else {
-                                Global.msgDialog(getActivity(), getResources().getString(R.string.error_server));
+                                Global.msgDialog(mContext, getResources().getString(R.string.error_server));
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -155,7 +148,7 @@ public class LiveMatches extends Fragment {
                         error.printStackTrace();
                         //progress.dismiss();
                         loaderView.hideLoader();
-                        Global.msgDialog(getActivity(), getResources().getString(R.string.error_server));
+                        Global.msgDialog(mContext, getResources().getString(R.string.error_server));
 //                Global.msgDialog(getActivity(), "Internet connection is slow");
                     }
                 }

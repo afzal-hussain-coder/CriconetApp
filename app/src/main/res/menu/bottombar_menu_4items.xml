@@ -20,11 +20,11 @@
     <item
         android:color="@color/colorPrimary"
         android:icon="@drawable/live_streaming"
-        android:title="@string/live_one" />
+        android:title="@string/Matches" />
     <item
         android:color="@color/colorPrimaryDark"
-        android:icon="@drawable/recent_match"
-        android:title="@string/recording" />
+        android:icon="@drawable/ic_school_black_24dp"
+        android:title="@string/academy" />
 
 
 </menu>

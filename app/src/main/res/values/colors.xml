@@ -75,6 +75,7 @@
     <color name="yellow">#FF7F24</color>
     <color name="yourColor">#8bbb51</color>
     <color name="transparnt_light">#c9000000</color>
+    <color name="select_player_color">#ffe6e6</color>
 
 
 </resources>

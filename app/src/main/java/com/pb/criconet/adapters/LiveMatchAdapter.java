@@ -84,8 +84,8 @@ public class LiveMatchAdapter extends RecyclerView.Adapter<LiveMatchAdapter.MyVi
 //            }
 
 
-        Animation scaleUp = AnimationUtils.loadAnimation(context, R.anim.list_anim_side);
-        holder.relative_dash.startAnimation(scaleUp);
+//        Animation scaleUp = AnimationUtils.loadAnimation(context, R.anim.list_anim_side);
+//        holder.relative_dash.startAnimation(scaleUp);
     }
 
     @Override

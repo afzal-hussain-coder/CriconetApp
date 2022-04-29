@@ -45,8 +45,10 @@ import java.util.Arrays;
 import io.agora.media.RtcTokenBuilder;
 import io.agora.rtc.Constants;
 import io.agora.rtc.RtcEngine;
+import io.agora.rtc.ScreenCaptureParameters;
 import io.agora.rtc.internal.EncryptionConfig;
 import io.agora.rtc.live.LiveTranscoding;
+import io.agora.rtc.models.ChannelMediaOptions;
 import io.agora.rtc.video.VideoCanvas;
 import io.agora.rtc.video.VideoEncoderConfiguration;
 import io.agora.rtc.video.VirtualBackgroundSource;
@@ -176,14 +178,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         return application().userSettings();
     }
 
-    public final void showLongToast(final String msg) {
-        this.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
-            }
-        });
-    }
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode,
@@ -218,53 +213,6 @@ public abstract class BaseActivity extends AppCompatActivity {
                 break;
             }
         }
-    }
-
-    protected int virtualKeyHeight() {
-        boolean hasPermanentMenuKey = ViewConfiguration.get(getApplication()).hasPermanentMenuKey();
-        if (hasPermanentMenuKey) {
-            return 0;
-        }
-
-        // Also can use getResources().getIdentifier("navigation_bar_height", "dimen", "android");
-        DisplayMetrics metrics = new DisplayMetrics();
-        Display display = getWindowManager().getDefaultDisplay();
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            display.getRealMetrics(metrics);
-        } else {
-            display.getMetrics(metrics);
-        }
-
-        int fullHeight = metrics.heightPixels;
-        int fullWidth = metrics.widthPixels;
-
-        if (fullHeight < fullWidth) {
-            fullHeight ^= fullWidth;
-            fullWidth ^= fullHeight;
-            fullHeight ^= fullWidth;
-        }
-
-        display.getMetrics(metrics);
-
-        int newFullHeight = metrics.heightPixels;
-        int newFullWidth = metrics.widthPixels;
-
-        if (newFullHeight < newFullWidth) {
-            newFullHeight ^= newFullWidth;
-            newFullWidth ^= newFullHeight;
-            newFullHeight ^= newFullWidth;
-        }
-
-        int virtualKeyHeight = fullHeight - newFullHeight;
-
-        if (virtualKeyHeight > 0) {
-            return virtualKeyHeight;
-        }
-
-        virtualKeyHeight = fullWidth - newFullWidth;
-
-        return virtualKeyHeight;
     }
 
     protected final int getStatusBarHeight() {
@@ -340,49 +288,34 @@ public abstract class BaseActivity extends AppCompatActivity {
      */
     public final void joinChannel(final String accessTokenn,final String channel, int uid)  {
         String accessToken = accessTokenn;
-//        try {
-        //accessToken ="006ee06e02d3bdc4193821258811319262fIABykiF3BS73kkFjD5I+vezS8Y6Su68FKIfaBLfcTh10jgECamoAAAAAEAARpytrBA3LYAEAAQABDctg";
-//            accessToken = generateToken(getResources().getString(R.string.agora_app_id),getResources().getString(R.string.app_certificate),channel,
-//                    String.valueOf(uid),uid,3600);
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-        //String accessToken = getApplicationContext().getString(R.string.agora_access_token);
         if (TextUtils.equals(accessToken, "") || TextUtils.equals(accessToken, "<#YOUR ACCESS TOKEN#>")) {
             accessToken = null; // default, no token
         }
-        //Log.d("AccessToken",accessToken);
-        //Toaster.customToast(accessToken);
-        rtcEngine().joinChannel(accessToken, channel, "OpenVCall", uid);
+
+        rtcEngine().enableAudioVolumeIndication(1000, 3, true);
+        rtcEngine().enableVideo();
+//        ScreenCaptureParameters screenCaptureParameters = new ScreenCaptureParameters();
+//        screenCaptureParameters.captureAudio = true;
+//        screenCaptureParameters.captureVideo = true;
+//        ScreenCaptureParameters.VideoCaptureParameters videoCaptureParameters = new ScreenCaptureParameters.VideoCaptureParameters();
+//        screenCaptureParameters.videoCaptureParameters = videoCaptureParameters;
+//        rtcEngine().startScreenCapture(screenCaptureParameters);
+        ChannelMediaOptions option = new ChannelMediaOptions();
+        option.autoSubscribeAudio = true;
+        option.autoSubscribeVideo = true;
+        rtcEngine().joinChannel(accessToken, channel, "Extra Optional Data", 0, option);
         config().mChannel = channel;
-
-
-        enablePreProcessor();
-        //Toaster.customToast("joinChannel " + channel + " " + uid);
-        //log.debug("joinChannel " + channel + " " + uid);
     }
 
 
     public static String generateToken(String appId,String appCertificate,String channelName,int uid
             ,int expirationTimeInSeconds) {
-
         RtcTokenBuilder token = new RtcTokenBuilder();
         int timestamp = (int) (System.currentTimeMillis() / 1000 + expirationTimeInSeconds);
-//        String result = token.buildTokenWithUserAccount(appId, appCertificate,
-//                channelName, userAccount, RtcTokenBuilder.Role.Role_Publisher, timestamp);
-//        System.out.println(result);
-
-//        String result = token.buildTokenWithUid(appId, appCertificate,
-//                channelName, uid, RtcTokenBuilder.Role.Role_Publisher, timestamp);
-//        System.out.println(result);
         String result = token.buildTokenWithUid(appId, appCertificate, channelName, uid,
                 timestamp, timestamp, timestamp,
                 timestamp);
         System.out.println(result);
-//        result = token.buildTokenWithUserAccount(appId, appCertificate, channelName,
-//                userAccount, timestamp, timestamp, timestamp,
-//                timestamp);
         return result;
     }
 

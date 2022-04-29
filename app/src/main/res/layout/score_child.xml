@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/bckground_light"
+    android:orientation="vertical">
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_1sdp"
+        android:background="@color/bckground_light"/>
+    <LinearLayout
+        android:id="@+id/li_mid"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@color/bckground"
+        android:layout_below="@+id/toolbar"
+        android:weightSum="4">
+
+        <TextView
+            android:id="@+id/tv_rank"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="0.7"
+            android:paddingTop="@dimen/_15sdp"
+            android:visibility="gone"
+            android:paddingBottom="@dimen/_15sdp"
+            android:gravity="center_horizontal"
+            android:fontFamily="@font/opensans_semibold"
+            android:text="10"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_9sdp" />
+        <View
+            android:layout_width="@dimen/_1sdp"
+            android:background="@color/bckground_light"
+            android:visibility="gone"
+            android:layout_height="match_parent"/>
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/tv_photo"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_30sdp"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_marginBottom="@dimen/_5sdp"
+            android:src="@drawable/placeholder_user"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="0.8"
+            android:gravity="center" />
+        <View
+            android:layout_width="@dimen/_1sdp"
+            android:background="@color/bckground_light"
+            android:layout_height="match_parent"/>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="2.4"
+            android:layout_marginStart="@dimen/_5sdp"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/tv_playerName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/opensans_semibold"
+                android:text="Afzal Hussain"
+                android:textColor="@color/white_smoke"
+                android:textSize="@dimen/_9sdp" />
+            <TextView
+                android:id="@+id/tv_team_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/opensans_semibold"
+                android:text="TATA IPL"
+                android:textColor="@color/gray"
+                android:textSize="@dimen/_7sdp" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="@dimen/_1sdp"
+            android:background="@color/bckground_light"
+            android:layout_height="match_parent"/>
+        <TextView
+            android:id="@+id/tv_point"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/_10sdp"
+            android:paddingBottom="@dimen/_10sdp"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="0.8"
+            android:gravity="center_horizontal"
+            android:fontFamily="@font/opensans_semibold"
+            android:text="137"
+            android:textColor="@color/white_smoke"
+            android:textSize="@dimen/_9sdp" />
+        <View
+            android:layout_width="@dimen/_1sdp"
+            android:background="@color/bckground_light"
+            android:visibility="gone"
+            android:layout_height="match_parent"/>
+
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_1sdp"
+        android:visibility="gone"
+        android:background="@color/bckground_light"/>
+
+
+</LinearLayout>

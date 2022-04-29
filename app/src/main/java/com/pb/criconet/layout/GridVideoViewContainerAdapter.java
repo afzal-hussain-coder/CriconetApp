@@ -97,6 +97,7 @@ public class GridVideoViewContainerAdapter extends VideoViewAdapter {
         return mUsers.get(position);
     }
 
+
     @Override
     public long getItemId(int position) {
         UserStatusData user = mUsers.get(position);

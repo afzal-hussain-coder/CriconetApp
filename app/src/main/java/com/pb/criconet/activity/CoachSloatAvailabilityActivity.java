@@ -6,6 +6,7 @@ import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -16,6 +17,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,6 +34,9 @@ import com.android.volley.toolbox.Volley;
 import com.applandeo.materialcalendarview.CalendarView;
 import com.applandeo.materialcalendarview.EventDay;
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.mancj.slideup.SlideUp;
+import com.mancj.slideup.SlideUpBuilder;
 import com.pb.criconet.R;
 import com.pb.criconet.Utills.CustomLoaderView;
 import com.pb.criconet.Utills.FilterCoachCloseTimeDropDownView;
@@ -40,12 +46,14 @@ import com.pb.criconet.Utills.GridSpacingItemDecoration;
 import com.pb.criconet.Utills.SessionManager;
 import com.pb.criconet.Utills.Toaster;
 import com.pb.criconet.adapters.TimeAdapter;
+import com.pb.criconet.adapters.TimeAdaptercoachh;
 import com.pb.criconet.event.SlotId;
 import com.pb.criconet.fragments.FragmentAvility;
 import com.pb.criconet.fragments.TimePreodee;
 import com.pb.criconet.models.BookCoach;
 import com.pb.criconet.models.DateSlotes;
 import com.pb.criconet.models.TimeSlot;
+import com.pb.criconet.models.updatedTimeSlot;
 
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONArray;
@@ -64,7 +72,8 @@ import javax.net.ssl.SNIHostName;
 
 import timber.log.Timber;
 
-public class CoachSloatAvailabilityActivity extends BaseActivity implements TimePreodee.selectedSlot {
+public class CoachSloatAvailabilityActivity extends BaseActivity {
+        //implements TimePreodee.selectedSlot {
     private SharedPreferences prefs;
     private RequestQueue queue;
     private ProgressDialog progress;
@@ -86,17 +95,28 @@ public class CoachSloatAvailabilityActivity extends BaseActivity implements Time
     private FilterCoachCloseTimeDropDownView spinerCurency;
     private ArrayList<com.pb.criconet.Utills.DataModel> option_currency = new ArrayList<>();
     String selectedCloseLimit="";
-    String selectedTimeSlot="";
+    String selectedTimeSlot = "", selectedTimeSlott = "",selectedTimeSlotUpdated="";
     Typeface typeface;
     CustomLoaderView loaderView;
     String booking_close_time="";
     Date previousDate;
+    JSONArray jsonArray=null;
+    JSONObject jsonObject=null;
+
+    private SlideUp slideUp;
+    private View dim, rootVieww;
+    private View slideView;
+    private Button btn_done;
+    List<String> updatedDateList = new ArrayList<>();
+    ArrayList<updatedTimeSlot> updatedSlotList;
+    JSONArray updateJsonArray = new JSONArray();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_coach_sloat_availability);
         mContext = this;
         mActivity= this;
+        jsonArray=new JSONArray();
         loaderView = CustomLoaderView.initialize(this);
         typeface = ResourcesCompat.getFont(mContext, R.font.opensans_semibold);
 
@@ -163,6 +183,13 @@ public class CoachSloatAvailabilityActivity extends BaseActivity implements Time
             public void onDismiss() {
             }
         });
+
+        if (Global.isOnline(mContext)) {
+            getUsersDetails();
+        } else {
+            Global.showDialog(mActivity);
+        }
+
         // disable dates before today
         Calendar min = Calendar.getInstance();
         previousDate = min.getTime();
@@ -173,21 +200,118 @@ public class CoachSloatAvailabilityActivity extends BaseActivity implements Time
         day=Global.getDay(datePicker.getCurrentPageDate().getTime().toString());
         printDatesInMonth(Integer.parseInt(year),Integer.parseInt(month),Integer.parseInt(day));
         //int daysInMonth = min.getActualMaximum(Calendar.DAY_OF_MONTH);
+        recyclerView = findViewById(R.id.recycler_view);
+        btn_done = findViewById(R.id.btn_done);
+        recyclerView.setLayoutManager(new GridLayoutManager(mContext, 3));
+        recyclerView.addItemDecoration(new GridSpacingItemDecoration(3, 20, false));
+
+        rootVieww = findViewById(R.id.root_view);
+        slideView = findViewById(R.id.slideView);
+        dim = findViewById(R.id.dim);
+        slideUp = new SlideUpBuilder(slideView)
+                .withListeners(new SlideUp.Listener.Events() {
+                    @Override
+                    public void onSlide(float percent) {
+                        dim.setAlpha(1 - (percent / 100));
+                        if (percent < 100) {
+                            // slideUp started showing
+
+                        }
+                    }
+
+                    @Override
+                    public void onVisibilityChanged(int visibility) {
+                        if (visibility == View.GONE) {
+
+//                            if (Global.isOnline(mContext)) {
+//                                getBookingHistory();
+//                            } else {
+//                                Global.showDialog(mActivity);
+//                            }
+
+                        }
+                    }
+                })
+                .withStartGravity(Gravity.BOTTOM)
+                .withLoggingEnabled(true)
+                .withStartState(SlideUp.State.HIDDEN)
+                .withSlideFromOtherView(rootVieww)
+                .build();
+
 
 
         datePicker.setOnDayClickListener(eventDay -> {
-            dateGot=Global.getDateGotCoach(eventDay.getCalendar().getTime().toString());
+            dateGot = Global.getDateGotCoach(eventDay.getCalendar().getTime().toString());
 
-            if(Global.getDateGot(eventDay.getCalendar().getTime().toString()).equals(Global.getDateGot(previousDate.toString()))||eventDay.getCalendar().getTime().compareTo(previousDate)>0){
-                if (Global.isOnline(mActivity)) {
-                    getDateSlote(dateGot);
+            JSONObject jsonObject = null;
+            updatedTimeSlot timeSlot = null;
+
+            if(updateJsonArray.length()==0){
+                if (Global.getDateGot(eventDay.getCalendar().getTime().toString()).equals(Global.getDateGot(previousDate.toString())) || eventDay.getCalendar().getTime().compareTo(previousDate) > 0) {
+                    if (Global.isOnline(mActivity)) {
+
+                        getDateSlote(dateGot, new ArrayList<>());
+                    } else {
+                        Global.showDialog(mActivity);
+                    }
                 } else {
-                    Global.showDialog(mActivity);
+                    Toaster.customToast("Select enabled date");
+                }
+            }else{
+                updatedSlotList = new ArrayList<>();
+                updatedSlotList.clear();
+                for (int i = 0; i < updateJsonArray.length(); i++) {
+                    try {
+                        jsonObject = updateJsonArray.getJSONObject(i);
+                        if (jsonObject.has("available_date")) {
+                            String avl_date = jsonObject.getString("available_date");
+                            // updatedDateList.add(avl_date);
+                            //Log.d("Size",dateGot+"/"+Global.getDateGotCoachh(avl_date));
+                            if (dateGot.equalsIgnoreCase(Global.getDateGotCoachh(avl_date))) {
+                                if (jsonObject.has("slot_id")) {
+                                    JSONArray jsonArray1 = jsonObject.getJSONArray("slot_id");
+                                    for (int j = 0; j < jsonArray1.length(); j++) {
+                                        JSONObject jsonObject1 = jsonArray1.getJSONObject(j);
+                                        timeSlot = new updatedTimeSlot(jsonObject1);
+                                        updatedSlotList.add(timeSlot);
+                                    }
+                                }
+                                Log.d("Size", updatedSlotList.size() + "");
+                                break;
+
+                            }
+
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+
+                }
+
+                if (Global.getDateGot(eventDay.getCalendar().getTime().toString()).equals(Global.getDateGot(previousDate.toString())) || eventDay.getCalendar().getTime().compareTo(previousDate) > 0) {
+                    if (Global.isOnline(mActivity)) {
+
+                        getDateSlote(dateGot, updatedSlotList);
+                    } else {
+                        Global.showDialog(mActivity);
+                    }
+                } else {
+                    Toaster.customToast("Select enabled date");
+                }
+
+                if (Global.getDateGot(eventDay.getCalendar().getTime().toString()).equals(Global.getDateGot(previousDate.toString())) || eventDay.getCalendar().getTime().compareTo(previousDate) > 0) {
+                    if (Global.isOnline(mActivity)) {
+
+                        getDateSlote(dateGot, updatedSlotList);
+                    } else {
+                        Global.showDialog(mActivity);
+                    }
+                } else {
+                    Toaster.customToast("Select enabled date");
                 }
             }
-            else{
-                Toaster.customToast("Select enabled date");
-            }
+
 
 
         });
@@ -230,42 +354,40 @@ public class CoachSloatAvailabilityActivity extends BaseActivity implements Time
 //                datePicker.setSwipeEnabled(true);
 //            }
         });
+        btn_done.setOnClickListener(view -> {
+            selectedTimeSlot = selectedTimeSlott;
 
+            if (Global.isOnline(mContext)) {
+
+                if(checkValidation()){
+                    slideUp.hide();
+                    updateCoachAvailability();
+                }
+
+            } else {
+                Global.showDialog(mActivity);
+            }
+
+        });
 
 
         btn_login.setOnClickListener(view -> {
-            multiDate=new StringBuilder();
-            multiTime=new StringBuilder();
 
-//            Calendar calendar =datePicker.getSelectedDates();
-//
-//            Global.getDateGot(calendar.getTime().toString());
-//
-//            String prefix = "";
-//            for (Calendar calendar : datePicker.getSelectedDates()) {
-//                multiDate.append(prefix);
-//                prefix = ",";
-//                multiDate.append(Global.getDateGot(calendar.getTime().toString()));
-//            }
-//
-//            String prefix1 = "";
-//            for (TimeSlot.Datum  data : modelArrayList.getData()) {
-//                if(data.isActive()) {
-//                    multiTime.append(prefix1);
-//                    prefix1 = ",";
-//                    multiTime.append(data.getSlotId());
-//                }
-//            }
-            if(checkValidation()){
-                updateCoachAvailability();
-            }
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    Intent intent = new Intent(mActivity, CoachProfileActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+            },100);
 
         });
 
     }
 
     public void printDatesInMonth(int year, int month,int day) {
-        SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
         Calendar cal = Calendar.getInstance();
         cal.clear();
         cal.set(year, month, day);
@@ -273,9 +395,17 @@ public class CoachSloatAvailabilityActivity extends BaseActivity implements Time
         int daysInMonth = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
         //Toaster.customToast(daysInMonth+"");
         //cal.get
-        for (int i = 0; i <=daysInMonth; i++) {
+        for (int i = 0; i <= daysInMonth; i++) {
             System.out.println(fmt.format(cal.getTime()));
             cal.add(Calendar.DAY_OF_MONTH, -1);
+
+            for (int j = 0; j < updatedDateList.size(); j++) {
+                if (Global.getDateGot(cal.getTime().toString()).equals(updatedDateList.get(j))) {
+                    events.add(new EventDay(Global.convertStringToCalendar(fmt.format(cal.getTime())), Global.getThreeDotss(mActivity)));
+                    datePicker.setEvents(events);
+                }
+            }
+
             events.add(new EventDay(Global.convertStringToCalendar(fmt.format(cal.getTime())), Global.getThreeDots(mActivity)));
             datePicker.setEvents(events);
         }
@@ -291,17 +421,137 @@ public class CoachSloatAvailabilityActivity extends BaseActivity implements Time
 
     }
 
-    private void getDateSlote(String dateGot) {
+    public void getUsersDetails() {
+        //loaderView.showLoader();
+        StringRequest postRequest = new StringRequest(Request.Method.POST, Global.URL + "get_user_data",
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d("getUserDetails", response);
+                        //loaderView.hideLoader();
+                        try {
+                            JSONObject jsonObject = new JSONObject(response.toString());
+                            if (jsonObject.optString("api_text").equalsIgnoreCase("Success")) {
+                                JSONObject object = jsonObject.getJSONObject("coach_data");
+
+                                if (object.has("coach_available_date")) {
+                                    JSONArray jsonObject_personal_info = object.getJSONArray("coach_available_date");
+                                    setData(jsonObject_personal_info);
+                                }
+
+                                if (object.has("coach_booking_close_time")) {
+
+                                    booking_close_time = object.getString("coach_booking_close_time");
+                                    selectedCloseLimit = "Booking session should be closed before " + booking_close_time + " hours";
+                                    spinerCurency.setText(selectedCloseLimit);
+                                    //Toaster.customToast(closeTime);
+                                }
+
+                            } else if (jsonObject.optString("api_text").equalsIgnoreCase("failed")) {
+                                Global.msgDialog(mActivity, jsonObject.optJSONObject("errors").optString("error_text"));
+                            } else {
+                                Global.msgDialog(mActivity, getResources().getString(R.string.error_server));
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
+                        // loaderView.hideLoader();
+                        Global.msgDialog(mActivity, getResources().getString(R.string.error_server));
+//                Global.msgDialog(EditProfile.this, "Internet connection is slow");
+                    }
+                }
+        ) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> param = new HashMap<String, String>();
+                param.put("user_id", SessionManager.get_user_id(prefs));
+                param.put("user_profile_id", SessionManager.get_user_id(prefs));
+                param.put("s", SessionManager.get_session_id(prefs));
+                System.out.println("data   :" + param);
+                return param;
+            }
+        };
+        int socketTimeout = 30000;
+        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        postRequest.setRetryPolicy(policy);
+        queue.add(postRequest);
+
+    }
+
+    private void setData(JSONArray data) {
+
+        if (data != null) {
+            updateJsonArray = data;
+            try {
+                JSONObject jsonObject = null;
+                String avl_date = "";
+                JSONObject jsonObjectUp = null;
+
+                ArrayList<String> toArray = new ArrayList<>();
+                for (int i = 0; i < data.length(); i++) {
+                    jsonObject = data.getJSONObject(i);
+
+                    if (jsonObject.has("available_date")) {
+                        avl_date = jsonObject.getString("available_date");
+                        updatedDateList.add(avl_date);
+                        JSONArray jsonArray = jsonObject.getJSONArray("slot_id");
+                        for (int j = 0; j < jsonArray.length(); j++) {
+                            JSONObject jsonObject1 = jsonArray.getJSONObject(j);
+                            updatedTimeSlot timeSlot = new updatedTimeSlot(jsonObject1);
+                            toArray.add(timeSlot.getSlotId());
+                            //...new code should be here...
+                        }
+
+                        String[] newName = toArray.toArray(new String[toArray.size()]);
+                        selectedTimeSlotUpdated = toCSV(newName);
+//                        jsonObjectUp = new JSONObject();
+//                        jsonObjectUp.put(Global.getDateGotCoachh(avl_date), selectedTimeSlot);
+//                        jsonArrayUp.put(jsonObjectUp);
+//                        updatedDateList.add(avl_date);
+                    }
+                }
+
+                // Log.d("newS",jsonArrayUp.toString());
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+
+            year = Global.getYear(datePicker.getCurrentPageDate().getTime().toString());
+            month = Global.getMonth(datePicker.getCurrentPageDate().getTime().toString());
+            day = Global.getDay(datePicker.getCurrentPageDate().getTime().toString());
+            printDatesInMonth(Integer.parseInt(year), Integer.parseInt(month), Integer.parseInt(day));
+
+        }
+
+    }
+
+    private void getDateSlote(String dateGot, ArrayList<updatedTimeSlot> updatedSlotList) {
         StringRequest postRequest = new StringRequest(Request.Method.POST, Global.URL + "get_time_slot_data", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Log.d("slotResponse",response);
+                Log.d("slotResponse", response);
                 Gson gson = new Gson();
                 modelArrayList = gson.fromJson(response, TimeSlot.class);
                 if (modelArrayList.getApiStatus().equalsIgnoreCase("200")) {
-                    navigationController.showTimePreodee(modelArrayList);
+                    recyclerView.setAdapter(new TimeAdaptercoachh(mActivity, modelArrayList.getData(), updatedSlotList, new TimeAdaptercoachh.timeSelectt() {
+                        @Override
+                        public void getSlotId(ArrayList<String> arrayListUser) {
+                            String[] namesArr = arrayListUser.toArray(new String[arrayListUser.size()]);
+                            selectedTimeSlott = toCSV(namesArr);
+                        }
+                    }));
+                    // rlSlot.setVisibility(View.VISIBLE);
+                    slideUp.show();
                 } else {
-                    dateGott="";
+                    dateGott = "";
                     Toaster.customToast(modelArrayList.getErrors().getErrorText());
                 }
             }
@@ -327,7 +577,6 @@ public class CoachSloatAvailabilityActivity extends BaseActivity implements Time
         queue.add(postRequest);
     }
 
-
     private void updateCoachAvailability() {
 
         loaderView.showLoader();
@@ -335,7 +584,7 @@ public class CoachSloatAvailabilityActivity extends BaseActivity implements Time
             @Override
             public void onResponse(String response) {
                 loaderView.hideLoader();
-                Log.d("SlotSubmitResponse",response);
+                Timber.d(response);
 
                 try {
                     JSONObject jsonObject= new JSONObject(response);
@@ -343,15 +592,21 @@ public class CoachSloatAvailabilityActivity extends BaseActivity implements Time
                     if (jsonObject.getString("api_status").equalsIgnoreCase("200")) {
                         data=jsonObject.getJSONObject("data");
                         Toaster.customToast(data.getString("message"));
-                        new Handler().postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                Intent intent = new Intent(mActivity, CoachProfileActivity.class);
-                                startActivity(intent);
-                                finish();
-                            }
-                        },2000);
+                        year = Global.getYear(datePicker.getCurrentPageDate().getTime().toString());
+                        month = Global.getMonth(datePicker.getCurrentPageDate().getTime().toString());
+                        day = Global.getDay(datePicker.getCurrentPageDate().getTime().toString());
+                        if (Global.isOnline(mContext)) {
+                            getUsersDetails();
+                        } else {
+                            Global.showDialog(mActivity);
+                        }
+                        printDatesInMonth(Integer.parseInt(year), Integer.parseInt(month), Integer.parseInt(day));
+                        if (selectedTimeSlot.equalsIgnoreCase("") && selectedTimeSlotUpdated.equalsIgnoreCase("")) {
+                            btn_login.setVisibility(View.GONE);
 
+                        }else{
+                            btn_login.setVisibility(View.VISIBLE);
+                        }
                     } else {
                         Toaster.customToast(data.getString("error"));
                     }
@@ -376,9 +631,10 @@ public class CoachSloatAvailabilityActivity extends BaseActivity implements Time
                 param.put("s", SessionManager.get_session_id(prefs));
                 param.put("date_slot", dateGot);
                 param.put("time_slot", selectedTimeSlot);
+               // param.put("date_time_slot",jsonArray.toString());
                 param.put("booking_close_time", booking_close_time);
 
-                Log.e("Param",param.toString());
+                Timber.e(param.toString());
                 return param;
             }
         };
@@ -387,6 +643,7 @@ public class CoachSloatAvailabilityActivity extends BaseActivity implements Time
         postRequest.setRetryPolicy(policy);
         queue.add(postRequest);
     }
+
     private void getSessionCloseTime() {
         StringRequest postRequest = new StringRequest(Request.Method.GET, Global.URL + Global.SESSION_CLOSE_TIME, new Response.Listener<String>() {
             @Override
@@ -488,27 +745,40 @@ public class CoachSloatAvailabilityActivity extends BaseActivity implements Time
     }
 
     private boolean checkValidation(){
-
+        //Toaster.customToast(selectedTimeSlot);
         if(dateGot.equalsIgnoreCase("")){
             Toaster.customToast(getResources().getString(R.string.Please_select_date_first));
             return false;
-        }else if(selectedCloseLimit.equalsIgnoreCase("")){
-            Toaster.customToast(getResources().getString(R.string.Booking_Session_Close_Timee));
+        }else if (selectedTimeSlot.isEmpty()){
+               // && selectedTimeSlotUpdated.equalsIgnoreCase("")) {
+            Toaster.customToast(getResources().getString(R.string.Please_select_time_first));
             return false;
         }
         return true;
     }
-
-    @Override
-    public void getSelectedSlot(ArrayList<String> arrayListUser) {
-
-        String[] namesArr = arrayListUser.toArray(new String[arrayListUser.size()]);
-
-        selectedTimeSlot =toCSV(namesArr);
-
-        //Toaster.customToast(selectedTimeSlot);
-
-    }
+//
+//    @Override
+//    public void getSelectedSlot(ArrayList<String> arrayListUser) {
+//
+//        String[] namesArr = arrayListUser.toArray(new String[arrayListUser.size()]);
+//
+//        selectedTimeSlot =toCSV(namesArr);
+//        try {
+//            jsonObject =new JSONObject();
+//            if(!selectedTimeSlot.isEmpty()){
+//
+//                jsonObject.put(dateGot,selectedTimeSlot);
+//                jsonArray.put(jsonObject);
+//            }
+//
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//
+//
+//        //Toaster.customToast(selectedTimeSlot);
+//
+//    }
 
     public static String toCSV(String[] array) {
         String result = "";
@@ -520,19 +790,5 @@ public class CoachSloatAvailabilityActivity extends BaseActivity implements Time
             result = sb.deleteCharAt(sb.length() - 1).toString();
         } return result;
     }
-
-
-//
-//    @Override
-//    protected void onStart() {
-//        super.onStart();
-//        EventBus.getDefault().register(this);
-//    }
-//
-//    @Override
-//    protected void onStop() {
-//        EventBus.getDefault().unregister(this);
-//        super.onStop();
-//    }
 
 }

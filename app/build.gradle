@@ -25,7 +25,7 @@ android {
         applicationId "com.pb.criconet"
         minSdkVersion 21
         targetSdkVersion 31
-        versionCode 35
+        versionCode 37
         versionName "1.1.10"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
@@ -186,6 +186,9 @@ dependencies {
     implementation project(':libagorartc')
     implementation 'com.github.marcinmoskala:VideoPlayView:0.0.2'
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.4'
+    // Expandable REclerview dependency
+    implementation 'com.mindorks:placeholderview:0.7.1'
+    implementation 'com.google.android.exoplayer:exoplayer:2.8.4'
 
 
 }

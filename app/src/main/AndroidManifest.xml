@@ -40,12 +40,31 @@
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning,HardcodedDebugMode"
         tools:targetApi="n">
-        <activity android:name=".activity.CoachSloatAvailabilityActivity">
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.MAIN" />-->
+        <activity android:name=".activity.AcademyBookChcekOutActvity"></activity>
+        <activity android:name=".activity.AcademyBookingDetailsActivity"></activity>
+        <activity android:name=".activity.visitAcademyCoachProfileActivity"></activity>
+        <activity android:name=".activity.AddAcademyActivity"></activity>
 
-<!--                <category android:name="android.intent.category.LAUNCHER" />-->
-<!--            </intent-filter>-->
+
+
+        <activity android:name=".activity.AcademyDetails" />
+        <activity android:name=".activity.ScreenShareActivity" />
+        <activity android:name=".activity.ScoreBoardActivity" />
+
+        <meta-data
+            android:name="com.google.android.actions"
+            android:resource="@xml/slide_up" />
+
+        <activity android:name=".activity.SelectTeamPlayerActivity" />
+        <activity android:name=".activity.ContestMatchListActivity" />
+        <activity android:name=".activity.CoachSloatAvailabilityActivity">
+
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+
+
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
         </activity>
         <activity android:name=".activity.CoachProfessionalInfoActivity" />
         <activity android:name=".activity.visitCoachProfileActivity" />

@@ -33,6 +33,7 @@
     <string name="forgot_password">Forgot Password?</string>
     <string name="forgot_password_hd">Forgot Password</string>
     <string name="email_address">Email Address</string>
+    <string name="email_addresss">Email :</string>
     <string name="register">Register</string>
     <string name="enter_reason">Enter Reason</string>
     <string name="unblock">Unblock</string>
@@ -71,6 +72,7 @@
     <string name="setting">Settings</string>
     <string name="dob">D.O.B</string>
     <string name="phone_no">Enter Phone No*</string>
+    <string name="phonee">Phone No :</string>
     <string name="phone">Phone Number</string>
     <string name="privacy_setting">Privacy Setting</string>
     <string name="deactivate_account">Deactivate Account</string>
@@ -249,7 +251,7 @@
     <string name="View_profile">View Profile</string>
     <string name="change_profile_pic">Changed their profile picture</string>
     <string name="change_profile_picc">Changed their profile picture</string>
-    <string name="language">Language</string>
+    <string name="language">Languages</string>
     <string name="certificate">Certificate</string>
     <string name="enter_coupon_code">Enter coupon code</string>
     <string name="applay_coupon">Apply Coupon</string>
@@ -260,6 +262,7 @@
     <string name="search_by_name_location">Search by Team, Location and Ground</string>
     <string name="pay_later">Pay Later</string>
     <string name="name">Name</string>
+    <string name="namee">Name :</string>
     <string name="enter_your_full_name">Enter your full name</string>
     <string name="enter_your_full_address">Enter your address</string>
     <string name="address">Address</string>
@@ -315,6 +318,7 @@
     <string name="error_in_payment">"Error in payment: "</string>
     <string name="coupon_discount">"Coupon Discount : "</string>
     <string name="bookingId">"Booking ID: "</string>
+    <string name="bookingIdd">Booking ID</string>
     <string name="online_paid_amount">Online e-Coaching session paid amount</string>
     <string name="Your_booking_has_been">"Your booking has been "</string>
     <string name="Failed_loading_app">Failed loading app!</string>
@@ -404,6 +408,7 @@
     <string name="Experience">"Experience : "</string>
     <string name="Please_select_date_first">Select date</string>
     <string name="Please_select_time_first">Select session</string>
+    <string name="Please_select_time_firstt">Select session time</string>
     <string name="Enter_Name">Enter Name</string>
     <string name="Enter_Middle_Name_at_least_3_character">Enter Middle Name (at least 3 character)</string>
     <string name="Enter_First_Name_at_least_3_character">Enter First Name (at least 3 character)</string>
@@ -450,6 +455,7 @@
     <string name="click_to_edit_profile">Click to Edit Profile</string>
     <string name="time_slote">Session Time</string>
     <string name="save_continue">Save &amp; Continue</string>
+    <string name="continue_submit">Continue</string>
     <string name="type_here_and_click_the_post_button">Type here and click the post button</string>
     <string name="match_not_found">Match Not Found</string>
     <string name="send_feedback">Send Feedback</string>
@@ -560,6 +566,58 @@
     <string name="linkind_profile">"LinkedIn profile "</string>
     <string name="instagram_profile">Instagram profile</string>
     <string name="youtube_profile">Youtube profile</string>
+    <string name="join_contest">Join Contest</string>
+    <string name="upcoming_matches">Upcoming Matches</string>
+    <string name="players">Players</string>
+    <string name="player_team_ranking"><![CDATA[Player & Match Ranking]]></string>
+    <string name="rank">Rank</string>
+    <string name="name_match"><![CDATA[Name & Match]]></string>
+    <string name="point">Point</string>
+    <string name="note">Note*</string>
+    <string name="note_guideline"><![CDATA[If you want to update your Availability. Please click on date & select slot to update your availability, otherwise click on continue.]]></string>
+    <string name="note_guideline_add"><![CDATA[If you want to add your Availability. Please click on date & select slot to add your availability.]]></string>
+    <string name="role">Role</string>
+    <string name="battingStyle">BattingStyle</string>
+    <string name="ballingStyle">BowlingStyle</string>
+    <string name="Match_Started">Match Started...</string>
+    <string name="total_points">Total Points:</string>
+    <string name="score_bord">My Contest Score Board</string>
+    <string name="hide">Hide Details</string>
+    <string name="Matches">Matches</string>
+    <string name="academy">Academy</string>
+    <string name="Book_academy">BOOK YOUR ACADEMY</string>
+    <string name="book_academy">Book Academy</string>
+    <string name="available_session">Available Session</string>
+    <string name="month">Month</string>
+    <string name="fees">Fees</string>
+    <string name="contact">Contact</string>
+    <string name="about">About</string>
+    <string name="training_type">Training Type :</string>
+    <string name="academy_profile">Academy Profile</string>
+    <string name="social_media_handle">Social Media Handle</string>
+    <string name="e_coaching">e-Coaching</string>
+    <string name="valid_for">Valid for</string>
+    <string name="book_another_academy">Book Another Academy</string>
+    <string name="coach">Coach</string>
+    <string name="coachlist">Coach listing</string>
+    <string name="name_of_the_academy">Name of the academy (Title)</string>
+    <string name="location_of_the_academy">Location of the academy</string>
+    <string name="academy_fess">Academy Fees</string>
+    <string name="details_about_academy">"Detail (about the academy) "</string>
+    <string name="short_description">Short Description</string>
+    <string name="contact_person_name">Contact Person Name</string>
+    <string name="Contact_Phone_No">Contact Person Phone No</string>
+    <string name="review_of_the_academy_if_any">"Review of the Academy (if any)  "</string>
+    <string name="select_your_academy_rating">Select your academy rating:-</string>
+    <string name="Do_you_give_personal_group_training_to_the_students">Do you give personal/group training to the students?</string>
+    <string name="personal">Personal</string>
+    <string name="group">Group</string>
+    <string name="language_of_training">Language for training</string>
+    <string name="online_academy_session_time">Online available session time  (In slots like 8:00-9:00, 9:00-10:00)</string>
+    <string name="fill_academy_specility">Fill academy specialities</string>
+    <string name="add_academy">Add Academy</string>
+    <string name="email">Email</string>
+    <string name="select_multiple_gallery_iamge">Select multiple image for academy gallery</string>
 
 
 </resources>

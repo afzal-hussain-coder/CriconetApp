@@ -49,6 +49,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.mancj.slideup.SlideUp;
 import com.mancj.slideup.SlideUpBuilder;
 import com.mukesh.OtpView;
@@ -371,7 +372,6 @@ public class CoachPersonalInfoActivity extends AppCompatActivity implements Adap
         });
     }
 
-
     private void selectImage() {
         slideUp.show();
         tv_choose.setText(R.string.add_photo);
@@ -559,7 +559,6 @@ public class CoachPersonalInfoActivity extends AppCompatActivity implements Adap
         return cursor.getString(idx);
     }
 
-
     public void updateImageTask(String path) {
         loaderView.showLoader();
         try {
@@ -707,7 +706,6 @@ public class CoachPersonalInfoActivity extends AppCompatActivity implements Adap
         queue.add(postRequest);
 
     }
-
     private void getCountry() {
         StringRequest postRequest = new StringRequest(Request.Method.POST, Global.URL + "get_countries", new Response.Listener<String>() {
             @Override
@@ -722,18 +720,17 @@ public class CoachPersonalInfoActivity extends AppCompatActivity implements Adap
                         country.add(data.getName());
                     }
 
-                    //countryID="";
                     ArrayAdapter aa = new ArrayAdapter(mActivity, R.layout.custom_spinner, country);
                     aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     spinnerCountry.setAdapter(aa);
 
-                    for (int i = 0; i < country.size(); i++) {
-                        if (country.get(i).equalsIgnoreCase("India")) {
-                            countryName = country.get(i);
-                            spinnerCountry.setSelection(Global.getIndex(spinnerCountry, countryName));
-                            break;
-                        }
-                    }
+//                    for (int i = 0; i < country.size(); i++) {
+//                        if (country.get(i).equalsIgnoreCase(country_Name)) {
+//                            country_Namee = country.get(i);
+//                            spinnerCountry.setSelection(Global.getIndex(spinnerCountry, country_Namee));
+//                            break;
+//                        }
+//                    }
 
                 }
 
@@ -760,32 +757,48 @@ public class CoachPersonalInfoActivity extends AppCompatActivity implements Adap
     }
 
     private void getState(String countryId) {
-        loaderView.showLoader();
+        //loaderView.showLoader();
         StringRequest postRequest = new StringRequest(Request.Method.GET, Global.URL + "get_states" + "&country_id=" + countryId, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 Log.d("ResponseSatate", response);
-                if (!response.isEmpty()) {
-                    loaderView.hideLoader();
-                    Gson gson = new Gson();
-                    statemodelArrayList = gson.fromJson(response, States.class);
-                    if (statemodelArrayList.getApiStatus().equalsIgnoreCase("200")) {
-                        ArrayList<String> state = new ArrayList<>();
-                        state.add("States");
-                        for (States.Datum data : statemodelArrayList.getData()) {
-                            state.add(data.getName());
-                        }
-                        ArrayAdapter aa = new ArrayAdapter(mActivity, R.layout.custom_spinner, state);
-                        aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        spinnerState.setAdapter(aa);
-                        spinnerState.setSelection(Global.getIndex(spinnerState, state_Name));
+                try {
+                    if (!response.isEmpty()) {
+                        //loaderView.hideLoader();
+                        Gson gson = new Gson();
+                        statemodelArrayList = gson.fromJson(response, States.class);
+                        if (statemodelArrayList.getApiStatus().equalsIgnoreCase("200")) {
+                            ArrayList<String> state = new ArrayList<>();
+                            state.add("States");
+                            for (States.Datum data : statemodelArrayList.getData()) {
+                                state.add(data.getName());
+                            }
 
-                        if(spinnerState.getSelectedItem().equals("States")){
-                            getCity(statemodelArrayList.getData().get(i).getId());
+                            ArrayAdapter aa = new ArrayAdapter(mActivity, R.layout.custom_spinner, state);
+                            aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                            spinnerState.setAdapter(aa);
+                            //Toaster.customToast(state_Name);
+                            spinnerState.setSelection(Global.getIndex(spinnerState, state_Name));
+                            //                        for (int i = 0; i < state.size(); i++) {
+                            //                            if (state.get(i).equalsIgnoreCase(state_Name)) {
+                            //                                country_Name = state.get(i);
+                            //                                spinnerState.setSelection(Global.getIndex(spinnerState, country_Name));
+                            //                                break;
+                            //                            }
+                            //                        }
+
+                            //Toaster.customToast(state_Name);
+                            //spinnerState.setSelection(Global.getIndex(spinnerState, state_Name));
+
+                            //                        if(spinnerState.getSelectedItem().equals("States")){
+                            //                            getCity(statemodelArrayList.getData().get(i).getId());
+                            //                        }
+                            //getCity(statemodelArrayList.getData().get(i-1).getId());
+                            //spinnerState.setSelection(Global.getIndex(spinnerState, SessionManager.getStates(prefs)));
                         }
-                        //getCity(statemodelArrayList.getData().get(i-1).getId());
-                        //spinnerState.setSelection(Global.getIndex(spinnerState, SessionManager.getStates(prefs)));
                     }
+                } catch (JsonSyntaxException e) {
+                    e.printStackTrace();
                 }
 
 
@@ -793,7 +806,7 @@ public class CoachPersonalInfoActivity extends AppCompatActivity implements Adap
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                loaderView.hideLoader();
+                //loaderView.hideLoader();
                 error.printStackTrace();
                 Global.msgDialog(mActivity, getResources().getString(R.string.error_server));
             }
@@ -805,32 +818,44 @@ public class CoachPersonalInfoActivity extends AppCompatActivity implements Adap
     }
 
     private void getCity(String stateId) {
-        loaderView.showLoader();
+        //loaderView.showLoader();
         StringRequest postRequest = new StringRequest(Request.Method.GET, Global.URL + "get_cities" + "&state_id=" + stateId, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Log.d("ResponseCity", response);
-                loaderView.hideLoader();
-                Gson gson = new Gson();
-                citymodelArrayList = gson.fromJson(response, City.class);
-                if (citymodelArrayList.getApiStatus().equalsIgnoreCase("200")) {
-                    ArrayList<String> city = new ArrayList<>();
-                    city.add("City");
-                    for (City.Datum data : citymodelArrayList.getData()) {
-                        city.add(data.getName());
+
+                //loaderView.hideLoader();
+                try {
+                    Log.d("ResponseCity", response);
+                    Gson gson = new Gson();
+                    citymodelArrayList = gson.fromJson(response, City.class);
+                    if (citymodelArrayList.getApiStatus().equalsIgnoreCase("200")) {
+                        ArrayList<String> city = new ArrayList<>();
+                        city.add("City");
+                        for (City.Datum data : citymodelArrayList.getData()) {
+                            city.add(data.getName());
+                        }
+                        ArrayAdapter aa = new ArrayAdapter(mActivity, R.layout.custom_spinner, city);
+                        aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        spinnerCity.setAdapter(aa);
+                        //spinnerCity.setSelection(Global.getIndex(spinnerCity, city_Name));
+
+                        for (int i = 0; i < city.size(); i++) {
+                            if (city.get(i).equalsIgnoreCase(city_Name)) {
+                                countryName = city.get(i);
+                                spinnerCity.setSelection(Global.getIndex(spinnerCity, countryName));
+                                break;
+                            }
+                        }
                     }
-                    ArrayAdapter aa = new ArrayAdapter(mActivity, R.layout.custom_spinner, city);
-                    aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    spinnerCity.setAdapter(aa);
-                    spinnerCity.setSelection(Global.getIndex(spinnerCity, city_Name));
-                    //spinnerCity.setSelection(Global.getIndex(spinnerCity, SessionManager.getCity(prefs)));
+                } catch (JsonSyntaxException e) {
+                    e.printStackTrace();
                 }
 
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                loaderView.hideLoader();
+                //loaderView.hideLoader();
                 error.printStackTrace();
                 Global.msgDialog(mActivity, getResources().getString(R.string.error_server));
             }
@@ -845,23 +870,20 @@ public class CoachPersonalInfoActivity extends AppCompatActivity implements Adap
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
 
         if (adapterView == spinnerCountry && i != 0) {
-            //countryID = "";
-            //state_Name="";
-            //city_Name="";
-            //spinnerState.setSelection(Global.getIndex(spinnerState, state_Name));
-            //spinnerCity.setSelection(Global.getIndex(spinnerCity, city_Name));
-            getState(modelArrayList.getData().get(i - 1).getId());
-            countryID = modelArrayList.getData().get(i - 1).getId();
-
+            countryID = modelArrayList.getData().get(i-1).getId();
+            stateID="";
+            cityID="";
+            spinnerState.setSelection(Global.getIndex(spinnerState, ""));
+            spinnerCity.setSelection(Global.getIndex(spinnerCity, ""));
+            getState(countryID);
+            spinnerCity.setEnabled(false);
 
         } else if (adapterView == spinnerState && i != 0) {
-            getCity(statemodelArrayList.getData().get(i - 1).getId());
             stateID = statemodelArrayList.getData().get(i - 1).getId();
+            getCity(statemodelArrayList.getData().get(i - 1).getId());
+            spinnerCity.setEnabled(true);
         } else if (adapterView == spinnerCity && i != 0) {
             cityID = citymodelArrayList.getData().get(i - 1).getId();
-        } else {
-            state_Name = "";
-            city_Name = "";
         }
 
     }
@@ -921,43 +943,23 @@ public class CoachPersonalInfoActivity extends AppCompatActivity implements Adap
             imagepath = data.optString("avatar");
             Glide.with(mActivity).load(data.optString("avatar")).into(profile_image);
         }
+
         if (data.has("country_name")) {
             countryName = data.optString("country_name");
-
-            if (countryName.isEmpty()) {
-
-            } else {
-                //Toaster.customToast(countryName);
-                countryID = data.optString("country_id");
-                getState(countryID);
-                spinnerCountry.setSelection(Global.getIndex(spinnerCountry, countryName));
-            }
+            countryID = data.optString("country_id");
+            getState(countryID);
+            spinnerCountry.setSelection(Global.getIndex(spinnerCountry, countryName));
 
         }
         if (data.has("state_name")) {
             state_Name = data.optString("state_name");
-            if (state_Name.equalsIgnoreCase("")) {
-
-            } else {
-                stateID = data.optString("state_id");
-                getCity(stateID);
-                //Toaster.customToast(state_Name);
-
-            }
-
-
+            stateID = data.optString("state_id");
+            getCity(stateID);
         }
         if (data.has("city_name")) {
             city_Name = data.optString("city_name");
-            if (city_Name.isEmpty()) {
-
-            } else {
-                // Toaster.customToast(city_Name);
-                //spinnerCity.setSelection(Global.getIndex(spinnerCity, city_Name));
-            }
-
-
         }
+
         if (data.has("pincode")) {
             etPincode.setText(data.optString("pincode"));
         }

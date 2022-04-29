@@ -104,7 +104,7 @@ public class MainActivity extends BaseActivity {
     private AppUpdateManager appUpdateManager;
     private InstallStateUpdatedListener installStateUpdatedListener;
     private static final int FLEXIBLE_APP_UPDATE_REQ_CODE = 123;
-    String gameSettingsStataus="",referral_code_status="";
+    String gameSettingsStataus = "", referral_code_status = "";
 
 
     private static final String DEEP_LINK_URL = "https://criconet.page.link/invite";
@@ -156,22 +156,24 @@ public class MainActivity extends BaseActivity {
         list_nav = findViewById(R.id.list_nav);
         text = new ArrayList<>();
         text.add(new Drawer(getString(R.string.home), false, R.drawable.ic_home));
-
+        //text.add(new Drawer(getString(R.string.add_academy), false, R.drawable.ic_school_black_24dp));
+        //text.add(new Drawer(getString(R.string.join_contest), false, R.drawable.ic_emoji_events_black_24dp));
+        //text.add(new Drawer(getString(R.string.score_bord), false, R.drawable.ic_scoreboard_black_24dp));
 
         // Record Video Code Commented
-        text.add(new Drawer(getString(R.string.recorded_video),false, R.drawable.recording_icon));
+        text.add(new Drawer(getString(R.string.recorded_video), false, R.drawable.recording_icon));
 
 
-      // Log.d("Coach",SessionManager.get_profiletype(prefs))
-       //Toaster.customToast(SessionManager.get_profiletype(prefs));
+        // Log.d("Coach",SessionManager.get_profiletype(prefs))
+        //Toaster.customToast(SessionManager.get_profiletype(prefs));
         if (SessionManager.get_profiletype(prefs).equalsIgnoreCase("coach")) {
             //text.add(new Drawer(getString(R.string.join_as_coach),false, R.drawable.ic_sports_handball_black_24dp));
-        }else{
-            text.add(new Drawer(getString(R.string.join_as_coach),false, R.drawable.ic_sports_handball_black_24dp));
+        } else {
+            text.add(new Drawer(getString(R.string.join_as_coach), false, R.drawable.ic_sports_handball_black_24dp));
         }
-        if(SessionManager.get_is_ambassador(prefs).equalsIgnoreCase("1")){
-        }else{
-            text.add(new Drawer(getString(R.string.campus_ambassdoar_progrrame),false,R.drawable.ambas));
+        if (SessionManager.get_is_ambassador(prefs).equalsIgnoreCase("1")) {
+        } else {
+            text.add(new Drawer(getString(R.string.campus_ambassdoar_progrrame), false, R.drawable.ambas));
         }
 
         // text.add(new Drawer(getString(R.string.Followers),false,R.drawable.ic_follower));
@@ -208,10 +210,10 @@ public class MainActivity extends BaseActivity {
 
                 Glide.with(mActivity).load(SessionManager.get_cover(prefs)).dontAnimate().into(cover);
                 //Toaster.customToast(SessionManager.get_user_name(prefs)+"/"+SessionManager.get_fname(prefs)+"/"+SessionManager.get_name(prefs));
-                if(SessionManager.get_name(prefs).equalsIgnoreCase("")) {
+                if (SessionManager.get_name(prefs).equalsIgnoreCase("")) {
                     txt_nav_name.setText(Global.capitalizeFirstLatterOfString(SessionManager.get_fname(prefs)));
 
-                }else{
+                } else {
                     txt_nav_name.setText(Global.capitalizeFirstLatterOfString(SessionManager.get_name(prefs)));
                 }
 //                else if(SessionManager.get_fname(prefs).equalsIgnoreCase("")){
@@ -271,7 +273,7 @@ public class MainActivity extends BaseActivity {
                     //finish();
                 }
             });
-        }else{
+        } else {
             txt_visit_profile.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -285,12 +287,16 @@ public class MainActivity extends BaseActivity {
         if (getIntent().getExtras() != null) {
             if (getIntent().getExtras().getString("type").equalsIgnoreCase("live_streaming")) {
                 navigationController.navigatoLiveMatchesFragment();
-            } else if(getIntent().getExtras().getString("type").equalsIgnoreCase("Coach_List")){
+            } else if (getIntent().getExtras().getString("type").equalsIgnoreCase("Coach_List")) {
                 navigationController.navigatoCoachFragment();
-            }else if(getIntent().getExtras().getString("type").equalsIgnoreCase("coachFreagment")){
+            } else if (getIntent().getExtras().getString("type").equalsIgnoreCase("coachFreagment")) {
                 navigationController.navigatoCoachFragment();
+            } else if (getIntent().getExtras().getString("type").equalsIgnoreCase("academyFragment")) {
+                navigationController.navigatoRecMatchesFragment();
             }
-           // Log.d("Type",getIntent().getExtras().getString("type"));
+
+
+            // Log.d("Type",getIntent().getExtras().getString("type"));
         }
     }
 
@@ -374,20 +380,19 @@ public class MainActivity extends BaseActivity {
         }
     }
 
-    public Bitmap DownloadImageFromPath(String path){
-        InputStream in =null;
-        Bitmap bmp=null;
-        ImageView iv = (ImageView)findViewById(R.id.img1);
+    public Bitmap DownloadImageFromPath(String path) {
+        InputStream in = null;
+        Bitmap bmp = null;
+        ImageView iv = (ImageView) findViewById(R.id.img1);
         int responseCode = -1;
-        try{
+        try {
 
             URL url = new URL(path);//"http://192.xx.xx.xx/mypath/img1.jpg
-            HttpURLConnection con = (HttpURLConnection)url.openConnection();
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
             con.setDoInput(true);
             con.connect();
             responseCode = con.getResponseCode();
-            if(responseCode == HttpURLConnection.HTTP_OK)
-            {
+            if (responseCode == HttpURLConnection.HTTP_OK) {
                 //download
                 in = con.getInputStream();
                 bmp = BitmapFactory.decodeStream(in);
@@ -395,9 +400,8 @@ public class MainActivity extends BaseActivity {
                 iv.setImageBitmap(bmp);
             }
 
-        }
-        catch(Exception ex){
-            Log.e("Exception",ex.toString());
+        } catch (Exception ex) {
+            Log.e("Exception", ex.toString());
         }
         return bmp;
     }
@@ -410,36 +414,40 @@ public class MainActivity extends BaseActivity {
         }
         if (text.get(position).getTitle().equalsIgnoreCase("Pavilion")) {
             navigationController.navigateToHomeFragment();
-        }else if (text.get(position).getTitle().equalsIgnoreCase("Register as an e-Coach")) {
-           //startActivity(new Intent(mActivity,CoachSloatAvailabilityActivity.class));
-            startActivity(new Intent(mActivity,CoachPersonalInfoActivity.class));
+        } else if (text.get(position).getTitle().equalsIgnoreCase("Register as an e-Coach")) {
+            //startActivity(new Intent(mActivity,CoachSloatAvailabilityActivity.class));
+            startActivity(new Intent(mActivity, CoachPersonalInfoActivity.class));
             finish();
-        }
-
-        else if (text.get(position).getTitle().equalsIgnoreCase("Slot")) {
+        } else if (text.get(position).getTitle().equalsIgnoreCase("Slot")) {
             navigationController.navigatoMenuFragment(true);
-        }
-        else if(text.get(position).getTitle().equalsIgnoreCase("Refer & Rewards")){
-            startActivity(new Intent(mActivity,ReferralIntroActivity.class));
+        } else if (text.get(position).getTitle().equalsIgnoreCase("Refer & Rewards")) {
+            startActivity(new Intent(mActivity, ReferralIntroActivity.class));
             finish();
 
-        }else if(text.get(position).getTitle().equalsIgnoreCase(getResources().getString(R.string.campus_ambassdoar_progrrame))){
-            startActivity(new Intent(mActivity,AmbassadoarProgrrameActivity.class).putExtra("From","2"));
+        } else if (text.get(position).getTitle().equalsIgnoreCase(getResources().getString(R.string.campus_ambassdoar_progrrame))) {
+            startActivity(new Intent(mActivity, AmbassadoarProgrrameActivity.class).putExtra("From", "2"));
             finish();
 
-        }
-        else if(text.get(position).getTitle().equalsIgnoreCase("Ambassador Account")){
-            startActivity(new Intent(mActivity,AmbassdorRewardsActivity.class));
+        } else if (text.get(position).getTitle().equalsIgnoreCase("Ambassador Account")) {
+            startActivity(new Intent(mActivity, AmbassdorRewardsActivity.class));
             finish();
 
         }
         // Record Video Commented ...if require please unCommented code hare.
         else if (text.get(position).getTitle().equalsIgnoreCase("Recorded Video")) {
-            startActivity(new Intent(mActivity,RecordedVideoActivity.class));
+            startActivity(new Intent(mActivity, RecordedVideoActivity.class));
 
-        }
-        else if (text.get(position).getTitle().equalsIgnoreCase("Booking History")) {
-            startActivity(new Intent(mActivity,BookingActivity.class));
+        } else if (text.get(position).getTitle().equalsIgnoreCase("Add Academy")) {
+            startActivity(new Intent(mActivity, AddAcademyActivity.class));
+            finish();
+        } else if (text.get(position).getTitle().equalsIgnoreCase("Join Contest")) {
+            startActivity(new Intent(mActivity, ContestMatchListActivity.class));
+            finish();
+        } else if (text.get(position).getTitle().equalsIgnoreCase("My Contest Score Board")) {
+            startActivity(new Intent(mActivity, ScoreBoardActivity.class).putExtra("FROM", "1"));
+            finish();
+        } else if (text.get(position).getTitle().equalsIgnoreCase("Booking History")) {
+            startActivity(new Intent(mActivity, BookingActivity.class));
             finish();
 //            navigationController.navigatoBookingFragment();
         } else if (text.get(position).getTitle().equalsIgnoreCase("Followers")) {
@@ -454,11 +462,9 @@ public class MainActivity extends BaseActivity {
             startActivity(new Intent(mActivity, EditProfile.class));
             finish();
 
-        }
-
-        else {
+        } else {
             try {
-                if (text.get(position).getTitle().equalsIgnoreCase("Super Six")){
+                if (text.get(position).getTitle().equalsIgnoreCase("Super Six")) {
                     startActivity(new Intent(mActivity, GameActivity.class));
                     finish();
 
@@ -470,30 +476,28 @@ public class MainActivity extends BaseActivity {
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                }
-                else if (text.get(position).getTitle().equalsIgnoreCase(pageURL.getLiveStreaming().getString("title"))) {
+                } else if (text.get(position).getTitle().equalsIgnoreCase(pageURL.getLiveStreaming().getString("title"))) {
                     try {
                         startActivity(new Intent(mActivity, WebViewActivity.class).putExtra("URL", pageURL.getLiveStreaming().getString("url")).putExtra("title", pageURL.getLiveStreaming().getString("title")));
                         finish();
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                }else if (text.get(position).getTitle().equalsIgnoreCase(pageURL.getPartner().getString("title"))) {
+                } else if (text.get(position).getTitle().equalsIgnoreCase(pageURL.getPartner().getString("title"))) {
                     try {
                         startActivity(new Intent(mActivity, WebViewActivity.class).putExtra("URL", pageURL.getPartner().getString("url")).putExtra("title", pageURL.getPartner().getString("title")));
                         finish();
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                }else if (text.get(position).getTitle().equalsIgnoreCase(pageURL.getGroundOwner().getString("title"))) {
+                } else if (text.get(position).getTitle().equalsIgnoreCase(pageURL.getGroundOwner().getString("title"))) {
                     try {
                         startActivity(new Intent(mActivity, WebViewActivity.class).putExtra("URL", pageURL.getGroundOwner().getString("url")).putExtra("title", pageURL.getGroundOwner().getString("title")));
                         finish();
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                }
-                else if (text.get(position).getTitle().equalsIgnoreCase(pageURL.getMediaReleases().getString("title"))) {
+                } else if (text.get(position).getTitle().equalsIgnoreCase(pageURL.getMediaReleases().getString("title"))) {
                     try {
                         startActivity(new Intent(mActivity, WebViewActivity.class).putExtra("URL", pageURL.getMediaReleases().getString("url")).putExtra("title", pageURL.getMediaReleases().getString("title")));
                         finish();
@@ -512,14 +516,11 @@ public class MainActivity extends BaseActivity {
                 else if (text.get(position).getTitle().equalsIgnoreCase(pageURL.getContact_us().getString("title"))) {
                     startActivity(new Intent(mActivity, WebViewActivity.class).putExtra("URL", pageURL.getContact_us().getString("url")).putExtra("title", pageURL.getContact_us().getString("title")));
                     finish();
-                }
-
-                else if (text.get(position).getTitle().equalsIgnoreCase("Change Password")) {
+                } else if (text.get(position).getTitle().equalsIgnoreCase("Change Password")) {
                     intent = new Intent(mActivity, ChangePassword.class);
                     startActivity(intent);
                     finish();
-                }
-                else if (text.get(position).getTitle().equalsIgnoreCase("Blocked User")) {
+                } else if (text.get(position).getTitle().equalsIgnoreCase("Blocked User")) {
                     intent = new Intent(mActivity, BlockedUsers.class);
                     startActivity(intent);
                 } else if (text.get(position).getTitle().equalsIgnoreCase("Settings")) {
@@ -572,7 +573,7 @@ public class MainActivity extends BaseActivity {
         }
         loaderView.showLoader();
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-                Request.Method.POST, Global.URL+"logout", json,
+                Request.Method.POST, Global.URL + "logout", json,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
@@ -628,7 +629,7 @@ public class MainActivity extends BaseActivity {
                         JSONObject jsonObject1 = jsonObject.getJSONObject("data");
 
 
-                        if(jsonObject1.has("game")) {
+                        if (jsonObject1.has("game")) {
                             try {
                                 gameSettingsStataus = jsonObject1.getString("game");
                                 // gameSettingsStataus="1";
@@ -637,14 +638,13 @@ public class MainActivity extends BaseActivity {
                                 jsonException.printStackTrace();
                             }
                         }
-                        if(jsonObject1.has("referral_code")) {
+                        if (jsonObject1.has("referral_code")) {
                             try {
                                 referral_code_status = jsonObject1.getString("referral_code");
                             } catch (JSONException jsonException) {
                                 jsonException.printStackTrace();
                             }
                         }
-
 
 
                     } else if (jsonObject.optString("api_text").equalsIgnoreCase("failed")) {
@@ -663,7 +663,7 @@ public class MainActivity extends BaseActivity {
                 error.printStackTrace();
                 //Global.msgDialog((Activity) mActivity, "Error from server");
             }
-        }) ;
+        });
         int socketTimeout = 30000;
         RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
         postRequest.setRetryPolicy(policy);
@@ -675,26 +675,26 @@ public class MainActivity extends BaseActivity {
         StringRequest postRequest = new StringRequest(Request.Method.POST, Global.URL + "page_url", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Log.d("Boking Response",response);
+                Log.d("Boking Response", response);
                 try {
-                    JSONObject  jsonObject= new JSONObject(response);
-                    if(jsonObject.getString("api_status").equalsIgnoreCase("200")){
-                        pageURL= new PageURL(jsonObject.getJSONObject("data"));
+                    JSONObject jsonObject = new JSONObject(response);
+                    if (jsonObject.getString("api_status").equalsIgnoreCase("200")) {
+                        pageURL = new PageURL(jsonObject.getJSONObject("data"));
 
-                       // text.add(new Drawer(getString(R.string.pages), false, R.drawable.ic_page));
+                        // text.add(new Drawer(getString(R.string.pages), false, R.drawable.ic_page));
                         text.add(new Drawer(getString(R.string.booking_history), false, R.drawable.ic_booking_history));
                         if (gameSettingsStataus.equalsIgnoreCase("1")) {
                             text.add(new Drawer(getString(R.string.game), false, R.drawable.super_six));
                         }
                         //text.add(new Drawer(getString(R.string.game), false, R.drawable.super_six));
                         //referral_code_status="0";
-                        if(referral_code_status.equalsIgnoreCase("1")){
+                        if (referral_code_status.equalsIgnoreCase("1")) {
                             text.add(new Drawer(getString(R.string.referrar_rewards), false, R.drawable.referral_icon));
                         }
-                        if(referral_code_status.equalsIgnoreCase("1")){
-                            if(SessionManager.get_is_ambassador(prefs).equalsIgnoreCase("1")){
+                        if (referral_code_status.equalsIgnoreCase("1")) {
+                            if (SessionManager.get_is_ambassador(prefs).equalsIgnoreCase("1")) {
                                 text.add(new Drawer(getString(R.string.referrar_rewards_ambasdor), false, R.drawable.ambas));
-                            }else{
+                            } else {
                                 //text.add(new Drawer(getString(R.string.campus_ambassdoar_progrrame),false,R.drawable.ambas));
                             }
 
@@ -807,7 +807,7 @@ public class MainActivity extends BaseActivity {
             if (resultCode == RESULT_CANCELED) {
                 Toast.makeText(getApplicationContext(), getResources().getString(R.string.Update_cancelled_by_user) + resultCode, Toast.LENGTH_LONG).show();
             } else if (resultCode == RESULT_OK) {
-                Toast.makeText(getApplicationContext(),getResources().getString(R.string.Update_Success) + resultCode, Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), getResources().getString(R.string.Update_Success) + resultCode, Toast.LENGTH_LONG).show();
             } else {
                 Toast.makeText(getApplicationContext(), getResources().getString(R.string.Update_Failed) + resultCode, Toast.LENGTH_LONG).show();
                 checkUpdate();
@@ -823,8 +823,8 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 if (appUpdateManager != null) {
-                        appUpdateManager.completeUpdate();
-                   }
+                    appUpdateManager.completeUpdate();
+                }
             }
         });
         View snackbarView = snackbar.getView();
@@ -855,7 +855,7 @@ public class MainActivity extends BaseActivity {
         super.onStop();
         removeInstallStateUpdateListener();
     }
-   /*End of In App Update Code*/
-     //TXT RECORD for invite referral
+    /*End of In App Update Code*/
+    //TXT RECORD for invite referral
     //google-site-verification=woqkXiB17vBE_hfOByspqflgreBWBT3K_DWA72GAE14
 }

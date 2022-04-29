@@ -98,6 +98,85 @@ public class BookingHistory {
         @Expose
         private String bookingSlotDate;
 
+        public String getAcademy_name() {
+            return academy_name;
+        }
+
+        public void setAcademy_name(String academy_name) {
+            this.academy_name = academy_name;
+        }
+
+        public String getAcademy_id() {
+            return academy_id;
+        }
+
+        public void setAcademy_id(String academy_id) {
+            this.academy_id = academy_id;
+        }
+
+        public String getLogo() {
+            return logo;
+        }
+
+        public void setLogo(String logo) {
+            this.logo = logo;
+        }
+
+        @SerializedName("academy_name")
+        @Expose
+        private String academy_name;
+        @SerializedName("academy_id")
+        @Expose
+        private String academy_id;
+        @SerializedName("logo")
+        @Expose
+        private String logo;
+        @SerializedName("Address")
+        @Expose
+        private String Address;
+
+        public String getAddress() {
+            return Address;
+        }
+
+        public void setAddress(String address) {
+            Address = address;
+        }
+
+        public String getPackage_valid_for() {
+            return package_valid_for;
+        }
+
+        public void setPackage_valid_for(String package_valid_for) {
+            this.package_valid_for = package_valid_for;
+        }
+
+        @SerializedName("package_valid_for")
+        @Expose
+        private String package_valid_for;
+
+        public String getTraining_type() {
+            return training_type;
+        }
+
+        public void setTraining_type(String training_type) {
+            this.training_type = training_type;
+        }
+
+        @SerializedName("training_type")
+        @Expose
+        private String training_type;
+
+
+
+
+
+
+
+
+
+
+
         public String getBooking_date() {
             return booking_date;
         }

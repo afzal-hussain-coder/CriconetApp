@@ -434,6 +434,7 @@ public class CoachDetailsActivity extends BaseActivity {
         StringRequest postRequest = new StringRequest(Request.Method.POST, Global.URL + "get_coach_available_date", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+                Timber.d(response);
                 // Global.dismissDialog(progressDialog);
                 Gson gson = new Gson();
 
@@ -502,7 +503,7 @@ public class CoachDetailsActivity extends BaseActivity {
         StringRequest postRequest = new StringRequest(Request.Method.POST, Global.URL + "get_coach_date_slot", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                //Log.d("Time respose", response);
+                Log.d("Time respose", response);
                 try{
                     Gson gson = new Gson();
                     TimeSlot modelArrayList = gson.fromJson(response, TimeSlot.class);

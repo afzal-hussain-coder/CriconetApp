@@ -518,6 +518,6 @@
         android:background="@color/black_semi_transparent"/>
 
     <include layout="@layout/dialog_camera_slector_edit_profile"
-        android:visibility="visible"/>
+        android:visibility="gone"/>
 
 </RelativeLayout>

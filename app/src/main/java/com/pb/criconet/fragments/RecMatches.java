@@ -87,18 +87,6 @@ public class RecMatches extends Fragment {
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.rec_matches, container, false);
 //        setHasOptionsMenu(true);
-
-        Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
-        TextView mTitle = (TextView) toolbar.findViewById(R.id.toolbartext);
-        String text = getString(R.string.Recorded_Matches);
-        mTitle.setText(text.toUpperCase());
-        ImageView img_addpost = toolbar.findViewById(R.id.img_addpost);
-        TextView tv_post = toolbar.findViewById(R.id.tv_post);
-        tv_post.setVisibility(View.GONE);
-        img_addpost.setVisibility(View.GONE);
-        img_addpost.setVisibility(View.GONE);
-        ImageView img_close = toolbar.findViewById(R.id.img_close);
-        img_close.setVisibility(View.GONE);
         loaderView = CustomLoaderView.initialize(getActivity());
         prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         queue = Volley.newRequestQueue(getActivity());
@@ -127,25 +115,6 @@ public class RecMatches extends Fragment {
 
 
         });
-        /*edit_search.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if(s.toString().length()==0) {
-                    Toaster.customToast(s.toString());
-                }else{
-                }
-            }
-        });*/
-
 
         if (Global.isOnline(getActivity())) {
             getHelp();
@@ -164,7 +133,12 @@ public class RecMatches extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        MainActivity.bottomNavigation.setSelectedIndex(3, true);
+        if (Global.isOnline(getActivity())) {
+            getHelp();
+        } else {
+            Global.showDialog(getActivity());
+        }
+        //MainActivity.bottomNavigation.setSelectedIndex(3, true);
     }
 
     @Override

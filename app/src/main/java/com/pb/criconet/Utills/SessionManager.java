@@ -56,6 +56,7 @@ public class SessionManager {
     private static String studied = "studied";
     private static String employment = "employment";
     private static String devicetoken = "devicetoken";
+    private static String leaugeName = "title";
     private static String Onlinestatus = "Onlinestatus";
     private static String Friends = "FRIENDS";
     private static String Notification_count = "NOTIFICATION_COUNT";
@@ -419,6 +420,13 @@ public class SessionManager {
 
     public static String get_devicetoken(SharedPreferences prefs) {
         return prefs.getString(devicetoken, "");
+    }
+    public static void save_leaugeName(SharedPreferences prefs, String value) {
+        SessionManager.savePreference(prefs, leaugeName, value);
+    }
+
+    public static String get_leaugeName(SharedPreferences prefs) {
+        return prefs.getString(leaugeName, "");
     }
 
     public static void save_fitness(SharedPreferences prefs, String value) {

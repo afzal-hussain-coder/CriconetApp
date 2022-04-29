@@ -5,46 +5,32 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.content.pm.Signature;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-
-import android.util.Base64;
-import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
-
-import com.google.firebase.messaging.FirebaseMessaging;
 import com.pb.criconet.R;
 import com.pb.criconet.Utills.SessionManager;
-import com.pb.criconet.Utills.Toaster;
-
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
-
-//import com.facebook.drawee.backends.pipeline.Fresco;
 
 public class Splash extends Activity {
     SharedPreferences prefs;
     boolean permission = false;
     int PERMISSION_ALL = 1;
-    Context mContext;;
+    Context mContext;
     String type="",booking_id="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mContext=this;;
+        mContext=this;
 //        Fresco.initialize(this);
         prefs = PreferenceManager.getDefaultSharedPreferences(Splash.this);
         //calculateHashKey("com.pb.criconet");
@@ -78,6 +64,7 @@ public class Splash extends Activity {
         } else {
             sendIntent();
         }
+
     }
 
     private boolean checkAndRequestPermissions() {
@@ -137,20 +124,17 @@ public class Splash extends Activity {
         }
 
         if (!listPermissionsNeeded.isEmpty()) {
-            ActivityCompat.requestPermissions(this, listPermissionsNeeded.toArray(new String[listPermissionsNeeded.size()]), PERMISSION_ALL);
+            ActivityCompat.requestPermissions(this, listPermissionsNeeded.toArray(new String[0]), PERMISSION_ALL);
             return false;
         }
         return true;
     }
 
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case 1: {
-                sendIntent();
-                return;
-            }
-            default:
-                finish();
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == 1) {
+            sendIntent();
+        } else {
+            finish();
         }
     }
 
@@ -201,7 +185,7 @@ public class Splash extends Activity {
                     }
                 } else {
 
-                    if(SessionManager.get_check_login(prefs)==false){
+                    if(!SessionManager.get_check_login(prefs)){
                         Intent intent = new Intent(Splash.this, IntroSliderActivity.class);
                         startActivity(intent);
                         finish();

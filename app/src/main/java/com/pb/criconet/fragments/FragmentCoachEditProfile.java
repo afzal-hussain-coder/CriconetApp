@@ -57,6 +57,7 @@ import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.google.android.material.card.MaterialCardView;
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.mancj.slideup.SlideUp;
 import com.mancj.slideup.SlideUpBuilder;
 import com.mukesh.OtpView;
@@ -162,6 +163,7 @@ public class FragmentCoachEditProfile extends Fragment implements AdapterView.On
     private StringBuilder langStringBuilder;
 
 
+
     public static FragmentCoachEditProfile newInstance() {
         return new FragmentCoachEditProfile();
     }
@@ -255,6 +257,7 @@ public class FragmentCoachEditProfile extends Fragment implements AdapterView.On
             getLanguage();
             getUsersDetails();
             getCountry();
+
         } else {
             Global.showDialog(getActivity());
         }
@@ -656,7 +659,6 @@ public class FragmentCoachEditProfile extends Fragment implements AdapterView.On
                         country.add(data.getName());
                     }
 
-                    //countryID="";
                     ArrayAdapter aa = new ArrayAdapter(getContext(), R.layout.custom_spinner, country);
                     aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     spinnerCountry.setAdapter(aa);
@@ -694,44 +696,48 @@ public class FragmentCoachEditProfile extends Fragment implements AdapterView.On
     }
 
     private void getState(String countryId) {
-        loaderView.showLoader();
+        //loaderView.showLoader();
         StringRequest postRequest = new StringRequest(Request.Method.GET, Global.URL + "get_states" + "&country_id=" + countryId, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Log.d("ResponseSatate", response);
-                if (!response.isEmpty()) {
-                    loaderView.hideLoader();
-                    Gson gson = new Gson();
-                    statemodelArrayList = gson.fromJson(response, States.class);
-                    if (statemodelArrayList.getApiStatus().equalsIgnoreCase("200")) {
-                        ArrayList<String> state = new ArrayList<>();
-                        //state.add("States");
-                        for (States.Datum data : statemodelArrayList.getData()) {
-                            state.add(data.getName());
+                Timber.d(response);
+                try {
+                    if (!response.isEmpty()) {
+                        //loaderView.hideLoader();
+                        Gson gson = new Gson();
+                        statemodelArrayList = gson.fromJson(response, States.class);
+                        if (statemodelArrayList.getApiStatus().equalsIgnoreCase("200")) {
+                            ArrayList<String> state = new ArrayList<>();
+                            state.add("States");
+                            for (States.Datum data : statemodelArrayList.getData()) {
+                                state.add(data.getName());
+                            }
+
+                            ArrayAdapter aa = new ArrayAdapter(getActivity(), R.layout.custom_spinner, state);
+                            aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                            spinnerState.setAdapter(aa);
+                           //Toaster.customToast(state_Name);
+                           spinnerState.setSelection(Global.getIndex(spinnerState, state_Name));
+    //                        for (int i = 0; i < state.size(); i++) {
+    //                            if (state.get(i).equalsIgnoreCase(state_Name)) {
+    //                                country_Name = state.get(i);
+    //                                spinnerState.setSelection(Global.getIndex(spinnerState, country_Name));
+    //                                break;
+    //                            }
+    //                        }
+
+                            //Toaster.customToast(state_Name);
+                            //spinnerState.setSelection(Global.getIndex(spinnerState, state_Name));
+
+    //                        if(spinnerState.getSelectedItem().equals("States")){
+    //                            getCity(statemodelArrayList.getData().get(i).getId());
+    //                        }
+                            //getCity(statemodelArrayList.getData().get(i-1).getId());
+                            //spinnerState.setSelection(Global.getIndex(spinnerState, SessionManager.getStates(prefs)));
                         }
-
-                        ArrayAdapter aa = new ArrayAdapter(getActivity(), R.layout.custom_spinner, state);
-                        aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        spinnerState.setAdapter(aa);
-
-                        spinnerState.setSelection(Global.getIndex(spinnerState, state_Name));
-//                        for (int i = 0; i < state.size(); i++) {
-//                            if (state.get(i).equalsIgnoreCase(state_Name)) {
-//                                country_Name = state.get(i);
-//                                spinnerState.setSelection(Global.getIndex(spinnerState, country_Name));
-//                                break;
-//                            }
-//                        }
-
-                        //Toaster.customToast(state_Name);
-                        //spinnerState.setSelection(Global.getIndex(spinnerState, state_Name));
-
-//                        if(spinnerState.getSelectedItem().equals("States")){
-//                            getCity(statemodelArrayList.getData().get(i).getId());
-//                        }
-                        //getCity(statemodelArrayList.getData().get(i-1).getId());
-                        //spinnerState.setSelection(Global.getIndex(spinnerState, SessionManager.getStates(prefs)));
                     }
+                } catch (JsonSyntaxException e) {
+                    e.printStackTrace();
                 }
 
 
@@ -739,7 +745,7 @@ public class FragmentCoachEditProfile extends Fragment implements AdapterView.On
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                loaderView.hideLoader();
+                //loaderView.hideLoader();
                 error.printStackTrace();
                 Global.msgDialog(getActivity(), getResources().getString(R.string.error_server));
             }
@@ -751,41 +757,44 @@ public class FragmentCoachEditProfile extends Fragment implements AdapterView.On
     }
 
     private void getCity(String stateId) {
-        loaderView.showLoader();
+        //loaderView.showLoader();
         StringRequest postRequest = new StringRequest(Request.Method.GET, Global.URL + "get_cities" + "&state_id=" + stateId, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Log.d("ResponseCity", response);
-                loaderView.hideLoader();
-                Gson gson = new Gson();
-                citymodelArrayList = gson.fromJson(response, City.class);
-                if (citymodelArrayList.getApiStatus().equalsIgnoreCase("200")) {
-                    ArrayList<String> city = new ArrayList<>();
-                    //city.add("City");
-                    for (City.Datum data : citymodelArrayList.getData()) {
-                        city.add(data.getName());
-                    }
-                    ArrayAdapter aa = new ArrayAdapter(getContext(), R.layout.custom_spinner, city);
-                    aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    spinnerCity.setAdapter(aa);
-                    spinnerCity.setSelection(Global.getIndex(spinnerCity, city_Name));
 
-//                    for (int i = 0; i < city.size(); i++) {
-//                        if (city.get(i).equalsIgnoreCase(city_Name)) {
-//                            country_Name = city.get(i);
-//                            spinnerCity.setSelection(Global.getIndex(spinnerCity, country_Name));
-//                            break;
-//                        }
-//                    }
-                    //spinnerCity.setSelection(Global.getIndex(spinnerCity, city_Name));
-                    //spinnerCity.setSelection(Global.getIndex(spinnerCity, SessionManager.getCity(prefs)));
+                //loaderView.hideLoader();
+                try {
+                    Log.d("ResponseCity", response);
+                    Gson gson = new Gson();
+                    citymodelArrayList = gson.fromJson(response, City.class);
+                    if (citymodelArrayList.getApiStatus().equalsIgnoreCase("200")) {
+                        ArrayList<String> city = new ArrayList<>();
+                        city.add("City");
+                        for (City.Datum data : citymodelArrayList.getData()) {
+                            city.add(data.getName());
+                        }
+                        ArrayAdapter aa = new ArrayAdapter(getContext(), R.layout.custom_spinner, city);
+                        aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        spinnerCity.setAdapter(aa);
+                        //spinnerCity.setSelection(Global.getIndex(spinnerCity, city_Name));
+
+                        for (int i = 0; i < city.size(); i++) {
+                            if (city.get(i).equalsIgnoreCase(city_Name)) {
+                                country_Name = city.get(i);
+                                spinnerCity.setSelection(Global.getIndex(spinnerCity, country_Name));
+                                break;
+                            }
+                        }
+                    }
+                } catch (JsonSyntaxException e) {
+                    e.printStackTrace();
                 }
 
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                loaderView.hideLoader();
+                //loaderView.hideLoader();
                 error.printStackTrace();
                 Global.msgDialog(getActivity(), getResources().getString(R.string.error_server));
             }
@@ -839,15 +848,17 @@ public class FragmentCoachEditProfile extends Fragment implements AdapterView.On
 
         if (adapterView == spinnerCountry && i != 0) {
             countryID = modelArrayList.getData().get(i).getId();
-            getState(countryID);
             stateID="";
             cityID="";
             spinnerState.setSelection(Global.getIndex(spinnerState, ""));
             spinnerCity.setSelection(Global.getIndex(spinnerCity, ""));
+            getState(countryID);
+           spinnerCity.setEnabled(false);
 
         } else if (adapterView == spinnerState && i != 0) {
             stateID = statemodelArrayList.getData().get(i - 1).getId();
             getCity(statemodelArrayList.getData().get(i - 1).getId());
+            spinnerCity.setEnabled(true);
         } else if (adapterView == spinnerCity && i != 0) {
             cityID = citymodelArrayList.getData().get(i - 1).getId();
         }
@@ -882,7 +893,7 @@ public class FragmentCoachEditProfile extends Fragment implements AdapterView.On
             country_Name = data.optString("country_name");
             countryID = data.optString("country_id");
             getState(countryID);
-            spinnerCountry.setSelection(Global.getIndex(spinnerCountry, country_Name));
+           spinnerCountry.setSelection(Global.getIndex(spinnerCountry, country_Name));
 
         }
         if (data.has("state_name")) {

@@ -22,7 +22,8 @@
         android:id="@id/small_video_view_dock"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_50sdp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/_50sdp"
         android:inflatedId="@id/small_video_view_dock"
         android:layout="@layout/small_video_view_dock" />
 
@@ -349,11 +350,12 @@
         android:layout_height="match_parent"
         android:alpha="0"
         android:visibility="visible"
-        android:background="@color/black_semi_transparent"
+        android:background="@color/transparent"
         android:fitsSystemWindows="false"
         />
 
     <include layout="@layout/chat_dailog"
+        android:id="@+id/chet"
         android:visibility="visible" />
 
     </RelativeLayout>

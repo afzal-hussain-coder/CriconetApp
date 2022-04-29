@@ -44,6 +44,7 @@ public abstract class VideoViewAdapter extends RecyclerView.Adapter<RecyclerView
         init(uids);
     }
 
+
     protected int mItemWidth;
     protected int mItemHeight;
 
@@ -76,6 +77,10 @@ public abstract class VideoViewAdapter extends RecyclerView.Adapter<RecyclerView
         mLocalUid = uid;
     }
 
+    public void removeItem(){
+
+    }
+
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         ViewGroup v = (ViewGroup) mInflater.inflate(R.layout.video_view_container, parent, false);
@@ -105,6 +110,7 @@ public abstract class VideoViewAdapter extends RecyclerView.Adapter<RecyclerView
 
         VideoViewAdapterUtil.renderExtraData(mContext, user, myHolder);
     }
+
 
     @Override
     public int getItemCount() {

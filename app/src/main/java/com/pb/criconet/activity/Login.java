@@ -977,6 +977,7 @@ public class Login extends AppCompatActivity {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        //Log.d("result",resultCode+"");
 //        // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
             // The Task returned from this call is always completed, no need to attach a listener.
@@ -995,13 +996,16 @@ public class Login extends AppCompatActivity {
         } else if (requestCode == REQUEST_LOCATION) {
 
             switch (resultCode) {
+
                 case Activity.RESULT_OK:
+                    //Log.d("o",)
                     //getAddress();
                     //startLocationUpdates();
                     break;
                 case Activity.RESULT_CANCELED:
-                    finish();
+                    //finish();
                     break;
+
             }
         } else {
             try {

@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#E8E8E8"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/ambs_toolbar" />
+
+    <LinearLayout
+        android:id="@+id/top"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/toolbar"
+        android:background="@color/colorPrimary"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/ground_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_marginBottom="@dimen/_5sdp"
+            android:fontFamily="@font/opensans_extrabold"
+            android:text="Max 22 players from a team"
+            android:textColor="#B8B8B8"
+            android:textSize="@dimen/_8sdp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="3"
+            android:layout_marginBottom="@dimen/_10sdp"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:orientation="horizontal">
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.6"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_marginBottom="@dimen/_5sdp"
+                    android:fontFamily="@font/opensans_extrabold"
+                    android:text="@string/players"
+                    android:textColor="#B8B8B8"
+                    android:textSize="@dimen/_7sdp" />
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:id="@+id/tv_selectedPlayerCount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:layout_marginBottom="@dimen/_5sdp"
+                        android:fontFamily="@font/opensans_bold"
+                        android:text="0"
+                        android:textColor="@color/light_grey"
+                        android:textSize="@dimen/_14sdp" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:layout_marginStart="@dimen/_2sdp"
+                        android:layout_marginBottom="@dimen/_5sdp"
+                        android:fontFamily="@font/opensans_regular"
+                        android:text=" / 22"
+                        android:textColor="#B8B8B8"
+                        android:textSize="@dimen/_11sdp" />
+                </LinearLayout>
+            </LinearLayout>
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.2"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/team1_namee"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:fontFamily="@font/opensans_extrabold"
+                    android:text="BLR"
+                    android:textColor="#B8B8B8"
+                    android:textSize="@dimen/_7sdp" />
+
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_below="@+id/team1_namee"
+                    android:orientation="horizontal">
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/im_team1"
+                        android:layout_width="@dimen/_40sdp"
+                        android:layout_height="@dimen/_40sdp"
+                        android:layout_gravity="center_vertical"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/user_default" />
+                    <TextView
+                        android:id="@+id/team1_playerCount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="@dimen/_5sdp"
+                        android:fontFamily="@font/opensans_extrabold"
+                        android:text="0"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/_8sdp" />
+                </LinearLayout>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.2"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/team2_namee"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:fontFamily="@font/opensans_extrabold"
+                    android:text="KOL"
+                    android:textColor="#B8B8B8"
+                    android:textSize="@dimen/_7sdp" />
+
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_below="@+id/team2_namee"
+                    android:orientation="horizontal">
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/im_team2"
+                        android:layout_width="@dimen/_40sdp"
+                        android:layout_height="@dimen/_40sdp"
+                        android:layout_gravity="center_vertical"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/user_default" />
+                    <TextView
+                        android:id="@+id/team2_playerCount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_5sdp"
+                        android:layout_gravity="center_vertical"
+                        android:fontFamily="@font/opensans_extrabold"
+                        android:text="0"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/_8sdp" />
+                </LinearLayout>
+            </RelativeLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_player"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/top"
+        android:layout_above="@+id/btn_submit"
+        android:paddingBottom="@dimen/_7sdp"
+        android:footerDividersEnabled="true"
+        />
+
+    <Button
+        android:id="@+id/btn_submit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:visibility="gone"
+        android:background="@color/app_green"
+        android:text="@string/submit"
+        android:textColor="@color/white_smoke"
+        android:layout_marginBottom="@dimen/_10sdp"
+        android:layout_alignParentBottom="true"/>
+</RelativeLayout>

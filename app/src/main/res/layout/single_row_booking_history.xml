@@ -67,13 +67,15 @@
                     android:visibility="visible" />
             </RelativeLayout>
             </RelativeLayout>
+
             <RelativeLayout
-                android:id="@+id/lay_specilization"
+                android:id="@+id/lay_user"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_10sdp"
                 android:layout_marginEnd="@dimen/_10sdp"
                 android:paddingBottom="@dimen/_5sdp"
+                android:visibility="visible"
                 android:paddingTop="@dimen/_5sdp"
                 android:background="@drawable/bg_coach_profile"
                 android:layout_marginTop="@dimen/_5sdp">
@@ -166,6 +168,159 @@
                 </LinearLayout>
                 </LinearLayout>
             </RelativeLayout>
+            <!--Academy layout..-->
+
+            <RelativeLayout
+                android:id="@+id/lay_academy"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:paddingBottom="@dimen/_5sdp"
+                android:padding="@dimen/_5sdp"
+                android:visibility="gone"
+                android:background="@drawable/bg_coach_profile"
+                android:layout_marginTop="@dimen/_5sdp">
+                <RelativeLayout
+                    android:id="@+id/rl_top"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/ivProfileImagee_academy"
+                        android:layout_width="@dimen/_60sdp"
+                        android:layout_height="@dimen/_60sdp"
+                        android:layout_marginStart="@dimen/_10sdp"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/placeholder_user"
+                        />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_toEndOf="@+id/ivProfileImagee_academy"
+                        android:layout_marginLeft="@dimen/_10sdp"
+                        android:layout_marginRight="@dimen/_5sdp"
+                        android:orientation="vertical">
+                        <TextView
+                            android:id="@+id/tvAcademyName"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_2sdp"
+                            android:textColor="@color/light_text_color"
+                            android:textSize="@dimen/_10sdp"
+                            app:fontFamily="@font/opensans_bold"
+                            app:layout_constraintTop_toBottomOf="@+id/ivProfileImage"
+                            android:text="Ranjeet Kumar" />
+                        <TextView
+                            android:id="@+id/tvAddress_academy"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/tvCoachName"
+                            android:layout_gravity="left"
+                            android:layout_marginTop="@dimen/_2sdp"
+                            android:text="kjbckjaB"
+                            android:textColor="@color/light_text_color"
+                            android:textSize="@dimen/_8sdp"
+                            app:fontFamily="@font/opensans_extrabold" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/bg_coach_profile_trainingtype"
+                            android:layout_marginTop="@dimen/_5sdp"
+                            android:padding="@dimen/_5sdp"
+                            android:orientation="vertical">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/bookingIdd"
+                                android:layout_gravity="center_horizontal"
+                                android:textColor="@color/grey"
+                                android:textSize="@dimen/_9sdp"
+                                app:fontFamily="@font/opensans_bold"
+                                />
+                            <TextView
+                                android:id="@+id/tvBookingId_academy"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:text="ID1-294"
+                                android:textColor="@color/light_text_color"
+                                android:textSize="@dimen/_8sdp"
+                                app:fontFamily="@font/opensans_extrabold"
+                                />
+                        </LinearLayout>
+                    </LinearLayout>
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:id="@+id/li_valid"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/rl_top"
+                    android:background="@drawable/bg_coach_profile_trainingtype"
+                    android:padding="@dimen/_5sdp"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:layout_marginEnd="@dimen/_5sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/e_coaching"
+                        android:textColor="@color/gray"
+                        android:layout_gravity="center_horizontal"
+                        android:textSize="@dimen/_9sdp"
+                        app:fontFamily="@font/opensans_bold"
+                        />
+                    <TextView
+                        android:id="@+id/tv_valid"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:gravity="center_horizontal"
+                        android:text="kjbckjaB"
+                        android:textColor="@color/logWarn"
+                        android:textSize="@dimen/_8sdp"
+                        app:fontFamily="@font/opensans_extrabold" />
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/li_valid"
+                    android:background="@drawable/bg_coach_profile_trainingtype"
+                    android:padding="@dimen/_5sdp"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:layout_marginEnd="@dimen/_5sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/session_time"
+                        android:textColor="@color/gray"
+                        android:layout_gravity="center_horizontal"
+                        android:textSize="@dimen/_9sdp"
+                        app:fontFamily="@font/opensans_bold"
+                        />
+                    <TextView
+                        android:id="@+id/tv_sessio_time_academy"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:gravity="center_horizontal"
+                        android:text="kjbckjaB"
+                        android:textColor="@color/logWarn"
+                        android:textSize="@dimen/_8sdp"
+                        app:fontFamily="@font/opensans_extrabold" />
+
+                </LinearLayout>
+
+            </RelativeLayout>
+
+
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.7dp"

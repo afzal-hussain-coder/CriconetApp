@@ -43,6 +43,7 @@ public class AmbassadoarProgrrameActivity extends AppCompatActivity {
 
         Intent intent= getIntent();
         if(intent!=null){
+
             FROM = intent.getExtras().getString("From");
         }
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {

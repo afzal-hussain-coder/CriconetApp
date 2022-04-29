@@ -60,6 +60,10 @@ import timber.log.Timber;
 
 
 public class Global {
+    public static final String UPCOMING_MATCH_IPL = "get_fantasy_match_list";
+    public static final String JOIN_FANTASY_MATCH_CONTEST = "join_fatasy_match_contest";
+    public static final String My_FANTASY_CONTEST = "my_fantasy_contest";
+
 
     public static final String FILE_UPLOAD_URL = "https://criconetonline.com/app_api.php?type=new_post";
     /*for debug*/
@@ -93,6 +97,9 @@ public class Global {
     public static final String RESEND_OTP = "resend_otp";
     public static final String VERIFY_MOBILE = "mobile_update";
     public static final String PAYMENT_SUCCESS = "booking_payment_success";
+    public static final String ACADEMY_BOOKING_SUCCESS = "academy_booking_success";
+
+
     public static final String GET_FEEDBACK_FORM = "get_cancel_feedback_form";
     public static final String CANCEL_BOOKING = "cancel_booking";
     public static final String GET_SPECIALITIES = "get_specialities_cat";
@@ -114,6 +121,9 @@ public class Global {
     public static final String ADD_COACH_QUALIFICATION = "update_coach_spec_exp";
     public static final String REMOVE_CERTIFICATE = "remove_certificate";
     public static final String SESSION_CLOSE_TIME = "session_close_time";
+    public static final String ACADEMY_LIST = "academy_lists";
+
+
 
 
     public static final int TYPE_VIDEO = 0,
@@ -157,8 +167,9 @@ public class Global {
         }
         return true;
     }
+
     public static boolean validateLengthofCoachRegisterProfileTitle(String name) {
-        if (name.length() < 8 || name.length()>40) {
+        if (name.length() < 8 || name.length() > 40) {
             name.length();
             return false;
         }
@@ -492,7 +503,8 @@ public class Global {
 
     public static String returnDate(String dateToConvert) {
         Date date = null;
-        SimpleDateFormat formatter = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzzz yyyy");
+        SimpleDateFormat formatter = new SimpleDateFormat("dd MM YYYY, HH:mm:ss zzzz yyyy");
+        //13 04 2022, 19:30 PM
         String temp = dateToConvert;
         try {
             date = formatter.parse(temp);
@@ -508,6 +520,47 @@ public class Global {
 
         return finalDateTime;
     }
+
+    public static String validateDateFormat(String dateToValdate) {
+
+        SimpleDateFormat formatter = new SimpleDateFormat("dd MM yyyy, HH:mm");
+        //To make strict date format validation
+        formatter.setLenient(false);
+        Date parsedDate = null;
+        try {
+            parsedDate = formatter.parse(dateToValdate);
+
+        } catch (ParseException e) {
+            //Handle exception
+        }
+        System.out.println("++validated DATE TIME ++" + formatter.format(parsedDate));
+        String formateDateMonthName = new SimpleDateFormat("EEEE , dd MMM yyyy").format(parsedDate);
+        // Log.v("output_date ", formateDateMonthName);
+        String formateTime = new SimpleDateFormat("hh:mm a").format(parsedDate);
+        // Log.v("output_time ", formateDateMonthName + "," + formateTime);
+        String finalDateTime = formateDateMonthName + " , " + formateTime;
+        return finalDateTime;
+    }
+    public static String validateDateFormatt(String dateToValdate) {
+        //2022-04-16
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        Date parsedDate = null;
+        try {
+            parsedDate = formatter.parse(dateToValdate);
+
+        } catch (ParseException e) {
+            //Handle exception
+        }
+        //System.out.println("++validated DATE TIME ++" + formatter.format(parsedDate));
+        String formateDateMonthName = new SimpleDateFormat("EEEE , dd MMM yyyy").format(parsedDate);
+//        // Log.v("output_date ", formateDateMonthName);
+//        String formateTime = new SimpleDateFormat("hh:mm a").format(parsedDate);
+//        // Log.v("output_time ", formateDateMonthName + "," + formateTime);
+//        String finalDateTime = formateDateMonthName + " , " + formateTime;
+        return formateDateMonthName;
+    }
+
+
 
     public static String getMonth(int month) {
         return new DateFormatSymbols().getMonths()[month - 0];

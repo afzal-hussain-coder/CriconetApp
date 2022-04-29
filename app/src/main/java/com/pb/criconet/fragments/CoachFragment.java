@@ -151,9 +151,7 @@ public class CoachFragment extends Fragment {
             }
         });
 
-
         drop_filter = rootView.findViewById(R.id.drop_filter);
-
 
         drop_filter.setClickListener(new FilterCoachSpecilitiesDropDownViewo.onClickInterface() {
             @Override
@@ -217,7 +215,7 @@ public class CoachFragment extends Fragment {
         StringRequest postRequest = new StringRequest(Request.Method.POST, Global.URL + "get_coach_lists", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                //Log.d("Response", response);
+                Log.d("Response", response);
                 // Global.dismissDialog(progressDialog);
                 loaderView.hideLoader();
                 try{

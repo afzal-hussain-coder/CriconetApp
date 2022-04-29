@@ -239,6 +239,19 @@
 
     <include layout="@layout/dialog_booking_details"
         android:visibility="visible"/>
+    <FrameLayout
+        android:id="@+id/dim_academydetails"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:alpha="0"
+        android:visibility="visible"
+        android:background="@color/black_semi_transparent"
+        android:fitsSystemWindows="false"
+        />
+
+    <include layout="@layout/acdemy_dailog_booking"
+        android:visibility="visible"
+        />
 
     <FrameLayout
         android:id="@+id/dim_chat"
@@ -253,5 +266,6 @@
     <include layout="@layout/chat_dailog_booking"
         android:visibility="visible"
         />
+
 
 </RelativeLayout>

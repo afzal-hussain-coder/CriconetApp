@@ -597,6 +597,9 @@ public class CoachProfessionalInfoActivity extends AppCompatActivity implements 
                                 JSONObject jsonObjectData = jsonObject.getJSONObject("data");
                                 SessionManager.save_profiletype(prefs, jsonObjectData.getString("profile_type"));
                                 Toaster.customToast(jsonObject.optString("msg"));
+                                isTeramsChecked="";
+                                ( (CompoundButton) cv_tearms).setChecked(false);
+
                             }
 
 

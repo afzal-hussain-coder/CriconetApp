@@ -51,6 +51,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -124,7 +125,7 @@ public class BookingActivity extends AppCompatActivity implements BookingHistory
     private Context mContext;
     private Activity mActivity;
     private boolean loading = true;
-    private SlideUp slideUp;
+    private SlideUp slideUp, slideUp_academyDetails;
     private View dim, rootView;
     private View slideView;
     private CircleImageView ivProfileImage;
@@ -143,20 +144,20 @@ public class BookingActivity extends AppCompatActivity implements BookingHistory
     FilterBookingDropDownView drop_filter_booking;
     DateDropDownView drop_date_from;
     DateDropDownView drop_date_to;
-    TextView tv_from_date,tvInfo;
-    TextView tv_to_date,notfound;
+    TextView tv_from_date, tvInfo;
+    TextView tv_to_date, notfound;
     FrameLayout fl_search;
     private ArrayList<DataModel> option = new ArrayList<>();
-    private String filterType="" ;
-    private String from_date="";
-    private String to_date="";
+    private String filterType = "";
+    private String from_date = "";
+    private String to_date = "";
 
     //WebView web_chat;
     private SlideUp slideUp_chat;
-    private View dim_chat, rootView_chat;
+    private View dim_chat, rootView_chat, root_view_academy, dim_academydetails, slideView_academy;
     private View slideView_chat;
-    String webUrl="";
-    String coach_id="";
+    String webUrl = "";
+    String coach_id = "";
 
     private final static int FCR = 1;
     WebView webView;
@@ -165,7 +166,7 @@ public class BookingActivity extends AppCompatActivity implements BookingHistory
     private ValueCallback<Uri> mUM;
     private ValueCallback<Uri[]> mUMA;
     WebSettings webSettings;
-    String notification_count="";
+    String notification_count = "";
 
     /*Record Video*/
     private static final int CAPTURE_VIDEO = 3015;
@@ -174,6 +175,12 @@ public class BookingActivity extends AppCompatActivity implements BookingHistory
     private byte[] byteArray;
     FloatingTextButton fabCreate;
     /*End Record Video*/
+
+    /*Academy Details IdS...*/
+    TextView tvCoachNamee, tvAddress, tvSessionValid, tv_training, tvBookingId, tvSessionTime, tvBookingDate_academy,
+            tvSessionAmount_academy, tvBookingStataus_academy;
+    ImageView ivProfileImagee_academy;
+    FrameLayout fl_join_session_academy;
 
 
     @Override
@@ -201,8 +208,8 @@ public class BookingActivity extends AppCompatActivity implements BookingHistory
                             results = new Uri[]{Uri.parse(dataString)};
                         }
                     }
-                                   mUMA.onReceiveValue(results);
-                                  mUMA = null;
+                    mUMA.onReceiveValue(results);
+                    mUMA = null;
                 }
                 //..record video code comment here.
                 else if (requestCode == CAPTURE_VIDEO) {
@@ -243,7 +250,7 @@ public class BookingActivity extends AppCompatActivity implements BookingHistory
 //                                loaderView.hideLoader();
 //
 //                            }
-                            EmailOtpDialog(video_thumbnail,filemanagerstring);
+                            EmailOtpDialog(video_thumbnail, filemanagerstring);
                             loaderView.hideLoader();
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -272,11 +279,11 @@ public class BookingActivity extends AppCompatActivity implements BookingHistory
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_booking);
         mContext = this;
-        mActivity =this;
+        mActivity = this;
         loaderView = CustomLoaderView.initialize(this);
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
         queue = Volley.newRequestQueue(this);
-        Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -292,9 +299,6 @@ public class BookingActivity extends AppCompatActivity implements BookingHistory
         });
         TextView mTitle = (TextView) toolbar.findViewById(R.id.toolbartext);
         mTitle.setText("Booking History");
-
-
-
 
         initializeView();
 
@@ -313,11 +317,11 @@ public class BookingActivity extends AppCompatActivity implements BookingHistory
 
     @SuppressLint("SetJavaScriptEnabled")
     private void initializeView() {
-        fabCreate = (FloatingTextButton)findViewById(R.id.action_button);
+        fabCreate = (FloatingTextButton) findViewById(R.id.action_button);
         fabCreate.setOnClickListener(view -> {
             openCameraVideo();
         });
-        webView =findViewById(R.id.web_chat);
+        webView = findViewById(R.id.web_chat);
         progressBar = findViewById(R.id.loadingVieww);
         webView.setWebViewClient(new Callback());
         webView.setOverScrollMode(WebView.OVER_SCROLL_NEVER);
@@ -363,7 +367,6 @@ public class BookingActivity extends AppCompatActivity implements BookingHistory
                 .build();
 
 
-
         //........Web Chat .....
         rootView_chat = findViewById(R.id.root_view_chat);
         slideView_chat = findViewById(R.id.slideView_chat);
@@ -400,17 +403,55 @@ public class BookingActivity extends AppCompatActivity implements BookingHistory
 
         //........End Web Chat...
 
+        // Academy Details
+        tvCoachNamee = findViewById(R.id.tvCoachNamee);
+        tvAddress = findViewById(R.id.tvAddress);
+        tvSessionValid = findViewById(R.id.tvSessionValid);
+        tv_training = findViewById(R.id.tv_training);
+        tvBookingId = findViewById(R.id.tvBookingId);
+        tvSessionTime = findViewById(R.id.tvSessionTime);
+        tvBookingDate_academy = findViewById(R.id.tvBookingDate_academy);
+        tvSessionAmount_academy = findViewById(R.id.tvSessionAmount_academy);
+        tvBookingStataus_academy = findViewById(R.id.tvBookingStataus_academy);
+        fl_join_session_academy = findViewById(R.id.fl_join_session_academy);
+        root_view_academy = findViewById(R.id.root_view_academy);
+        slideView_academy = findViewById(R.id.slideView_academy);
+        dim_academydetails = findViewById(R.id.dim_academydetails);
+        ivProfileImagee_academy = findViewById(R.id.ivProfileImagee_academy);
+        slideUp_academyDetails = new SlideUpBuilder(slideView_academy)
+                .withListeners(new SlideUp.Listener.Events() {
+                    @Override
+                    public void onSlide(float percent) {
+                        dim.setAlpha(1 - (percent / 100));
+                        if (percent < 100) {
+                            // slideUp started showing
+
+                        }
+                    }
+
+                    @Override
+                    public void onVisibilityChanged(int visibility) {
+                        if (visibility == View.GONE) {
+                        }
+                    }
+                })
+                .withStartGravity(Gravity.BOTTOM)
+                .withLoggingEnabled(true)
+                .withStartState(SlideUp.State.HIDDEN)
+                .withSlideFromOtherView(root_view_academy)
+                .build();
+
         notfound = findViewById(R.id.notfound);
-        coachlist=findViewById(R.id.coachlist);
+        coachlist = findViewById(R.id.coachlist);
         coachlist.setHasFixedSize(true);
         coachlist.setLayoutManager(new LinearLayoutManager(this));
         ivProfileImage = findViewById(R.id.ivProfileImage);
-        tvCoachName =findViewById(R.id.tvCoachName);
-        tvSessionDetails =findViewById(R.id.tvSessionDetails);
-        tvSessionDateTime =findViewById(R.id.tvSessionDateTime);
-        tvBookingDate=findViewById(R.id.tvBookingDate);
-        tvSessionAmount=findViewById(R.id.tvSessionAmount);
-        tvBookingStataus=findViewById(R.id.tvBookingStataus);
+        tvCoachName = findViewById(R.id.tvCoachName);
+        tvSessionDetails = findViewById(R.id.tvSessionDetails);
+        tvSessionDateTime = findViewById(R.id.tvSessionDateTime);
+        tvBookingDate = findViewById(R.id.tvBookingDate);
+        tvSessionAmount = findViewById(R.id.tvSessionAmount);
+        tvBookingStataus = findViewById(R.id.tvBookingStataus);
         tv_booking_paymnet_status = findViewById(R.id.tv_booking_paymnet_status);
         fl_cancel_booking = findViewById(R.id.fl_cancel_booking);
         fl_join_session = findViewById(R.id.fl_join_session);
@@ -432,11 +473,11 @@ public class BookingActivity extends AppCompatActivity implements BookingHistory
             @Override
             public void onClickDone(String name) {
 
-                if(name.equalsIgnoreCase("Cancelled booking")){
-                    filterType= "cancelled";
-                }else if(name.equalsIgnoreCase("Confirmed booking")){
-                    filterType= "confirmed";
-                }else{
+                if (name.equalsIgnoreCase("Cancelled booking")) {
+                    filterType = "cancelled";
+                } else if (name.equalsIgnoreCase("Confirmed booking")) {
+                    filterType = "confirmed";
+                } else {
                     filterType = name;
                 }
             }
@@ -476,7 +517,7 @@ public class BookingActivity extends AppCompatActivity implements BookingHistory
 
             @Override
             public void onClickDone(String name) {
-                to_date= name;
+                to_date = name;
                 tv_to_date.setText(name);
             }
 
@@ -506,23 +547,23 @@ public class BookingActivity extends AppCompatActivity implements BookingHistory
         StringRequest postRequest = new StringRequest(Request.Method.POST, Global.URL + "get_booking_history", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Log.d("Boking Response",response);
+                Log.d("Boking Response", response);
                 loaderView.hideLoader();
                 //Global.dismissDialog(progressDialog);
 
-                try{
+                try {
                     Gson gson = new Gson();
                     BookingHistory modelArrayList = gson.fromJson(response, BookingHistory.class);
 
-                    if(modelArrayList.getData().isEmpty()){
+                    if (modelArrayList.getData().isEmpty()) {
                         notfound.setVisibility(View.VISIBLE);
                         coachlist.setVisibility(View.GONE);
-                    }else{
+                    } else {
                         notfound.setVisibility(View.GONE);
                         coachlist.setVisibility(View.VISIBLE);
-                        coachlist.setAdapter(new BookingHistoryAdapter(mContext,modelArrayList.getData(), BookingActivity.this));
+                        coachlist.setAdapter(new BookingHistoryAdapter(mContext, modelArrayList.getData(), BookingActivity.this));
                     }
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
 
@@ -555,130 +596,184 @@ public class BookingActivity extends AppCompatActivity implements BookingHistory
     }
 
     @Override
-    public void buttonClick(String id,long timeDuration,String action,String channel_id,String booking_id,String userId,String coachId,String coachName) {
-        if(action.equalsIgnoreCase("join")){
-            Intent intent=new Intent(this, CallActivity.class);
-            intent.putExtra(ConstantApp.ACTION_KEY_CHANNEL_NAME,channel_id);
-            intent.putExtra("UserId",userId);
-            intent.putExtra("CoachId",coachId);
-            intent.putExtra("booking_id",booking_id);
-            intent.putExtra("id",id);
-            intent.putExtra("timeDuration",timeDuration);
-            intent.putExtra("Name",coachName);
+    public void buttonClick(String id, long timeDuration, String action, String channel_id, String booking_id, String userId, String coachId, String coachName) {
+        if (action.equalsIgnoreCase("join")) {
+            Intent intent = new Intent(this, CallActivity.class);
+            intent.putExtra(ConstantApp.ACTION_KEY_CHANNEL_NAME, channel_id);
+            intent.putExtra("UserId", userId);
+            intent.putExtra("CoachId", coachId);
+            intent.putExtra("booking_id", booking_id);
+            intent.putExtra("id", id);
+            intent.putExtra("timeDuration", timeDuration);
+            intent.putExtra("Name", coachName);
             startActivity(intent);
-        }else {
-            validateAction(booking_id,action);
+        } else {
+            validateAction(booking_id, action);
         }
     }
 
     @Override
     public void viewDetails(BookingHistory.Datum data) {
         bookingId = data.getId();
-        if (!data.getAvatar().isEmpty()){
-            Glide.with(mActivity).load(data.getAvatar())
-                    .into(ivProfileImage);
-        }else{
-            Glide.with(mActivity).load(R.drawable.placeholder_user)
-                    .into(ivProfileImage);
-        }
-        tvCoachName.setText(Global.capitalizeFirstLatterOfString(data.getName()));
 
-        if(data.getDevice_message()==null || data.getDevice_message().isEmpty()){
-            tvInfo.setVisibility(View.GONE);
-        }else{
-            tvInfo.setVisibility(View.VISIBLE);
-            tvInfo.setText(Html.fromHtml(data.getDevice_message()));
-        }
+        if (data.getAcademy_id().isEmpty() || data.getAcademy_id().equalsIgnoreCase("0") || data.getAcademy_id().equalsIgnoreCase("null")) {
+            if (!data.getAvatar().isEmpty()) {
+                Glide.with(mActivity).load(data.getAvatar())
+                        .into(ivProfileImage);
+            } else {
+                Glide.with(mActivity).load(R.drawable.placeholder_user)
+                        .into(ivProfileImage);
+            }
+            tvCoachName.setText(Global.capitalizeFirstLatterOfString(data.getName()));
 
-        tvSessionDetails.setText(getResources().getString(R.string.bookingId)+" "+data.getBookingId());
-        tvSessionDateTime.setText(Global.convertUTCDateToLocalDate(data.getBookingSlotDate())+" , "+data.getBookingSlotTxt());
-        tvBookingDate.setText(data.getBooking_date());
-        if(data.getPay_leter_str().isEmpty()){
-            tv_booking_paymnet_status.setText(getResources().getString(R.string.online_paid_amount));
-        }else{
-            tv_booking_paymnet_status.setText(data.getPay_leter_str());
-        }
+            if (data.getDevice_message() == null || data.getDevice_message().isEmpty()) {
+                tvInfo.setVisibility(View.GONE);
+            } else {
+                tvInfo.setVisibility(View.VISIBLE);
+                tvInfo.setText(Html.fromHtml(data.getDevice_message()));
+            }
 
-        tvSessionAmount.setText("\u20B9"+data.getPayment_amount());
-        tvBookingStataus.setText(getResources().getString(R.string.Your_booking_has_been )+data.getBtn1().toLowerCase()+"!");
+            tvSessionDetails.setText(getResources().getString(R.string.bookingId) + " " + data.getBookingId());
+            tvSessionDateTime.setText(Global.convertUTCDateToLocalDate(data.getBookingSlotDate()) + " , " + data.getBookingSlotTxt());
+            tvBookingDate.setText(data.getBooking_date());
+            if (data.getPay_leter_str().isEmpty()) {
+                tv_booking_paymnet_status.setText(getResources().getString(R.string.online_paid_amount));
+            } else {
+                tv_booking_paymnet_status.setText(data.getPay_leter_str());
+            }
 
-        if((data.getBtn1().equalsIgnoreCase("Confirmed") &&data.getBtn2().equalsIgnoreCase(""))){
+            tvSessionAmount.setText("\u20B9" + data.getPayment_amount());
+            tvBookingStataus.setText(getResources().getString(R.string.Your_booking_has_been) + data.getBtn1().toLowerCase() + "!");
 
-            if(Global.getCurrentDate().compareTo(Global.convertUTCDateToLocalDate(data.getBookingSlotDate()))>=0 && Global.getCurrentDateAndTime().compareTo(data.getOnlineSessionStartTime())>0 ){
+            if ((data.getBtn1().equalsIgnoreCase("Confirmed") && data.getBtn2().equalsIgnoreCase(""))) {
 
+                if (Global.getCurrentDate().compareTo(Global.convertUTCDateToLocalDate(data.getBookingSlotDate())) >= 0 && Global.getCurrentDateAndTime().compareTo(data.getOnlineSessionStartTime()) > 0) {
+
+                    fl_cancel_booking.setVisibility(View.GONE);
+                    fl_cancelled.setVisibility(View.GONE);
+                    fl_join_session.setVisibility(View.GONE);
+                } else {
+
+                    if (data.getCancel_enable().equalsIgnoreCase("1")) {
+                        fl_cancel_booking.setVisibility(View.VISIBLE);
+                    } else {
+                        fl_cancel_booking.setVisibility(View.GONE);
+                    }
+                    fl_cancelled.setVisibility(View.GONE);
+                    fl_join_session.setVisibility(View.GONE);
+                }
+
+            } else if (data.getBtn1().equalsIgnoreCase("Cancelled")) {
+                fl_cancel_booking.setVisibility(View.GONE);
+                fl_cancelled.setVisibility(View.VISIBLE);
+                fl_join_session.setVisibility(View.GONE);
+            } else if (data.getBtn2().equalsIgnoreCase("Join") && data.getBtn1().equalsIgnoreCase("Confirmed")) {
                 fl_cancel_booking.setVisibility(View.GONE);
                 fl_cancelled.setVisibility(View.GONE);
-                fl_join_session.setVisibility(View.GONE);
-            }else{
-
-                if(data.getCancel_enable().equalsIgnoreCase("1")){
-                    fl_cancel_booking.setVisibility(View.VISIBLE);
-                }else{
-                    fl_cancel_booking.setVisibility(View.GONE);
+                if (data.getChanel_id().equalsIgnoreCase("")) {
+                    fl_join_session.setVisibility(View.GONE);
+                } else {
+                    fl_join_session.setVisibility(View.VISIBLE);
                 }
-                fl_cancelled.setVisibility(View.GONE);
-                fl_join_session.setVisibility(View.GONE);
+
             }
 
-        }else if(data.getBtn1().equalsIgnoreCase("Cancelled")){
-            fl_cancel_booking.setVisibility(View.GONE);
-            fl_cancelled.setVisibility(View.VISIBLE);
-            fl_join_session.setVisibility(View.GONE);
-        }else if(data.getBtn2().equalsIgnoreCase("Join") && data.getBtn1().equalsIgnoreCase("Confirmed")){
-            fl_cancel_booking.setVisibility(View.GONE);
-            fl_cancelled.setVisibility(View.GONE);
-            if(data.getChanel_id().equalsIgnoreCase("")){
-                fl_join_session.setVisibility(View.GONE);
+            fl_cancel_booking.setOnClickListener(v -> {
+                slideUp.hide();
+                cancelAlertDialog();
+            });
+            fl_join_session.setOnClickListener(v -> {
+                Intent intent = new Intent(this, CallActivity.class);
+                intent.putExtra(ConstantApp.ACTION_KEY_CHANNEL_NAME, data.getChanel_id());
+                intent.putExtra("UserId", data.getUserId());
+                intent.putExtra("CoachId", data.getCoachUserId());
+                intent.putExtra("booking_id", data.getBookingId());
+                intent.putExtra("id", data.getId());
+                intent.putExtra("timeDuration", data.getDuration_in_milisecond());
+                intent.putExtra("Name", data.getName());
+                startActivity(intent);
+                slideUp.hide();
+            });
+
+            slideUp.show();
+        } else {
+            slideUp_academyDetails.show();
+            if (!data.getAvatar().isEmpty()) {
+                Glide.with(mActivity).load(data.getLogo())
+                        .into(ivProfileImagee_academy);
+            } else {
+                Glide.with(mActivity).load(R.drawable.placeholder_user)
+                        .into(ivProfileImagee_academy);
+            }
+            tvCoachNamee.setText(Global.capitalizeFirstLatterOfString(data.getAcademy_name()));
+            tvAddress.setText(data.getAddress());
+            tvSessionValid.setText(getString(R.string.valid_for)+" "+data.getPackage_valid_for());
+            tvSessionTime.setText(data.getBookingSlotTxt());
+            tvBookingDate_academy.setText(data.getBooking_date());
+            tvSessionAmount_academy.setText(data.getPayment_amount());
+            tvBookingId.setText(data.getBookingId());
+
+            if(data.getTraining_type().isEmpty()|| data.getTraining_type().equalsIgnoreCase("null")){
+                tv_training.setVisibility(View.GONE);
             }else{
-                fl_join_session.setVisibility(View.VISIBLE);
+                tv_training.setVisibility(View.VISIBLE);
+                tv_training.setText(getString(R.string.training_type)+" "+data.getTraining_type());
+
             }
 
+
+            tvBookingStataus_academy.setText(getResources().getString(R.string.Your_booking_has_been) + data.getBtn1().toLowerCase() + "!");
+            if (data.getBtn2().equalsIgnoreCase("Join") && data.getBtn1().equalsIgnoreCase("Confirmed")) {
+
+                if (data.getChanel_id().equalsIgnoreCase("")) {
+                    fl_join_session_academy.setVisibility(View.GONE);
+                } else {
+                    fl_join_session_academy.setVisibility(View.VISIBLE);
+                }
+
+            }
+
+            fl_join_session_academy.setOnClickListener(v -> {
+                slideUp_academyDetails.hide();
+                Intent intent = new Intent(this, CallActivity.class);
+                intent.putExtra(ConstantApp.ACTION_KEY_CHANNEL_NAME, data.getChanel_id());
+                intent.putExtra("UserId", data.getUserId());
+                intent.putExtra("CoachId", data.getCoachUserId());
+                intent.putExtra("booking_id", data.getBookingId());
+                intent.putExtra("id", data.getId());
+                intent.putExtra("timeDuration", data.getDuration_in_milisecond());
+                intent.putExtra("Name", data.getName());
+                startActivity(intent);
+
+            });
         }
 
-        fl_cancel_booking.setOnClickListener(v -> {
-            slideUp.hide();
-            cancelAlertDialog();
-        });
-        fl_join_session.setOnClickListener(v -> {
-            Intent intent=new Intent(this, CallActivity.class);
-            intent.putExtra(ConstantApp.ACTION_KEY_CHANNEL_NAME,data.getChanel_id());
-            intent.putExtra("UserId",data.getUserId());
-            intent.putExtra("CoachId",data.getCoachUserId());
-            intent.putExtra("booking_id",data.getBookingId());
-            intent.putExtra("id",data.getId());
-            intent.putExtra("timeDuration",data.getDuration_in_milisecond());
-            intent.putExtra("Name",data.getName());
-            startActivity(intent);
-            slideUp.hide();
-        });
-
-        slideUp.show();
     }
 
     @Override
     public void chatClick(String coachId, String userId) {
-        loadWebView(coachId,userId);
+        loadWebView(coachId, userId);
         slideUp_chat.show();
 
     }
 
-    private boolean isValidateSearch(){
+    private boolean isValidateSearch() {
         boolean isOk = true;
-        if(from_date.equalsIgnoreCase("")){
+        if (from_date.equalsIgnoreCase("")) {
             Toaster.customToast("Select From date!");
-            isOk =false;
-        }else if(to_date.equalsIgnoreCase("")){
+            isOk = false;
+        } else if (to_date.equalsIgnoreCase("")) {
             Toaster.customToast("Select To date!");
-            isOk =false;
-        }else if(filterType.equalsIgnoreCase("")){
+            isOk = false;
+        } else if (filterType.equalsIgnoreCase("")) {
             Toaster.customToast("Select Booking Status!");
-            isOk =false;
+            isOk = false;
         }
 
         return isOk;
     }
 
-    private void validateAction(String booking_id,String action) {
+    private void validateAction(String booking_id, String action) {
         loaderView.showLoader();
 //        progressDialog = Global.getProgressDialog(this, CCResource.getString(this, R.string.loading_dot), false);
         StringRequest postRequest = new StringRequest(Request.Method.POST, Global.URL + "booking_action", new Response.Listener<String>() {
@@ -688,7 +783,7 @@ public class BookingActivity extends AppCompatActivity implements BookingHistory
                 //Global.dismissDialog(progressDialog);
                 Gson gson = new Gson();
                 CoachAccept modelArrayList = gson.fromJson(response, CoachAccept.class);
-                Toaster.customToast(modelArrayList.getData().getMessage() );
+                Toaster.customToast(modelArrayList.getData().getMessage());
 
             }
         }, new Response.ErrorListener() {
@@ -730,7 +825,7 @@ public class BookingActivity extends AppCompatActivity implements BookingHistory
         FrameLayout fl_yes = dialog.findViewById(R.id.fl_yes);
         fl_yes.setOnClickListener(v -> {
             dialog.dismiss();
-            startActivity(new Intent(mContext,CancellationFeedbackFormActivity.class).putExtra("BookingId",bookingId));
+            startActivity(new Intent(mContext, CancellationFeedbackFormActivity.class).putExtra("BookingId", bookingId));
         });
         dialog.show();
     }
@@ -745,14 +840,14 @@ public class BookingActivity extends AppCompatActivity implements BookingHistory
 
     // webchat....
     @SuppressLint({"SetJavaScriptEnabled", "ClickableViewAccessibility", "ObsoleteSdkInt"})
-    public void loadWebView(String coach_id, String user_Id){
-        if(SessionManager.getProfileType(prefs).equalsIgnoreCase("Coach")){
-            webUrl= Global.URL_CHAT+"/"+"messages"+"/"+user_Id+"?"+"user_id="+SessionManager.get_user_id(prefs)+"&"+"s="+SessionManager.get_session_id(prefs);
-        }else{
-            webUrl= Global.URL_CHAT+"/"+"messages"+"/"+coach_id+"?"+"user_id="+SessionManager.get_user_id(prefs)+"&"+"s="+SessionManager.get_session_id(prefs);
+    public void loadWebView(String coach_id, String user_Id) {
+        if (SessionManager.getProfileType(prefs).equalsIgnoreCase("Coach")) {
+            webUrl = Global.URL_CHAT + "/" + "messages" + "/" + user_Id + "?" + "user_id=" + SessionManager.get_user_id(prefs) + "&" + "s=" + SessionManager.get_session_id(prefs);
+        } else {
+            webUrl = Global.URL_CHAT + "/" + "messages" + "/" + coach_id + "?" + "user_id=" + SessionManager.get_user_id(prefs) + "&" + "s=" + SessionManager.get_session_id(prefs);
         }
 
-        Log.d("WevURL",webUrl);
+        Log.d("WevURL", webUrl);
         if (Build.VERSION.SDK_INT >= 23 && (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)) {
             ActivityCompat.requestPermissions(BookingActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA}, 1);
         }
@@ -874,22 +969,22 @@ public class BookingActivity extends AppCompatActivity implements BookingHistory
 
     @Override
     public boolean onKeyDown(int keyCode, @NonNull KeyEvent event) {
-           try{
-               if (event.getAction() == KeyEvent.ACTION_DOWN) {
+        try {
+            if (event.getAction() == KeyEvent.ACTION_DOWN) {
 
-                   if (keyCode == KeyEvent.KEYCODE_BACK) {
-                       if (webView.canGoBack()) {
-                           webView.goBack();
-                       } else {
-                           finish();
-                       }
-                       return true;
-                   }
-               }
+                if (keyCode == KeyEvent.KEYCODE_BACK) {
+                    if (webView.canGoBack()) {
+                        webView.goBack();
+                    } else {
+                        finish();
+                    }
+                    return true;
+                }
+            }
 
-           }catch (Exception e){
-               e.printStackTrace();
-           }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return super.onKeyDown(keyCode, event);
     }
 
@@ -909,7 +1004,7 @@ public class BookingActivity extends AppCompatActivity implements BookingHistory
                 public void run() {
                     progressBar.stop();
                 }
-            },2000);
+            }, 2000);
 
             super.onPageFinished(view, url);
 
@@ -953,7 +1048,7 @@ public class BookingActivity extends AppCompatActivity implements BookingHistory
     }
 
 
-    private void EmailOtpDialog(Bitmap thumbnail,String postFile) {
+    private void EmailOtpDialog(Bitmap thumbnail, String postFile) {
         Dialog dialog = new Dialog(mActivity);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -961,11 +1056,11 @@ public class BookingActivity extends AppCompatActivity implements BookingHistory
         dialog.setCancelable(false);
         ImageView img_video = dialog.findViewById(R.id.img_videoo);
         img_video.setImageBitmap(thumbnail);
-        FrameLayout fl_cancel= dialog.findViewById(R.id.fl_cancell);
+        FrameLayout fl_cancel = dialog.findViewById(R.id.fl_cancell);
         fl_cancel.setOnClickListener(view -> {
             dialog.dismiss();
         });
-        FrameLayout fl_upload_video= dialog.findViewById(R.id.fl_upload_videoo);
+        FrameLayout fl_upload_video = dialog.findViewById(R.id.fl_upload_videoo);
         fl_upload_video.setOnClickListener(view -> {
             //PostFeedFinal(postFile);
             dialog.dismiss();
@@ -1023,7 +1118,7 @@ public class BookingActivity extends AppCompatActivity implements BookingHistory
                     },
                     entity);
 
-            Log.d("PostEntity",entity.toString());
+            Log.d("PostEntity", entity.toString());
 
 
             int socketTimeout = 50000;
@@ -1043,9 +1138,10 @@ public class BookingActivity extends AppCompatActivity implements BookingHistory
     private RequestBody bodyPart(String name) {
         return RequestBody.create(MediaType.parse("multipart/form-data"), name);
     }
+
     private void uploadVideoToServer(String postFile) {
 
-        try{
+        try {
             File videoFile = new File(postFile);
             RequestBody videoBody = RequestBody.create(MediaType.parse("application/octet-stream"), videoFile);
             MultipartBody.Part vFile = MultipartBody.Part.createFormData("postVideo", videoFile.getName(), videoBody);
@@ -1068,13 +1164,13 @@ public class BookingActivity extends AppCompatActivity implements BookingHistory
                         loaderView.hideLoader();
 //                        tv_post.setVisibility(View.GONE);
 //                        img_addpost.setVisibility(View.VISIBLE);
-                        Log.d("ResponseRecord",response+"");
+                        Log.d("ResponseRecord", response + "");
                         Timber.e(String.valueOf(response));
                         ResultObject result = response.body();
                         Timber.e(result.toString());
                         if (result.getApi_text().equalsIgnoreCase("success")) {
-                         startActivity(new Intent(mContext,RecordedVideoActivity.class));
-                         finish();
+                            startActivity(new Intent(mContext, RecordedVideoActivity.class));
+                            finish();
 
                         } else if (result.getApi_text().equalsIgnoreCase("failed")) {
                             Global.msgDialog(mActivity, result.getApi_status());
@@ -1096,7 +1192,7 @@ public class BookingActivity extends AppCompatActivity implements BookingHistory
                     Timber.e("Error message Home %s", t.getMessage());
                 }
             });
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
